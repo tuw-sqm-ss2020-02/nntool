@@ -1,5 +1,7 @@
 = nntool.eu
 
+image:https://travis-ci.org/tuw-sqm-ss2020-02/nntool.svg?branch=master["Build Status", link="https://travis-ci.org/tuw-sqm-ss2020-02/nntool"]
+
 == Overview
 
 BEREC–the Body of European Regulators for Electronic Communications–assigned the contract for development, implementation and validation of the Net Neutrality (NN) Reference Measurement System in July 2018.
