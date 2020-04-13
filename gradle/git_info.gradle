@@ -8,10 +8,18 @@ class GitInfo {
   public GitInfo() {
     def isCI = System.env.CI
     if (isCI != null) {
-      println("In CI context, using CI_ environment variables instead of git commands.")
+      if (System.env.TRAVIS != null) {
+        println("Running in travis CI.")
+        
+        branchName = System.env.TRAVIS_BRANCH
+        commitRef = System.env.TRAVIS_COMMIT
+      } else {
+        println("In CI context, using CI_ environment variables instead of git commands.")
 
-      branchName = System.env.CI_COMMIT_REF_NAME
-      commitRef = System.env.CI_COMMIT_SHORT_SHA
+        branchName = System.env.CI_COMMIT_REF_NAME
+        commitRef = System.env.CI_COMMIT_SHORT_SHA
+      }
+      
       commitCount = "-1"
     } else {
       branchName = runGitCommand('symbolic-ref', '--short', 'HEAD')
