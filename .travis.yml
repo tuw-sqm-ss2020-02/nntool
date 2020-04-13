@@ -1,0 +1,25 @@
+language: java
+install: true
+
+os: linux
+dist: trusty
+jdk: oraclejdk8
+
+addons:
+  sonarcloud:
+    organization: "tuw-sqm-ss2020-02"
+    token:
+      secure: "QdC5K63vTq2Zjo/Q8/D76Qv5qMGo97VTnW3dl5o5QzMHXq+j4qoo9DKC3XNYxU3zJWL5T4qSUCJHdgUArBesEvEKzHKkTw+Qb3VXWpobMZz7WEDpFW2pB1d5Yhw3nPWfCGRJogr+vpXbpDXZEoUWTCR/lzMKqO6fEWV9WotCidsQ+DbGGU7LJyj7XEN5uNSefphT4roJ/kXo3+g9KFkGDkUTMKmGdJAN9VZcJvQPgivoRUsd3gD4oMP+N1SMbblTxSWHtrotWoVKjeRXyghDSp9jU1tGPxcJL8iliVjHV5Dg9s2jgyQ9b+ZZX0vJ4DyAwn432QIrjC+VSCwGQjW1f8E6W5l22l+ZUXhr1XZYlX4Hn2YiOJQJD+1r4Ltp/xHJVql9iPmfHf+fIE/lnv0VgAY+sgjQE5cChwQAMxI+2kwpqeU2lcNQmu4oNXbA086LGYXZI4QoWUrxPDjr23XiDbxqJjb8lmk+2FqfaaDqVZA6iWgo9Tw9RtRKbipBEmVoYePlQGB0NSDLW9L7LCtBNe9iNMihXPFb7dmQa28M1dquawmMqs6nCItf9CssHHVPUQsmRmD9LXQ1QO64MTvTVHSCanvIPLgBmYWMRfXhlw0w4I2n58de+LSdntfxZ6fdSfJkCJNsMyjwIEcEiClz8SjzrI9SETRvmKoIW/40t2U="
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+script:
+  - ./gradlew --no-daemon clean build sonarqube -Dskip-android -x test
+  
