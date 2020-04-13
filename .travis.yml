@@ -21,5 +21,4 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew --no-daemon clean build sonarqube -Dskip-android -x test
-  
+  - ./gradlew --no-daemon clean build jacocoTestReport sonarqube -Dskip-android -Dinclude-jacoco-code-coverage

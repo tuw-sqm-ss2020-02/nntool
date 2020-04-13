@@ -34,6 +34,7 @@ plugins {
 	id 'com.adarshr.test-logger' version '1.6.0' // https://github.com/radarsh/gradle-test-logger-plugin
 
 	id 'org.sonarqube' version '2.8'
+	id 'jacoco'
 }
 
 apply from: "${project.rootDir}/gradle/git_info.gradle"
@@ -45,6 +46,7 @@ if (System.getProperty('include-code-coverage') != null) {
 sonarqube {
   properties {
     property "sonar.projectKey", "tuw-sqm-ss2020-02_nntool"
+    property "sonar.coverage.jacoco.xmlReportPaths", "${project.rootDir}/couchdb-client/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/nettest-shared-server-storage-couchdb/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/nettest-shared-server-opendata/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/spring-data-couchdb/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/couchdb-spring-boot-starter/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/statistic-service/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/couchdb-spring-boot-autoconfigure/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/result-service/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/map-service/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/collector-service/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/ias-android-common/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/search-service/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/qos-service/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/qos-client-android/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/nettest-shared/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/controller-service/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/loadbalancing-service/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/ias-android-speed/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/nettest-shared-server-storage-postgresql/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/ias-android-demo/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/android-app/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/qos-client-java/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/opendata-collector-service/build/reports/jacoco/test/jacocoTestReport.xml,${project.rootDir}/nettest-shared-server/build/reports/jacoco/test/jacocoTestReport.xml"
   }
 }
 
@@ -85,6 +87,10 @@ subprojects { p ->
 	if (System.getProperty('include-code-coverage') != null) {
 		apply from: "${project.rootDir}/gradle/clover.gradle"
 	}
+
+    if (System.getProperty('include-jacoco-code-coverage') != null) {
+        apply from: "${project.rootDir}/gradle/jacoco.gradle"
+    }
 
     // make root project clean task depend on (= execute) subproject clean tasks
 	rootProject.clean.dependsOn tasks.matching { it.name == "clean" }
