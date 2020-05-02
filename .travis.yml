@@ -5,7 +5,12 @@ os: linux
 dist: trusty
 jdk: oraclejdk8
 
+before_install:
+  - sudo apt-get -y install fontconfig ttf-dejavu
+
 addons:
+  apt:
+    update: true
   sonarcloud:
     organization: "tuw-sqm-ss2020-02"
     token:
@@ -21,4 +26,14 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew --no-daemon clean build jacocoTestReport sonarqube -Dskip-android -Dinclude-jacoco-code-coverage
+  - ./gradlew --no-daemon --no-parallel clean build jacocoTestReport cloverGenerateReport cloverAggregateReports -Dskip-android -Dinclude-jacoco-code-coverage -Dinclude-code-coverage
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  repo: tuw-sqm-ss2020-02/nntool-ci-report
+  github_token: $GITHUB_TOKEN
+  local_dir: build
+  on:
+    branch: gh-pages
+#    branch: master
