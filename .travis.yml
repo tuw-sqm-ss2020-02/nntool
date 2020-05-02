@@ -34,6 +34,7 @@ deploy:
   repo: tuw-sqm-ss2020-02/nntool-ci-report
   github_token: $GITHUB_TOKEN
   local_dir: build
+  #target_branch: gh-pages
   on:
-    branch: gh-pages
-#    branch: master
+    branch: tuw-sqm-ss2020-02-clover
+    #branch: master
