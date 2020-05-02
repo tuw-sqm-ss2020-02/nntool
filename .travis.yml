@@ -36,5 +36,4 @@ deploy:
   local_dir: build
   #target_branch: gh-pages
   on:
-    branch: tuw-sqm-ss2020-02-clover
-    #branch: master
+    branch: master
