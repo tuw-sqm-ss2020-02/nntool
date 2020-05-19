@@ -26,7 +26,7 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew --no-daemon --no-parallel clean build jacocoTestReport cloverGenerateReport cloverAggregateReports -Dskip-android -Dinclude-jacoco-code-coverage -Dinclude-code-coverage
+  - ./gradlew --no-daemon --no-parallel clean build jacocoTestReport cloverGenerateReport cloverAggregateReports -Dskip-android -Dinclude-jacoco-code-coverage -Dinclude-code-coverage -Dinclude-checkstyle-quality-check
 
 deploy:
   provider: pages
