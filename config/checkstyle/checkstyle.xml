@@ -46,15 +46,16 @@
 
   <!-- Checks that a package-info.java file exists for each package.     -->
   <!-- See https://checkstyle.org/config_javadoc.html#JavadocPackage -->
-  <module name="JavadocPackage"/>
+  <!--<module name="JavadocPackage"/>-->
 
   <!-- Checks whether files end with a new line.                        -->
   <!-- See https://checkstyle.org/config_misc.html#NewlineAtEndOfFile -->
-  <module name="NewlineAtEndOfFile"/>
+  <!--<module name="NewlineAtEndOfFile"/>-->
 
   <!-- Checks that property files contain the same keys.         -->
   <!-- See https://checkstyle.org/config_misc.html#Translation -->
-  <module name="Translation"/>
+  <!-- not necessary for our project -->
+  <!--<module name="Translation"/>-->
 
   <!-- Checks for Size Violations.                    -->
   <!-- See https://checkstyle.org/config_sizes.html -->
@@ -88,19 +89,24 @@
     <!-- Checks for Javadoc comments.                     -->
     <!-- See https://checkstyle.org/config_javadoc.html -->
     <module name="InvalidJavadocPosition"/>
+    <module name="JavadocContentLocationCheck"/>
     <module name="JavadocMethod"/>
     <module name="JavadocType"/>
     <module name="JavadocVariable"/>
-    <module name="JavadocStyle"/>
     <module name="MissingJavadocMethod"/>
+    <module name="MissingJavadocType"/>
 
     <!-- Checks for Naming Conventions.                  -->
     <!-- See https://checkstyle.org/config_naming.html -->
+    <module name="CatchParameterName"/>
     <module name="ConstantName"/>
+    <module name="InterfaceTypeParameterName"/>
+    <module name="LambdaParameterName"/>
     <module name="LocalFinalVariableName"/>
     <module name="LocalVariableName"/>
     <module name="MemberName"/>
     <module name="MethodName"/>
+    <module name="MethodTypeParameterName"/>
     <module name="PackageName"/>
     <module name="ParameterName"/>
     <module name="StaticVariableName"/>
@@ -122,9 +128,10 @@
 
     <!-- Checks for whitespace                               -->
     <!-- See https://checkstyle.org/config_whitespace.html -->
-    <module name="EmptyForIteratorPad"/>
+    <module name="EmptyLineSeparator"/>
     <module name="GenericWhitespace"/>
     <module name="MethodParamPad"/>
+    <module name="NoLineWrap"/>
     <module name="NoWhitespaceAfter"/>
     <module name="NoWhitespaceBefore"/>
     <module name="OperatorWrap"/>
@@ -132,45 +139,89 @@
     <module name="TypecastParenPad"/>
     <module name="WhitespaceAfter"/>
     <module name="WhitespaceAround"/>
+    <!--<module name="EmptyForIteratorPad"/>-->
+
+
 
     <!-- Modifier Checks                                    -->
     <!-- See https://checkstyle.org/config_modifiers.html -->
-    <module name="ModifierOrder"/>
+    <!-- <module name="ModifierOrder"/> -->
     <module name="RedundantModifier"/>
 
     <!-- Checks for blocks. You know, those {}'s         -->
     <!-- See https://checkstyle.org/config_blocks.html -->
     <module name="AvoidNestedBlocks"/>
     <module name="EmptyBlock"/>
-    <module name="LeftCurly"/>
-    <module name="NeedBraces"/>
+    <module name="LeftCurly">
+      <property name="ignoreEnums" value="false"/>
+    </module>
     <module name="RightCurly"/>
+    <module name="NeedBraces"/>
+
+    <!-- Annotation Checks                          -->
+    <!-- See https://checkstyle.sourceforge.io/config_annotation.html -->
+    <module name="AnnotationLocation">
+      <property name="allowSamelineMultipleAnnotations" value="false"/>
+      <property name="allowSamelineSingleParameterlessAnnotation" value="false"/>
+      <property name="allowSamelineParameterizedAnnotation" value="true"/>
+    </module>
+    <module name="MissingDeprecated"/>
+    <module name="SuppressWarnings"/>
 
     <!-- Checks for common coding problems               -->
     <!-- See https://checkstyle.org/config_coding.html -->
+    <module name="AvoidDoubleBraceInitialization"/>
+    <module name="AvoidInlineConditionals"/>
+    <module name="DefaultComesLast"/>
     <module name="EmptyStatement"/>
     <module name="EqualsHashCode"/>
+    <module name="FallThrough"/>
     <module name="HiddenField"/>
-    <module name="IllegalInstantiation"/>
+    <module name="IllegalInstantiation">
+      <property name="classes" value="java.lang.Boolean"/>
+    </module>
     <module name="InnerAssignment"/>
     <module name="MagicNumber"/>
     <module name="MissingSwitchDefault"/>
+    <module name="MultipleStringLiterals"/>
     <module name="MultipleVariableDeclarations"/>
+    <module name="NoArrayTrailingComma"/>
+    <module name="NoEnumTrailingComma"/>
+    <module name="OneStatementPerLine"/>
+    <module name="RequireThis"/>
     <module name="SimplifyBooleanExpression"/>
-    <module name="SimplifyBooleanReturn"/>
+    <module name="StringLiteralEquality"/>
+
+    <!-- Checks for metrics                         -->
+    <!-- See https://checkstyle.sourceforge.io/config_metrics.html -->
+    <module name="CyclomaticComplexity">
+      <property name="switchBlockAsSingleDecisionPoint" value="true"/>
+    </module>
+    <module name="NPathComplexity"/>
 
     <!-- Checks for class design                         -->
     <!-- See https://checkstyle.org/config_design.html -->
-    <module name="DesignForExtension"/>
+    <!--<module name="DesignForExtension"/>-->
     <module name="FinalClass"/>
     <module name="HideUtilityClassConstructor"/>
-    <module name="InterfaceIsType"/>
+    <module name="InnerTypeLast"/>
+    <module name="InterfaceIsType">
+      <property name="allowMarkerInterfaces" value="false"/>
+    </module>
+    <module name="OneTopLevelClass"/>
+    <module name="ThrowsCount">
+      <property name="ignorePrivateMethods" value="false"/>
+    </module>
     <module name="VisibilityModifier"/>
 
     <!-- Miscellaneous other checks.                   -->
     <!-- See https://checkstyle.org/config_misc.html -->
     <module name="ArrayTypeStyle"/>
+    <module name="AvoidEscapedUnicodeCharacters"/>
+    <module name="CommentsIndentation"/>
     <module name="FinalParameters"/>
+    <module name="Indentation"/>
+    <module name="OuterTypeFilename"/>
     <module name="TodoComment"/>
     <module name="UpperEll"/>
 
