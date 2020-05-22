@@ -62,6 +62,8 @@
   <module name="FileLength"/>
   <module name="LineLength">
     <property name="fileExtensions" value="java"/>
+    <property name="ignorePattern" value="//|\@|\*"/>
+    <property name="max" value="250"/>
   </module>
 
   <!-- Checks for whitespace                               -->
@@ -124,7 +126,6 @@
     <!-- Checks for Size Violations.                    -->
     <!-- See https://checkstyle.org/config_sizes.html -->
     <module name="MethodLength"/>
-    <module name="ParameterNumber"/>
 
     <!-- Checks for whitespace                               -->
     <!-- See https://checkstyle.org/config_whitespace.html -->

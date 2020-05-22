@@ -88,8 +88,10 @@ public class LmapActionDto {
 	 * The output is stored temporarily since the Destination Schedules will in general not be running when output is passed to them. 
 	 * The behavior of an Action passing data to its own Schedule is implementation specific.
 	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "A set of Schedules receiving the output produced by this Action. The output is stored temporarily since the Destination Schedules will in general not be running when output is passed to them. The behavior of an Action passing data to its own Schedule is implementation specific.")
-	@JsonPropertyDescription("A set of Schedules receiving the output produced by this Action. The output is stored temporarily since the Destination Schedules will in general not be running when output is passed to them. The behavior of an Action passing data to its own Schedule is implementation specific.")
+	@io.swagger.annotations.ApiModelProperty(required = true, value = "A set of Schedules receiving the output produced by this Action. The output is stored temporarily since the Destination Schedules will in general not be running when output is passed to them. " +
+			"The behavior of an Action passing data to its own Schedule is implementation specific.")
+	@JsonPropertyDescription("A set of Schedules receiving the output produced by this Action. The output is stored temporarily since the Destination Schedules will in general not be running when output is passed to them. " +
+			"The behavior of an Action passing data to its own Schedule is implementation specific.")
 	@Expose
 	@SerializedName("destination")
 	@JsonProperty(required = true, value = "destination")

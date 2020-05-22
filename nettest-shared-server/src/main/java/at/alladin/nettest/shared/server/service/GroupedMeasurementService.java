@@ -116,7 +116,7 @@ public class GroupedMeasurementService {
 	 * @param includeKeys will include the internal keys in the result (e.g. speed_parameter_group)
 	 * @return
 	 */
-	public DetailMeasurementResponse groupResult(final FullMeasurementResponse measurement, final List<SpeedtestDetailGroup> groupStructure, final Locale locale, 
+	public DetailMeasurementResponse groupResult(final FullMeasurementResponse measurement, final List<SpeedtestDetailGroup> groupStructure, final Locale locale,
 			final int geoAccuracyDetailLimit, final boolean includeKeys) {
 		
 		if (measurement == null) {
@@ -128,7 +128,7 @@ public class GroupedMeasurementService {
     	
     	//Fill in the corresponding Response with translated and formatted values
 		final DetailMeasurementResponse ret = new DetailMeasurementResponse();
-		
+
 		final PriorityQueue<ShareText> shareTextQueue = new PriorityQueue<>((textOne, textTwo) -> {
 			return textOne.getPriority().compareTo(textTwo.getPriority());
 		});
@@ -143,7 +143,7 @@ public class GroupedMeasurementService {
 //			}
 		
 		final Map<MeasurementTypeDto, FullSubMeasurement> subMeasurements = measurement.getMeasurements();
-		
+
 		boolean hasQoSMeasurements = false;
 		if (subMeasurements != null) {
 			final FullQoSMeasurement qosMeasurement = (FullQoSMeasurement) subMeasurements.get(MeasurementTypeDto.QOS);
@@ -151,7 +151,6 @@ public class GroupedMeasurementService {
 		}
 		
 		ret.setHasQoSResults(hasQoSMeasurements);
-
 		
 		for (final SpeedtestDetailGroup groupDefinition : groupStructure) {
 			//create a corresponding responseGroup w/formatted and i18ed values

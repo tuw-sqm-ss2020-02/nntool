@@ -151,72 +151,11 @@ public class QualityOfServiceTest implements Callable<QoSResultCollector> {
 			} catch (IllegalArgumentException ex) {
 				ex.printStackTrace();
 			}
-			
-			if (TASK_HTTP.equals(taskId)) {
-	        	test = new HttpProxyTask(this, taskDesc, threadCounter++);
-			}
-			else if (TASK_NON_TRANSPARENT_PROXY.equals(taskId)) {
-	        	test = new NonTransparentProxyTask(this, taskDesc, threadCounter++);
-			}
-			else if (TASK_DNS.equals(taskId)) {
-			    /*  if there is a provided dnsserveraddress from the settings, use it! (unless a dns resolver was already specified in the taskDescription)
-                    Necessary for android devices with SDK > 26, as the usual way of obtaining the DNS server (via the dns library) doesn't work for them
-                */
-				if (qoSTestSettings.getDnsServerAddressList() != null && qoSTestSettings.getDnsServerAddressList().size() > 0 && !taskDesc.getParams().containsKey(DnsTask.PARAM_DNS_RESOLVER)) {
-					taskDesc.getParams().put(DnsTask.PARAM_DNS_RESOLVER, qoSTestSettings.getDnsServerAddressList().get(0).getHostAddress());
-				}
-	        	test = new DnsTask(this, taskDesc, threadCounter++);
-			}
-			else if (TASK_TCP.equals(taskId)) {
-	        	test = new TcpTask(this, taskDesc, threadCounter++);
-			}
-			else if (TASK_UDP.equals(taskId)) {
-	        	test = new UdpTask(this, taskDesc, threadCounter++);
-			}
-			else if (TASK_VOIP.equals(taskId)) {
-				test = new VoipTask(this, taskDesc, threadCounter++);
-			}
-			else if (TASK_TRACEROUTE.equals(taskId)) {
-				if (nnTestSettings != null && nnTestSettings.getTracerouteServiceClazz() != null) {
-					test = new TracerouteTask(this, taskDesc, threadCounter++);	
-				}
-				else {
-					System.out.println("No TracerouteService implementation: Skipping TracerouteTask: " + taskDesc);
-				}
-			}
-			else if (TASK_WEBSITE.equals(taskId)) {
-				if (nnTestSettings != null && nnTestSettings.getWebsiteTestService() != null) {
-					test = new WebsiteTask(this, taskDesc, threadCounter++);	
-				}
-				else {
-					System.out.println("No WebsiteTestService implementation: Skipping WebsiteTask: " + taskDesc);
-				}
-			}
-			else if (TASK_ECHO_PROTOCOL.equals(taskId)) {
-				if (taskDesc.getParams().get(AbstractEchoProtocolTask.PROTOCOL) != null) {
-					final String protocol = (String) taskDesc.getParams().get(AbstractEchoProtocolTask.PROTOCOL);
-					if (AbstractEchoProtocolTask.PROTOCOL_TCP.equals(protocol)) {
-						test = new EchoProtocolTcpTask(this, taskDesc, threadCounter++);
-					} else if (AbstractEchoProtocolTask.PROTOCOL_UDP.equals(protocol)) {
-						test = new EchoProtocolUdpTask(this, taskDesc, threadCounter++);
-					} else {
-						System.out.println("Protocol for EchoProtocol unknown. Use either: " + AbstractEchoProtocolTask.PROTOCOL_UDP + " or " + AbstractEchoProtocolTask.PROTOCOL_TCP);
-					}
-				} else {
-					System.out.println("No protocol specified for the EchoProtocol test. Skipping " + taskDesc);
-				}
-			}
-			else if (TASK_MKIT_WEB_CONNECTIVITY.equals(taskId)) {
-				test = new MkitTask(this, taskId, taskDesc, threadCounter++);
-			}
-			else if (TASK_MKIT_DASH.equals(taskId)) {
-				test = new MkitTask(this, taskId, taskDesc, threadCounter++);
-			}
-			else if (TASK_SIP.equals(taskId)) {
-				test = new SipTask(this, taskDesc, threadCounter++);
-			}
+
+			test = getTask(taskId, taskDesc, nnTestSettings, threadCounter);
 
 			if (test != null) {
+				threadCounter++;
 				//manage taskMap:
 				List<AbstractQoSTask> testList = null;
 				testList = testMap.get(test.getTestType());
@@ -274,6 +213,90 @@ public class QualityOfServiceTest implements Callable<QoSResultCollector> {
 			qoSTestSettings.dispatchTestProgressEvent(TestProgressEvent.ON_CREATED, null, this);	
 		}
     }
+
+    private AbstractQoSTask getTask(String taskId, TaskDesc taskDesc, TestSettings nnTestSettings, int threadCounter){
+		AbstractQoSTask test = null;
+    	switch (taskId){
+			case TASK_HTTP:
+				test = new HttpProxyTask(this, taskDesc, threadCounter);
+				break;
+
+			case TASK_NON_TRANSPARENT_PROXY:
+				test = new NonTransparentProxyTask(this, taskDesc, threadCounter);
+				break;
+
+			case TASK_DNS:
+				/*  if there is a provided dnsserveraddress from the settings, use it! (unless a dns resolver was already specified in the taskDescription)
+                    Necessary for android devices with SDK > 26, as the usual way of obtaining the DNS server (via the dns library) doesn't work for them
+                */
+				if (qoSTestSettings.getDnsServerAddressList() != null && qoSTestSettings.getDnsServerAddressList().size() > 0 && !taskDesc.getParams().containsKey(DnsTask.PARAM_DNS_RESOLVER)) {
+					taskDesc.getParams().put(DnsTask.PARAM_DNS_RESOLVER, qoSTestSettings.getDnsServerAddressList().get(0).getHostAddress());
+				}
+				test = new DnsTask(this, taskDesc, threadCounter);
+				break;
+
+			case TASK_TCP:
+				test = new TcpTask(this, taskDesc, threadCounter);
+				break;
+
+			case TASK_UDP:
+				test = new UdpTask(this, taskDesc, threadCounter);
+				break;
+
+			case TASK_VOIP:
+				test = new VoipTask(this, taskDesc, threadCounter);
+				break;
+
+			case TASK_TRACEROUTE:
+				if (nnTestSettings != null && nnTestSettings.getTracerouteServiceClazz() != null) {
+					test = new TracerouteTask(this, taskDesc, threadCounter);
+				}
+				else {
+					System.out.println("No TracerouteService implementation: Skipping TracerouteTask: " + taskDesc);
+				}
+				break;
+
+			case TASK_WEBSITE:
+				if (nnTestSettings != null && nnTestSettings.getWebsiteTestService() != null) {
+					test = new WebsiteTask(this, taskDesc, threadCounter);
+				}
+				else {
+					System.out.println("No WebsiteTestService implementation: Skipping WebsiteTask: " + taskDesc);
+				}
+				break;
+
+			case TASK_ECHO_PROTOCOL:
+				if (taskDesc.getParams().get(AbstractEchoProtocolTask.PROTOCOL) != null) {
+					final String protocol = (String) taskDesc.getParams().get(AbstractEchoProtocolTask.PROTOCOL);
+					if (AbstractEchoProtocolTask.PROTOCOL_TCP.equals(protocol)) {
+						test = new EchoProtocolTcpTask(this, taskDesc, threadCounter);
+					} else if (AbstractEchoProtocolTask.PROTOCOL_UDP.equals(protocol)) {
+						test = new EchoProtocolUdpTask(this, taskDesc, threadCounter);
+					} else {
+						System.out.println("Protocol for EchoProtocol unknown. Use either: " + AbstractEchoProtocolTask.PROTOCOL_UDP + " or " + AbstractEchoProtocolTask.PROTOCOL_TCP);
+					}
+				} else {
+					System.out.println("No protocol specified for the EchoProtocol test. Skipping " + taskDesc);
+				}
+				break;
+
+			case TASK_MKIT_WEB_CONNECTIVITY:
+				test = new MkitTask(this, taskId, taskDesc, threadCounter);
+				break;
+
+			case TASK_MKIT_DASH:
+				test = new MkitTask(this, taskId, taskDesc, threadCounter);
+				break;
+
+			case TASK_SIP:
+				test = new SipTask(this, taskDesc, threadCounter);
+				break;
+
+			default:
+				break;
+		}
+		return test;
+	}
 
     /**
      * 

@@ -437,11 +437,7 @@ public class ServerPreferences {
    					}
    				}
 	   		}
-
-	   		/////////////////////////////////
 	   		//	Services/Plugins:
-	   		/////////////////////////////////
-	   		
 	   		pluginMap.put("REST", new RestService(prop, this));
 
 	   	} catch (IOException ex) {

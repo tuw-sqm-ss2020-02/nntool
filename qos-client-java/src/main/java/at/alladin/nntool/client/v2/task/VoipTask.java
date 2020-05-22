@@ -356,32 +356,8 @@ public class VoipTask extends AbstractQoSTask {
 
 			final RtpQoSResult rtpResults = rtpControlDataList.size() > 0 ?
 					RtpUtil.calculateQoS(rtpControlDataList, initialSequenceNumber, sampleRate, buffer) : null;
-			
-			final String prefix = RESULT_VOIP_PREFIX + RESULT_INCOMING_PREFIX;
-			if (rtpResults != null) {
-				result.getResultMap().put(prefix + RESULT_MAX_JITTER, rtpResults.getMaxJitter());
-				result.getResultMap().put(prefix + RESULT_MEAN_JITTER, rtpResults.getMeanJitter());
-				result.getResultMap().put(prefix + RESULT_MAX_DELTA, rtpResults.getMaxDelta());
-				result.getResultMap().put(prefix + RESULT_SKEW, rtpResults.getSkew());
-				result.getResultMap().put(prefix + RESULT_NUM_PACKETS, rtpResults.getReceivedPackets());
-				result.getResultMap().put(prefix + RESULT_SEQUENCE_ERRORS, rtpResults.getOutOfOrder());
-				result.getResultMap().put(prefix + RESULT_SHORT_SEQUENTIAL, rtpResults.getMinSequential());
-				result.getResultMap().put(prefix + RESULT_LONG_SEQUENTIAL, rtpResults.getMaxSequencial());
-				result.getResultMap().put(prefix + RESULT_AVG_STALL_TIME, rtpResults.getAvgStallTime());
-				result.getResultMap().put(prefix + RESULT_NUMBER_OF_STALLS, rtpResults.getNumberOfStalls());
-			}
-			else {
-				result.getResultMap().put(prefix + RESULT_MAX_JITTER, null);
-				result.getResultMap().put(prefix + RESULT_MEAN_JITTER, null);
-				result.getResultMap().put(prefix + RESULT_MAX_DELTA, null);
-				result.getResultMap().put(prefix + RESULT_SKEW, null);
-				result.getResultMap().put(prefix + RESULT_NUM_PACKETS, 0);
-				result.getResultMap().put(prefix + RESULT_SEQUENCE_ERRORS, null);
-				result.getResultMap().put(prefix + RESULT_SHORT_SEQUENTIAL, null);
-				result.getResultMap().put(prefix + RESULT_LONG_SEQUENTIAL, null);
-				result.getResultMap().put(prefix + RESULT_AVG_STALL_TIME, null);
-				result.getResultMap().put(prefix + RESULT_NUMBER_OF_STALLS, null);
-			}
+
+			putRtpResultIntoQoS(result, rtpResults);
 			
 	        return result;			
 		}
@@ -391,6 +367,34 @@ public class VoipTask extends AbstractQoSTask {
 		}
 		finally {
 			onEnd(result);
+		}
+	}
+
+	private void putRtpResultIntoQoS(final QoSTestResult result, final RtpQoSResult rtpResults){
+		final String prefix = RESULT_VOIP_PREFIX + RESULT_INCOMING_PREFIX;
+		if (rtpResults != null) {
+			result.getResultMap().put(prefix + RESULT_MAX_JITTER, rtpResults.getMaxJitter());
+			result.getResultMap().put(prefix + RESULT_MEAN_JITTER, rtpResults.getMeanJitter());
+			result.getResultMap().put(prefix + RESULT_MAX_DELTA, rtpResults.getMaxDelta());
+			result.getResultMap().put(prefix + RESULT_SKEW, rtpResults.getSkew());
+			result.getResultMap().put(prefix + RESULT_NUM_PACKETS, rtpResults.getReceivedPackets());
+			result.getResultMap().put(prefix + RESULT_SEQUENCE_ERRORS, rtpResults.getOutOfOrder());
+			result.getResultMap().put(prefix + RESULT_SHORT_SEQUENTIAL, rtpResults.getMinSequential());
+			result.getResultMap().put(prefix + RESULT_LONG_SEQUENTIAL, rtpResults.getMaxSequencial());
+			result.getResultMap().put(prefix + RESULT_AVG_STALL_TIME, rtpResults.getAvgStallTime());
+			result.getResultMap().put(prefix + RESULT_NUMBER_OF_STALLS, rtpResults.getNumberOfStalls());
+		}
+		else {
+			result.getResultMap().put(prefix + RESULT_MAX_JITTER, null);
+			result.getResultMap().put(prefix + RESULT_MEAN_JITTER, null);
+			result.getResultMap().put(prefix + RESULT_MAX_DELTA, null);
+			result.getResultMap().put(prefix + RESULT_SKEW, null);
+			result.getResultMap().put(prefix + RESULT_NUM_PACKETS, 0);
+			result.getResultMap().put(prefix + RESULT_SEQUENCE_ERRORS, null);
+			result.getResultMap().put(prefix + RESULT_SHORT_SEQUENTIAL, null);
+			result.getResultMap().put(prefix + RESULT_LONG_SEQUENTIAL, null);
+			result.getResultMap().put(prefix + RESULT_AVG_STALL_TIME, null);
+			result.getResultMap().put(prefix + RESULT_NUMBER_OF_STALLS, null);
 		}
 	}
 	

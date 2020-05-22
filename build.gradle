@@ -85,7 +85,7 @@ subprojects { p ->
 		return
 	}
 
-    if (System.getProperty('include-checkstyle-quality-check') != null) {
+    if (System.getProperty('include-checkstyle-quality-check') == null) {
         apply from: "${project.rootDir}/gradle/checkstyle.gradle"
     }
 
