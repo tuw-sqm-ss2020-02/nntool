@@ -17,7 +17,6 @@
 package at.alladin.nntool.shared.qos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.annotations.Expose;
 
 
 /**
