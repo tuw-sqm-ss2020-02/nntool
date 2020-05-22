@@ -140,13 +140,6 @@
     <module name="WhitespaceAround"/>
     <!--<module name="EmptyForIteratorPad"/>-->
 
-
-
-    <!-- Modifier Checks                                    -->
-    <!-- See https://checkstyle.org/config_modifiers.html -->
-    <!-- <module name="ModifierOrder"/> -->
-    <module name="RedundantModifier"/>
-
     <!-- Checks for blocks. You know, those {}'s         -->
     <!-- See https://checkstyle.org/config_blocks.html -->
     <module name="AvoidNestedBlocks"/>
