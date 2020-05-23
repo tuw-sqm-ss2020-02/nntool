@@ -31,24 +31,15 @@ import at.alladin.nettest.nntool.android.app.util.info.signal.SignalGatherer;
  */
 public class InformationService extends Service {
 
-    public static String ACTION_START_INFORMATION_SERVICE = "at.alladin.nettest.nntool.android.app.startInformationService";
-
     private final static String TAG = InformationService.class.getSimpleName();
-
+    public static String ACTION_START_INFORMATION_SERVICE = "at.alladin.nettest.nntool.android.app.startInformationService";
     private final InformationServiceBinder informationServiceBinder = new InformationServiceBinder();
+    private InformationProvider informationProvider;
 
     @Override
     public IBinder onBind(Intent intent) {
         return informationServiceBinder;
     }
-
-    public class InformationServiceBinder extends Binder {
-        public InformationService getService() {
-            return InformationService.this;
-        }
-    }
-
-    private InformationProvider informationProvider;
 
     @Override
     public void onCreate() {
@@ -59,7 +50,7 @@ public class InformationService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d(TAG,"onDestroy");
+        Log.d(TAG, "onDestroy");
         informationProvider.stop();
         super.onDestroy();
     }
@@ -89,5 +80,11 @@ public class InformationService extends Service {
 
     public InformationProvider getInformationProvider() {
         return informationProvider;
+    }
+
+    public class InformationServiceBinder extends Binder {
+        public InformationService getService() {
+            return InformationService.this;
+        }
     }
 }

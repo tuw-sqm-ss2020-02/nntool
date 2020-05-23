@@ -66,6 +66,7 @@ public class RequestUtil {
 
     /**
      * prepares a {@link ApiRequestInfo} object already filled with available information
+     *
      * @param context
      * @return
      */
@@ -107,7 +108,7 @@ public class RequestUtil {
         return apiRequest;
     }
 
-    public static LmapControlDto prepareMeasurementInitiationRequest (final String selectedMeasurementPeerIdentifier, final Context context) {
+    public static LmapControlDto prepareMeasurementInitiationRequest(final String selectedMeasurementPeerIdentifier, final Context context) {
         final LmapControlDto request = new LmapControlDto();
         final LmapAgentDto agentDto = new LmapAgentDto();
         agentDto.setAgentId(PreferencesUtil.getAgentUuid(context));
@@ -171,7 +172,7 @@ public class RequestUtil {
 
         if (informationCollector != null) {
             Log.d(TAG, "Operator [illegal network state detected: "
-                    + informationCollector.getIllegalNetworkStateDetected() +"] -> " + informationCollector.getOperatorInfo());
+                    + informationCollector.getIllegalNetworkStateDetected() + "] -> " + informationCollector.getOperatorInfo());
 
             final TimeBasedResultDto timeBasedResultDto = new TimeBasedResultDto();
             report.setTimeBasedResult(timeBasedResultDto);
@@ -205,8 +206,7 @@ public class RequestUtil {
                     networkInfoDto.setBssid(operator.getBssid());
                     networkInfoDto.setSsid(operator.getSsid());
                     networkInfoDto.setFrequency(operator.getFrequency());
-                }
-                else if (operatorInfo.getOperatorInfo() instanceof MobileOperator) {
+                } else if (operatorInfo.getOperatorInfo() instanceof MobileOperator) {
                     final MobileOperator operator = (MobileOperator) operatorInfo.getOperatorInfo();
                     networkInfoDto.setNetworkOperatorMccMnc(operator.getNetworkOperator());
                     networkInfoDto.setNetworkOperatorName(operator.getNetworkOperatorName());

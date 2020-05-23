@@ -23,8 +23,7 @@ package com.zafaco.DemoApplicationBerec.interfaces;
 /**
  * Interface FocusedFragment
  */
-public interface FocusedFragment
-{
+public interface FocusedFragment {
     /**
      * Method onDisplayView
      */

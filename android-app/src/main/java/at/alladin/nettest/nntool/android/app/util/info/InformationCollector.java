@@ -51,12 +51,9 @@ import at.alladin.nettest.shared.berec.collector.api.v1.dto.shared.GeoLocationDt
 public class InformationCollector
         implements SignalStrengthChangeListener, NetworkChangeListener, GeoLocationChangeListener {
 
-    private final static String TAG = InformationCollector.class.getSimpleName();
-
     public final static String IF_TRAFFIC_LIST_END_TAG = "_END";
-
     public final static String IF_TRAFFIC_LIST_TOTAL_TAG = "_TOTAL";
-
+    private final static String TAG = InformationCollector.class.getSimpleName();
     private final InformationProvider informationProvider;
 
     private final AtomicBoolean isCollecting = new AtomicBoolean(false);
@@ -195,11 +192,9 @@ public class InformationCollector
         if (this.isCollecting.get() && event != null) {
             if (NetworkChangeEvent.NetworkChangeEventType.NO_CONNECTION.equals(event.getEventType())) {
                 illegalNetworkStateDetected.set(true);
-            }
-            else if (event.getNetworkType() == null) {
+            } else if (event.getNetworkType() == null) {
                 illegalNetworkStateDetected.set(true);
-            }
-            else {
+            } else {
                 final CellType cellType = CellType.fromTelephonyNetworkTypeId(event.getNetworkType());
                 boolean isMobileOperator = true;
                 switch (cellType) {
@@ -221,8 +216,7 @@ public class InformationCollector
                 final OperatorInfo operator = isMobileOperator ? event.getMobileOperator() : event.getWifiOperator();
                 if (operator == null) {
                     illegalNetworkStateDetected.set(true);
-                }
-                else if (operatorInfo.get() != null) {
+                } else if (operatorInfo.get() != null) {
                     final OperatorInfoHolder lastOperatorInfo = operatorInfo.get();
                     boolean wasMobileOperator = (lastOperatorInfo.getOperatorInfo() instanceof MobileOperator);
                     //check if previous and current operator are the same connection type
@@ -269,12 +263,41 @@ public class InformationCollector
         return illegalNetworkStateDetected.get();
     }
 
+    public long getStartTimeNs() {
+        return timestampNs.get();
+    }
+
     public void setStartTimeNs(final long startTimeNs) {
         timestampNs.set(startTimeNs);
     }
 
-    public long getStartTimeNs() {
-        return timestampNs.get();
+    public String getClientIpPublic() {
+        return clientIpPublic;
+    }
+
+    public void setClientIpPublic(String clientIpPublic) {
+        this.clientIpPublic = clientIpPublic;
+    }
+
+    public String getClientIpPrivate() {
+        return clientIpPrivate;
+    }
+
+    public void setClientIpPrivate(String clientIpPrivate) {
+        this.clientIpPrivate = clientIpPrivate;
+    }
+
+    public CurrentInterfaceTraffic getAggregatedIfValues() {
+        long rxTotal = 0;
+        long txTotal = 0;
+        long durationTotal = 0;
+        for (final CurrentInterfaceTraffic ift : interfaceTrafficMap.values()) {
+            rxTotal += ift.getRxBytes();
+            txTotal += ift.getTxBytes();
+            durationTotal += ift.getDurationNs();
+        }
+
+        return new CurrentInterfaceTraffic(rxTotal, txTotal, durationTotal);
     }
 
     public static class OperatorInfoHolder {
@@ -323,34 +346,5 @@ public class InformationCollector
         public void setTime(LocalDateTime time) {
             this.time = time;
         }
-    }
-
-    public String getClientIpPublic() {
-        return clientIpPublic;
-    }
-
-    public void setClientIpPublic(String clientIpPublic) {
-        this.clientIpPublic = clientIpPublic;
-    }
-
-    public String getClientIpPrivate() {
-        return clientIpPrivate;
-    }
-
-    public void setClientIpPrivate(String clientIpPrivate) {
-        this.clientIpPrivate = clientIpPrivate;
-    }
-
-    public CurrentInterfaceTraffic getAggregatedIfValues() {
-        long rxTotal = 0;
-        long txTotal = 0;
-        long durationTotal = 0;
-        for (final CurrentInterfaceTraffic ift : interfaceTrafficMap.values()) {
-            rxTotal += ift.getRxBytes();
-            txTotal += ift.getTxBytes();
-            durationTotal += ift.getDurationNs();
-        }
-
-        return new CurrentInterfaceTraffic(rxTotal, txTotal, durationTotal);
     }
 }

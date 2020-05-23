@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,184 +25,184 @@ import at.alladin.nntool.shared.qos.util.SipTaskHelper;
  */
 public class SipResult extends AbstractResult {
 
-	@JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_PORT)
-	private Integer port;
+    @JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_PORT)
+    private Integer port;
 
-	@JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_TIMEOUT)
-	private Long timeout;
+    @JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_TIMEOUT)
+    private Long timeout;
 
-	@JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_COUNT)
-	private Long count;
+    @JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_COUNT)
+    private Long count;
 
-	@JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_CALL_DURATION)
-	private Long callDuration;
+    @JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_CALL_DURATION)
+    private Long callDuration;
 
-	@JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_TO)
-	private String objectiveTo;
-	
-	@JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_FROM)
-	private String objectivefrom;
+    @JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_TO)
+    private String objectiveTo;
 
-	@JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_VIA)
-	private String objectiveVia;
-	
-	@JsonProperty(SipTaskHelper.PARAM_RESULT_TO)
-	private String resultTo;
-	
-	@JsonProperty(SipTaskHelper.PARAM_RESULT_FROM)
-	private String resultFrom;
+    @JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_FROM)
+    private String objectivefrom;
 
-	@JsonProperty(SipTaskHelper.PARAM_RESULT_VIA)
-	private String resultVia;
+    @JsonProperty(SipTaskHelper.PARAM_OBJECTIVE_VIA)
+    private String objectiveVia;
 
-	@JsonProperty(SipTaskHelper.PARAM_RESULT)
-	private String result;
-	
-	@JsonProperty(SipTaskHelper.PARAM_RESULT_CCSR)	
-	private Object callCompletionSuccessRate;
+    @JsonProperty(SipTaskHelper.PARAM_RESULT_TO)
+    private String resultTo;
 
-	@JsonProperty(SipTaskHelper.PARAM_RESULT_CSSR)	
-	private Object callSetupSuccessRate;
+    @JsonProperty(SipTaskHelper.PARAM_RESULT_FROM)
+    private String resultFrom;
 
-	@JsonProperty(SipTaskHelper.PARAM_RESULT_DCR)	
-	private Object callDroppedCallRate;
+    @JsonProperty(SipTaskHelper.PARAM_RESULT_VIA)
+    private String resultVia;
 
-	/**
-	 * 
-	 */
-	public SipResult() {
-		// TODO Auto-generated constructor stub
-	}
+    @JsonProperty(SipTaskHelper.PARAM_RESULT)
+    private String result;
 
-	public Integer getPort() {
-		return port;
-	}
+    @JsonProperty(SipTaskHelper.PARAM_RESULT_CCSR)
+    private Object callCompletionSuccessRate;
 
-	public void setPort(Integer port) {
-		this.port = port;
-	}
+    @JsonProperty(SipTaskHelper.PARAM_RESULT_CSSR)
+    private Object callSetupSuccessRate;
 
-	public Long getCount() {
-		return count;
-	}
+    @JsonProperty(SipTaskHelper.PARAM_RESULT_DCR)
+    private Object callDroppedCallRate;
 
-	public void setCount(Long count) {
-		this.count = count;
-	}
+    /**
+     *
+     */
+    public SipResult() {
+        // TODO Auto-generated constructor stub
+    }
 
-	public Long getTimeout() {
-		return timeout;
-	}
+    public Integer getPort() {
+        return port;
+    }
 
-	public void setTimeout(Long timeout) {
-		this.timeout = timeout;
-	}
+    public void setPort(Integer port) {
+        this.port = port;
+    }
 
-	public String getResult() {
-		return result;
-	}
+    public Long getCount() {
+        return count;
+    }
 
-	public void setResult(String result) {
-		this.result = result;
-	}
+    public void setCount(Long count) {
+        this.count = count;
+    }
 
-	public Object getCallCompletionSuccessRate() {
-		return callCompletionSuccessRate;
-	}
+    public Long getTimeout() {
+        return timeout;
+    }
 
-	public void setCallCompletionSuccessRate(Double callCompletionSuccessRate) {
-		this.callCompletionSuccessRate = callCompletionSuccessRate;
-	}
+    public void setTimeout(Long timeout) {
+        this.timeout = timeout;
+    }
 
-	public Object getCallSetupSuccessRate() {
-		return callSetupSuccessRate;
-	}
+    public String getResult() {
+        return result;
+    }
 
-	public void setCallSetupSuccessRate(Double callSetupSuccessRate) {
-		this.callSetupSuccessRate = callSetupSuccessRate;
-	}
+    public void setResult(String result) {
+        this.result = result;
+    }
 
-	public Object getCallDroppedCallRate() {
-		return callDroppedCallRate;
-	}
+    public Object getCallCompletionSuccessRate() {
+        return callCompletionSuccessRate;
+    }
 
-	public void setCallDroppedCallRate(Double callDroppedCallRate) {
-		this.callDroppedCallRate = callDroppedCallRate;
-	}
-	
-	public String getObjectiveTo() {
-		return objectiveTo;
-	}
+    public void setCallCompletionSuccessRate(Double callCompletionSuccessRate) {
+        this.callCompletionSuccessRate = callCompletionSuccessRate;
+    }
 
-	public void setObjectiveTo(String objectiveTo) {
-		this.objectiveTo = objectiveTo;
-	}
+    public Object getCallSetupSuccessRate() {
+        return callSetupSuccessRate;
+    }
 
-	public String getObjectivefrom() {
-		return objectivefrom;
-	}
+    public void setCallSetupSuccessRate(Double callSetupSuccessRate) {
+        this.callSetupSuccessRate = callSetupSuccessRate;
+    }
 
-	public void setObjectivefrom(String objectivefrom) {
-		this.objectivefrom = objectivefrom;
-	}
+    public Object getCallDroppedCallRate() {
+        return callDroppedCallRate;
+    }
 
-	public String getResultTo() {
-		return resultTo;
-	}
+    public void setCallDroppedCallRate(Double callDroppedCallRate) {
+        this.callDroppedCallRate = callDroppedCallRate;
+    }
 
-	public void setResultTo(String resultTo) {
-		this.resultTo = resultTo;
-	}
+    public String getObjectiveTo() {
+        return objectiveTo;
+    }
 
-	public String getResultFrom() {
-		return resultFrom;
-	}
+    public void setObjectiveTo(String objectiveTo) {
+        this.objectiveTo = objectiveTo;
+    }
 
-	public void setResultFrom(String resultFrom) {
-		this.resultFrom = resultFrom;
-	}
+    public String getObjectivefrom() {
+        return objectivefrom;
+    }
 
-	public Long getCallDuration() {
-		return callDuration;
-	}
+    public void setObjectivefrom(String objectivefrom) {
+        this.objectivefrom = objectivefrom;
+    }
 
-	public void setCallDuration(Long callDuration) {
-		this.callDuration = callDuration;
-	}
+    public String getResultTo() {
+        return resultTo;
+    }
 
-	public String getObjectiveVia() {
-		return objectiveVia;
-	}
+    public void setResultTo(String resultTo) {
+        this.resultTo = resultTo;
+    }
 
-	public void setObjectiveVia(String objectiveVia) {
-		this.objectiveVia = objectiveVia;
-	}
+    public String getResultFrom() {
+        return resultFrom;
+    }
 
-	public String getResultVia() {
-		return resultVia;
-	}
+    public void setResultFrom(String resultFrom) {
+        this.resultFrom = resultFrom;
+    }
 
-	public void setResultVia(String resultVia) {
-		this.resultVia = resultVia;
-	}
+    public Long getCallDuration() {
+        return callDuration;
+    }
 
-	@Override
-	public String toString() {
-		return "SipResult{" +
-				"port=" + port +
-				", timeout=" + timeout +
-				", count=" + count +
-				", callDuration=" + callDuration +
-				", objectiveTo='" + objectiveTo + '\'' +
-				", objectivefrom='" + objectivefrom + '\'' +
-				", objectiveVia='" + objectiveVia + '\'' +
-				", resultTo='" + resultTo + '\'' +
-				", resultFrom='" + resultFrom + '\'' +
-				", resultVia='" + resultVia + '\'' +
-				", result='" + result + '\'' +
-				", callCompletionSuccessRate=" + callCompletionSuccessRate +
-				", callSetupSuccessRate=" + callSetupSuccessRate +
-				", callDroppedCallRate=" + callDroppedCallRate +
-				"} " + super.toString();
-	}
+    public void setCallDuration(Long callDuration) {
+        this.callDuration = callDuration;
+    }
+
+    public String getObjectiveVia() {
+        return objectiveVia;
+    }
+
+    public void setObjectiveVia(String objectiveVia) {
+        this.objectiveVia = objectiveVia;
+    }
+
+    public String getResultVia() {
+        return resultVia;
+    }
+
+    public void setResultVia(String resultVia) {
+        this.resultVia = resultVia;
+    }
+
+    @Override
+    public String toString() {
+        return "SipResult{" +
+                "port=" + port +
+                ", timeout=" + timeout +
+                ", count=" + count +
+                ", callDuration=" + callDuration +
+                ", objectiveTo='" + objectiveTo + '\'' +
+                ", objectivefrom='" + objectivefrom + '\'' +
+                ", objectiveVia='" + objectiveVia + '\'' +
+                ", resultTo='" + resultTo + '\'' +
+                ", resultFrom='" + resultFrom + '\'' +
+                ", resultVia='" + resultVia + '\'' +
+                ", result='" + result + '\'' +
+                ", callCompletionSuccessRate=" + callCompletionSuccessRate +
+                ", callSetupSuccessRate=" + callSetupSuccessRate +
+                ", callDroppedCallRate=" + callDroppedCallRate +
+                "} " + super.toString();
+    }
 }

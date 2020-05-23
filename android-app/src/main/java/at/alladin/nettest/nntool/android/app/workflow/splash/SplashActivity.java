@@ -30,18 +30,7 @@ import at.alladin.nettest.nntool.android.app.R;
  */
 public class SplashActivity extends AppCompatActivity {
 
-    private final int SPLASH_WAIT_MS = 1200;
-
     final Handler handler = new Handler();
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_view);
-        handler.postDelayed(startMainActivityRunnable, SPLASH_WAIT_MS);
-    }
-
-
     final Runnable startMainActivityRunnable = new Runnable() {
         @Override
         public void run() {
@@ -49,12 +38,19 @@ public class SplashActivity extends AppCompatActivity {
             try {
                 Bundle b = ActivityOptionsCompat.makeCustomAnimation(SplashActivity.this, android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
                 startActivity(startMainActivityIntent, b);
-            }
-            catch (final IllegalArgumentException e) {
+            } catch (final IllegalArgumentException e) {
                 //may crash on some samsung(?) or huawei(?) devices
                 startActivity(startMainActivityIntent);
             }
             finish();
         }
     };
+    private final int SPLASH_WAIT_MS = 1200;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.splash_view);
+        handler.postDelayed(startMainActivityRunnable, SPLASH_WAIT_MS);
+    }
 }

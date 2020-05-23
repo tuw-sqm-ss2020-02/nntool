@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,205 +31,204 @@ import at.alladin.nettest.shared.berec.collector.api.v1.dto.shared.StatusDto;
 
 /**
  * This DTO class is a base class for all specific full measurement classes.
- * 
- * @author alladin-IT GmbH (bp@alladin.at)
  *
+ * @author alladin-IT GmbH (bp@alladin.at)
  */
 @io.swagger.annotations.ApiModel(description = "This DTO class is a base class for all specific full measurement classes.")
 @JsonClassDescription("This DTO class is a base class for all specific full measurement classes.")
 @JsonTypeInfo(
-		use = JsonTypeInfo.Id.NAME,
-		property = "deserialize_type"	//TODO: rename all deserialize_type to _deserialize_type
+        use = JsonTypeInfo.Id.NAME,
+        property = "deserialize_type"    //TODO: rename all deserialize_type to _deserialize_type
 )
 @JsonSubTypes({
-		@JsonSubTypes.Type(value = FullSpeedMeasurement.class, name = "full_speed_measurement"),
-		@JsonSubTypes.Type(value = FullQoSMeasurement.class, name = "full_qos_measurement")
+        @JsonSubTypes.Type(value = FullSpeedMeasurement.class, name = "full_speed_measurement"),
+        @JsonSubTypes.Type(value = FullQoSMeasurement.class, name = "full_qos_measurement")
 })
 public class FullSubMeasurement {
 
-	/**
-	 * Flag to mark this QoS measurement as implausible.
-	 * An implausible QoS result is one that could not have been measured that way.
-	 * This flag exists for potentially tampered results, so they do not count as valid results (e.g. to prevent tampering w/statistics).
-	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "Flag to mark this QoS measurement as implausible. An implausible QoS result is one that could not have been measured that way. This flag exists for potentially tampered results, so they do not count as valid results (e.g. to prevent tampering w/statistics).")
-	@JsonPropertyDescription("Flag to mark this QoS measurement as implausible. An implausible QoS result is one that could not have been measured that way. This flag exists for potentially tampered results, so they do not count as valid results (e.g. to prevent tampering w/statistics).")
-	@Expose
-	@SerializedName("implausible")
-	@JsonProperty(required = true, value = "implausible")
-	private boolean implausible;
-	
-	/**
-	 * The protocol version this measurement used, if available.
-	 */
-	@io.swagger.annotations.ApiModelProperty("The protocol version this measurement used, if available.")
-	@JsonPropertyDescription("The protocol version this measurement used, if available.")
-	@Expose
-	@SerializedName("version_protocol")
-	@JsonProperty("version_protocol")
-	private String versionProtocol;
-	
-	/**
-	 * The library version this measurement used, if available.
-	 */
-	@io.swagger.annotations.ApiModelProperty("The library version this measurement used, if available.")
-	@JsonPropertyDescription("The library version this measurement used, if available.")
-	@Expose
-	@SerializedName("version_library")
-	@JsonProperty("version_library")
-	private String versionLibrary;
-	
-// SubMeasurementTime
-	
-	/**
-	 * Start time in nanoseconds relative to the start time of the overall measurement object.
-	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "Start time in nanoseconds relative to the start time of the overall measurement object.")
-	@JsonPropertyDescription("Start time in nanoseconds relative to the start time of the overall measurement object.")
-	@Expose
-	@SerializedName("relative_start_time_ns")
-	@JsonProperty(required = true, value = "relative_start_time_ns")
-	private Long relativeStartTimeNs;
-	
-	/**
-	 * End time in nanoseconds relative to the end time of the overall measurement object.
-	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "End time in nanoseconds relative to the end time of the overall measurement object.")
-	@JsonPropertyDescription("End time in nanoseconds relative to the end time of the overall measurement object.")
-	@Expose
-	@SerializedName("relative_end_time_ns")
-	@JsonProperty(required = true, value = "relative_end_time_ns")
-	private Long relativeEndTimeNs;
-	
-	/**
-	 * Start Date and time for this sub measurement. Date and time is always stored as UTC. 
-	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "Start Date and time for this sub measurement. Date and time is always stored as UTC.")
-	@JsonPropertyDescription("Start Date and time for this sub measurement. Date and time is always stored as UTC.")
-	@Expose
-	@SerializedName("start_time")
-	@JsonProperty(required = true, value = "start_time")
-	private LocalDateTime startTime;
-	
-	/**
-	 * End Date and time for this sub measurement. Date and time is always stored as UTC.
-	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "End Date and time for this sub measurement. Date and time is always stored as UTC.")
-	@JsonPropertyDescription("End Date and time for this sub measurement. Date and time is always stored as UTC.")
-	@Expose
-	@SerializedName("end_time")
-	@JsonProperty(required = true, value = "end_time")
-	private LocalDateTime endTime;
-	
-	/**
-	 * Duration of a measurement.
-	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "Duration of a measurement.")
-	@JsonPropertyDescription("Duration of a measurement.")
-	@Expose
-	@SerializedName("duration_ns")
-	@JsonProperty(required = true, value = "duration_ns")
-	private Long durationNs;
-	
-// MeasurementStatusInfo
-	
-	/**
-	 * @see StatusDto
-	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "The status of a measurement.")
-	@JsonPropertyDescription("The status of a measurement.")
-	@Expose
-	@SerializedName("status")
-	@JsonProperty(required = true, value = "status")
-	private StatusDto status;
-	
-	/**
-	 * @see ReasonDto
-	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "The reason why a measurement failed.")
-	@JsonPropertyDescription("The reason why a measurement failed.")
-	@Expose
-	@SerializedName("reason")
-	@JsonProperty(required = true, value = "reason")
-	private ReasonDto reason;
+    /**
+     * Flag to mark this QoS measurement as implausible.
+     * An implausible QoS result is one that could not have been measured that way.
+     * This flag exists for potentially tampered results, so they do not count as valid results (e.g. to prevent tampering w/statistics).
+     */
+    @io.swagger.annotations.ApiModelProperty(required = true, value = "Flag to mark this QoS measurement as implausible. An implausible QoS result is one that could not have been measured that way. This flag exists for potentially tampered results, so they do not count as valid results (e.g. to prevent tampering w/statistics).")
+    @JsonPropertyDescription("Flag to mark this QoS measurement as implausible. An implausible QoS result is one that could not have been measured that way. This flag exists for potentially tampered results, so they do not count as valid results (e.g. to prevent tampering w/statistics).")
+    @Expose
+    @SerializedName("implausible")
+    @JsonProperty(required = true, value = "implausible")
+    private boolean implausible;
 
-	public boolean isImplausible() {
-		return implausible;
-	}
+    /**
+     * The protocol version this measurement used, if available.
+     */
+    @io.swagger.annotations.ApiModelProperty("The protocol version this measurement used, if available.")
+    @JsonPropertyDescription("The protocol version this measurement used, if available.")
+    @Expose
+    @SerializedName("version_protocol")
+    @JsonProperty("version_protocol")
+    private String versionProtocol;
 
-	public void setImplausible(boolean implausible) {
-		this.implausible = implausible;
-	}
+    /**
+     * The library version this measurement used, if available.
+     */
+    @io.swagger.annotations.ApiModelProperty("The library version this measurement used, if available.")
+    @JsonPropertyDescription("The library version this measurement used, if available.")
+    @Expose
+    @SerializedName("version_library")
+    @JsonProperty("version_library")
+    private String versionLibrary;
 
-	public String getVersionProtocol() {
-		return versionProtocol;
-	}
+    // SubMeasurementTime
 
-	public void setVersionProtocol(String versionProtocol) {
-		this.versionProtocol = versionProtocol;
-	}
+    /**
+     * Start time in nanoseconds relative to the start time of the overall measurement object.
+     */
+    @io.swagger.annotations.ApiModelProperty(required = true, value = "Start time in nanoseconds relative to the start time of the overall measurement object.")
+    @JsonPropertyDescription("Start time in nanoseconds relative to the start time of the overall measurement object.")
+    @Expose
+    @SerializedName("relative_start_time_ns")
+    @JsonProperty(required = true, value = "relative_start_time_ns")
+    private Long relativeStartTimeNs;
 
-	public String getVersionLibrary() {
-		return versionLibrary;
-	}
+    /**
+     * End time in nanoseconds relative to the end time of the overall measurement object.
+     */
+    @io.swagger.annotations.ApiModelProperty(required = true, value = "End time in nanoseconds relative to the end time of the overall measurement object.")
+    @JsonPropertyDescription("End time in nanoseconds relative to the end time of the overall measurement object.")
+    @Expose
+    @SerializedName("relative_end_time_ns")
+    @JsonProperty(required = true, value = "relative_end_time_ns")
+    private Long relativeEndTimeNs;
 
-	public void setVersionLibrary(String versionLibrary) {
-		this.versionLibrary = versionLibrary;
-	}
+    /**
+     * Start Date and time for this sub measurement. Date and time is always stored as UTC.
+     */
+    @io.swagger.annotations.ApiModelProperty(required = true, value = "Start Date and time for this sub measurement. Date and time is always stored as UTC.")
+    @JsonPropertyDescription("Start Date and time for this sub measurement. Date and time is always stored as UTC.")
+    @Expose
+    @SerializedName("start_time")
+    @JsonProperty(required = true, value = "start_time")
+    private LocalDateTime startTime;
 
-	public Long getRelativeStartTimeNs() {
-		return relativeStartTimeNs;
-	}
+    /**
+     * End Date and time for this sub measurement. Date and time is always stored as UTC.
+     */
+    @io.swagger.annotations.ApiModelProperty(required = true, value = "End Date and time for this sub measurement. Date and time is always stored as UTC.")
+    @JsonPropertyDescription("End Date and time for this sub measurement. Date and time is always stored as UTC.")
+    @Expose
+    @SerializedName("end_time")
+    @JsonProperty(required = true, value = "end_time")
+    private LocalDateTime endTime;
 
-	public void setRelativeStartTimeNs(Long relativeStartTimeNs) {
-		this.relativeStartTimeNs = relativeStartTimeNs;
-	}
+    /**
+     * Duration of a measurement.
+     */
+    @io.swagger.annotations.ApiModelProperty(required = true, value = "Duration of a measurement.")
+    @JsonPropertyDescription("Duration of a measurement.")
+    @Expose
+    @SerializedName("duration_ns")
+    @JsonProperty(required = true, value = "duration_ns")
+    private Long durationNs;
 
-	public Long getRelativeEndTimeNs() {
-		return relativeEndTimeNs;
-	}
+    // MeasurementStatusInfo
 
-	public void setRelativeEndTimeNs(Long relativeEndTimeNs) {
-		this.relativeEndTimeNs = relativeEndTimeNs;
-	}
+    /**
+     * @see StatusDto
+     */
+    @io.swagger.annotations.ApiModelProperty(required = true, value = "The status of a measurement.")
+    @JsonPropertyDescription("The status of a measurement.")
+    @Expose
+    @SerializedName("status")
+    @JsonProperty(required = true, value = "status")
+    private StatusDto status;
 
-	public LocalDateTime getStartTime() {
-		return startTime;
-	}
+    /**
+     * @see ReasonDto
+     */
+    @io.swagger.annotations.ApiModelProperty(required = true, value = "The reason why a measurement failed.")
+    @JsonPropertyDescription("The reason why a measurement failed.")
+    @Expose
+    @SerializedName("reason")
+    @JsonProperty(required = true, value = "reason")
+    private ReasonDto reason;
 
-	public void setStartTime(LocalDateTime startTime) {
-		this.startTime = startTime;
-	}
+    public boolean isImplausible() {
+        return implausible;
+    }
 
-	public LocalDateTime getEndTime() {
-		return endTime;
-	}
+    public void setImplausible(boolean implausible) {
+        this.implausible = implausible;
+    }
 
-	public void setEndTime(LocalDateTime endTime) {
-		this.endTime = endTime;
-	}
+    public String getVersionProtocol() {
+        return versionProtocol;
+    }
 
-	public Long getDurationNs() {
-		return durationNs;
-	}
+    public void setVersionProtocol(String versionProtocol) {
+        this.versionProtocol = versionProtocol;
+    }
 
-	public void setDurationNs(Long durationNs) {
-		this.durationNs = durationNs;
-	}
+    public String getVersionLibrary() {
+        return versionLibrary;
+    }
 
-	public StatusDto getStatus() {
-		return status;
-	}
+    public void setVersionLibrary(String versionLibrary) {
+        this.versionLibrary = versionLibrary;
+    }
 
-	public void setStatus(StatusDto status) {
-		this.status = status;
-	}
+    public Long getRelativeStartTimeNs() {
+        return relativeStartTimeNs;
+    }
 
-	public ReasonDto getReason() {
-		return reason;
-	}
+    public void setRelativeStartTimeNs(Long relativeStartTimeNs) {
+        this.relativeStartTimeNs = relativeStartTimeNs;
+    }
 
-	public void setReason(ReasonDto reason) {
-		this.reason = reason;
-	}
+    public Long getRelativeEndTimeNs() {
+        return relativeEndTimeNs;
+    }
+
+    public void setRelativeEndTimeNs(Long relativeEndTimeNs) {
+        this.relativeEndTimeNs = relativeEndTimeNs;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public Long getDurationNs() {
+        return durationNs;
+    }
+
+    public void setDurationNs(Long durationNs) {
+        this.durationNs = durationNs;
+    }
+
+    public StatusDto getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusDto status) {
+        this.status = status;
+    }
+
+    public ReasonDto getReason() {
+        return reason;
+    }
+
+    public void setReason(ReasonDto reason) {
+        this.reason = reason;
+    }
 }

@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2013-2019 alladin-IT GmbH
  * Copyright 2014-2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -203,8 +203,7 @@ public class NetworkGatherer
         if (getConnectivityManager() != null) {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
                 result = getNetworkTypePreApi23();
-            }
-            else {
+            } else {
                 result = getNetworkTypeApi23();
             }
         }
@@ -221,8 +220,7 @@ public class NetworkGatherer
         if (isConnected && (event == null || lastNetworkType.get() != result)) {
             networkChangeEvent.setEventType(NetworkChangeEvent.NetworkChangeEventType.SIGNAL_UPDATE);
             emitNewEvent = true;
-        }
-        else if (!isConnected) {
+        } else if (!isConnected) {
             networkChangeEvent.setEventType(NetworkChangeEvent.NetworkChangeEventType.NO_CONNECTION);
             emitNewEvent = true;
         }
@@ -272,6 +270,14 @@ public class NetworkGatherer
         return result;
     }
 
+    @Override
+    public void onSignalStrengthChange(SignalStrengthChangeEvent event) {
+        Log.d(TAG, event != null ? event.toString() : "SignalStrengthChangeEvent == null");
+        if (event != null && event.getCurrentSignalStrength() != null) {
+            getNetwork();
+        }
+    }
+
     private class NetworkStateBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(final Context context, final Intent intent) {
@@ -284,14 +290,6 @@ public class NetworkGatherer
         @Override
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
             Log.d(TAG, "TelephonyStateListener onSignalStrengthsChanged");
-            getNetwork();
-        }
-    }
-
-    @Override
-    public void onSignalStrengthChange(SignalStrengthChangeEvent event) {
-        Log.d(TAG, event != null ? event.toString() : "SignalStrengthChangeEvent == null");
-        if (event != null && event.getCurrentSignalStrength() != null) {
             getNetwork();
         }
     }

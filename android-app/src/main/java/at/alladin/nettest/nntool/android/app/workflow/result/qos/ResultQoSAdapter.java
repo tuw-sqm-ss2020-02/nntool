@@ -46,12 +46,6 @@ public class ResultQoSAdapter extends ArrayAdapter<QoSBoxResult> {
         this.context = context;
     }
 
-    private class ViewHolder {
-        AlladinTextView icon;
-        TextView name;
-        TextView successCount;
-    }
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -65,8 +59,7 @@ public class ResultQoSAdapter extends ArrayAdapter<QoSBoxResult> {
             viewHolder.name = convertView.findViewById(R.id.result_qos_group_name);
             viewHolder.successCount = convertView.findViewById(R.id.result_qos_success_count);
             convertView.setTag(viewHolder);
-        }
-        else {
+        } else {
             viewHolder = (ResultQoSAdapter.ViewHolder) convertView.getTag();
         }
 
@@ -82,6 +75,12 @@ public class ResultQoSAdapter extends ArrayAdapter<QoSBoxResult> {
         }
 
         return convertView;
+    }
+
+    private class ViewHolder {
+        AlladinTextView icon;
+        TextView name;
+        TextView successCount;
     }
 
 

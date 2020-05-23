@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -62,13 +62,13 @@ public class UdpIncomingTaskTest {
     private String taskCmd;
 
     @Before
-    public void init () {
+    public void init() {
         loopback = InetAddress.getLoopbackAddress();
         testSettings = new TestSettings();
         testSettings.setUseSsl(false);
         testSettings.setStartTimeNs(12);
         clientHolder = ClientHolder.getInstance(TaskDescriptionHelper.createTaskDescList("host", "80",
-                null, new int[] {80}, "host", null, null), null);
+                null, new int[]{80}, "host", null, null), null);
 
         qosTest = new QualityOfServiceTest(clientHolder, testSettings);
 
@@ -127,29 +127,29 @@ public class UdpIncomingTaskTest {
      */
 
     @Test
-    public void testUdpIncomingSingleWorking (@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
-                                 @Mocked final DataOutputStream dataOutputStream) throws Exception {
+    public void testUdpIncomingSingleWorking(@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
+                                             @Mocked final DataOutputStream dataOutputStream) throws Exception {
 
         new Expectations() {{
 
             controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
             times = 1;
             result = new Delegate() {
-                public void delegate (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
                     taskCmd = cmd;
                 }
             };
 
             controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
             result = new Delegate() {
-                public void delegate (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
                     callback.onResponse("RCV 1 1", cmd);
                 }
             };
 
             socket.receive((DatagramPacket) any);
             result = new Delegate() {
-                public void delegate (DatagramPacket packet) {
+                public void delegate(DatagramPacket packet) {
                     packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
                     packet.setPort(80);
                     packet.setAddress(loopback);
@@ -162,29 +162,29 @@ public class UdpIncomingTaskTest {
         udpTask.setControlConnection(controlConnection);
         final QoSTestResult res = udpTask.call();
 
-        assertEquals("Did not receive incoming packets",1, res.getResultMap().get(UdpTask.RESULT_NUM_PACKETS_INCOMING));
-        assertEquals("Did not receive incoming packets",1, res.getResultMap().get(UdpTask.RESULT_INCOMING_PACKETS));
+        assertEquals("Did not receive incoming packets", 1, res.getResultMap().get(UdpTask.RESULT_NUM_PACKETS_INCOMING));
+        assertEquals("Did not receive incoming packets", 1, res.getResultMap().get(UdpTask.RESULT_INCOMING_PACKETS));
         assertEquals("Unexpected packet loss rate", "0", res.getResultMap().get(UdpTask.RESULT_INCOMING_PLR));
         assertEquals("Sent command to qos service is not as expected", "UDPTEST IN 80 1", taskCmd);
     }
 
     @Test
-    public void testUdpIncomingMultipleRandomOrderWorking (@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
-                                              @Mocked final DataOutputStream dataOutputStream) throws Exception {
+    public void testUdpIncomingMultipleRandomOrderWorking(@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
+                                                          @Mocked final DataOutputStream dataOutputStream) throws Exception {
 
         new Expectations() {{
 
             controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
             times = 1;
             result = new Delegate() {
-                public void delegate (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
                     taskCmd = cmd;
                 }
             };
 
             controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
             result = new Delegate() {
-                public void delegate (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
                     callback.onResponse("RCV 4 2", cmd);
                 }
             };
@@ -193,7 +193,7 @@ public class UdpIncomingTaskTest {
             socket.receive((DatagramPacket) any);
             returns(
                     new Delegate() {
-                        public void delegate (DatagramPacket packet) {
+                        public void delegate(DatagramPacket packet) {
                             packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
                             packet.setPort(80);
                             packet.setAddress(loopback);
@@ -201,7 +201,7 @@ public class UdpIncomingTaskTest {
                     }
                     ,
                     new Delegate() {
-                        public void delegate (DatagramPacket packet) {
+                        public void delegate(DatagramPacket packet) {
                             packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(3)));
                             packet.setPort(80);
                             packet.setAddress(loopback);
@@ -209,7 +209,7 @@ public class UdpIncomingTaskTest {
                     }
                     ,
                     new Delegate() {
-                        public void delegate (DatagramPacket packet) {
+                        public void delegate(DatagramPacket packet) {
                             packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(1)));
                             packet.setPort(80);
                             packet.setAddress(loopback);
@@ -217,7 +217,7 @@ public class UdpIncomingTaskTest {
                     }
             );
             result = new Delegate() {
-                public void delegate (DatagramPacket packet) {
+                public void delegate(DatagramPacket packet) {
                     packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(2)));
                     packet.setPort(80);
                     packet.setAddress(loopback);
@@ -234,29 +234,29 @@ public class UdpIncomingTaskTest {
 
         System.out.println(res.toString());
 
-        assertEquals("Did not receive incoming packets",4, res.getResultMap().get(UdpTask.RESULT_NUM_PACKETS_INCOMING));
-        assertEquals("Did not receive incoming packets",4, res.getResultMap().get(UdpTask.RESULT_INCOMING_PACKETS));
+        assertEquals("Did not receive incoming packets", 4, res.getResultMap().get(UdpTask.RESULT_NUM_PACKETS_INCOMING));
+        assertEquals("Did not receive incoming packets", 4, res.getResultMap().get(UdpTask.RESULT_INCOMING_PACKETS));
         assertEquals("Unexpected packet loss rate", "0", res.getResultMap().get(UdpTask.RESULT_INCOMING_PLR));
         assertEquals("Sent command to qos service is not as expected", "UDPTEST IN 80 4", taskCmd);
     }
 
     @Test
-    public void testUdpIncomingMultipleDuplicatesWorking (@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
-                                                           @Mocked final DataOutputStream dataOutputStream) throws Exception {
+    public void testUdpIncomingMultipleDuplicatesWorking(@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
+                                                         @Mocked final DataOutputStream dataOutputStream) throws Exception {
 
         new Expectations() {{
 
             controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
             times = 1;
             result = new Delegate() {
-                public void delegate (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
                     taskCmd = cmd;
                 }
             };
 
             controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
             result = new Delegate() {
-                public void delegate (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
                     callback.onResponse("RCV 2 2", cmd);
                 }
             };
@@ -265,7 +265,7 @@ public class UdpIncomingTaskTest {
             socket.receive((DatagramPacket) any);
             returns(
                     new Delegate() {
-                        public void delegate (DatagramPacket packet) {
+                        public void delegate(DatagramPacket packet) {
                             packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
                             packet.setPort(80);
                             packet.setAddress(loopback);
@@ -273,7 +273,7 @@ public class UdpIncomingTaskTest {
                     }
                     ,
                     new Delegate() {
-                        public void delegate (DatagramPacket packet) {
+                        public void delegate(DatagramPacket packet) {
                             packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(3)));
                             packet.setPort(80);
                             packet.setAddress(loopback);
@@ -281,7 +281,7 @@ public class UdpIncomingTaskTest {
                     }
                     ,
                     new Delegate() {
-                        public void delegate (DatagramPacket packet) {
+                        public void delegate(DatagramPacket packet) {
                             packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(3)));
                             packet.setPort(80);
                             packet.setAddress(loopback);
@@ -289,7 +289,7 @@ public class UdpIncomingTaskTest {
                     }
             );
             result = new Delegate() {
-                public void delegate (DatagramPacket packet) {
+                public void delegate(DatagramPacket packet) {
                     packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
                     packet.setPort(80);
                     packet.setAddress(loopback);
@@ -304,30 +304,30 @@ public class UdpIncomingTaskTest {
         udpTask.setControlConnection(controlConnection);
         final QoSTestResult res = udpTask.call();
 
-        assertEquals("Did not receive incoming packets",4, res.getResultMap().get(UdpTask.RESULT_NUM_PACKETS_INCOMING));
+        assertEquals("Did not receive incoming packets", 4, res.getResultMap().get(UdpTask.RESULT_NUM_PACKETS_INCOMING));
         //we expect 2 packets, as two of them are a duplicate
-        assertEquals("Did not receive incoming packets",2, res.getResultMap().get(UdpTask.RESULT_INCOMING_PACKETS));
+        assertEquals("Did not receive incoming packets", 2, res.getResultMap().get(UdpTask.RESULT_INCOMING_PACKETS));
         assertEquals("Unexpected packet loss rate", "50", res.getResultMap().get(UdpTask.RESULT_INCOMING_PLR));
         assertEquals("Sent command to qos service is not as expected", "UDPTEST IN 80 4", taskCmd);
     }
 
     @Test
-    public void testUdpIncomingWithSocketException (@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
-                                                            @Mocked final DataOutputStream dataOutputStream) throws Exception {
+    public void testUdpIncomingWithSocketException(@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
+                                                   @Mocked final DataOutputStream dataOutputStream) throws Exception {
 
         new Expectations() {{
 
             controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
             times = 1;
             result = new Delegate() {
-                public void delegate (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
                     taskCmd = cmd;
                 }
             };
 
             controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
             result = new Delegate() {
-                public void delegate (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
                     callback.onResponse("RCV 1 2", cmd);
                 }
             };
@@ -335,12 +335,12 @@ public class UdpIncomingTaskTest {
             // send packets 0, 1, 1, 2 in order (the duplicate shall be registered as such)
             socket.receive((DatagramPacket) any);
             result = new Delegate() {
-                        public void delegate (DatagramPacket packet) {
-                            packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
-                            packet.setPort(80);
-                            packet.setAddress(loopback);
-                        }
-                    };
+                public void delegate(DatagramPacket packet) {
+                    packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
+                    packet.setPort(80);
+                    packet.setAddress(loopback);
+                }
+            };
             result = new SocketException("Forcefully thrown exception");
 
         }};
@@ -351,23 +351,23 @@ public class UdpIncomingTaskTest {
         udpTask.setControlConnection(controlConnection);
         final QoSTestResult res = udpTask.call();
 
-        assertEquals("Did not receive incoming packets",2, res.getResultMap().get(UdpTask.RESULT_NUM_PACKETS_INCOMING));
-        assertEquals("Did not receive incoming packets",1, res.getResultMap().get(UdpTask.RESULT_INCOMING_PACKETS));
+        assertEquals("Did not receive incoming packets", 2, res.getResultMap().get(UdpTask.RESULT_NUM_PACKETS_INCOMING));
+        assertEquals("Did not receive incoming packets", 1, res.getResultMap().get(UdpTask.RESULT_INCOMING_PACKETS));
         assertEquals("Unexpected packet loss rate", "50", res.getResultMap().get(UdpTask.RESULT_INCOMING_PLR));
         assertEquals("Sent command to qos service is not as expected", "UDPTEST IN 80 2", taskCmd);
 
     }
 
     @Test
-    public void testUdpIncomingWithControlConnectException (@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
-                                                            @Mocked final DataOutputStream dataOutputStream) throws Exception {
+    public void testUdpIncomingWithControlConnectException(@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
+                                                           @Mocked final DataOutputStream dataOutputStream) throws Exception {
 
         new Expectations() {{
 
             controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
             times = 1;
             result = new Delegate() {
-                public void delegate (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
                     taskCmd = cmd;
                 }
             };
@@ -375,14 +375,14 @@ public class UdpIncomingTaskTest {
             controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
             times = 1;
             result = new Delegate() {
-                public void delegate (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
                     callback.onResponse("NEW RCV 2 1", cmd);
                 }
             };
 
             socket.receive((DatagramPacket) any);
             result = new Delegate() {
-                public void delegate (DatagramPacket packet) {
+                public void delegate(DatagramPacket packet) {
                     packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
                     packet.setPort(80);
                     packet.setAddress(loopback);
@@ -395,8 +395,8 @@ public class UdpIncomingTaskTest {
         udpTask.setControlConnection(controlConnection);
         final QoSTestResult res = udpTask.call();
 
-        assertEquals("Did not receive incoming packets",1, res.getResultMap().get(UdpTask.RESULT_NUM_PACKETS_INCOMING));
-        assertEquals("Did not receive incoming packets",1, res.getResultMap().get(UdpTask.RESULT_INCOMING_PACKETS));
+        assertEquals("Did not receive incoming packets", 1, res.getResultMap().get(UdpTask.RESULT_NUM_PACKETS_INCOMING));
+        assertEquals("Did not receive incoming packets", 1, res.getResultMap().get(UdpTask.RESULT_INCOMING_PACKETS));
         //PLR is 100 because the control connection responded with the new protocol
         assertEquals("Unexpected packet loss rate", "100", res.getResultMap().get(UdpTask.RESULT_INCOMING_PLR));
         assertEquals("Sent command to qos service is not as expected", "UDPTEST IN 80 1", taskCmd);

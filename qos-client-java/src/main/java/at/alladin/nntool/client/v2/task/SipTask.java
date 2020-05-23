@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,102 +35,97 @@ import at.alladin.nntool.util.net.sip.SipResponseMessage;
 import at.alladin.nntool.util.net.sip.SipUtil;
 
 /**
- * 
  * @author lb
- *
  */
 public class SipTask extends AbstractQoSTask {
 
-	private final int port;
-	
-	private final long timeout;
+    private final int port;
 
-	private final long count;
+    private final long timeout;
 
-	private final long callDuration;
-	
-	private final String to;
-	
-	private final String from;
-	
-	private final String via;
+    private final long count;
 
-	private float callSetupSuccessRate = 0f;
+    private final long callDuration;
 
-	private float callCompletionSuccessRate = 0f;
+    private final String to;
 
-	/**
-	 * 
-	 * @param taskDesc
-	 */
-	public SipTask(QualityOfServiceTest nnTest, TaskDesc taskDesc, int threadId) {
-		super(nnTest, taskDesc, threadId, threadId);
-		
-		this.port = Integer.valueOf((String)taskDesc.getParams().get(SipTaskHelper.PARAM_PORT));
-		
-		String value = (String) taskDesc.getParams().get(SipTaskHelper.PARAM_TIMEOUT);
-		this.timeout = value != null ? Long.valueOf(value) : SipTaskHelper.DEFAULT_TIMEOUT;
+    private final String from;
+
+    private final String via;
+
+    private float callSetupSuccessRate = 0f;
+
+    private float callCompletionSuccessRate = 0f;
+
+    /**
+     * @param taskDesc
+     */
+    public SipTask(QualityOfServiceTest nnTest, TaskDesc taskDesc, int threadId) {
+        super(nnTest, taskDesc, threadId, threadId);
+
+        this.port = Integer.valueOf((String) taskDesc.getParams().get(SipTaskHelper.PARAM_PORT));
+
+        String value = (String) taskDesc.getParams().get(SipTaskHelper.PARAM_TIMEOUT);
+        this.timeout = value != null ? Long.valueOf(value) : SipTaskHelper.DEFAULT_TIMEOUT;
 
         value = (String) taskDesc.getParams().get(SipTaskHelper.PARAM_COUNT);
         this.count = value != null ? Long.valueOf(value) : SipTaskHelper.DEFAULT_COUNT;
 
         value = (String) taskDesc.getParams().get(SipTaskHelper.PARAM_CALL_DURATION);
-		this.callDuration = value != null ? Long.valueOf(value) : SipTaskHelper.DEFAULT_CALL_DURATION;
-		
-		value = (String) taskDesc.getParams().get(SipTaskHelper.PARAM_TO);
-		this.to = value != null ? value : "";
-		
-		value = (String) taskDesc.getParams().get(SipTaskHelper.PARAM_FROM);
-		this.from = value != null ? value : "";
-		
-		value = (String) taskDesc.getParams().get(SipTaskHelper.PARAM_VIA);
-		this.via = value != null ? value : "";
-}
+        this.callDuration = value != null ? Long.valueOf(value) : SipTaskHelper.DEFAULT_CALL_DURATION;
 
-	/*
-	 * (non-Javadoc)
-	 * @see java.util.concurrent.Callable#call()
-	 */
-	public QoSTestResult call() throws Exception {
-		final QoSTestResult result = initQoSTestResult(QosMeasurementType.SIP);
-		try {
-			onStart(result);
+        value = (String) taskDesc.getParams().get(SipTaskHelper.PARAM_TO);
+        this.to = value != null ? value : "";
 
-			result.getResultMap().put(SipTaskHelper.PARAM_OBJECTIVE_PORT, port);
+        value = (String) taskDesc.getParams().get(SipTaskHelper.PARAM_FROM);
+        this.from = value != null ? value : "";
+
+        value = (String) taskDesc.getParams().get(SipTaskHelper.PARAM_VIA);
+        this.via = value != null ? value : "";
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.util.concurrent.Callable#call()
+     */
+    public QoSTestResult call() throws Exception {
+        final QoSTestResult result = initQoSTestResult(QosMeasurementType.SIP);
+        try {
+            onStart(result);
+
+            result.getResultMap().put(SipTaskHelper.PARAM_OBJECTIVE_PORT, port);
             result.getResultMap().put(SipTaskHelper.PARAM_OBJECTIVE_COUNT, count);
-			result.getResultMap().put(SipTaskHelper.PARAM_OBJECTIVE_CALL_DURATION, callDuration);
-			result.getResultMap().put(SipTaskHelper.PARAM_OBJECTIVE_FROM, from);
-			result.getResultMap().put(SipTaskHelper.PARAM_OBJECTIVE_TO, to);
-			result.getResultMap().put(SipTaskHelper.PARAM_OBJECTIVE_VIA, via);
-			result.getResultMap().put(SipTaskHelper.PARAM_OBJECTIVE_TIMEOUT, timeout);
+            result.getResultMap().put(SipTaskHelper.PARAM_OBJECTIVE_CALL_DURATION, callDuration);
+            result.getResultMap().put(SipTaskHelper.PARAM_OBJECTIVE_FROM, from);
+            result.getResultMap().put(SipTaskHelper.PARAM_OBJECTIVE_TO, to);
+            result.getResultMap().put(SipTaskHelper.PARAM_OBJECTIVE_VIA, via);
+            result.getResultMap().put(SipTaskHelper.PARAM_OBJECTIVE_TIMEOUT, timeout);
 
-			for (int i = 0; i < count; i++) {
+            for (int i = 0; i < count; i++) {
                 runSipTest(result.getResultMap());
             }
 
-			final float ccsr = (float) callCompletionSuccessRate / (float) count;
-			final float cssr = (float) callSetupSuccessRate / (float) count;
+            final float ccsr = (float) callCompletionSuccessRate / (float) count;
+            final float cssr = (float) callSetupSuccessRate / (float) count;
 
-			BigDecimal bigCcsr = new BigDecimal(""+ccsr);
-			BigDecimal bigOne = new BigDecimal("1.0");
+            BigDecimal bigCcsr = new BigDecimal("" + ccsr);
+            BigDecimal bigOne = new BigDecimal("1.0");
 
-			result.getResultMap().put(SipTaskHelper.PARAM_RESULT_CCSR, ccsr);
+            result.getResultMap().put(SipTaskHelper.PARAM_RESULT_CCSR, ccsr);
             result.getResultMap().put(SipTaskHelper.PARAM_RESULT_CSSR, cssr);
             result.getResultMap().put(SipTaskHelper.PARAM_RESULT_DCR,
-					bigOne.subtract(bigCcsr).floatValue());
-			
-			return result;
-		}
-		catch (Exception e) {
-			throw e;
-		}
-		finally {
-			onEnd(result);
-		}
+                    bigOne.subtract(bigCcsr).floatValue());
 
-	}
+            return result;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            onEnd(result);
+        }
 
-	public void runSipTest(final HashMap<String, Object> result) throws IOException, InterruptedException {
+    }
+
+    public void runSipTest(final HashMap<String, Object> result) throws IOException, InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
 
         final ControlConnectionResponseCallback callback = new ControlConnectionResponseCallback() {
@@ -144,8 +139,8 @@ public class SipTask extends AbstractQoSTask {
                         InetSocketAddress socketAddr = new InetSocketAddress(InetAddress.getByName(getTestServerAddr()), port);
                         System.out.println("SIP Connecting to: " + socketAddr.toString());
                         Socket testSocket = new Socket();
-                        testSocket.connect(socketAddr, (int)(timeout/1000000));
-                        testSocket.setSoTimeout((int)(timeout/1000000));
+                        testSocket.connect(socketAddr, (int) (timeout / 1000000));
+                        testSocket.setSoTimeout((int) (timeout / 1000000));
 
                         System.out.println("SIP is connected: " + testSocket.isConnected());
 
@@ -177,7 +172,7 @@ public class SipTask extends AbstractQoSTask {
                         callSetupSuccessRate++;
 
                         //simulate call by waiting for the duration of the call
-                        Thread.sleep((int)(callDuration/1000000));
+                        Thread.sleep((int) (callDuration / 1000000));
 
                         //send BYE request to qos service
                         final SipRequestMessage msgBye = SipUtil.generateByeMessage(from, to, via);
@@ -196,20 +191,16 @@ public class SipTask extends AbstractQoSTask {
                         callCompletionSuccessRate++;
 
                         result.put(SipTaskHelper.PARAM_RESULT, "OK");
-                    }
-                    else {
+                    } else {
                         result.put(SipTaskHelper.PARAM_RESULT, "ERROR");
                     }
-                }
-                catch (SocketTimeoutException e) {
+                } catch (SocketTimeoutException e) {
                     e.printStackTrace();
                     result.put(SipTaskHelper.PARAM_RESULT, "TIMEOUT");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     result.put(SipTaskHelper.PARAM_RESULT, "ERROR");
-                }
-                finally {
+                } finally {
                     latch.countDown();
                 }
             }
@@ -221,29 +212,29 @@ public class SipTask extends AbstractQoSTask {
         }
     }
 
-	/*
-	 * (non-Javadoc)
-	 * @see at.alladin.rmbt.client.v2.task.AbstractRmbtTask#initTask()
-	 */
-	@Override
-	public void initTask() {
-		// TODO Auto-generated method stub
-	}
+    /*
+     * (non-Javadoc)
+     * @see at.alladin.rmbt.client.v2.task.AbstractRmbtTask#initTask()
+     */
+    @Override
+    public void initTask() {
+        // TODO Auto-generated method stub
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see at.alladin.rmbt.client.v2.task.QoSTask#getTestType()
-	 */
-	public QosMeasurementType getTestType() {
-		return QosMeasurementType.SIP;
-	}
+    /*
+     * (non-Javadoc)
+     * @see at.alladin.rmbt.client.v2.task.QoSTask#getTestType()
+     */
+    public QosMeasurementType getTestType() {
+        return QosMeasurementType.SIP;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see at.alladin.rmbt.client.v2.task.QoSTask#needsQoSControlConnection()
-	 */
-	public boolean needsQoSControlConnection() {
-		return true;
-	}
+    /*
+     * (non-Javadoc)
+     * @see at.alladin.rmbt.client.v2.task.QoSTask#needsQoSControlConnection()
+     */
+    public boolean needsQoSControlConnection() {
+        return true;
+    }
 
 }

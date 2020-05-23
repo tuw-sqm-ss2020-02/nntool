@@ -80,7 +80,7 @@ public class InterfaceTrafficView extends LinearLayout implements InterfaceTraff
         for (int i = 0; i < 3; i++) {
             trafficViews[i].setTextColor(getResources().getColor(R.color.interface_traffic_arrow_inactive));
         }
-        switch(value) {
+        switch (value) {
             case HIGH:
                 trafficViews[2].setTextColor(getResources().getColor(R.color.interface_traffic_arrow_active));
             case MID:
@@ -94,10 +94,10 @@ public class InterfaceTrafficView extends LinearLayout implements InterfaceTraff
 
     public enum InterfaceTrafficClassificationEnum {
         UNKNOWN(Long.MIN_VALUE, Long.MIN_VALUE),
-        NONE(0,10000),  // 0 < x < 10kBit/s
-        LOW(10000,(long)1e6),   // 10k < x < 100 kBit/s
-        MID((long)1e6, (long)1e9),      // 100k < x  < 1 MBit/s
-        HIGH((long)1e9, Long.MAX_VALUE);
+        NONE(0, 10000),  // 0 < x < 10kBit/s
+        LOW(10000, (long) 1e6),   // 10k < x < 100 kBit/s
+        MID((long) 1e6, (long) 1e9),      // 100k < x  < 1 MBit/s
+        HIGH((long) 1e9, Long.MAX_VALUE);
 
         protected long minBps;
         protected long maxBps;
@@ -107,16 +107,7 @@ public class InterfaceTrafficView extends LinearLayout implements InterfaceTraff
             this.maxBps = maxBps;
         }
 
-        public long getMinBps() {
-            return this.minBps;
-        }
-
-        public long getMaxBps() {
-            return this.maxBps;
-        }
-
         /**
-         *
          * @param bitPerSecond
          * @return
          */
@@ -128,6 +119,14 @@ public class InterfaceTrafficView extends LinearLayout implements InterfaceTraff
             }
 
             return UNKNOWN;
+        }
+
+        public long getMinBps() {
+            return this.minBps;
+        }
+
+        public long getMaxBps() {
+            return this.maxBps;
         }
     }
 

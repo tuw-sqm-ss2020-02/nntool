@@ -21,45 +21,43 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
  * @author lb
- *
  */
 public class Randomizer {
 
-	private final List<Integer> numberList;
-	private int indexPointer;
+    private final List<Integer> numberList;
+    private int indexPointer;
 
-	public Randomizer(int minValue, int maxValue) {
-		this(minValue, maxValue, 1);
-	}
+    public Randomizer(int minValue, int maxValue) {
+        this(minValue, maxValue, 1);
+    }
 
-	public Randomizer(int minValue, int maxValue, int step) {
-		if (minValue > maxValue) {
-			int tmp = minValue;
-			minValue = maxValue;
-			maxValue = tmp;
-		}
-		if (step <= 0) {
-			if (step == 0) {
-				step = 1;
-			} else {
-				step = Math.abs(step);
-			}
-		}
+    public Randomizer(int minValue, int maxValue, int step) {
+        if (minValue > maxValue) {
+            int tmp = minValue;
+            minValue = maxValue;
+            maxValue = tmp;
+        }
+        if (step <= 0) {
+            if (step == 0) {
+                step = 1;
+            } else {
+                step = Math.abs(step);
+            }
+        }
 
-		numberList = new ArrayList<>((maxValue - minValue) / step);
-		for (int i = minValue; i <= maxValue; i += step) {
-			numberList.add(i);
-		}
-		Collections.shuffle(numberList);
-	}
+        numberList = new ArrayList<>((maxValue - minValue) / step);
+        for (int i = minValue; i <= maxValue; i += step) {
+            numberList.add(i);
+        }
+        Collections.shuffle(numberList);
+    }
 
-	public synchronized int next() {
-		final int nextInt = numberList.get(indexPointer++);
-		if (indexPointer >= numberList.size()) {
-			indexPointer = 0;
-		}
-		return nextInt;
-	}
+    public synchronized int next() {
+        final int nextInt = numberList.get(indexPointer++);
+        if (indexPointer >= numberList.size()) {
+            indexPointer = 0;
+        }
+        return nextInt;
+    }
 }

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,47 +33,46 @@ import at.alladin.nettest.shared.server.web.api.v1.AbstractDocumentationResource
 
 /**
  * This controller provides the documentation resources (redirects to Swagger, JSON schemes of model and DTO classes).
- * 
- * @author alladin-IT GmbH (bp@alladin.at)
  *
+ * @author alladin-IT GmbH (bp@alladin.at)
  */
 @Controller
 @RequestMapping("/api/v0/documentation")
 public class DocumentationResource extends AbstractDocumentationResource {
 
-	/*
-	 * (non-Javadoc)
-	 * @see at.alladin.nettest.shared.server.web.api.AbstractDocumentationResource#getOpenApiGroupName()
-	 */
-	@Override
-	public String getOpenApiGroupName() {
-		return "map-service_v0";
-	}
+    /*
+     * (non-Javadoc)
+     * @see at.alladin.nettest.shared.server.web.api.AbstractDocumentationResource#getOpenApiGroupName()
+     */
+    @Override
+    public String getOpenApiGroupName() {
+        return "map-service_v0";
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see at.alladin.nettest.shared.server.web.api.AbstractDocumentationResource#getDtoClasses()
-	 */
-	@Override
-	public List<Class<?>> getDtoClasses() {
-		return Arrays.asList(
-			ApiBase.class, 
-			ApiRequest.class, 
-			ApiRequestInfo.class, 
-			BasicRequest.class,
-			ApiResponse.class, 
-			ApiError.class, 
-			BasicResponse.class
-			// TODO
-		);
-	}
+    /*
+     * (non-Javadoc)
+     * @see at.alladin.nettest.shared.server.web.api.AbstractDocumentationResource#getDtoClasses()
+     */
+    @Override
+    public List<Class<?>> getDtoClasses() {
+        return Arrays.asList(
+                ApiBase.class,
+                ApiRequest.class,
+                ApiRequestInfo.class,
+                BasicRequest.class,
+                ApiResponse.class,
+                ApiError.class,
+                BasicResponse.class
+                // TODO
+        );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see at.alladin.nettest.shared.server.web.api.AbstractDocumentationResource#getModelClasses()
-	 */
-	@Override
-	public List<Class<?>> getModelClasses() {
-		return Arrays.asList(); // TODO
-	}
+    /*
+     * (non-Javadoc)
+     * @see at.alladin.nettest.shared.server.web.api.AbstractDocumentationResource#getModelClasses()
+     */
+    @Override
+    public List<Class<?>> getModelClasses() {
+        return Arrays.asList(); // TODO
+    }
 }

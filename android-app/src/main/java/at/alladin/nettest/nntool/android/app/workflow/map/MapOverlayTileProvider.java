@@ -41,8 +41,8 @@ public class MapOverlayTileProvider extends UrlTileProvider {
 
     private String mapServiceUrl;
 
-    public MapOverlayTileProvider (final MapOverlayType type, final Context context) {
-        super (tilesize, tilesize);
+    public MapOverlayTileProvider(final MapOverlayType type, final Context context) {
+        super(tilesize, tilesize);
         mapServiceUrl = PreferencesUtil.getMapServiceUrl(context);
         maxZoomForPointMap = type == MapOverlayType.HEATMAP ? null : context.getResources().getInteger(R.integer.default_map_max_zoom_for_point_map);
         this.type = type;

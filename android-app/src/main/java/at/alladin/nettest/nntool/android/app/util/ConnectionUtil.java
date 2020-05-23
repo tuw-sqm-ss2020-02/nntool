@@ -30,7 +30,6 @@ import at.alladin.nettest.nntool.android.app.util.connection.ResultConnection;
 public class ConnectionUtil {
 
     /**
-     *
      * @param context
      * @return
      */
@@ -50,7 +49,7 @@ public class ConnectionUtil {
         return new ResultConnection(resultServiceUrl);
     }
 
-    public static MapConnection createMapConnection (final Context context) {
+    public static MapConnection createMapConnection(final Context context) {
         final boolean overrideSettings = context.getResources().getBoolean(R.bool.default_result_service_settings_override);
         final String mapServiceUrl = PreferencesUtil.getMapServiceUrl(context);
 
@@ -68,7 +67,6 @@ public class ConnectionUtil {
 
 
     /**
-     *
      * @param context
      * @return
      */
@@ -84,7 +82,6 @@ public class ConnectionUtil {
     }
 
     /**
-     *
      * @param context
      * @param collectorUrl
      * @return

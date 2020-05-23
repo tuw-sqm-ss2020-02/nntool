@@ -51,7 +51,7 @@ public class ResultQoSSingleResultFragment extends ActionBarFragment {
 
     private int testNumber;
 
-    public static ResultQoSSingleResultFragment newInstance (final EvaluatedQoSResult evaluatedQoSResult, final Map<String, String> keyToTranslationMap, final int testNumber) {
+    public static ResultQoSSingleResultFragment newInstance(final EvaluatedQoSResult evaluatedQoSResult, final Map<String, String> keyToTranslationMap, final int testNumber) {
         final ResultQoSSingleResultFragment fragment = new ResultQoSSingleResultFragment();
         fragment.setEvaluatedQoSResult(evaluatedQoSResult);
         fragment.setKeyToTranslationMap(keyToTranslationMap);
@@ -108,7 +108,7 @@ public class ResultQoSSingleResultFragment extends ActionBarFragment {
 
     @Override
     public Object[] getTitleArgs() {
-        return new Object[] {testNumber};
+        return new Object[]{testNumber};
     }
 
     @Override

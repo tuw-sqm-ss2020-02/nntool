@@ -54,7 +54,7 @@ public class ResultQoSTypeDetailFragment extends ActionBarFragment {
 
     private QoSMeasurementTypeDto qosType;
 
-    public static ResultQoSTypeDetailFragment newInstance (final FullQoSMeasurement qoSMeasurement, final QoSBoxResult qoSBoxResult) {
+    public static ResultQoSTypeDetailFragment newInstance(final FullQoSMeasurement qoSMeasurement, final QoSBoxResult qoSBoxResult) {
         final ResultQoSTypeDetailFragment fragment = new ResultQoSTypeDetailFragment();
         fragment.setQoSMeasurement(qoSMeasurement);
         fragment.setQoSBoxResult(qoSBoxResult);

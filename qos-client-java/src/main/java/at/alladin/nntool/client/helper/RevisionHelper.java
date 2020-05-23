@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,17 +19,15 @@ package at.alladin.nntool.client.helper;
 import java.io.InputStream;
 import java.util.Properties;
 
-public final class RevisionHelper
-{
+public final class RevisionHelper {
     public static final String describe;
     public static final String revision;
     public static final String gitId;
     public static final String branch;
     public static final long buildTime;
     public static final boolean dirty;
-    
-    static
-    {
+
+    static {
         String _describe = null;
         String _revision = null;
         String _gitId = null;
@@ -39,8 +37,7 @@ public final class RevisionHelper
         final InputStream svnIS = RevisionHelper.class.getClassLoader().getResourceAsStream("revision.properties");
         final Properties properties = new Properties();
         if (svnIS != null)
-            try
-            {
+            try {
                 properties.load(svnIS);
                 _describe = properties.getProperty("git.describe");
                 _gitId = properties.getProperty("git.id");
@@ -48,15 +45,12 @@ public final class RevisionHelper
                 final String dirtyString = properties.getProperty("git.dirty");
                 _dirty = dirtyString != null && dirtyString.equals("true");
                 _revision = properties.getProperty("git.revision");
-                if (_dirty)
-                {
+                if (_dirty) {
                     _revision = _revision + "M";
                     _gitId = _gitId + "M";
                 }
                 _buildTime = Long.parseLong(properties.getProperty("build.time"));
-            }
-            catch (final Exception e)
-            { // there isn't much we can do here about it..
+            } catch (final Exception e) { // there isn't much we can do here about it..
             }
         describe = _describe == null ? "?" : _describe;
         revision = _revision == null ? "?" : _revision;
@@ -65,18 +59,16 @@ public final class RevisionHelper
         dirty = _dirty;
         buildTime = _buildTime == null ? 0 : _buildTime;
     }
-    
-    public static String getVerboseRevision()
-    {
+
+    public static String getVerboseRevision() {
         return String.format("%s_%s", branch, describe);
     }
 
     public static long getVeboseTimestamp() {
         return buildTime;
     }
-    
-    public static String getServerVersion()
-    {
+
+    public static String getServerVersion() {
         return gitId;
     }
 }

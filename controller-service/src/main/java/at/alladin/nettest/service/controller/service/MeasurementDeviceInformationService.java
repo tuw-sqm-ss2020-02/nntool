@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2016-2019 alladin-IT GmbH
  * Copyright 2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@ import static at.alladin.nettest.shared.berec.collector.api.v1.dto.shared.Measur
 /**
  * taken from the SpeedMeasurementResource
  * (https://github.com/alladin-IT/nettest-ilr/blob/2ec6b487b994114fc71243421346a684464922f7/control-server/src/main/java/at/alladin/nettest/server/control/web/api/v1/SpeedMeasurementResource.java)
- * 
+ *
  * @author Felix Kendlbacher (alladin-IT GmbH)
  */
 @Service
@@ -50,7 +50,7 @@ public class MeasurementDeviceInformationService {
         }
     }
 
-    public void fillDeviceInformation (final ApiRequestInfo apiRequestInfo, final HttpServletRequest request) {
+    public void fillDeviceInformation(final ApiRequestInfo apiRequestInfo, final HttpServletRequest request) {
         if (apiRequestInfo != null && apiRequestInfo.getAgentType() == DESKTOP) {
             // Got request from websocket client -> fill in info based on user agent
             final String ua = request.getHeader("user-agent");

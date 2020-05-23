@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,97 +47,95 @@ import at.alladin.nettest.shared.server.helper.ResponseHelper;
  * The Java stack-trace is only added if the service runs in development mode.
  *
  * @author alladin-IT GmbH (bp@alladin.at)
- *
  */
 @RestController
 public class ErrorResource implements ErrorController {
 
-	private final Logger logger = LoggerFactory.getLogger(ErrorResource.class);
+    private final Logger logger = LoggerFactory.getLogger(ErrorResource.class);
 
-	/**
-	 *
-	 */
-	@Autowired
-	private ErrorAttributes errorAttributes;
+    /**
+     *
+     */
+    @Autowired
+    private ErrorAttributes errorAttributes;
 
-	/**
-	 *
-	 */
-	@Autowired
-	private Environment env;
+    /**
+     *
+     */
+    @Autowired
+    private Environment env;
 
-	/**
-	 *
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value = "/error")
-	public ResponseEntity<ApiResponse<?>> error(WebRequest webRequest, HttpServletResponse response) {
-		final boolean includeStackTrace = env.acceptsProfiles(Profiles.of("dev"));
+    /**
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/error")
+    public ResponseEntity<ApiResponse<?>> error(WebRequest webRequest, HttpServletResponse response) {
+        final boolean includeStackTrace = env.acceptsProfiles(Profiles.of("dev"));
 
-		final HttpStatus status = HttpStatus.valueOf(response.getStatus());
+        final HttpStatus status = HttpStatus.valueOf(response.getStatus());
 
-		final List<ApiError> errors = Arrays.asList(mapError(webRequest, includeStackTrace));
-		logger.debug("Rendering error response: {}", errors);
+        final List<ApiError> errors = Arrays.asList(mapError(webRequest, includeStackTrace));
+        logger.debug("Rendering error response: {}", errors);
 
-		return ResponseHelper.error(null, errors, status);
-	}
+        return ResponseHelper.error(null, errors, status);
+    }
 
-	/**
-	 *
-	 * @param errorMap
-	 * @param includeStackTrace
-	 * @return
-	 */
-	private ApiError mapError(WebRequest webRequest, boolean includeStackTrace) {
-		final Map<String, Object> errorMap = errorAttributes.getErrorAttributes(webRequest, includeStackTrace);
-		final Throwable cause = errorAttributes.getError(webRequest);
+    /**
+     * @param errorMap
+     * @param includeStackTrace
+     * @return
+     */
+    private ApiError mapError(WebRequest webRequest, boolean includeStackTrace) {
+        final Map<String, Object> errorMap = errorAttributes.getErrorAttributes(webRequest, includeStackTrace);
+        final Throwable cause = errorAttributes.getError(webRequest);
 
-		logger.info("{}", errorMap);
+        logger.info("{}", errorMap);
 
-		//logger.info("{}", errorMap.get("timestamp"));
-		//LocalDateTime.parse("", new DateTimeFormatterBuilder()..toFormatter());
-		//Tue Sep 18 10:33:31 CEST 2018
+        //logger.info("{}", errorMap.get("timestamp"));
+        //LocalDateTime.parse("", new DateTimeFormatterBuilder()..toFormatter());
+        //Tue Sep 18 10:33:31 CEST 2018
 
-		Object path 		= errorMap.get("path");
-		Object status 		= errorMap.get("status");
-		Object error		= errorMap.get("error");
+        Object path = errorMap.get("path");
+        Object status = errorMap.get("status");
+        Object error = errorMap.get("error");
 
-		Object message 		= errorMap.get("message");
-		Object exception 	= errorMap.get("exception");
-		Object trace 		= includeStackTrace ? errorMap.get("trace") : null;
+        Object message = errorMap.get("message");
+        Object exception = errorMap.get("exception");
+        Object trace = includeStackTrace ? errorMap.get("trace") : null;
 
-		if (cause != null) {
-			message = cause.getMessage(); //cause.getLocalizedMessage()
-			exception = cause.getClass().getCanonicalName();
+        if (cause != null) {
+            message = cause.getMessage(); //cause.getLocalizedMessage()
+            exception = cause.getClass().getCanonicalName();
 
-			if (includeStackTrace) {
-				try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw)) {
-					cause.printStackTrace(pw);
+            if (includeStackTrace) {
+                try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw)) {
+                    cause.printStackTrace(pw);
 
-					trace = sw.toString();
-				} catch (Exception ex) { }
-			}
-		}
+                    trace = sw.toString();
+                } catch (Exception ex) {
+                }
+            }
+        }
 
-		return new ApiError(
-			LocalDateTime.now(), // errorMap.get("timestamp"),
-			path != null ? path.toString() : null,
-			status != null ? Integer.parseInt(status.toString()) : null,
-			error != null ? error.toString() : null,
-			message != null ? message.toString() : null,
-			exception != null ? exception.toString() : null,
-			trace != null ? trace.toString() : null
-		);
-	}
+        return new ApiError(
+                LocalDateTime.now(), // errorMap.get("timestamp"),
+                path != null ? path.toString() : null,
+                status != null ? Integer.parseInt(status.toString()) : null,
+                error != null ? error.toString() : null,
+                message != null ? message.toString() : null,
+                exception != null ? exception.toString() : null,
+                trace != null ? trace.toString() : null
+        );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.boot.autoconfigure.web.ErrorController#getErrorPath()
-	 */
-	@Override
-	public String getErrorPath() {
-		return "/error";
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.boot.autoconfigure.web.ErrorController#getErrorPath()
+     */
+    @Override
+    public String getErrorPath() {
+        return "/error";
+    }
 }

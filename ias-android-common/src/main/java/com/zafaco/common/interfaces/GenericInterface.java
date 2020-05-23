@@ -25,16 +25,17 @@ import org.json.JSONObject;
 /**
  * Interface GenericInterface
  */
-public interface GenericInterface
-{
+public interface GenericInterface {
     /**
      * Method reportCallback
+     *
      * @param message
      */
     void reportCallback(JSONObject message);
 
     /**
      * Method consoleCallback
+     *
      * @param message
      */
     void consoleCallback(String message);

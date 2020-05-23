@@ -30,7 +30,8 @@ public class CellInfoWrapper {
 
     public CellSignalStrengthWrapper cellSignalStrengthWrapper;
 
-    public CellInfoWrapper() { }
+    public CellInfoWrapper() {
+    }
 
     public CellInfoWrapper(CellIdentityWrapper cellIdentityWrapper, CellSignalStrengthWrapper cellSignalStrengthWrapper) {
         this.cellIdentityWrapper = cellIdentityWrapper;

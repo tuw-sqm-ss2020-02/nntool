@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,99 +20,97 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /**
- * 
  * @author lb
- *
  */
 public class HttpProxyResult extends AbstractResult {
 
-	@JsonProperty("http_objective_url")
-	private String target;
+    @JsonProperty("http_objective_url")
+    private String target;
 
-	@JsonProperty("http_objective_range")
-	private String range;
+    @JsonProperty("http_objective_range")
+    private String range;
 
-	@JsonProperty("http_result_length")
-	private Long length;
-	
-	@JsonProperty("http_result_header")
-	private String header;
-	
-	@JsonProperty("http_result_status")
-	private String status;
-	
-	@JsonProperty("http_result_hash")
-	private String hash;
-	
-	@JsonProperty("http_result_duration")
-	private Long duration;
+    @JsonProperty("http_result_length")
+    private Long length;
 
-	public HttpProxyResult() {
-		
-	}
-	
-	public Long getLength() {
-		return length;
-	}
+    @JsonProperty("http_result_header")
+    private String header;
 
-	public void setLength(Long length) {
-		this.length = length;
-	}
+    @JsonProperty("http_result_status")
+    private String status;
 
-	public String getHeader() {
-		return header;
-	}
+    @JsonProperty("http_result_hash")
+    private String hash;
 
-	public void setHeader(String header) {
-		this.header = header;
-	}
+    @JsonProperty("http_result_duration")
+    private Long duration;
 
-	public String getStatus() {
-		return status;
-	}
+    public HttpProxyResult() {
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    }
 
-	public String getHash() {
-		return hash;
-	}
+    public Long getLength() {
+        return length;
+    }
 
-	public void setHash(String hash) {
-		this.hash = hash;
-	}
-	
-	public String getTarget() {
-		return target;
-	}
+    public void setLength(Long length) {
+        this.length = length;
+    }
 
-	public void setTarget(String target) {
-		this.target = target;
-	}
+    public String getHeader() {
+        return header;
+    }
 
-	public String getRange() {
-		return range;
-	}
+    public void setHeader(String header) {
+        this.header = header;
+    }
 
-	public void setRange(String range) {
-		this.range = range;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public Long getDuration() {
-		return duration;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setDuration(Long duration) {
-		this.duration = duration;
-	}
+    public String getHash() {
+        return hash;
+    }
 
-	@Override
-	public String toString() {
-		return "HttpProxyResult [target=" + target + ", range=" + range
-				+ ", length=" + length + ", header=" + header + ", status="
-				+ status + ", hash=" + hash + ", duration=" + duration
-				+ ", getOperator()=" + getOperator() + ", getOnFailure()="
-				+ getOnFailure() + ", getOnSuccess()=" + getOnSuccess() + "]";
-	}
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    public String getRange() {
+        return range;
+    }
+
+    public void setRange(String range) {
+        this.range = range;
+    }
+
+    public Long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Long duration) {
+        this.duration = duration;
+    }
+
+    @Override
+    public String toString() {
+        return "HttpProxyResult [target=" + target + ", range=" + range
+                + ", length=" + length + ", header=" + header + ", status="
+                + status + ", hash=" + hash + ", duration=" + duration
+                + ", getOperator()=" + getOperator() + ", getOnFailure()="
+                + getOnFailure() + ", getOnSuccess()=" + getOnSuccess() + "]";
+    }
 }

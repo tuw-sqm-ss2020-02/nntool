@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,19 +18,15 @@ package at.alladin.nntool.client.helper;
 
 /**
  * The system defaults.
- * 
- * 
- * 
  */
-public abstract interface Config
-{
-    
+public abstract interface Config {
+
     /*********************
-     * 
+     *
      * Default Preferences
-     * 
+     *
      *********************/
-    
+
     public static final String CLIENT_NAME = "NNTool";
     public static final String VERSION_NUMBER = "0.3";
     public static final String VERSION_STRING = CLIENT_NAME + "v" + VERSION_NUMBER;
@@ -52,13 +48,13 @@ public abstract interface Config
     public static final String SYNC_HOST_URL = "/sync";
     public static final String SETTINGS_HOST_URL = "/settings";
     public static final String LOG_HOST_URL = "/log";
-    
+
     // Verschluesselungsart -> TLS oder SSL
     public static final String ENCRYPTION_STRING = "TLS";
-    
+
     public static final int SPEED_TEST_INTERVAL = 250;
-    
+
     public static final String MLAB_NS = "http://mlab-ns.appspot.com/ndt?format=json";
     public static final String NDT_FALLBACK_HOST = "ndt.iupui.donar.measurement-lab.org";
-    
+
 }

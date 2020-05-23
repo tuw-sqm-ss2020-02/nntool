@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,194 +53,191 @@ import at.alladin.nettest.service.search.exception.SearchException;
 
 /**
  * This service is responsible for search requests.
- * 
- * @author alladin-IT GmbH (bp@alladin.at)
  *
+ * @author alladin-IT GmbH (bp@alladin.at)
  */
 @Service
 public class SearchService {
 
-	private static final Logger logger = LoggerFactory.getLogger(SearchService.class);
-	
-	private static final TimeValue DEFAULT_TIMEOUT = new TimeValue(5, TimeUnit.SECONDS);
-	
-	@Autowired
-	private SearchServiceProperties searchServiceProperties;
-	
-	@Autowired
-	private RestHighLevelClient elasticsearchClient;	
-	
-	public Page<Map<String, Object>> findAll(String queryString, Pageable pageable) {
-		final int searchMaxPageSize = searchServiceProperties.getSearch().getMaxPageSize();
-		
-		return findAll(queryString, pageable, searchMaxPageSize);
-	}
-	
-	public Page<Map<String, Object>> findAll(String queryString, Pageable pageable, int maxPageSize) {
-		if (pageable.getPageSize() > maxPageSize) {
-			throw new BadExportRequestException("Only " + maxPageSize + " items can be queried at once."); 
-		}
-		
-		final SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		
-		final QueryBuilder queryBuilder;
-		
-		if (StringUtils.hasLength(queryString)) {
-			String customQueryString = new String(queryString);
-			
-			// TODO: restrict queryStringQuery
+    private static final Logger logger = LoggerFactory.getLogger(SearchService.class);
+
+    private static final TimeValue DEFAULT_TIMEOUT = new TimeValue(5, TimeUnit.SECONDS);
+
+    @Autowired
+    private SearchServiceProperties searchServiceProperties;
+
+    @Autowired
+    private RestHighLevelClient elasticsearchClient;
+
+    public Page<Map<String, Object>> findAll(String queryString, Pageable pageable) {
+        final int searchMaxPageSize = searchServiceProperties.getSearch().getMaxPageSize();
+
+        return findAll(queryString, pageable, searchMaxPageSize);
+    }
+
+    public Page<Map<String, Object>> findAll(String queryString, Pageable pageable, int maxPageSize) {
+        if (pageable.getPageSize() > maxPageSize) {
+            throw new BadExportRequestException("Only " + maxPageSize + " items can be queried at once.");
+        }
+
+        final SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        final QueryBuilder queryBuilder;
+
+        if (StringUtils.hasLength(queryString)) {
+            String customQueryString = new String(queryString);
+
+            // TODO: restrict queryStringQuery
 			
 			/*queryBuilder = QueryBuilders.boolQuery()
 				.must(QueryBuilders.queryStringQuery(customQueryString));*/
-			//queryBuilder = QueryBuilders.queryStringQuery(customQueryString)/*.allowLeadingWildcard(false)*/;
-			
-			// TODO ...
-			if (!customQueryString.contains(":")) {
-				if (!customQueryString.startsWith("*")) {
-					customQueryString = "*" + customQueryString;
-				}
-				
-				if (!customQueryString.endsWith("*")) {
-					customQueryString = customQueryString + "*";
-				}
-			}
-			
-			queryBuilder = QueryBuilders.queryStringQuery(customQueryString).analyzeWildcard(true);
-		} else {
-			queryBuilder = QueryBuilders.matchAllQuery();
-		}
-		
-		searchSourceBuilder.query(queryBuilder);
-		
-		// pageable
-		searchSourceBuilder.from((int)pageable.getOffset());
-		searchSourceBuilder.size(pageable.getPageSize());
-		
-		// sort
-		// pageable sort: localhost:8083/api/v1/measurements?q=*&sort=start_time,desc&sort=end_time,desc
-		// elasticsearch sort: localhost:8083/api/v1/measurements?q=*&sort=start_time:desc&sort=end_time:desc
-		// We currently only support pageable sort method with ,desc
-		
-		pageable.getSort().forEach(s -> {
-			searchSourceBuilder.sort(
-				//SortBuilders.fieldSort(s.getProperty()).order(s.getDirection() == Direction.ASC ? SortOrder.ASC : SortOrder.DESC)
-				SortBuilders.fieldSort(s.getProperty()).order(SortOrder.fromString(s.getDirection().toString()))
-			);
-		});
-		
-		// Execute Query
-		final SearchResult result = executeSearchQuery(searchSourceBuilder);
-		
-		return new PageImpl<>(result.getResults(), pageable, result.getTotalHits());
-	}
+            //queryBuilder = QueryBuilders.queryStringQuery(customQueryString)/*.allowLeadingWildcard(false)*/;
 
-	public List<Map<String, Object>> findByDateRange(Integer year, Integer month, Integer day) {
-		String gte = year + "-" + String.format("%02d", month);
-		String lte = year + "-" + String.format("%02d", month);
-		
-		if (day != null) {
-			gte += "-" + String.format("%02d", day);
-			lte += "-" + String.format("%02d", day);
-		} else {
-			gte += "-01";
-			lte += "-" + YearMonth.of(year, month).lengthOfMonth();
-		}
-		
-		final QueryBuilder queryBuilder = QueryBuilders
-				.rangeQuery("start_time")
-				.gte(gte)
-				.lte(lte);
-		
-		final SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		
-		searchSourceBuilder.query(queryBuilder);
-		
-		// Execute Query
-		return executeSearchQuery(searchSourceBuilder).getResults();
-	}
-	
-	public Map<String, Object> findOneByOpenDataUuid(String openDataUuid) {
-		final String index = searchServiceProperties.getElasticsearch().getIndex();
-		final GetRequest getRequest = new GetRequest(index, openDataUuid);
-		
-		try {
-			final GetResponse getResponse = elasticsearchClient.get(getRequest, RequestOptions.DEFAULT);
-			
-			return getResponse.getSourceAsMap();
-		} catch (IOException e) {
-			throw new SearchException(e);
-		}
-	}
-	
-	////
-	
-	private SearchResult executeSearchQuery(SearchSourceBuilder searchSourceBuilder) {
-		// Add timeout if none is set
-		if (searchSourceBuilder.timeout() == null) {
-		
-			TimeValue timeoutTimeValue;
-			try {
-				// parseTimeValue throws an exception if the String is malformed.
-				final String queryTimeoutString = searchServiceProperties.getElasticsearch().getQueryTimeout();
-				timeoutTimeValue = TimeValue.parseTimeValue(queryTimeoutString, DEFAULT_TIMEOUT, "timeout");
-			} catch (IllegalArgumentException ex) {
-				timeoutTimeValue = DEFAULT_TIMEOUT;
-			}
-	
-			searchSourceBuilder.timeout(timeoutTimeValue);
-		}
-		
-		final String index = searchServiceProperties.getElasticsearch().getIndex();
-		
-		final SearchRequest searchRequest = new SearchRequest();
-		searchRequest.indices(index);
-		searchRequest.source(searchSourceBuilder);
-		
-		try {
-			final SearchResponse searchResponse = elasticsearchClient.search(searchRequest, RequestOptions.DEFAULT);
-			
-			final SearchHits searchHits = searchResponse.getHits();
-			
-			List<Map<String, Object>> mapList = Stream.of(searchHits.getHits())
-				.map(SearchHit::getSourceAsMap)
-				.collect(Collectors.toList());
-			
-			final SearchResult result = new SearchResult(mapList, searchHits.getTotalHits().value);
-			
-			logger.debug("Query: {}, result: {}", searchSourceBuilder.query().toString(), result);
-			
-			return result;
-		} catch (IOException e) {
-			throw new SearchException(e);
-		}
-	}
-	
-	/**
-	 * 
-	 * @author alladin-IT GmbH (bp@alladin.at)
-	 *
-	 */
-	private class SearchResult {
-		
-		final List<Map<String, Object>> results;
-		final long totalHits;
-		
-		SearchResult(List<Map<String, Object>> results, long totalHits) {
-			this.results = results;
-			this.totalHits = totalHits;
-		}
-		
-		public List<Map<String, Object>> getResults() {
-			return results;
-		}
-		
-		public long getTotalHits() {
-			return totalHits;
-		}
+            // TODO ...
+            if (!customQueryString.contains(":")) {
+                if (!customQueryString.startsWith("*")) {
+                    customQueryString = "*" + customQueryString;
+                }
 
-		@Override
-		public String toString() {
-			return "SearchResult [results.size=" + results.size() + ", totalHits=" + totalHits + "]";
-		}
-	}
+                if (!customQueryString.endsWith("*")) {
+                    customQueryString = customQueryString + "*";
+                }
+            }
+
+            queryBuilder = QueryBuilders.queryStringQuery(customQueryString).analyzeWildcard(true);
+        } else {
+            queryBuilder = QueryBuilders.matchAllQuery();
+        }
+
+        searchSourceBuilder.query(queryBuilder);
+
+        // pageable
+        searchSourceBuilder.from((int) pageable.getOffset());
+        searchSourceBuilder.size(pageable.getPageSize());
+
+        // sort
+        // pageable sort: localhost:8083/api/v1/measurements?q=*&sort=start_time,desc&sort=end_time,desc
+        // elasticsearch sort: localhost:8083/api/v1/measurements?q=*&sort=start_time:desc&sort=end_time:desc
+        // We currently only support pageable sort method with ,desc
+
+        pageable.getSort().forEach(s -> {
+            searchSourceBuilder.sort(
+                    //SortBuilders.fieldSort(s.getProperty()).order(s.getDirection() == Direction.ASC ? SortOrder.ASC : SortOrder.DESC)
+                    SortBuilders.fieldSort(s.getProperty()).order(SortOrder.fromString(s.getDirection().toString()))
+            );
+        });
+
+        // Execute Query
+        final SearchResult result = executeSearchQuery(searchSourceBuilder);
+
+        return new PageImpl<>(result.getResults(), pageable, result.getTotalHits());
+    }
+
+    public List<Map<String, Object>> findByDateRange(Integer year, Integer month, Integer day) {
+        String gte = year + "-" + String.format("%02d", month);
+        String lte = year + "-" + String.format("%02d", month);
+
+        if (day != null) {
+            gte += "-" + String.format("%02d", day);
+            lte += "-" + String.format("%02d", day);
+        } else {
+            gte += "-01";
+            lte += "-" + YearMonth.of(year, month).lengthOfMonth();
+        }
+
+        final QueryBuilder queryBuilder = QueryBuilders
+                .rangeQuery("start_time")
+                .gte(gte)
+                .lte(lte);
+
+        final SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        searchSourceBuilder.query(queryBuilder);
+
+        // Execute Query
+        return executeSearchQuery(searchSourceBuilder).getResults();
+    }
+
+    public Map<String, Object> findOneByOpenDataUuid(String openDataUuid) {
+        final String index = searchServiceProperties.getElasticsearch().getIndex();
+        final GetRequest getRequest = new GetRequest(index, openDataUuid);
+
+        try {
+            final GetResponse getResponse = elasticsearchClient.get(getRequest, RequestOptions.DEFAULT);
+
+            return getResponse.getSourceAsMap();
+        } catch (IOException e) {
+            throw new SearchException(e);
+        }
+    }
+
+    ////
+
+    private SearchResult executeSearchQuery(SearchSourceBuilder searchSourceBuilder) {
+        // Add timeout if none is set
+        if (searchSourceBuilder.timeout() == null) {
+
+            TimeValue timeoutTimeValue;
+            try {
+                // parseTimeValue throws an exception if the String is malformed.
+                final String queryTimeoutString = searchServiceProperties.getElasticsearch().getQueryTimeout();
+                timeoutTimeValue = TimeValue.parseTimeValue(queryTimeoutString, DEFAULT_TIMEOUT, "timeout");
+            } catch (IllegalArgumentException ex) {
+                timeoutTimeValue = DEFAULT_TIMEOUT;
+            }
+
+            searchSourceBuilder.timeout(timeoutTimeValue);
+        }
+
+        final String index = searchServiceProperties.getElasticsearch().getIndex();
+
+        final SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices(index);
+        searchRequest.source(searchSourceBuilder);
+
+        try {
+            final SearchResponse searchResponse = elasticsearchClient.search(searchRequest, RequestOptions.DEFAULT);
+
+            final SearchHits searchHits = searchResponse.getHits();
+
+            List<Map<String, Object>> mapList = Stream.of(searchHits.getHits())
+                    .map(SearchHit::getSourceAsMap)
+                    .collect(Collectors.toList());
+
+            final SearchResult result = new SearchResult(mapList, searchHits.getTotalHits().value);
+
+            logger.debug("Query: {}, result: {}", searchSourceBuilder.query().toString(), result);
+
+            return result;
+        } catch (IOException e) {
+            throw new SearchException(e);
+        }
+    }
+
+    /**
+     * @author alladin-IT GmbH (bp@alladin.at)
+     */
+    private class SearchResult {
+
+        final List<Map<String, Object>> results;
+        final long totalHits;
+
+        SearchResult(List<Map<String, Object>> results, long totalHits) {
+            this.results = results;
+            this.totalHits = totalHits;
+        }
+
+        public List<Map<String, Object>> getResults() {
+            return results;
+        }
+
+        public long getTotalHits() {
+            return totalHits;
+        }
+
+        @Override
+        public String toString() {
+            return "SearchResult [results.size=" + results.size() + ", totalHits=" + totalHits + "]";
+        }
+    }
 }

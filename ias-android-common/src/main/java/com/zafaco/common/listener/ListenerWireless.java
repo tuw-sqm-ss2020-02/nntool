@@ -31,111 +31,98 @@ import com.zafaco.common.interfaces.ModulesInterface;
 
 import org.json.JSONObject;
 
-public class ListenerWireless extends BroadcastReceiver
-{
-	/**************************** Variables ****************************/
+public class ListenerWireless extends BroadcastReceiver {
+    /**************************** Variables ****************************/
 
-	Context ctx;
+    Context ctx;
 
-	//Module Objects
-	private Tool mTool;
-	private ModulesInterface interfaceCallback;
-	private WifiManager wm;
-	private Thread pThread;
-	private boolean withIntervall = false;
+    //Module Objects
+    private Tool mTool;
+    private ModulesInterface interfaceCallback;
+    private WifiManager wm;
+    private Thread pThread;
+    private boolean withIntervall = false;
 
-	/*******************************************************************/
+    /*******************************************************************/
 
-	private String sState = "COMPLETED";
+    private String sState = "COMPLETED";
 
-	/*******************************************************************/
+    /*******************************************************************/
 
-	/**
-	 * Constructor
-	 */
-	public ListenerWireless(Context ctx, ModulesInterface intCall)
-	{
-		this.ctx = ctx;
-		this.interfaceCallback = intCall;
+    /**
+     * Constructor
+     */
+    public ListenerWireless(Context ctx, ModulesInterface intCall) {
+        this.ctx = ctx;
+        this.interfaceCallback = intCall;
 
-		mTool = new Tool();
+        mTool = new Tool();
 
-		wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
-		IntentFilter iFilter = new IntentFilter();
-		iFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        IntentFilter iFilter = new IntentFilter();
+        iFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
 
-		ctx.registerReceiver(this, iFilter);
+        ctx.registerReceiver(this, iFilter);
 
-	}
+    }
 
-	public void getState()
-	{
-		onReceive(ctx, new Intent());
-	}
+    public void getState() {
+        onReceive(ctx, new Intent());
+    }
 
-	public void withIntervall()
-	{
-		pThread = new Thread(new WorkerThread());
-		pThread.start();
+    public void withIntervall() {
+        pThread = new Thread(new WorkerThread());
+        pThread.start();
 
-		withIntervall = true;
-	}
+        withIntervall = true;
+    }
 
-	public void stopUpdates()
-	{
-		ctx.unregisterReceiver(this);
+    public void stopUpdates() {
+        ctx.unregisterReceiver(this);
 
-		if( withIntervall )
-			pThread.interrupt();
+        if (withIntervall)
+            pThread.interrupt();
 
-		withIntervall = false;
-	}
+        withIntervall = false;
+    }
 
-	@Override
-	public void onReceive(Context context, Intent intent)
-	{
-		getData();
-	}
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        getData();
+    }
 
-	private void getData()
-	{
-		JSONObject jData = new JSONObject();
+    private void getData() {
+        JSONObject jData = new JSONObject();
 
-		try
-		{
-			wm = (WifiManager)ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        try {
+            wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
-			//---------------------------------------------
+            //---------------------------------------------
 
-			jData.put("app_mode", mTool.isWifi(ctx) ? "WIFI" : "WWAN");
+            jData.put("app_mode", mTool.isWifi(ctx) ? "WIFI" : "WWAN");
 
-			//----------------------------------------------
+            //----------------------------------------------
 
-			//Callback
-			interfaceCallback.receiveData(jData);
-		}
-		catch (Exception ex)
-		{
-			mTool.printTrace(ex);
-		}
-	}
+            //Callback
+            interfaceCallback.receiveData(jData);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
-	class WorkerThread extends Thread
-	{
-		public void run()
-		{
-			while (true)
-			{
-				try
-				{
-					getData();
+    class WorkerThread extends Thread {
+        public void run() {
+            while (true) {
+                try {
+                    getData();
 
-					//Every 10 Seconds
-					Thread.sleep(10000);
-				}
-				catch (InterruptedException ex) { mTool.printTrace(ex); }
-			}
-		}
-	}
+                    //Every 10 Seconds
+                    Thread.sleep(10000);
+                } catch (InterruptedException ex) {
+                    mTool.printTrace(ex);
+                }
+            }
+        }
+    }
 }

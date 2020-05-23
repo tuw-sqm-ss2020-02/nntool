@@ -36,6 +36,41 @@ import android.widget.TextView;
  */
 public class BlockingProgressDialog extends AlertDialog {
 
+    private final String message;
+    private ProgressLayout progressLayout;
+
+    private BlockingProgressDialog(final Context context, final String message, final int theme,
+                                   final boolean cancelable, final OnCancelListener cancelListener) {
+        super(context, theme);
+        this.message = message;
+        setCancelable(cancelable);
+        if (cancelListener != null) {
+            setOnCancelListener(cancelListener);
+        }
+    }
+
+    public static int argb(float alpha, float red, float green, float blue) {
+        return ((int) (alpha * 255.0f + 0.5f) << 24) |
+                ((int) (red * 255.0f + 0.5f) << 16) |
+                ((int) (green * 255.0f + 0.5f) << 8) |
+                (int) (blue * 255.0f + 0.5f);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setCanceledOnTouchOutside(false);
+        progressLayout = new ProgressLayout(getContext());
+        setContentView(progressLayout);
+        progressLayout.setMessage(message);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getWindow().setBackgroundDrawable(new ColorDrawable(argb(.9f, 1f, 1f, 1f)));
+    }
+
     public static class Builder {
 
         private Context context;
@@ -84,6 +119,8 @@ public class BlockingProgressDialog extends AlertDialog {
 
     private class ProgressLayout extends FrameLayout {
 
+        private TextView textView;
+
         public ProgressLayout(Context context) {
             super(context);
             init();
@@ -98,8 +135,6 @@ public class BlockingProgressDialog extends AlertDialog {
             super(context, attrs, defStyleAttr);
             init();
         }
-
-        private TextView textView;
 
         private void init() {
             final LinearLayout ll = new LinearLayout(getContext());
@@ -117,7 +152,7 @@ public class BlockingProgressDialog extends AlertDialog {
             layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.gravity = Gravity.CENTER;
-            layoutParams.setMargins(30,10,10,10);
+            layoutParams.setMargins(30, 10, 10, 10);
             progress.setLayoutParams(layoutParams);
             ll.addView(progress);
 
@@ -125,7 +160,7 @@ public class BlockingProgressDialog extends AlertDialog {
             layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.gravity = Gravity.CENTER;
-            layoutParams.setMargins(30,10,10,10);
+            layoutParams.setMargins(30, 10, 10, 10);
             textView.setLayoutParams(layoutParams);
 
             ll.addView(textView);
@@ -134,41 +169,5 @@ public class BlockingProgressDialog extends AlertDialog {
         public void setMessage(final String text) {
             textView.setText(text);
         }
-    }
-
-    private final String message;
-
-    private ProgressLayout progressLayout;
-
-    private BlockingProgressDialog(final Context context, final String message, final int theme,
-                                   final boolean cancelable, final OnCancelListener cancelListener) {
-        super(context, theme);
-        this.message = message;
-        setCancelable(cancelable);
-        if (cancelListener != null) {
-            setOnCancelListener(cancelListener);
-        }
-    }
-
-    public static int argb(float alpha, float red, float green, float blue) {
-        return ((int) (alpha * 255.0f + 0.5f) << 24) |
-                ((int) (red   * 255.0f + 0.5f) << 16) |
-                ((int) (green * 255.0f + 0.5f) <<  8) |
-                (int) (blue  * 255.0f + 0.5f);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setCanceledOnTouchOutside(false);
-        progressLayout = new ProgressLayout(getContext());
-        setContentView(progressLayout);
-        progressLayout.setMessage(message);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        getWindow().setBackgroundDrawable(new ColorDrawable(argb(.9f,1f,1f,1f)));
     }
 }

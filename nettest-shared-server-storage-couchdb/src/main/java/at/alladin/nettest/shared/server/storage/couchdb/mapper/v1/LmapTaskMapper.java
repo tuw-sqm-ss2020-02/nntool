@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,108 +42,108 @@ import at.alladin.nntool.shared.qos.util.SipTaskHelper;
 
 @Mapper(componentModel = "spring")
 public interface LmapTaskMapper {
-	
-	@Mappings({
-		@Mapping(target="options",
-				expression= "java( buildOptionQoSList(settings, measurementServer, qosObjectiveList, useIPv6) )"
-				),
-		@Mapping(target="name", source="name")
-	})
-	LmapTaskDto map(Settings settings, MeasurementServer measurementServer, List<QoSMeasurementObjective> qosObjectiveList, String name, boolean useIPv6);
-	
-	@Mappings({
-		@Mapping(target="options",
-				expression= "java( buildOptionSpeedList(settings, measurementServer, useIPv6) )"
-				),
-		@Mapping(target="name", source="name")
-	})
-	LmapTaskDto map(Settings settings, MeasurementServer measurementServer, String name, boolean useIPv6);
-	
-	@Mappings({
+
+    @Mappings({
+            @Mapping(target = "options",
+                    expression = "java( buildOptionQoSList(settings, measurementServer, qosObjectiveList, useIPv6) )"
+            ),
+            @Mapping(target = "name", source = "name")
+    })
+    LmapTaskDto map(Settings settings, MeasurementServer measurementServer, List<QoSMeasurementObjective> qosObjectiveList, String name, boolean useIPv6);
+
+    @Mappings({
+            @Mapping(target = "options",
+                    expression = "java( buildOptionSpeedList(settings, measurementServer, useIPv6) )"
+            ),
+            @Mapping(target = "name", source = "name")
+    })
+    LmapTaskDto map(Settings settings, MeasurementServer measurementServer, String name, boolean useIPv6);
+
+    @Mappings({
 //		@Mapping(target="uploadClassList", source="uploadClassList"),
 //		@Mapping(target="downloadClassList", source="downloadClassList")
-	})
-	SpeedMeasurementConfiguration map(SpeedMeasurementSettings speedSettings);
-	
-	List<SpeedMeasurementClass> map(List<at.alladin.nettest.shared.server.storage.couchdb.domain.model.Settings.SpeedMeasurementSettings.SpeedMeasurementClass> speedMeasurementClass);
-	
-	default QoSMeasurementTypeParameters createQoSParameters(List<QoSMeasurementObjective> qosObjectiveList) {
-		final QoSMeasurementTypeParameters ret = new QoSMeasurementTypeParameters();
-		for (QoSMeasurementObjective objective : qosObjectiveList)  {
-			if (objective.getType() == null) {
-				continue;
-			}
-			final QoSMeasurementTypeDto dtoType = QoSMeasurementTypeDto.valueOf(objective.getType().toString());
-			if (!ret.getObjectives().containsKey(dtoType)) {
-				ret.getObjectives().put(dtoType, new ArrayList<>());
-			}
-			final Map<String, Object> objectiveMap = new HashMap<>();
-			objectiveMap.put(LmapTaskDto.CONCURRENCY_GROUP, objective.getConcurrencyGroup());
-			objectiveMap.put(LmapTaskDto.QOS_TEST_UID, objective.getObjectiveId());
-			objectiveMap.put(LmapTaskDto.QOS_TEST_TYPE, objective.getType().toString());
-			objective.getParameters().forEach((key, value) -> objectiveMap.put(key, value));
-			ret.getObjectives().get(dtoType).add(objectiveMap);
-			
-			if (QoSMeasurementType.SIP.equals(objective.getType())) {
-				SipTaskHelper.preProcess(objectiveMap);
-			}
-			
-		}
-		
-		return ret;
-	}
-	
-	default List<LmapOptionDto> buildOptionSpeedList(final Settings settings, final MeasurementServer measurementServer, boolean useIPv6) {
-		final List<LmapOptionDto> ret = new ArrayList<>();
-		
-		if (settings != null && settings.getUrls() != null && settings.getUrls().getCollectorService() != null) {
-			ret.add(generateOption(LmapTaskDto.RESULT_COLLECTOR_URL, settings.getUrls().getCollectorService()));
-		}
-		
-		addMeasurementServerOptionsToList(ret, measurementServer, useIPv6);
-		
-		if (settings.getMeasurements() != null) {
-			final SpeedMeasurementSettings speedSettings = (SpeedMeasurementSettings) settings.getMeasurements().get(MeasurementTypeDto.SPEED);
-			if (speedSettings != null) {
-				final LmapOptionDto paramDto = new LmapOptionDto();
-				final SpeedMeasurementTypeParameters parameters = new SpeedMeasurementTypeParameters();
-				parameters.setMeasurementConfiguration(map(speedSettings));
-				paramDto.setMeasurementParameters(parameters);
-				paramDto.setName(LmapTaskDto.MEASUREMENT_PARAMETER_SPEED);
-				ret.add(paramDto);
-			}
-		}
-		return ret;
-	}
-	
-	default List<LmapOptionDto> buildOptionQoSList(final Settings settings, final MeasurementServer measurementServer, List<QoSMeasurementObjective> qosObjectiveList, boolean useIPv6) {
-		final List<LmapOptionDto> ret = new ArrayList<>();
-		
-		if (settings != null && settings.getUrls() != null && settings.getUrls().getCollectorService() != null) {
-			ret.add(generateOption(LmapTaskDto.RESULT_COLLECTOR_URL, settings.getUrls().getCollectorService()));
-		}
-		
-		addMeasurementServerOptionsToList(ret, measurementServer, useIPv6);
-		
-		final LmapOptionDto measurementOption = new LmapOptionDto();
-		if (qosObjectiveList != null) {
-			measurementOption.setMeasurementParameters(createQoSParameters(qosObjectiveList));
-		} 
-		measurementOption.setName(LmapTaskDto.MEASUREMENT_PARAMETER_QOS);
-		ret.add(measurementOption);
-		
-		
-		return ret;
-	}
-	
-	default LmapOptionDto generateOption(final String name, final String value) {
-		final LmapOptionDto option = new LmapOptionDto();
-		option.setName(name);
-		option.setValue(value);
-		return option;
-	}
-	
-	default void addMeasurementServerOptionsToList(final List<LmapOptionDto> optionList, final MeasurementServer measurementServer, boolean useIPv6) {
+    })
+    SpeedMeasurementConfiguration map(SpeedMeasurementSettings speedSettings);
+
+    List<SpeedMeasurementClass> map(List<at.alladin.nettest.shared.server.storage.couchdb.domain.model.Settings.SpeedMeasurementSettings.SpeedMeasurementClass> speedMeasurementClass);
+
+    default QoSMeasurementTypeParameters createQoSParameters(List<QoSMeasurementObjective> qosObjectiveList) {
+        final QoSMeasurementTypeParameters ret = new QoSMeasurementTypeParameters();
+        for (QoSMeasurementObjective objective : qosObjectiveList) {
+            if (objective.getType() == null) {
+                continue;
+            }
+            final QoSMeasurementTypeDto dtoType = QoSMeasurementTypeDto.valueOf(objective.getType().toString());
+            if (!ret.getObjectives().containsKey(dtoType)) {
+                ret.getObjectives().put(dtoType, new ArrayList<>());
+            }
+            final Map<String, Object> objectiveMap = new HashMap<>();
+            objectiveMap.put(LmapTaskDto.CONCURRENCY_GROUP, objective.getConcurrencyGroup());
+            objectiveMap.put(LmapTaskDto.QOS_TEST_UID, objective.getObjectiveId());
+            objectiveMap.put(LmapTaskDto.QOS_TEST_TYPE, objective.getType().toString());
+            objective.getParameters().forEach((key, value) -> objectiveMap.put(key, value));
+            ret.getObjectives().get(dtoType).add(objectiveMap);
+
+            if (QoSMeasurementType.SIP.equals(objective.getType())) {
+                SipTaskHelper.preProcess(objectiveMap);
+            }
+
+        }
+
+        return ret;
+    }
+
+    default List<LmapOptionDto> buildOptionSpeedList(final Settings settings, final MeasurementServer measurementServer, boolean useIPv6) {
+        final List<LmapOptionDto> ret = new ArrayList<>();
+
+        if (settings != null && settings.getUrls() != null && settings.getUrls().getCollectorService() != null) {
+            ret.add(generateOption(LmapTaskDto.RESULT_COLLECTOR_URL, settings.getUrls().getCollectorService()));
+        }
+
+        addMeasurementServerOptionsToList(ret, measurementServer, useIPv6);
+
+        if (settings.getMeasurements() != null) {
+            final SpeedMeasurementSettings speedSettings = (SpeedMeasurementSettings) settings.getMeasurements().get(MeasurementTypeDto.SPEED);
+            if (speedSettings != null) {
+                final LmapOptionDto paramDto = new LmapOptionDto();
+                final SpeedMeasurementTypeParameters parameters = new SpeedMeasurementTypeParameters();
+                parameters.setMeasurementConfiguration(map(speedSettings));
+                paramDto.setMeasurementParameters(parameters);
+                paramDto.setName(LmapTaskDto.MEASUREMENT_PARAMETER_SPEED);
+                ret.add(paramDto);
+            }
+        }
+        return ret;
+    }
+
+    default List<LmapOptionDto> buildOptionQoSList(final Settings settings, final MeasurementServer measurementServer, List<QoSMeasurementObjective> qosObjectiveList, boolean useIPv6) {
+        final List<LmapOptionDto> ret = new ArrayList<>();
+
+        if (settings != null && settings.getUrls() != null && settings.getUrls().getCollectorService() != null) {
+            ret.add(generateOption(LmapTaskDto.RESULT_COLLECTOR_URL, settings.getUrls().getCollectorService()));
+        }
+
+        addMeasurementServerOptionsToList(ret, measurementServer, useIPv6);
+
+        final LmapOptionDto measurementOption = new LmapOptionDto();
+        if (qosObjectiveList != null) {
+            measurementOption.setMeasurementParameters(createQoSParameters(qosObjectiveList));
+        }
+        measurementOption.setName(LmapTaskDto.MEASUREMENT_PARAMETER_QOS);
+        ret.add(measurementOption);
+
+
+        return ret;
+    }
+
+    default LmapOptionDto generateOption(final String name, final String value) {
+        final LmapOptionDto option = new LmapOptionDto();
+        option.setName(name);
+        option.setValue(value);
+        return option;
+    }
+
+    default void addMeasurementServerOptionsToList(final List<LmapOptionDto> optionList, final MeasurementServer measurementServer, boolean useIPv6) {
         if (measurementServer != null) {
 
             ////
@@ -183,6 +183,6 @@ public interface LmapTaskMapper {
             optionList.add(generateOption(LmapTaskDto.SERVER_PORT, String.valueOf(port)));
             optionList.add(generateOption(LmapTaskDto.ENCRYPTION, String.valueOf(encryption)));
         }
-	}
-	
+    }
+
 }

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,36 +51,35 @@ import at.alladin.nettest.shared.berec.collector.api.v1.dto.shared.WebSocketInfo
 
 /**
  * This unit test is used to generate the example configuration file of the report model for milestone 1 deliverable 3.
- * 
- * @author alladin-IT GmbH (bp@alladin.at)
  *
+ * @author alladin-IT GmbH (bp@alladin.at)
  */
 public class LmapReportModelExampleTest extends AbstractLmapExampleTest {
 
-	/**
-	 * 
-	 */
-	@Test
-	public void testGenerateReportModel() {
-		final LmapReportDto lmapReportDto = new LmapReportDto();
-		
-		///
-		
-		lmapReportDto.setDate(LocalDateTime.now());
-		lmapReportDto.setAgentId("60c42144-e7f2-47ca-acfd-5447946a6f5e");
-		lmapReportDto.setGroupId("example_group");
-		lmapReportDto.setMeasurementPoint("_measurement_point_");
-		
-		///
-		
-		final List<LmapResultDto> results = new ArrayList<>();
-		
-		final LmapResultDto speedResultDto = new LmapResultDto();
-		speedResultDto.setSchedule("immediate_speed_qos_measurement_schedule");
-		speedResultDto.setAction("speed_measurement_action");
-		speedResultDto.setTask(MeasurementTypeDto.SPEED.name());
-		//speedResultDto.setParameters(Object parameters);
-		
+    /**
+     *
+     */
+    @Test
+    public void testGenerateReportModel() {
+        final LmapReportDto lmapReportDto = new LmapReportDto();
+
+        ///
+
+        lmapReportDto.setDate(LocalDateTime.now());
+        lmapReportDto.setAgentId("60c42144-e7f2-47ca-acfd-5447946a6f5e");
+        lmapReportDto.setGroupId("example_group");
+        lmapReportDto.setMeasurementPoint("_measurement_point_");
+
+        ///
+
+        final List<LmapResultDto> results = new ArrayList<>();
+
+        final LmapResultDto speedResultDto = new LmapResultDto();
+        speedResultDto.setSchedule("immediate_speed_qos_measurement_schedule");
+        speedResultDto.setAction("speed_measurement_action");
+        speedResultDto.setTask(MeasurementTypeDto.SPEED.name());
+        //speedResultDto.setParameters(Object parameters);
+
         final SpeedMeasurementTypeParameters speedParams = new SpeedMeasurementTypeParameters();
         /*
         final SpeedMeasurementTypeParameters.Durations dur = new SpeedMeasurementTypeParameters.Durations();
@@ -106,33 +105,33 @@ public class LmapReportModelExampleTest extends AbstractLmapExampleTest {
         final SpeedMeasurementTypeParameters.MeasurementServerConfig conf = new SpeedMeasurementTypeParameters.MeasurementServerConfig();
         conf.setBaseUrl("berec.eu");
         speedParams.setMeasurementServerConfig(conf);
-        
+
         LmapOptionDto option = new LmapOptionDto();
-		option.setName(MeasurementTypeDto.SPEED.name());
-		option.setMeasurementParameters(speedParams);
-		speedResultDto.getOptions().add(option);
-		//speedResultDto.setTags(List<String> tags);
-		speedResultDto.setStart(LocalDateTime.now().minusHours(1).minusMinutes(2));
-		speedResultDto.setEnd(LocalDateTime.now().minusHours(1));
-		speedResultDto.setEvent(speedResultDto.getStart());
-		//speedResultDto.setCycleNumber(String cycleNumber);
-		speedResultDto.setStatus(0);
-		//speedResultDto.setConflict(List<LmapReportResultConflictDto> conflict);
-		
-		final SpeedMeasurementResult speedMeasurementResult = new SpeedMeasurementResult();
-		speedMeasurementResult.setRelativeStartTimeNs(1234L);
-		speedMeasurementResult.setRelativeEndTimeNs((long)(4.6e10 + 10));
-		speedMeasurementResult.setStatus(StatusDto.FINISHED);
-		speedMeasurementResult.setBytesDownload(537484L);
-		speedMeasurementResult.setBytesDownloadIncludingSlowStart(537889L);
-		speedMeasurementResult.setBytesUpload(12396739L);
-		speedMeasurementResult.setBytesUploadIncludingSlowStart(12496739L);
-		speedMeasurementResult.setDurationRttNs((long)(1e10 + 8));
-		speedMeasurementResult.setDurationDownloadNs((long)(1.4e10+10));
-		speedMeasurementResult.setDurationUploadNs((long)(2.1e10 + 10));
-		speedMeasurementResult.setRelativeStartTimeRttNs((long)(0.4e10+10));
-		speedMeasurementResult.setRelativeStartTimeDownloadNs((long)(1.8e10+10));
-		speedMeasurementResult.setRelativeStartTimeUploadNs((long)(3.5e10+10));
+        option.setName(MeasurementTypeDto.SPEED.name());
+        option.setMeasurementParameters(speedParams);
+        speedResultDto.getOptions().add(option);
+        //speedResultDto.setTags(List<String> tags);
+        speedResultDto.setStart(LocalDateTime.now().minusHours(1).minusMinutes(2));
+        speedResultDto.setEnd(LocalDateTime.now().minusHours(1));
+        speedResultDto.setEvent(speedResultDto.getStart());
+        //speedResultDto.setCycleNumber(String cycleNumber);
+        speedResultDto.setStatus(0);
+        //speedResultDto.setConflict(List<LmapReportResultConflictDto> conflict);
+
+        final SpeedMeasurementResult speedMeasurementResult = new SpeedMeasurementResult();
+        speedMeasurementResult.setRelativeStartTimeNs(1234L);
+        speedMeasurementResult.setRelativeEndTimeNs((long) (4.6e10 + 10));
+        speedMeasurementResult.setStatus(StatusDto.FINISHED);
+        speedMeasurementResult.setBytesDownload(537484L);
+        speedMeasurementResult.setBytesDownloadIncludingSlowStart(537889L);
+        speedMeasurementResult.setBytesUpload(12396739L);
+        speedMeasurementResult.setBytesUploadIncludingSlowStart(12496739L);
+        speedMeasurementResult.setDurationRttNs((long) (1e10 + 8));
+        speedMeasurementResult.setDurationDownloadNs((long) (1.4e10 + 10));
+        speedMeasurementResult.setDurationUploadNs((long) (2.1e10 + 10));
+        speedMeasurementResult.setRelativeStartTimeRttNs((long) (0.4e10 + 10));
+        speedMeasurementResult.setRelativeStartTimeDownloadNs((long) (1.8e10 + 10));
+        speedMeasurementResult.setRelativeStartTimeUploadNs((long) (3.5e10 + 10));
 
         final RttInfoDto rttInfo = new RttInfoDto();
         rttInfo.setRequestedNumPackets(2);
@@ -144,11 +143,11 @@ public class LmapReportModelExampleTest extends AbstractLmapExampleTest {
         final List<RttDto> rttList = new ArrayList<>();
         RttDto rtt = new RttDto();
         rtt.setRttNs(1436L);
-        rtt.setRelativeTimeNs((long)(0.6e10+10));
+        rtt.setRelativeTimeNs((long) (0.6e10 + 10));
         rttList.add(rtt);
         rtt = new RttDto();
         rtt.setRttNs(874L);
-        rtt.setRelativeTimeNs((long)(1.2e10+10));
+        rtt.setRelativeTimeNs((long) (1.2e10 + 10));
         rttList.add(rtt);
         rttInfo.setRtts(rttList);
         speedMeasurementResult.setRttInfo(rttInfo);
@@ -156,17 +155,17 @@ public class LmapReportModelExampleTest extends AbstractLmapExampleTest {
         final List<SpeedMeasurementRawDataItemDto> rawDownloadList = new ArrayList<>();
         SpeedMeasurementRawDataItemDto raw = new SpeedMeasurementRawDataItemDto();
         raw.setStreamId(0);
-        raw.setRelativeTimeNs((long)(1.9e10+10));
+        raw.setRelativeTimeNs((long) (1.9e10 + 10));
         raw.setBytes(1983L);
         rawDownloadList.add(raw);
         raw = new SpeedMeasurementRawDataItemDto();
         raw.setStreamId(1);
-        raw.setRelativeTimeNs((long)(2.4e10+10));
+        raw.setRelativeTimeNs((long) (2.4e10 + 10));
         raw.setBytes(198743L);
         rawDownloadList.add(raw);
         raw = new SpeedMeasurementRawDataItemDto();
         raw.setStreamId(0);
-        raw.setRelativeTimeNs((long)(3.2e10+10));
+        raw.setRelativeTimeNs((long) (3.2e10 + 10));
         raw.setBytes(19838484L);
         rawDownloadList.add(raw);
         speedMeasurementResult.setDownloadRawData(rawDownloadList);
@@ -174,12 +173,12 @@ public class LmapReportModelExampleTest extends AbstractLmapExampleTest {
         final List<SpeedMeasurementRawDataItemDto> rawUploadList = new ArrayList<>();
         raw = new SpeedMeasurementRawDataItemDto();
         raw.setStreamId(0);
-        raw.setRelativeTimeNs((long)(3.9e10+10));
+        raw.setRelativeTimeNs((long) (3.9e10 + 10));
         raw.setBytes(1983L);
         rawUploadList.add(raw);
         raw = new SpeedMeasurementRawDataItemDto();
         raw.setStreamId(1);
-        raw.setRelativeTimeNs((long)(4.2e10+10));
+        raw.setRelativeTimeNs((long) (4.2e10 + 10));
         raw.setBytes(198743L);
         rawUploadList.add(raw);
         speedMeasurementResult.setUploadRawData(rawUploadList);
@@ -231,80 +230,80 @@ public class LmapReportModelExampleTest extends AbstractLmapExampleTest {
 //		tableSpeed.setRows(Arrays.asList(new LmapTableRowDto<SpeedMeasurementResult>(Arrays.asList(speedMeasurementResult))));
 //		
 //		speedResultDto.setTable(Arrays.asList(tableSpeed));
-        
+
         speedResultDto.getResults().add(speedMeasurementResult);
-		
-		results.add(speedResultDto);
-		
-		//
-		final LmapResultDto qosResultDto = new LmapResultDto();
-		
-		qosResultDto.setSchedule("immediate_speed_qos_measurement_schedule");
-		qosResultDto.setAction("qos_measurement_action");
-		qosResultDto.setTask(MeasurementTypeDto.QOS.name());
-		//qosResultDto.setParameters(Object parameters);
-		final QoSMeasurementTypeParameters qosParams = new QoSMeasurementTypeParameters();
+
+        results.add(speedResultDto);
+
+        //
+        final LmapResultDto qosResultDto = new LmapResultDto();
+
+        qosResultDto.setSchedule("immediate_speed_qos_measurement_schedule");
+        qosResultDto.setAction("qos_measurement_action");
+        qosResultDto.setTask(MeasurementTypeDto.QOS.name());
+        //qosResultDto.setParameters(Object parameters);
+        final QoSMeasurementTypeParameters qosParams = new QoSMeasurementTypeParameters();
         final Map<QoSMeasurementTypeDto, List<Map<String, Object>>> objectives = new HashMap<>();
         objectives.put(QoSMeasurementTypeDto.TCP, new ArrayList<Map<String, Object>>());
         option = new LmapOptionDto();
-		option.setName(MeasurementTypeDto.QOS.name());
-		option.setMeasurementParameters(qosParams);
-		qosResultDto.getOptions().add(option);
-		//qosResultDto.setTags(List<String> tags);
-		qosResultDto.setStart(LocalDateTime.now().minusHours(1).minusMinutes(2));
-		qosResultDto.setEnd(LocalDateTime.now().minusHours(1));
-		qosResultDto.setEvent(qosResultDto.getStart());
-		//qosResultDto.setCycleNumber(String cycleNumber);
-		qosResultDto.setStatus(1);
-		//qosResultDto.setConflict(List<LmapReportResultConflictDto> conflict);
-		
-		final QoSMeasurementResult qosMeasurementResult = new QoSMeasurementResult();
-		qosMeasurementResult.setStatus(StatusDto.FAILED);
-		qosMeasurementResult.setReason(ReasonDto.UNABLE_TO_CONNECT);
-		qosMeasurementResult.setRelativeStartTimeNs((long)(4.6e10 + 10));
-		qosMeasurementResult.setRelativeEndTimeNs((long)(11.7e10 + 10));
-		
+        option.setName(MeasurementTypeDto.QOS.name());
+        option.setMeasurementParameters(qosParams);
+        qosResultDto.getOptions().add(option);
+        //qosResultDto.setTags(List<String> tags);
+        qosResultDto.setStart(LocalDateTime.now().minusHours(1).minusMinutes(2));
+        qosResultDto.setEnd(LocalDateTime.now().minusHours(1));
+        qosResultDto.setEvent(qosResultDto.getStart());
+        //qosResultDto.setCycleNumber(String cycleNumber);
+        qosResultDto.setStatus(1);
+        //qosResultDto.setConflict(List<LmapReportResultConflictDto> conflict);
+
+        final QoSMeasurementResult qosMeasurementResult = new QoSMeasurementResult();
+        qosMeasurementResult.setStatus(StatusDto.FAILED);
+        qosMeasurementResult.setReason(ReasonDto.UNABLE_TO_CONNECT);
+        qosMeasurementResult.setRelativeStartTimeNs((long) (4.6e10 + 10));
+        qosMeasurementResult.setRelativeEndTimeNs((long) (11.7e10 + 10));
+
 //		final LmapTableDto<QoSMeasurementResult> tableQos = new LmapTableDto<>();
 //		tableQos.setColumns(Arrays.asList("result"));
 //		tableQos.setRows(Arrays.asList(new LmapTableRowDto<QoSMeasurementResult>(Arrays.asList(qosMeasurementResult))));
-		
-		
-		qosResultDto.getResults().add(qosMeasurementResult);
-		
-		results.add(qosResultDto);
-		
-		lmapReportDto.setResults(results);
-		
-		///
-		
-		final ApiRequestInfo apiRequestInfo = new ApiRequestInfo();
-		
-		apiRequestInfo.setLanguage("en_US");
-		apiRequestInfo.setTimezone("Europe/Vienna");
-		apiRequestInfo.setAgentType(MeasurementAgentTypeDto.MOBILE);
-		apiRequestInfo.setOsName("Android");
-		apiRequestInfo.setOsVersion("8.1");
-		apiRequestInfo.setApiLevel("27");
-		apiRequestInfo.setCodeName("bullhead");
-		apiRequestInfo.setModel("MOTOG3");
-		apiRequestInfo.setAppVersionName("1.0.0");
-		apiRequestInfo.setAppVersionCode(42);
-		apiRequestInfo.setAppGitRevision("cba56293");
-		//apiRequestInfo.setGeoLocation(GeoLocationDto geoLocation);
-		
-		lmapReportDto.setAdditionalRequestInfo(apiRequestInfo);
-		
-		///
-		
-		final TimeBasedResultDto timeBasedResultDto = new TimeBasedResultDto();
 
-		timeBasedResultDto.setStartTime(LocalDateTime.now().minusHours(1).minusMinutes(2));
-		timeBasedResultDto.setEndTime(LocalDateTime.now().minusHours(1));
-		timeBasedResultDto.setDurationNs(2 * 60000000000L);
-		
-		//
-		
-		final List<GeoLocationDto> geoLocList = new ArrayList<>();
+
+        qosResultDto.getResults().add(qosMeasurementResult);
+
+        results.add(qosResultDto);
+
+        lmapReportDto.setResults(results);
+
+        ///
+
+        final ApiRequestInfo apiRequestInfo = new ApiRequestInfo();
+
+        apiRequestInfo.setLanguage("en_US");
+        apiRequestInfo.setTimezone("Europe/Vienna");
+        apiRequestInfo.setAgentType(MeasurementAgentTypeDto.MOBILE);
+        apiRequestInfo.setOsName("Android");
+        apiRequestInfo.setOsVersion("8.1");
+        apiRequestInfo.setApiLevel("27");
+        apiRequestInfo.setCodeName("bullhead");
+        apiRequestInfo.setModel("MOTOG3");
+        apiRequestInfo.setAppVersionName("1.0.0");
+        apiRequestInfo.setAppVersionCode(42);
+        apiRequestInfo.setAppGitRevision("cba56293");
+        //apiRequestInfo.setGeoLocation(GeoLocationDto geoLocation);
+
+        lmapReportDto.setAdditionalRequestInfo(apiRequestInfo);
+
+        ///
+
+        final TimeBasedResultDto timeBasedResultDto = new TimeBasedResultDto();
+
+        timeBasedResultDto.setStartTime(LocalDateTime.now().minusHours(1).minusMinutes(2));
+        timeBasedResultDto.setEndTime(LocalDateTime.now().minusHours(1));
+        timeBasedResultDto.setDurationNs(2 * 60000000000L);
+
+        //
+
+        final List<GeoLocationDto> geoLocList = new ArrayList<>();
         GeoLocationDto loc = new GeoLocationDto();
         loc.setTime(new LocalDateTime(2011, 2, 6, 22, 42, 14));
         loc.setAccuracy(2.1);
@@ -316,7 +315,7 @@ public class LmapReportModelExampleTest extends AbstractLmapExampleTest {
         loc.setLongitude(-97.092505);
         loc.setRelativeTimeNs((long) (1.4e10 + 10));
         geoLocList.add(loc);
-        
+
         loc = new GeoLocationDto();
         loc.setTime(new LocalDateTime(2011, 2, 6, 22, 42, 38));
         loc.setAccuracy(12.1);
@@ -328,105 +327,105 @@ public class LmapReportModelExampleTest extends AbstractLmapExampleTest {
         loc.setLongitude(-97.092108);
         loc.setRelativeTimeNs((long) (3.8e10 + 10));
         geoLocList.add(loc);
-		
-		timeBasedResultDto.setGeoLocations(geoLocList);
-		
-		//
-        
+
+        timeBasedResultDto.setGeoLocations(geoLocList);
+
+        //
+
         final List<PointInTimeValueDto<Double>> cpuList = new ArrayList<>();
         PointInTimeValueDto<Double> point = new PointInTimeValueDto<>();
         point.setValue(42.4242);
-        point.setRelativeTimeNs((long)(3.8e10 + 10));
+        point.setRelativeTimeNs((long) (3.8e10 + 10));
         cpuList.add(point);
         point = new PointInTimeValueDto<>();
         point.setValue(67.2353);
-        point.setRelativeTimeNs((long)(4.2e10 + 10));
+        point.setRelativeTimeNs((long) (4.2e10 + 10));
         cpuList.add(point);
         point = new PointInTimeValueDto<>();
         point.setValue(96.1002);
-        point.setRelativeTimeNs((long)(5.6e10 + 10));
+        point.setRelativeTimeNs((long) (5.6e10 + 10));
         cpuList.add(point);
         point = new PointInTimeValueDto<>();
         point.setValue(77.3543);
-        point.setRelativeTimeNs((long)(7.8e10 + 10));
-		
-		timeBasedResultDto.setCpuUsage(cpuList);
-		
-		//
-		
+        point.setRelativeTimeNs((long) (7.8e10 + 10));
+
+        timeBasedResultDto.setCpuUsage(cpuList);
+
+        //
+
         final List<PointInTimeValueDto<Double>> memList = new ArrayList<>();
         point = new PointInTimeValueDto<>();
         point.setValue(42.4242);
-        point.setRelativeTimeNs((long)(4.2e10 + 10));
+        point.setRelativeTimeNs((long) (4.2e10 + 10));
         memList.add(point);
         point = new PointInTimeValueDto<>();
         point.setValue(21.2353);
-        point.setRelativeTimeNs((long)(4.8e10 + 10));
+        point.setRelativeTimeNs((long) (4.8e10 + 10));
         memList.add(point);
         point = new PointInTimeValueDto<>();
         point.setValue(36.4545);
-        point.setRelativeTimeNs((long)(7.3e10 + 10));
+        point.setRelativeTimeNs((long) (7.3e10 + 10));
         memList.add(point);
         point = new PointInTimeValueDto<>();
         point.setValue(65.223);
-        point.setRelativeTimeNs((long)(9.4e10 + 10));
+        point.setRelativeTimeNs((long) (9.4e10 + 10));
         memList.add(point);
         point = new PointInTimeValueDto<>();
         point.setValue(73.563);
-        point.setRelativeTimeNs((long)(9.8e10 + 10));
+        point.setRelativeTimeNs((long) (9.8e10 + 10));
         memList.add(point);
-        
-		timeBasedResultDto.setMemUsage(memList);
-		
-		//
-		
-		final List<MeasurementResultNetworkPointInTimeDto> networkList = new ArrayList<>();
+
+        timeBasedResultDto.setMemUsage(memList);
+
+        //
+
+        final List<MeasurementResultNetworkPointInTimeDto> networkList = new ArrayList<>();
         final MeasurementResultNetworkPointInTimeDto netPoint = new MeasurementResultNetworkPointInTimeDto();
-        
+
         netPoint.setNetworkTypeId(99);
         netPoint.setSsid("Arlington Public WiFi");
         netPoint.setBssid("45:87:66:45:32:aa");
-        netPoint.setRelativeTimeNs((long)(.1e10+10));
+        netPoint.setRelativeTimeNs((long) (.1e10 + 10));
         netPoint.setTime(new LocalDateTime(2011, 2, 6, 22, 42, 14));
         networkList.add(netPoint);
 
-		timeBasedResultDto.setNetworkPointsInTime(networkList);
-		
-		//
-		
-		//timeBasedResultDto.setCellLocations(List<CellInfoDto> cellLocations);
-		
-		//
-		
-		final List<SignalDto> signalList = new ArrayList<>();
+        timeBasedResultDto.setNetworkPointsInTime(networkList);
+
+        //
+
+        //timeBasedResultDto.setCellLocations(List<CellInfoDto> cellLocations);
+
+        //
+
+        final List<SignalDto> signalList = new ArrayList<>();
         SignalDto signal = new SignalDto();
         signal.setNetworkTypeId(99);
-        signal.setRelativeTimeNs((long)(2.4e10+10));
+        signal.setRelativeTimeNs((long) (2.4e10 + 10));
         netPoint.setTime(new LocalDateTime(2011, 2, 6, 22, 42, 54));
         signal.setWifiBssid("45:87:66:45:32:aa");
         signal.setWifiSsid("Arlington Public WiFi");
         signal.setWifiLinkSpeedBps((int) (2.5e+7));
         signal.setWifiRssiDbm(-57);
         signalList.add(signal);
-        
+
         signal = new SignalDto();
         signal.setNetworkTypeId(99);
-        signal.setRelativeTimeNs((long)(3.2e10+10));
+        signal.setRelativeTimeNs((long) (3.2e10 + 10));
         netPoint.setTime(new LocalDateTime(2011, 2, 6, 22, 43, 02));
         signal.setWifiBssid("45:87:66:45:32:aa");
         signal.setWifiSsid("Arlington Public WiFi");
         signal.setWifiLinkSpeedBps((int) (2.5e+7));
         signal.setWifiRssiDbm(-52);
         signalList.add(signal);
-		
-		timeBasedResultDto.setSignals(signalList);
-		
-		//
-		
-		lmapReportDto.setTimeBasedResult(timeBasedResultDto);
 
-		///
-			
-		System.out.println(objectToJson(lmapReportDto));
-	}
+        timeBasedResultDto.setSignals(signalList);
+
+        //
+
+        lmapReportDto.setTimeBasedResult(timeBasedResultDto);
+
+        ///
+
+        System.out.println(objectToJson(lmapReportDto));
+    }
 }

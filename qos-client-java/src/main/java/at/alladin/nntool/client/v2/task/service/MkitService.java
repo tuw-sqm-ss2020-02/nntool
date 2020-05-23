@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,6 +26,48 @@ import java.util.concurrent.Callable;
  */
 public interface MkitService extends Callable<MkitService.MkitResult> {
 
+    /**
+     * NEEDS to be called before the call() method is called, otherwise call will always return null
+     * Set the test to be executed (using one of the available enums)
+     *
+     * @param testToExecute
+     * @throws UnsupportedMkitTestException if the mkitTestEnum is not supported by the mkitServiceImpl
+     */
+    void setTestToExecute(final MkitTestEnum testToExecute) throws UnsupportedMkitTestException;
+
+    /**
+     * Set possible input for the given mkit test
+     * setTestToExecute needs be called before addInput
+     *
+     * @param input, may be null if no input is required
+     */
+    void addInput(final String input);
+
+    /**
+     * Set flags for the given mkit test
+     * setTestToExecute needs be called before addFlags
+     * Syntax:
+     * FLAGNAME[ VALUE]
+     * where the " VALUE" is optional (if not provided, true is assumed)
+     * the whitespace is only there, if a value is actually provided
+     *
+     * @param flags, may be null if no flags are requested
+     */
+    void addFlags(final String flags);
+
+    /**
+     * @return the current progress of the mkit tests in percent
+     */
+    float getProgress();
+
+    /**
+     * Cancel the currently ongoing measurement
+     * (functionality of cancel depends on the possibilities of the underlying implementation)
+     */
+    void cancel();
+
+    void setOnMkitTestProgressListener(final MkitTestProgressListener listener);
+
     enum MkitTestEnum {
         MKIT_NDT,
         MKIT_HTTP_INVALID_REQUEST_LINE,
@@ -42,6 +84,22 @@ public interface MkitService extends Callable<MkitService.MkitResult> {
         MKIT_WHATSAPP_MESSENGER
     }
 
+    interface MkitResult {
+        /**
+         * @return a string representation of the result (which is valid json)
+         */
+        String toString();
+
+        /**
+         * @return the result as JSONObject (for easy manipulating)
+         */
+        JSONObject toJson();
+    }
+
+    interface MkitTestProgressListener {
+        void onProgress(final float progress);
+    }
+
     /**
      * Exception thrown if the requested mkitTestEnum is NOT supported by the underlying impl
      */
@@ -55,64 +113,6 @@ public interface MkitService extends Callable<MkitService.MkitResult> {
         public UnsupportedMkitTestException(String msg) {
             super(msg);
         }
-    }
-
-    interface MkitResult {
-        /**
-         *
-         * @return a string representation of the result (which is valid json)
-         */
-        String toString();
-
-        /**
-         *
-         * @return the result as JSONObject (for easy manipulating)
-         */
-        JSONObject toJson();
-    }
-
-    /**
-     * NEEDS to be called before the call() method is called, otherwise call will always return null
-     * Set the test to be executed (using one of the available enums)
-     * @param testToExecute
-     * @throws UnsupportedMkitTestException if the mkitTestEnum is not supported by the mkitServiceImpl
-     */
-    void setTestToExecute (final MkitTestEnum testToExecute) throws UnsupportedMkitTestException;
-
-    /**
-     * Set possible input for the given mkit test
-     * setTestToExecute needs be called before addInput
-     * @param input, may be null if no input is required
-     */
-    void addInput(final String input);
-
-    /**
-     * Set flags for the given mkit test
-     * setTestToExecute needs be called before addFlags
-     * Syntax:
-     * 		FLAGNAME[ VALUE]
-     * 	where the " VALUE" is optional (if not provided, true is assumed)
-     * 	the whitespace is only there, if a value is actually provided
-     * @param flags, may be null if no flags are requested
-     */
-    void addFlags(final String flags);
-
-    /**
-     *
-     * @return the current progress of the mkit tests in percent
-     */
-    float getProgress ();
-
-    /**
-     * Cancel the currently ongoing measurement
-     * (functionality of cancel depends on the possibilities of the underlying implementation)
-     */
-    void cancel ();
-
-    void setOnMkitTestProgressListener(final MkitTestProgressListener listener);
-
-    interface MkitTestProgressListener {
-        void onProgress(final float progress);
     }
 
 }

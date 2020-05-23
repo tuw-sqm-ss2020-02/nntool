@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,138 +34,137 @@ import at.alladin.nettest.shared.berec.collector.api.v1.dto.measurement.result.T
 
 /**
  * This module defines a data model for reporting results from Measurement Agents, which are part of a Large-Scale Measurement Platform (LMAP), to result data Collectors.
- * 
- * @author alladin-IT GmbH (lb@alladin.at)
  *
+ * @author alladin-IT GmbH (lb@alladin.at)
  */
 @io.swagger.annotations.ApiModel(description = "This module defines a data model for reporting results from Measurement Agents, which are part of a Large-Scale Measurement Platform (LMAP), to result data Collectors.")
 @JsonClassDescription("This module defines a data model for reporting results from Measurement Agents, which are part of a Large-Scale Measurement Platform (LMAP), to result data Collectors.")
 @JsonInclude(Include.NON_EMPTY)
 public class LmapReportDto {
-			
-	/**
-	 * The date and time when this result report was sent to a Collector.
-	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "The date and time when this result report was sent to a Collector.")
-	@JsonPropertyDescription("The date and time when this result report was sent to a Collector.")
-	@Expose
-	@SerializedName("date")
-	@JsonProperty(required = true, value = "date")
-	private LocalDateTime date;
-	
-	/**
-	 * The agent-id of the agent from which this report originates.
-	 */
-	@io.swagger.annotations.ApiModelProperty(value = "The agent-id of the agent from which this report originates.")
-	@JsonPropertyDescription("The agent-id of the agent from which this report originates.")
-	@Expose
-	@SerializedName("agent-id")
-	@JsonProperty(value = "agent-id")
-	private String agentId;
 
-	/**
-	 * The group-id of the agent from which this report originates.
-	 */
-	@io.swagger.annotations.ApiModelProperty(value = "The group-id of the agent from which this report originates.")
-	@JsonPropertyDescription("The group-id of the agent from which this report originates.")
-	@Expose
-	@SerializedName("group-id")
-	@JsonProperty(value = "group-id")
-	private String groupId;
+    /**
+     * The date and time when this result report was sent to a Collector.
+     */
+    @io.swagger.annotations.ApiModelProperty(required = true, value = "The date and time when this result report was sent to a Collector.")
+    @JsonPropertyDescription("The date and time when this result report was sent to a Collector.")
+    @Expose
+    @SerializedName("date")
+    @JsonProperty(required = true, value = "date")
+    private LocalDateTime date;
 
-	/**
-	 * The measurement-point of the agent from which this report originates.
-	 */
-	@io.swagger.annotations.ApiModelProperty(value = "The measurement-point of the agent from which this report originates.")
-	@JsonPropertyDescription("The measurement-point of the agent from which this report originates.")
-	@Expose
-	@SerializedName("measurement-point")
-	@JsonProperty(value = "measurement-point")
-	private String measurementPoint;
-	
-	/**
-	 * The list of Tasks for which results are reported.
-	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "The list of Tasks for which results are reported.")
-	@JsonPropertyDescription("The list of Tasks for which results are reported.")
-	@Expose
-	@SerializedName("result")
-	@JsonProperty(required = true, value = "result")
-	private List<LmapResultDto> results = new ArrayList<>();
-	
-	/**
-	 * Additional information that is sent by agent alongside the request.
-	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "Additional information that is sent by agent alongside the request.")
-	@JsonPropertyDescription("Additional information that is sent by agent alongside the request.")
-	@Expose
-	@SerializedName("additional_request_info")
-	@JsonProperty(required = true, value = "additional_request_info")	
-	private ApiRequestInfo additionalRequestInfo;
+    /**
+     * The agent-id of the agent from which this report originates.
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "The agent-id of the agent from which this report originates.")
+    @JsonPropertyDescription("The agent-id of the agent from which this report originates.")
+    @Expose
+    @SerializedName("agent-id")
+    @JsonProperty(value = "agent-id")
+    private String agentId;
 
-	/**
-	 * This module defines a data model for reporting time based results from Measurement Agents.
-	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "This module defines a data model for reporting time based results from Measurement Agents.")
-	@JsonPropertyDescription("This module defines a data model for reporting time based results from Measurement Agents.")
-	@Expose
-	@SerializedName("time_based_result")
-	@JsonProperty(required = true, value = "time_based_result")
-	private TimeBasedResultDto timeBasedResult;
+    /**
+     * The group-id of the agent from which this report originates.
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "The group-id of the agent from which this report originates.")
+    @JsonPropertyDescription("The group-id of the agent from which this report originates.")
+    @Expose
+    @SerializedName("group-id")
+    @JsonProperty(value = "group-id")
+    private String groupId;
 
-	public LocalDateTime getDate() {
-		return date;
-	}
+    /**
+     * The measurement-point of the agent from which this report originates.
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "The measurement-point of the agent from which this report originates.")
+    @JsonPropertyDescription("The measurement-point of the agent from which this report originates.")
+    @Expose
+    @SerializedName("measurement-point")
+    @JsonProperty(value = "measurement-point")
+    private String measurementPoint;
 
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
+    /**
+     * The list of Tasks for which results are reported.
+     */
+    @io.swagger.annotations.ApiModelProperty(required = true, value = "The list of Tasks for which results are reported.")
+    @JsonPropertyDescription("The list of Tasks for which results are reported.")
+    @Expose
+    @SerializedName("result")
+    @JsonProperty(required = true, value = "result")
+    private List<LmapResultDto> results = new ArrayList<>();
 
-	public String getAgentId() {
-		return agentId;
-	}
+    /**
+     * Additional information that is sent by agent alongside the request.
+     */
+    @io.swagger.annotations.ApiModelProperty(required = true, value = "Additional information that is sent by agent alongside the request.")
+    @JsonPropertyDescription("Additional information that is sent by agent alongside the request.")
+    @Expose
+    @SerializedName("additional_request_info")
+    @JsonProperty(required = true, value = "additional_request_info")
+    private ApiRequestInfo additionalRequestInfo;
 
-	public void setAgentId(String agentId) {
-		this.agentId = agentId;
-	}
+    /**
+     * This module defines a data model for reporting time based results from Measurement Agents.
+     */
+    @io.swagger.annotations.ApiModelProperty(required = true, value = "This module defines a data model for reporting time based results from Measurement Agents.")
+    @JsonPropertyDescription("This module defines a data model for reporting time based results from Measurement Agents.")
+    @Expose
+    @SerializedName("time_based_result")
+    @JsonProperty(required = true, value = "time_based_result")
+    private TimeBasedResultDto timeBasedResult;
 
-	public String getGroupId() {
-		return groupId;
-	}
+    public LocalDateTime getDate() {
+        return date;
+    }
 
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
-	}
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
 
-	public String getMeasurementPoint() {
-		return measurementPoint;
-	}
+    public String getAgentId() {
+        return agentId;
+    }
 
-	public void setMeasurementPoint(String measurementPoint) {
-		this.measurementPoint = measurementPoint;
-	}
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
+    }
 
-	public List<LmapResultDto> getResults() {
-		return results;
-	}
+    public String getGroupId() {
+        return groupId;
+    }
 
-	public void setResults(List<LmapResultDto> results) {
-		this.results = results;
-	}
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
 
-	public ApiRequestInfo getAdditionalRequestInfo() {
-		return additionalRequestInfo;
-	}
+    public String getMeasurementPoint() {
+        return measurementPoint;
+    }
 
-	public void setAdditionalRequestInfo(ApiRequestInfo additionalRequestInfo) {
-		this.additionalRequestInfo = additionalRequestInfo;
-	}
+    public void setMeasurementPoint(String measurementPoint) {
+        this.measurementPoint = measurementPoint;
+    }
 
-	public TimeBasedResultDto getTimeBasedResult() {
-		return timeBasedResult;
-	}
+    public List<LmapResultDto> getResults() {
+        return results;
+    }
 
-	public void setTimeBasedResult(TimeBasedResultDto timeBasedResult) {
-		this.timeBasedResult = timeBasedResult;
-	}
+    public void setResults(List<LmapResultDto> results) {
+        this.results = results;
+    }
+
+    public ApiRequestInfo getAdditionalRequestInfo() {
+        return additionalRequestInfo;
+    }
+
+    public void setAdditionalRequestInfo(ApiRequestInfo additionalRequestInfo) {
+        this.additionalRequestInfo = additionalRequestInfo;
+    }
+
+    public TimeBasedResultDto getTimeBasedResult() {
+        return timeBasedResult;
+    }
+
+    public void setTimeBasedResult(TimeBasedResultDto timeBasedResult) {
+        this.timeBasedResult = timeBasedResult;
+    }
 }

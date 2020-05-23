@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@ import at.alladin.nntool.client.helper.Config;
 
 public abstract class AbstractTest {
     protected static final String EXPECT_GREETING = Config.VERSION_STRING;
-	
+
     protected final ClientHolder client;
     protected final TestParameter params;
     protected final int threadId;
@@ -42,170 +42,151 @@ public abstract class AbstractTest {
     protected InputStreamCounter in;
     protected BufferedReader reader;
     protected OutputStreamCounter out;
-    
+
     protected long totalDown;
     protected long totalUp;
     protected int chunksize;
     protected byte[] buf;
 
-    
+
     /**
-     * 
      * @param client
      * @param params
      * @param threadId
      */
     public AbstractTest(ClientHolder client, TestParameter params, int threadId) {
-    	this.threadId = threadId;
-    	this.client = client;
-    	this.params = params;
+        this.threadId = threadId;
+        this.client = client;
+        this.params = params;
     }
 
-    protected Socket getSocket(final String host, final int port, final boolean isSecure, final int timeOut) throws UnknownHostException, IOException
-    {
-    	InetSocketAddress sockAddr = new InetSocketAddress(host, port);
-    	
-    	final Socket socket;
-    	
-        if (client.getSslSocketFactory() != null && isSecure)
-        {
+    protected Socket getSocket(final String host, final int port, final boolean isSecure, final int timeOut) throws UnknownHostException, IOException {
+        InetSocketAddress sockAddr = new InetSocketAddress(host, port);
+
+        final Socket socket;
+
+        if (client.getSslSocketFactory() != null && isSecure) {
             socket = client.getSslSocketFactory().createSocket();
-        }
-        else {
+        } else {
             socket = new Socket();
         }
-        
+
         if (socket != null) {
-        	System.out.println("Connecting to " + sockAddr + " with timout: " + timeOut + "ms " + socket + " [SSL: " + isSecure + "]");
-        	socket.connect(sockAddr, timeOut);
+            System.out.println("Connecting to " + sockAddr + " with timout: " + timeOut + "ms " + socket + " [SSL: " + isSecure + "]");
+            socket.connect(sockAddr, timeOut);
         }
-        
-    	return socket;
+
+        return socket;
     }
 
     protected Socket connect(final TestResult testResult, final InetAddress host, final int port, final String protocolVersion, final String response, final boolean isSecure, final int connTimeOut) throws IOException {
         log(String.format(Locale.US, "thread %d: connecting...", threadId));
-        
+
         final InetAddress inetAddress = host;
-        
+
         final Socket s = getSocket(inetAddress.getHostAddress(), port, isSecure, connTimeOut);
         s.setSoTimeout(12000);
-        
+
         if (testResult != null) {
-        	testResult.ip_local = s.getLocalAddress();
-        	testResult.ip_server = s.getInetAddress();
-        	testResult.port_remote = s.getPort();
+            testResult.ip_local = s.getLocalAddress();
+            testResult.ip_server = s.getInetAddress();
+            testResult.port_remote = s.getPort();
         }
-        
-        if (s instanceof SSLSocket)
-        {
+
+        if (s instanceof SSLSocket) {
             final SSLSocket sslSocket = (SSLSocket) s;
             final SSLSession session = sslSocket.getSession();
             if (testResult != null) {
-            	testResult.encryption = String.format(Locale.US, "%s (%s)", session.getProtocol(), session.getCipherSuite());
+                testResult.encryption = String.format(Locale.US, "%s (%s)", session.getProtocol(), session.getCipherSuite());
             }
         }
-        
+
         log(String.format(Locale.US, "thread %d: ReceiveBufferSize: '%s'.", threadId, s.getReceiveBufferSize()));
         log(String.format(Locale.US, "thread %d: SendBufferSize: '%s'.", threadId, s.getSendBufferSize()));
-        
+
         if (in != null)
             totalDown += in.getCount();
         if (out != null)
             totalUp += out.getCount();
-        
+
         in = new InputStreamCounter(s.getInputStream());
         reader = new BufferedReader(new InputStreamReader(in, "US-ASCII"), 4096);
         out = new OutputStreamCounter(s.getOutputStream());
-        
+
         String line = reader.readLine();
-        if (!line.equals(protocolVersion))
-        {
+        if (!line.equals(protocolVersion)) {
             log(String.format(Locale.US, "thread %d: got '%s' expected '%s'", threadId, line, EXPECT_GREETING));
             return null;
         }
-        
+
         line = reader.readLine();
-        if (!line.startsWith("ACCEPT "))
-        {
+        if (!line.startsWith("ACCEPT ")) {
             log(String.format(Locale.US, "thread %d: got '%s' expected 'ACCEPT'", threadId, line));
             return null;
         }
-        
+
         final String send = String.format(Locale.US, "TOKEN %s\n", params.getToken());
-        
+
         out.write(send.getBytes("US-ASCII"));
-        
+
         line = reader.readLine();
-        
-        if (line == null)
-        {
+
+        if (line == null) {
             log(String.format(Locale.US, "thread %d: got no answer expected 'OK'", threadId, line));
             return null;
-        }
-        else if (!line.equals("OK"))
-        {
+        } else if (!line.equals("OK")) {
             log(String.format(Locale.US, "thread %d: got '%s' expected 'OK'", threadId, line));
             return null;
         }
-        
+
         line = reader.readLine();
-        try (final Scanner scanner = new Scanner(line))
-        {
-        	if (response.equals("CHUNKSIZE")) {
-                if (!response.equals(scanner.next()))
-                {
+        try (final Scanner scanner = new Scanner(line)) {
+            if (response.equals("CHUNKSIZE")) {
+                if (!response.equals(scanner.next())) {
                     log(String.format(Locale.US, "thread %d: got '%s' expected 'CHUNKSIZE'", threadId, line));
                     return null;
                 }
-                try
-                {
+                try {
                     chunksize = scanner.nextInt();
                     log(String.format(Locale.US, "thread %d: CHUNKSIZE is %d", threadId, chunksize));
-                }
-                catch (final Exception e)
-                {
+                } catch (final Exception e) {
                     log(String.format(Locale.US, "thread %d: invalid CHUNKSIZE: '%s'", threadId, line));
                     return null;
                 }
                 if (buf == null || buf != null && buf.length != chunksize)
                     buf = new byte[chunksize];
-                
+
                 s.setSoTimeout(0);
-                return s;        		
-        	}
-        	else {
-        		log(String.format(Locale.US, "thread %d: got '%s'", threadId, line));
-        		s.setSoTimeout(0);
-        		return s;
-        	}
+                return s;
+            } else {
+                log(String.format(Locale.US, "thread %d: got '%s'", threadId, line));
+                s.setSoTimeout(0);
+                return s;
+            }
 
         }
     }
-    
-    protected Socket connect(final TestResult testResult) throws IOException
-    {
-    	return connect(testResult, InetAddress.getByName(params.getHost()), params.getPort(), EXPECT_GREETING, "CHUNKSIZE", true, 20000);
+
+    protected Socket connect(final TestResult testResult) throws IOException {
+        return connect(testResult, InetAddress.getByName(params.getHost()), params.getPort(), EXPECT_GREETING, "CHUNKSIZE", true, 20000);
     }
-    
+
     /**
-     * 
      * @param message
      * @return
-     * @throws IOException 
-     * @throws UnsupportedEncodingException 
+     * @throws IOException
+     * @throws UnsupportedEncodingException
      */
     protected void sendMessage(final String message) throws UnsupportedEncodingException, IOException {
         String send;
-        send = String.format(Locale.US, message);        	
+        send = String.format(Locale.US, message);
 
         System.out.println("sending command (thread " + Thread.currentThread().getId() + "): " + send);
-		out.write(send.getBytes("US-ASCII"));
+        out.write(send.getBytes("US-ASCII"));
         out.flush();
     }
-    
-    protected void log(final CharSequence text)
-    {
+
+    protected void log(final CharSequence text) {
         client.log(text);
     }
 

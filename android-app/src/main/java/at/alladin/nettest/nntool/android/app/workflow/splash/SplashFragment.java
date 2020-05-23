@@ -43,5 +43,5 @@ public class SplashFragment extends Fragment {
     public void onStart() {
         super.onStart();
         getView().setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-   }
+    }
 }

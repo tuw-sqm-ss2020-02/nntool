@@ -88,11 +88,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onResume() {
         super.onResume();
         if (rootKey == null) {
-            ((MainActivity)getActivity()).updateActionBar(getString(R.string.title_settings));
+            ((MainActivity) getActivity()).updateActionBar(getString(R.string.title_settings));
         } else {
             switch (rootKey) {
                 case SINGLE_TEST_SELECTION_SCREEN_KEY:
-                    ((MainActivity)getActivity()).updateActionBar(getString(R.string.title_settings_test_selection), true);
+                    ((MainActivity) getActivity()).updateActionBar(getString(R.string.title_settings_test_selection), true);
                     break;
             }
         }

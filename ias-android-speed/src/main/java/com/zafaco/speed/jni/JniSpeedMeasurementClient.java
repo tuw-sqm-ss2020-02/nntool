@@ -35,16 +35,14 @@ import com.zafaco.speed.jni.exception.AndroidJniCppException;
 
 public class JniSpeedMeasurementClient {
 
+    private static final String TAG = "SPEED_MEASUREMENT_JNI";
+
     static {
         System.loadLibrary("ias-client");
     }
 
-    private static final String TAG = "SPEED_MEASUREMENT_JNI";
-
-    private SpeedMeasurementState speedMeasurementState;
-
     private final SpeedTaskDesc speedTaskDesc;
-
+    private SpeedMeasurementState speedMeasurementState;
     private List<MeasurementStringListener> stringListeners = new ArrayList<>();
 
     private List<MeasurementFinishedStringListener> finishedStringListeners = new ArrayList<>();
@@ -65,22 +63,21 @@ public class JniSpeedMeasurementClient {
     public void cppCallback(final String message) {
         if (previousMeasurementPhase != speedMeasurementState.getMeasurementPhase()) {
             Log.d(TAG, "Previous state: " + previousMeasurementPhase.toString() + " current state: " + speedMeasurementState.getMeasurementPhase().toString());
-            for(MeasurementPhaseListener l : measurementPhaseListeners) {
+            for (MeasurementPhaseListener l : measurementPhaseListeners) {
                 l.onMeasurementPhaseFinished(previousMeasurementPhase);
                 l.onMeasurementPhaseStarted(speedMeasurementState.getMeasurementPhase());
             }
             previousMeasurementPhase = speedMeasurementState.getMeasurementPhase();
         }
         Log.d(TAG, message);
-        for(MeasurementStringListener l : stringListeners)
-        {
-            if(!message.isEmpty())
+        for (MeasurementStringListener l : stringListeners) {
+            if (!message.isEmpty())
                 l.onMeasurement(message);
         }
     }
 
     @Keep
-    public void cppCallbackFinished (final String message, final JniSpeedMeasurementResult result) {
+    public void cppCallbackFinished(final String message, final JniSpeedMeasurementResult result) {
         Log.d(TAG, message);
         for (MeasurementFinishedStringListener l : finishedStringListeners) {
             l.onMeasurementFinished(message);
@@ -126,32 +123,32 @@ public class JniSpeedMeasurementClient {
         finishedListeners.remove(listener);
     }
 
-    public void addMeasurementPhaseListener (final MeasurementPhaseListener listener) {
+    public void addMeasurementPhaseListener(final MeasurementPhaseListener listener) {
         measurementPhaseListeners.add(listener);
     }
 
-    public void removeMeasurementPhaseListener (final MeasurementPhaseListener listener) {
+    public void removeMeasurementPhaseListener(final MeasurementPhaseListener listener) {
         measurementPhaseListeners.remove(listener);
     }
 
     public interface MeasurementStringListener {
-        void onMeasurement (final String result);
+        void onMeasurement(final String result);
     }
 
     public interface MeasurementFinishedStringListener {
 
-        void onMeasurementFinished (final String result);
+        void onMeasurementFinished(final String result);
 
     }
 
     public interface MeasurementFinishedListener {
 
-        void onMeasurementFinished (final JniSpeedMeasurementResult result, final SpeedTaskDesc taskDesc);
+        void onMeasurementFinished(final JniSpeedMeasurementResult result, final SpeedTaskDesc taskDesc);
     }
 
     public interface MeasurementPhaseListener {
-        void onMeasurementPhaseStarted (final SpeedMeasurementState.MeasurementPhase startedPhase);
+        void onMeasurementPhaseStarted(final SpeedMeasurementState.MeasurementPhase startedPhase);
 
-        void onMeasurementPhaseFinished (final SpeedMeasurementState.MeasurementPhase finishedPhase);
+        void onMeasurementPhaseFinished(final SpeedMeasurementState.MeasurementPhase finishedPhase);
     }
 }

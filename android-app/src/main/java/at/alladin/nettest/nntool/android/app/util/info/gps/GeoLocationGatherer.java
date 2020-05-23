@@ -37,34 +37,125 @@ import at.alladin.nettest.shared.berec.collector.api.v1.dto.shared.GeoLocationDt
  */
 public class GeoLocationGatherer extends ListenableGatherer<GeoLocationChangeEvent, GeoLocationChangeListener> {
 
-    private final static String TAG = GeoLocationGatherer.class.getSimpleName();
-
     /**
      * min time difference for location update
      */
     public static final int GEO_LOC_UPDATE_MIN_TIME = 1000;
-
     /**
      * min distance difference for location update
      */
     public static final int GEO_LOC_UPDATE_MIN_DISTANCE = 0;
-
     /**
      *
      */
     public static final int GEO_ACCEPT_TIME = 1000 * 60 * 15;
-
     /**
      *
      */
     public static final int GEO_MIN_TIME = 1000 * 60;
-
+    private final static String TAG = GeoLocationGatherer.class.getSimpleName();
     /**
      *
      */
     private LocationListenerImpl locationListener;
 
     private AtomicBoolean isLocationEnabled = new AtomicBoolean(false);
+
+    private static GeoLocationDto toGeoLocationDto(final Location location) {
+        if (location == null) {
+            return null;
+        }
+
+        final GeoLocationDto dto = new GeoLocationDto();
+        dto.setAccuracy((double) location.getAccuracy());
+        dto.setAltitude(location.getAltitude());
+        dto.setHeading((double) location.getBearing());
+        dto.setLatitude(location.getLatitude());
+        dto.setLongitude(location.getLongitude());
+        dto.setProvider(location.getProvider());
+        dto.setSpeed((double) location.getSpeed());
+        dto.setTime(new LocalDateTime(location.getTime(), DateTimeZone.UTC));
+        return dto;
+    }
+
+    private static boolean isBetterLocation(final GeoLocationChangeEvent curLocation, final Location newLocation) {
+        return isBetterLocation(curLocation != null ? curLocation.getGeoLocationDto() : null,
+                newLocation != null ? toGeoLocationDto(newLocation) : null);
+    }
+
+    private static boolean isBetterLocation(final GeoLocationDto curLocation, final GeoLocationDto newLocation) {
+        if (newLocation == null) {
+            return false;
+        }
+
+        final long locTime = newLocation.getTime().toDateTime().getMillis(); //milliseconds since January 1, 1970
+
+        // discard locations older than Config.GEO_ACCEPT_TIME milliseconds
+        // System.nanoTime() and newLocation.getElapsedRealtimeNanos() would be
+        // more accurate but would require API level 17
+        final long now = System.currentTimeMillis();
+        Log.d(TAG, "age: " + (now - locTime) + " ms");
+        if (now > locTime + GEO_ACCEPT_TIME) {
+            return false;
+        }
+
+        if (curLocation == null) {
+            // A new location is always better than no location
+            return true;
+        }
+
+        // Check whether the new location fix is newer or older
+        final long timeDelta = locTime - curLocation.getTime().toDateTime().getMillis();
+        final boolean isSignificantlyNewer = timeDelta > GEO_MIN_TIME;
+        final boolean isSignificantlyOlder = timeDelta < -GEO_MIN_TIME;
+        final boolean isNewer = timeDelta > 0;
+
+        // If it's been more than two minutes since the current location,
+        // use the new location
+        // because the user has likely moved
+        if (isSignificantlyNewer) {
+            // If the new location is more than two minutes older, it must
+            // be worse
+            return true;
+        } else if (isSignificantlyOlder) {
+            // keep old value
+            return false;
+        } else {
+            // Check whether the new location fix is more or less accurate
+            final int accuracyDelta = (int) (newLocation.getAccuracy() - curLocation.getAccuracy());
+            final boolean isLessAccurate = accuracyDelta > 0;
+            final boolean isMoreAccurate = accuracyDelta < 0;
+            final boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+
+            // Check if the old and new location are from the same provider
+            final boolean isFromSameProvider = isSameProvider(newLocation.getProvider(), curLocation.getProvider());
+
+            final boolean isSamePosition = newLocation.getLatitude().equals(curLocation.getLatitude())
+                    && newLocation.getLongitude().equals(curLocation.getLongitude());
+
+            // Determine location quality using a combination of timeliness
+            // and accuracy
+            if (isMoreAccurate) {
+                return true;
+            } else if (isNewer && !isLessAccurate && !isSamePosition) {
+                return true;
+            } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider && !isSamePosition) {
+                return true;
+            }
+            // keep old location otherwise
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks whether two providers are the same
+     */
+    private static boolean isSameProvider(final String provider1, final String provider2) {
+        if (provider1 == null)
+            return provider2 == null;
+        return provider1.equals(provider2);
+    }
 
     @Override
     public void addListener(GeoLocationChangeListener listener) {
@@ -97,8 +188,7 @@ public class GeoLocationGatherer extends ListenableGatherer<GeoLocationChangeEve
                 locationManager.requestLocationUpdates(fineProviderName, GEO_LOC_UPDATE_MIN_TIME,
                         GEO_LOC_UPDATE_MIN_DISTANCE, locationListener);
             }
-        }
-        else {
+        } else {
             Log.i(TAG, "Location permissions missing: Manifest.permission.ACCESS_FINE_LOCATION and/or Manifest.permission.ACCESS_COARSE_LOCATION");
         }
     }
@@ -152,29 +242,10 @@ public class GeoLocationGatherer extends ListenableGatherer<GeoLocationChangeEve
         return isLocationEnabled.get();
     }
 
-    private static GeoLocationDto toGeoLocationDto(final Location location) {
-        if (location == null) {
-            return null;
-        }
-
-        final GeoLocationDto dto = new GeoLocationDto();
-        dto.setAccuracy((double)location.getAccuracy());
-        dto.setAltitude(location.getAltitude());
-        dto.setHeading((double)location.getBearing());
-        dto.setLatitude(location.getLatitude());
-        dto.setLongitude(location.getLongitude());
-        dto.setProvider(location.getProvider());
-        dto.setSpeed((double) location.getSpeed());
-        dto.setTime(new LocalDateTime(location.getTime(), DateTimeZone.UTC));
-        return dto;
-    }
-
-    private class LocationListenerImpl implements LocationListener
-    {
+    private class LocationListenerImpl implements LocationListener {
 
         @Override
-        public void onLocationChanged(final Location location)
-        {
+        public void onLocationChanged(final Location location) {
             final String outString = "Location: " + String.valueOf(location.getLatitude()) + "/"
                     + String.valueOf(location.getLongitude()) + " +/-" + String.valueOf(location.getAccuracy())
                     + "m provider: " + String.valueOf(location.getProvider());
@@ -183,8 +254,7 @@ public class GeoLocationGatherer extends ListenableGatherer<GeoLocationChangeEve
         }
 
         @Override
-        public void onProviderDisabled(final String provider)
-        {
+        public void onProviderDisabled(final String provider) {
             Log.d(TAG, "provider disabled: " + provider);
             final LocationManager lm = GeoLocationGatherer.this.getLocationManager();
             if (lm != null) {
@@ -197,8 +267,7 @@ public class GeoLocationGatherer extends ListenableGatherer<GeoLocationChangeEve
         }
 
         @Override
-        public void onProviderEnabled(final String provider)
-        {
+        public void onProviderEnabled(final String provider) {
             Log.d(TAG, "provider enabled: " + provider);
             final LocationManager lm = GeoLocationGatherer.this.getLocationManager();
             if (lm != null) {
@@ -211,93 +280,9 @@ public class GeoLocationGatherer extends ListenableGatherer<GeoLocationChangeEve
         }
 
         @Override
-        public void onStatusChanged(final String provider, final int status, final Bundle extras)
-        {
+        public void onStatusChanged(final String provider, final int status, final Bundle extras) {
             Log.d(TAG, "status changed: " + provider + "=" + status);
         }
-    }
-
-    private static boolean isBetterLocation(final GeoLocationChangeEvent curLocation, final Location newLocation) {
-        return isBetterLocation(curLocation != null ? curLocation.getGeoLocationDto() : null,
-                newLocation != null ? toGeoLocationDto(newLocation) : null);
-    }
-
-    private static boolean isBetterLocation(final GeoLocationDto curLocation, final GeoLocationDto newLocation)
-    {
-        if (newLocation == null) {
-            return false;
-        }
-
-        final long locTime = newLocation.getTime().toDateTime().getMillis(); //milliseconds since January 1, 1970
-
-        // discard locations older than Config.GEO_ACCEPT_TIME milliseconds
-        // System.nanoTime() and newLocation.getElapsedRealtimeNanos() would be
-        // more accurate but would require API level 17
-        final long now = System.currentTimeMillis();
-        Log.d(TAG, "age: " + (now - locTime) + " ms");
-        if (now > locTime + GEO_ACCEPT_TIME) {
-            return false;
-        }
-
-        if (curLocation == null) {
-            // A new location is always better than no location
-            return true;
-        }
-
-        // Check whether the new location fix is newer or older
-        final long timeDelta = locTime - curLocation.getTime().toDateTime().getMillis();
-        final boolean isSignificantlyNewer = timeDelta > GEO_MIN_TIME;
-        final boolean isSignificantlyOlder = timeDelta < -GEO_MIN_TIME;
-        final boolean isNewer = timeDelta > 0;
-
-        // If it's been more than two minutes since the current location,
-        // use the new location
-        // because the user has likely moved
-        if (isSignificantlyNewer) {
-            // If the new location is more than two minutes older, it must
-            // be worse
-            return true;
-        }
-        else if (isSignificantlyOlder) {
-            // keep old value
-            return false;
-        }
-        else {
-            // Check whether the new location fix is more or less accurate
-            final int accuracyDelta = (int) (newLocation.getAccuracy() - curLocation.getAccuracy());
-            final boolean isLessAccurate = accuracyDelta > 0;
-            final boolean isMoreAccurate = accuracyDelta < 0;
-            final boolean isSignificantlyLessAccurate = accuracyDelta > 200;
-
-            // Check if the old and new location are from the same provider
-            final boolean isFromSameProvider = isSameProvider(newLocation.getProvider(), curLocation.getProvider());
-
-            final boolean isSamePosition = newLocation.getLatitude().equals(curLocation.getLatitude())
-                    && newLocation.getLongitude().equals(curLocation.getLongitude());
-
-            // Determine location quality using a combination of timeliness
-            // and accuracy
-            if (isMoreAccurate) {
-                return true;
-            }
-            else if (isNewer && !isLessAccurate && !isSamePosition) {
-                return true;
-            }
-            else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider &&!isSamePosition) {
-                return true;
-            }
-            // keep old location otherwise
-        }
-
-        return false;
-    }
-
-    /** Checks whether two providers are the same */
-    private static boolean isSameProvider(final String provider1, final String provider2)
-    {
-        if (provider1 == null)
-            return provider2 == null;
-        return provider1.equals(provider2);
     }
 
 }

@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2013-2019 alladin-IT GmbH
  * Copyright 2014-2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -80,16 +80,14 @@ public class SignalGatherer extends ListenableGatherer<SignalStrengthChangeEvent
                 ng = getInformationProvider().registerGatherer(NetworkGatherer.class);
             }
             ng.addListener(this);
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
 
 
         try {
             CellLocation.requestLocationUpdate();
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
@@ -117,6 +115,11 @@ public class SignalGatherer extends ListenableGatherer<SignalStrengthChangeEvent
         return lastSignalItem.get();
     }
 
+    public void setLastSignalItem(final CellSignalStrengthWrapper signalItem) {
+        lastSignalItem.set(signalItem);
+        Log.d(TAG, "New signalDbm item: " + lastSignalItem.get());
+    }
+
     private int getNetwork() {
         final NetworkGatherer ng = getInformationProvider().getGatherer(NetworkGatherer.class);
         if (ng != null) {
@@ -135,8 +138,7 @@ public class SignalGatherer extends ListenableGatherer<SignalStrengthChangeEvent
 
             if (NetworkChangeEvent.NetworkChangeEventType.NO_CONNECTION.equals(event.getEventType())) {
                 resetSignal = true;
-            }
-            else if (lastSignal != null
+            } else if (lastSignal != null
                     && NetworkChangeEvent.NetworkChangeEventType.SIGNAL_UPDATE.equals(event.getEventType())
                     && event.getNetworkType() != null) {
                 final CellType newCellType = CellType.fromTelephonyNetworkTypeId(event.getNetworkType());
@@ -145,8 +147,7 @@ public class SignalGatherer extends ListenableGatherer<SignalStrengthChangeEvent
                 if (oldCellType != null) {
                     resetSignal = newCellType == null || !newCellType.getTechnologyType().equals(oldCellType.getTechnologyType());
                 }
-            }
-            else if (event.getNetworkType() == null) {
+            } else if (event.getNetworkType() == null) {
                 resetSignal = true;
             }
 
@@ -159,6 +160,20 @@ public class SignalGatherer extends ListenableGatherer<SignalStrengthChangeEvent
         }
     }
 
+    private void dispatchSignalStrengthChangedEvent(final SignalStrengthChangeEvent event) {
+        if (getListenerList() != null) {
+            for (final SignalStrengthChangeListener listener : getListenerList()) {
+                listener.onSignalStrengthChange(event);
+            }
+        }
+    }
+
+    @Override
+    public void setCurrentValue(SignalStrengthChangeEvent currentValue) {
+        super.setCurrentValue(currentValue);
+        dispatchSignalStrengthChangedEvent(currentValue);
+    }
+
     private class NetworkStateBroadcastReceiver extends BroadcastReceiver {
         private final Integer ACCEPT_WIFI_RSSI_MIN = -113;
 
@@ -169,7 +184,7 @@ public class SignalGatherer extends ListenableGatherer<SignalStrengthChangeEvent
             if (network == NetworkTypeAware.NETWORK_WLAN) {
                 final WifiInfo wifiInfo = getWifiManager().getConnectionInfo();
                 final int rssi = wifiInfo.getRssi();
-                if (rssi != -1 && rssi >= ACCEPT_WIFI_RSSI_MIN)  {
+                if (rssi != -1 && rssi >= ACCEPT_WIFI_RSSI_MIN) {
                     final CellInfoWrapper cellInfoWrapper = CellInfoWrapper.fromWifiInfo(wifiInfo);
                     setCurrentValue(
                             new SignalStrengthChangeEvent(
@@ -322,8 +337,7 @@ public class SignalGatherer extends ListenableGatherer<SignalStrengthChangeEvent
 
                 if (PermissionUtil.isLocationPermissionGranted(getInformationProvider().getContext())) {
                     onCellInfoChanged(getTelephonyManager().getAllCellInfo());
-                }
-                else {
+                } else {
                     Log.w(TAG, "Location permission not granted. Cannot read cell location info.");
                 }
 
@@ -339,25 +353,6 @@ public class SignalGatherer extends ListenableGatherer<SignalStrengthChangeEvent
 
             }
         }
-    }
-
-    private void dispatchSignalStrengthChangedEvent(final SignalStrengthChangeEvent event) {
-        if (getListenerList() != null) {
-            for (final SignalStrengthChangeListener listener : getListenerList()) {
-                listener.onSignalStrengthChange(event);
-            }
-        }
-    }
-
-    public void setLastSignalItem(final CellSignalStrengthWrapper signalItem) {
-        lastSignalItem.set(signalItem);
-        Log.d(TAG, "New signalDbm item: " + lastSignalItem.get());
-    }
-
-    @Override
-    public void setCurrentValue(SignalStrengthChangeEvent currentValue) {
-        super.setCurrentValue(currentValue);
-        dispatchSignalStrengthChangedEvent(currentValue);
     }
 
     /*

@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,161 +27,163 @@ import at.alladin.nntool.client.v2.task.service.TestProgressListener.TestProgres
 import at.alladin.nntool.util.tools.TracerouteService;
 
 public class TestSettings {
-	private boolean useSsl;
-	private long startTimeNs;
-	private File cacheFolder;
-	private TrafficService trafficService;
-	private WebsiteTestService websiteTestService;
-	private Class<? extends TracerouteService> tracerouteServiceClazz;
-	private Class<? extends MkitService> mkitServiceClazz;
-	private final List<TestProgressListener> testProgressListenerList = new ArrayList<TestProgressListener>();
-	/**
-	 * Provides the option to provide custom dns servers to be used
-	 */
-	private List<InetAddress> dnsServerAddressList;
-	
-	public TestSettings() { }
-	
-	public TestSettings(long startTimeNs) {
-		this.startTimeNs = startTimeNs;
-	}
+    private final List<TestProgressListener> testProgressListenerList = new ArrayList<TestProgressListener>();
+    private boolean useSsl;
+    private long startTimeNs;
+    private File cacheFolder;
+    private TrafficService trafficService;
+    private WebsiteTestService websiteTestService;
+    private Class<? extends TracerouteService> tracerouteServiceClazz;
+    private Class<? extends MkitService> mkitServiceClazz;
+    /**
+     * Provides the option to provide custom dns servers to be used
+     */
+    private List<InetAddress> dnsServerAddressList;
 
-	public void dispatchTestProgressEvent(TestProgressEvent event, AbstractQoSTask test) {
-		dispatchTestProgressEvent(event, test, null);
-	}
-	
-	public void dispatchTestProgressEvent(TestProgressEvent event, AbstractQoSTask test, QualityOfServiceTest qosTest) {
-			switch (event) {
-			case ON_START:
-				for (TestProgressListener listener : testProgressListenerList) {
-					if (listener != null) {
-						listener.onQoSTestStart(test);
-					}
-				}
-				break;
-			case ON_END:
-				for (TestProgressListener listener : testProgressListenerList) {
-					if (listener != null) {
-						listener.onQoSTestEnd(test);
-					}
-				}
-				break;
-			case ON_CREATED:
-				for (TestProgressListener listener : testProgressListenerList) {
-					if (listener != null) {
-						listener.onQoSCreated(qosTest);
-					}
-				}
-				break;
-			}
-	}
+    public TestSettings() {
+    }
 
-	/**
-	 * the absolute starting point of the qos test.<br>
-	 * needed for all relative time measurements
-	 * @return
-	 */
-	public long getStartTimeNs() {
-		return startTimeNs;
-	}
+    public TestSettings(long startTimeNs) {
+        this.startTimeNs = startTimeNs;
+    }
 
-	/**
-	 * sets the absolute starting point of the qos test.<br>
-	 * is called during the qualityOfServiceTest.run() to store the actual start of the qos measurements
-	 * @param startTimeNs
-	 */
-	public void setStartTimeNs(long startTimeNs) {
-		this.startTimeNs = startTimeNs;
-	}
+    public void dispatchTestProgressEvent(TestProgressEvent event, AbstractQoSTask test) {
+        dispatchTestProgressEvent(event, test, null);
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public boolean isUseSsl() {
-		return useSsl;
-	}
+    public void dispatchTestProgressEvent(TestProgressEvent event, AbstractQoSTask test, QualityOfServiceTest qosTest) {
+        switch (event) {
+            case ON_START:
+                for (TestProgressListener listener : testProgressListenerList) {
+                    if (listener != null) {
+                        listener.onQoSTestStart(test);
+                    }
+                }
+                break;
+            case ON_END:
+                for (TestProgressListener listener : testProgressListenerList) {
+                    if (listener != null) {
+                        listener.onQoSTestEnd(test);
+                    }
+                }
+                break;
+            case ON_CREATED:
+                for (TestProgressListener listener : testProgressListenerList) {
+                    if (listener != null) {
+                        listener.onQoSCreated(qosTest);
+                    }
+                }
+                break;
+        }
+    }
 
-	/**
-	 * 
-	 * @param useSsl
-	 */
-	public void setUseSsl(boolean useSsl) {
-		this.useSsl = useSsl;
-	}
+    /**
+     * the absolute starting point of the qos test.<br>
+     * needed for all relative time measurements
+     *
+     * @return
+     */
+    public long getStartTimeNs() {
+        return startTimeNs;
+    }
 
-	public List<InetAddress> getDnsServerAddressList() {
-		return dnsServerAddressList;
-	}
+    /**
+     * sets the absolute starting point of the qos test.<br>
+     * is called during the qualityOfServiceTest.run() to store the actual start of the qos measurements
+     *
+     * @param startTimeNs
+     */
+    public void setStartTimeNs(long startTimeNs) {
+        this.startTimeNs = startTimeNs;
+    }
 
-	public void setDnsServerAddressList(List<InetAddress> dnsServerAddressList) {
-		this.dnsServerAddressList = dnsServerAddressList;
-	}
+    /**
+     * @return
+     */
+    public boolean isUseSsl() {
+        return useSsl;
+    }
 
-	public File getCacheFolder() {
-		return cacheFolder;
-	}
+    /**
+     * @param useSsl
+     */
+    public void setUseSsl(boolean useSsl) {
+        this.useSsl = useSsl;
+    }
 
-	public void setCacheFolder(File cacheFolder) {
-		this.cacheFolder = cacheFolder;
-	}
+    public List<InetAddress> getDnsServerAddressList() {
+        return dnsServerAddressList;
+    }
 
-	public TrafficService getTrafficService() {
-		return trafficService;
-	}
+    public void setDnsServerAddressList(List<InetAddress> dnsServerAddressList) {
+        this.dnsServerAddressList = dnsServerAddressList;
+    }
 
-	public void setTrafficService(TrafficService trafficService) {
-		this.trafficService = trafficService;
-	}
+    public File getCacheFolder() {
+        return cacheFolder;
+    }
 
-	public WebsiteTestService getWebsiteTestService() {
-		return websiteTestService;
-	}
+    public void setCacheFolder(File cacheFolder) {
+        this.cacheFolder = cacheFolder;
+    }
 
-	public void setWebsiteTestService(WebsiteTestService websiteTestService) {
-		this.websiteTestService = websiteTestService;
-	}
+    public TrafficService getTrafficService() {
+        return trafficService;
+    }
 
-	/**
-	 TracerouteServicehe {@link TracerouteService} implementation for traceroute functionalitTracerouteServiceeturn
-	 */
-	public Class<? extends TracerouteService> getTracerouteServiceClazz() {
-		return tracerouteServiceClazz;
-	}
+    public void setTrafficService(TrafficService trafficService) {
+        this.trafficService = trafficService;
+    }
 
-	/**
-	 * set the {@link TracerouteService} implementation for traceroute functionality
-	 * @TracerouteServicengTool
-	 */
-	public void setTracerouteServiceClazz(Class<? extends TracerouteService> tracerouteServiceClazz) {
-		this.tracerouteServiceClazz = tracerouteServiceClazz;
-	}
+    public WebsiteTestService getWebsiteTestService() {
+        return websiteTestService;
+    }
 
-	public Class<? extends MkitService> getMkitServiceClazz() {
-		return mkitServiceClazz;
-	}
+    public void setWebsiteTestService(WebsiteTestService websiteTestService) {
+        this.websiteTestService = websiteTestService;
+    }
 
-	public void setMkitServiceClazz(Class<? extends MkitService> mkitServiceClazz) {
-		this.mkitServiceClazz = mkitServiceClazz;
-	}
+    /**
+     * TracerouteServicehe {@link TracerouteService} implementation for traceroute functionalitTracerouteServiceeturn
+     */
+    public Class<? extends TracerouteService> getTracerouteServiceClazz() {
+        return tracerouteServiceClazz;
+    }
 
-	public List<TestProgressListener> getTestProgressListener() {
-		return testProgressListenerList;
-	}
+    /**
+     * set the {@link TracerouteService} implementation for traceroute functionality
+     *
+     * @TracerouteServicengTool
+     */
+    public void setTracerouteServiceClazz(Class<? extends TracerouteService> tracerouteServiceClazz) {
+        this.tracerouteServiceClazz = tracerouteServiceClazz;
+    }
 
-	public void addTestProgressListener(TestProgressListener listener) {
-		if (!testProgressListenerList.contains(listener)) {
-			testProgressListenerList.add(listener);
-		}
-	}
+    public Class<? extends MkitService> getMkitServiceClazz() {
+        return mkitServiceClazz;
+    }
 
-	@Override
-	public String toString() {
-		return "TestSettings [useSsl=" + useSsl + ", startTimeNs="
-				+ startTimeNs + ", cacheFolder=" + cacheFolder
-				+ ", trafficService=" + trafficService
-				+ ", websiteTestService=" + websiteTestService
-				+ ", testProgressListenerList=" + testProgressListenerList
-				+ "]";
-	}
+    public void setMkitServiceClazz(Class<? extends MkitService> mkitServiceClazz) {
+        this.mkitServiceClazz = mkitServiceClazz;
+    }
+
+    public List<TestProgressListener> getTestProgressListener() {
+        return testProgressListenerList;
+    }
+
+    public void addTestProgressListener(TestProgressListener listener) {
+        if (!testProgressListenerList.contains(listener)) {
+            testProgressListenerList.add(listener);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "TestSettings [useSsl=" + useSsl + ", startTimeNs="
+                + startTimeNs + ", cacheFolder=" + cacheFolder
+                + ", trafficService=" + trafficService
+                + ", websiteTestService=" + websiteTestService
+                + ", testProgressListenerList=" + testProgressListenerList
+                + "]";
+    }
 }

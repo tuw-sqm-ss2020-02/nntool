@@ -34,10 +34,6 @@ import at.alladin.nettest.shared.berec.collector.api.v1.dto.measurement.result.S
  */
 public class SubMeasurementResultParseUtilTest {
 
-    private JniSpeedMeasurementResult jniSpeedResult;
-
-    private SpeedTaskDesc taskDesc;
-
     private static final long lastBytesDownload = 158549920L;
     private static final long lastBytesDownloadIncludingSlowStart = 341843580L;
     private static final long lastBytesUpload = 128773020L;
@@ -50,6 +46,8 @@ public class SubMeasurementResultParseUtilTest {
     private static final long rttUdpStart = 1561554378264499000L;
     private static final long uploadStart = 1561554404912793000L;
     private static final long downloadStart = 1561554390079342000L;
+    private JniSpeedMeasurementResult jniSpeedResult;
+    private SpeedTaskDesc taskDesc;
 
     @Before
     public void init() {
@@ -188,11 +186,11 @@ public class SubMeasurementResultParseUtilTest {
         rttResult.setStandardDeviationNs(893248332L);
 
         rttResult.setSingleRtts(Arrays.asList(
-            new SingleRtt(24796000000L, 1000000000L),
-            new SingleRtt(20796000000L, 2000000000L),
-            new SingleRtt(19796000000L, 3000000000L),
-            new SingleRtt(25796000000L, 4000000000L),
-            new SingleRtt(22796000000L, 5000000000L)
+                new SingleRtt(24796000000L, 1000000000L),
+                new SingleRtt(20796000000L, 2000000000L),
+                new SingleRtt(19796000000L, 3000000000L),
+                new SingleRtt(25796000000L, 4000000000L),
+                new SingleRtt(22796000000L, 5000000000L)
         ));
 
         taskDesc = new SpeedTaskDesc();
@@ -209,7 +207,7 @@ public class SubMeasurementResultParseUtilTest {
     }
 
     @Test
-    public void parseBasicCompleteResult () {
+    public void parseBasicCompleteResult() {
         final SpeedMeasurementResult result = SubMeasurementResultParseUtil.parseIntoSpeedMeasurementResult(jniSpeedResult, taskDesc);
 
         Assert.assertEquals("unexpected task description", "peer-ias-de-01.net-neutrality.tools", result.getConnectionInfo().getAddress());
@@ -242,7 +240,7 @@ public class SubMeasurementResultParseUtilTest {
     }
 
     @Test
-    public void parsePartialResultContainingAvailableResults () {
+    public void parsePartialResultContainingAvailableResults() {
         jniSpeedResult.setDownloadInfoList(null);
         jniSpeedResult.setRttUdpResult(null);
         SpeedMeasurementResult result = SubMeasurementResultParseUtil.parseIntoSpeedMeasurementResult(jniSpeedResult, taskDesc);

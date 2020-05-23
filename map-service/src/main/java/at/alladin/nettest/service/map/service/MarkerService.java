@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2013-2019 alladin-IT GmbH
  * Copyright 2014-2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,18 +56,15 @@ import at.alladin.nntool.shared.map.MapMarkerResponse.MapMarker;
 @Service
 public class MarkerService {
 
-	private final Logger logger = LoggerFactory.getLogger(MarkerService.class);
-	
     /**
      *
      */
     private static int MAX_PROVIDER_LENGTH = 22;
-
     /**
      *
      */
     private static int CLICK_RADIUS = 10;
-
+    private final Logger logger = LoggerFactory.getLogger(MarkerService.class);
     @Autowired
     private ClassificationService classificationService;
 
@@ -77,7 +74,7 @@ public class MarkerService {
     @Autowired
     private MessageSource messageSource;
 
-	@Autowired
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     public MapMarkerResponse obtainMarker(final MapMarkerRequest request, final Locale locale) {
@@ -85,15 +82,15 @@ public class MarkerService {
         final MapMarkerResponse answer = new MapMarkerResponse();
 
         try {
-        	
-        	String clientUuidString = null;
-        	if (request.getOptions() != null && request.getOptions().containsKey("client_uuid")) {
-        		clientUuidString = request.getOptions().get("client_uuid");
-        	}
+
+            String clientUuidString = null;
+            if (request.getOptions() != null && request.getOptions().containsKey("client_uuid")) {
+                clientUuidString = request.getOptions().get("client_uuid");
+            }
 
             boolean useXY = false;
             boolean useLatLon = false;
-            
+
             final MapCoordinate coordinates = request.getCoordinates();
 
             if (coordinates.getX() != null && coordinates.getY() != null) {
@@ -103,10 +100,10 @@ public class MarkerService {
             }
 
             if (coordinates.getZoom() != null && (useLatLon || useXY)) {
-            	double geoX = 0;
+                double geoX = 0;
                 double geoY = 0;
-                
-            	final int zoom = coordinates.getZoom();
+
+                final int zoom = coordinates.getZoom();
                 if (useXY) {
                     geoX = coordinates.getX();
                     geoY = coordinates.getY();
@@ -119,7 +116,7 @@ public class MarkerService {
                 if (coordinates.getSize() != null) {
                     size = coordinates.getSize();
                 } else {
-                	size = 0;
+                    size = 0;
                 }
 
                 if (zoom != 0 && geoX != 0 && geoY != 0) {
@@ -151,28 +148,28 @@ public class MarkerService {
                     filters.add(mapOptionsService.getAccuracyMapFilter());
 
                     if (request.getMapFilter() != null) {
-	                    final Iterator<String> keys = request.getMapFilter().keySet().iterator();
-	
-	                    while (keys.hasNext()) {
-	                        final String key = /*(String)*/ keys.next();
-	                        if (request.getMapFilter().get(key) != null) {
-	                            if (key.equals("highlight")) {
-	                                if (highlightUuidString == null) {
-	                                    highlightUuidString = request.getMapFilter().get(key);
-	                                }
-	                            } else if (key.equals("highlight_uuid")) {
-	                                highlightUuidString = request.getMapFilter().get(key);
-	                            } else if ("prioritize".equals(key)) {
-	                                prioritizeUUIDString = request.getMapFilter().get(key);
-	                            } else {
-	                                final MapServiceSettings.MapFilter f = mapOptionsService.getMapFilterForKey(key);
-	                                if (f != null) {
-	                                    //filters.add(mapFilter.getFilter(mapFilterObj.getString(key)));
-	                                    filters.add(f.getFilter("" + request.getMapFilter().get(key)));
-	                                }
-	                            }
-	                        }
-	                    }
+                        final Iterator<String> keys = request.getMapFilter().keySet().iterator();
+
+                        while (keys.hasNext()) {
+                            final String key = /*(String)*/ keys.next();
+                            if (request.getMapFilter().get(key) != null) {
+                                if (key.equals("highlight")) {
+                                    if (highlightUuidString == null) {
+                                        highlightUuidString = request.getMapFilter().get(key);
+                                    }
+                                } else if (key.equals("highlight_uuid")) {
+                                    highlightUuidString = request.getMapFilter().get(key);
+                                } else if ("prioritize".equals(key)) {
+                                    prioritizeUUIDString = request.getMapFilter().get(key);
+                                } else {
+                                    final MapServiceSettings.MapFilter f = mapOptionsService.getMapFilterForKey(key);
+                                    if (f != null) {
+                                        //filters.add(mapFilter.getFilter(mapFilterObj.getString(key)));
+                                        filters.add(f.getFilter("" + request.getMapFilter().get(key)));
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     if (prioritizeUUIDString != null) {
@@ -191,10 +188,10 @@ public class MarkerService {
                     final String sql = String.format(
                             "SELECT "
                                     + (useLatLon
-	                                    ? " ST_Y(ST_TRANSFORM(geo_location_geometry, 4674)) as lat "
-	                                    		+ ", ST_X(ST_TRANSFORM(t.geo_location_geometry, 4674)) as lon"
-	                                    : " ST_X(t.geo_location_geometry) x, ST_Y(t.geo_location_geometry) y"
-                                		)
+                                    ? " ST_Y(ST_TRANSFORM(geo_location_geometry, 4674)) as lat "
+                                    + ", ST_X(ST_TRANSFORM(t.geo_location_geometry, 4674)) as lon"
+                                    : " ST_X(t.geo_location_geometry) x, ST_Y(t.geo_location_geometry) y"
+                            )
                                     + ", (t.start_time)::timestamp as time, t.agent_timezone as timezone, ias.throughput_avg_download_bps as speed_download, ias.throughput_avg_upload_bps as speed_upload"
                                     + ", ias.rtt_median_ns as ping_median, t.initial_network_type_id as network_type"
                                     + ", t.mobile_network_signal_strength_2g3g_dbm as signal_strength"
@@ -208,15 +205,15 @@ public class MarkerService {
                                     //TODO: there is only one provider name left, right?
 //                                    + ", COALESCE(json->'network_info'->'provider'->>'shortname', json->'network_info'->'provider'->>'name') as provider_text"
 //                                    + ", COALESCE(json->'mobile_network_info'->'mobile_provider'->>'shortname', json->'mobile_network_info'->'mobile_provider'->>'name') as mobile_network_name"
-									+ ", COALESCE(t.provider_shortname, t.provider_name) as provider_name"
-									+ ", t.mobile_sim_operator_name as mobile_sim_name"
+                                    + ", COALESCE(t.provider_shortname, t.provider_name) as provider_name"
+                                    + ", t.mobile_sim_operator_name as mobile_sim_name"
                                     + ", t.initial_network_type_id as network_type_id"
                                     + ", t.network_signal_info as signals"
                                     + ", COALESCE(t.mobile_network_lte_rsrp_dbm, t.mobile_network_signal_strength_2g3g_dbm, wifi_network_rssi_dbm) as signal_dbm"
 //                                    + ", t.uuid as uuid, t.client_uuid as client_uuid"
-									+ ", t.agent_uuid as client_uuid"
-									+ ", t.os_name as os_name"
-									+ ", t.agent_type as agent_type"
+                                    + ", t.agent_uuid as client_uuid"
+                                    + ", t.os_name as os_name"
+                                    + ", t.agent_type as agent_type"
                                     + " FROM measurements t"
                                     + " LEFT JOIN ias_measurements ias ON t.open_data_uuid = ias.measurement_open_data_uuid"
                                     + " WHERE"
@@ -273,7 +270,7 @@ public class MarkerService {
     private MapMarker parseResultSet(final ResultSet rs, final String clientUuidString, final String highlightUuidString, final Locale locale) throws SQLException {
         final NumberFormat format = NumberFormat.getInstance(locale);
         format.setRoundingMode(RoundingMode.HALF_UP);
-        
+
         final MapMarker ret = new MapMarker();
         final List<DetailMeasurementGroupItem> markerResultList = new ArrayList<>();
         ret.setResultItems(markerResultList);
@@ -290,19 +287,19 @@ public class MarkerService {
         final String dbClientUuidString = rs.getString("client_uuid");
         //final String measurementUuid = rs.getString("uuid");
         final String measurementUuid = "0" + rs.getString("open_test_uuid");
-        
+
         // RMBTClient Info
 
         if ((clientUuidString != null && clientUuidString.equals(dbClientUuidString)) ||
                 (highlightUuidString != null && highlightUuidString.equals(dbClientUuidString))) {
             // highlight uses both the new highlight_uuid syntax and the old client_uuid syntax
             // TODO: The client_uuid should only return your own measurement markers
-        	ret.setHighlight(true);
+            ret.setHighlight(true);
 
             // put measurement_uuid if measurement belongs to given client_uuid
-        	ret.setOpenTestUuid(measurementUuid); // give measurement_uuid for in-app view of own results
+            ret.setOpenTestUuid(measurementUuid); // give measurement_uuid for in-app view of own results
         } else {
-        	ret.setHighlight(false);
+            ret.setHighlight(false);
         }
 
         final double res_x = rs.getDouble(1);
@@ -323,60 +320,60 @@ public class MarkerService {
         }
         markerResultList.add(generateMeasurementItem("MARKER_TIME", dateFormat.format(date)));
         ret.setTimestamp(date.getTime());
-        
-    	markerResultList.add(generateMeasurementItem("MARKER_AGENT", "AGENT_" + rs.getString("agent_type")));
+
+        markerResultList.add(generateMeasurementItem("MARKER_AGENT", "AGENT_" + rs.getString("agent_type")));
         markerResultList.add(generateMeasurementItem("MARKER_OS", rs.getString("os_name")));
 
         //get the first networkType for classification
         final String signalString = rs.getString("signals");
         final JSONArray signalArr;
         if (signalString != null) {
-        	signalArr = new JSONArray(signalString);
+            signalArr = new JSONArray(signalString);
         } else {
-        	signalArr = new JSONArray();
+            signalArr = new JSONArray();
         }
         final Integer networkTypeId = signalArr.length() > 0 ? signalArr.getJSONObject(0).getInt("network_type_id") : rs.getInt("network_type_id");
 
         final List<DetailMeasurementGroupItem> measurementResultList = new ArrayList<>();
-        
+
         ClassificationHelper.ClassificationItem classificationItem = null;
         DetailMeasurementGroupItem markerItem = null;
-        
+
         final int fieldDown = rs.getInt("speed_download");
         if (fieldDown != 0) {
-	        final String downloadString = String.format("%s %s", format.format(fieldDown / 1000000d), messageSource.getMessage("MARKER_DOWNLOAD_UNIT", null, locale));
-	        classificationItem = classificationService.classifyColor(ClassificationHelper.ClassificationType.DOWNLOAD, fieldDown, networkTypeId);
-	        markerItem = generateMeasurementItem(messageSource.getMessage("MARKER_DOWNLOAD", null, locale), downloadString, classificationItem);
-	        measurementResultList.add(markerItem);
-	        markerResultList.add(0, markerItem);
+            final String downloadString = String.format("%s %s", format.format(fieldDown / 1000000d), messageSource.getMessage("MARKER_DOWNLOAD_UNIT", null, locale));
+            classificationItem = classificationService.classifyColor(ClassificationHelper.ClassificationType.DOWNLOAD, fieldDown, networkTypeId);
+            markerItem = generateMeasurementItem(messageSource.getMessage("MARKER_DOWNLOAD", null, locale), downloadString, classificationItem);
+            measurementResultList.add(markerItem);
+            markerResultList.add(0, markerItem);
         }
 
         final int fieldUp = rs.getInt("speed_upload");
         if (fieldUp != 0) {
-	        final String uploadString = String.format("%s %s", format.format(fieldUp / 1000000d),messageSource.getMessage("MARKER_UPLOAD_UNIT", null, locale));
-	        classificationItem = classificationService.classifyColor(ClassificationHelper.ClassificationType.UPLOAD, fieldUp, networkTypeId);
-	        markerItem = generateMeasurementItem(messageSource.getMessage("MARKER_UPLOAD", null, locale), uploadString, classificationItem);
-	        measurementResultList.add(markerItem);
-	        markerResultList.add(1, markerItem);
+            final String uploadString = String.format("%s %s", format.format(fieldUp / 1000000d), messageSource.getMessage("MARKER_UPLOAD_UNIT", null, locale));
+            classificationItem = classificationService.classifyColor(ClassificationHelper.ClassificationType.UPLOAD, fieldUp, networkTypeId);
+            markerItem = generateMeasurementItem(messageSource.getMessage("MARKER_UPLOAD", null, locale), uploadString, classificationItem);
+            measurementResultList.add(markerItem);
+            markerResultList.add(1, markerItem);
         }
 
-        
+
         final double pingDblValue = rs.getDouble("ping_median");
         if (pingDblValue != 0) {
-	        final int pingValue = (int) Math.round(pingDblValue / 1000000d);
-	        final String pingString = String.format("%s %s", format.format(pingValue),
-	                messageSource.getMessage("MARKER_PING_UNIT", null, locale));
-	        classificationItem = classificationService.classifyColor(ClassificationHelper.ClassificationType.PING, pingValue, networkTypeId);
-	        markerItem = generateMeasurementItem(messageSource.getMessage("MARKER_PING", null, locale), pingString, classificationItem);
-	        measurementResultList.add(markerItem);
-	        markerResultList.add(2, markerItem);
+            final int pingValue = (int) Math.round(pingDblValue / 1000000d);
+            final String pingString = String.format("%s %s", format.format(pingValue),
+                    messageSource.getMessage("MARKER_PING_UNIT", null, locale));
+            classificationItem = classificationService.classifyColor(ClassificationHelper.ClassificationType.PING, pingValue, networkTypeId);
+            markerItem = generateMeasurementItem(messageSource.getMessage("MARKER_PING", null, locale), pingString, classificationItem);
+            measurementResultList.add(markerItem);
+            markerResultList.add(2, markerItem);
         }
-        
+
         final int networkType = rs.getInt("network_type");
-                
+
         final int signalDbmValue = rs.getInt("signal_dbm");
         if (signalDbmValue != 0) {
-    		classificationItem = classificationService.classifyColor(ClassificationHelper.ClassificationType.SIGNAL, signalDbmValue, networkType);
+            classificationItem = classificationService.classifyColor(ClassificationHelper.ClassificationType.SIGNAL, signalDbmValue, networkType);
             markerItem = generateMeasurementItem(messageSource.getMessage("MARKER_SIGNAL", null, locale), signalDbmValue + " " + messageSource.getMessage("MARKER_SIGNAL_UNIT", null, locale), classificationItem);
             measurementResultList.add(markerItem);
             markerResultList.add(markerItem);
@@ -433,7 +430,7 @@ public class MarkerService {
                 if (highlightUuid != null && rs.getString("uuid") != null) { // own test
                     final String ssid = rs.getString("wifi_ssid");
                     if (ssid != null && ssid.length() != 0) {
-                    	networkResult.add(generateMeasurementItem(messageSource.getMessage("MARKER_WIFI_SSID", null, locale), ssid.toString()));
+                        networkResult.add(generateMeasurementItem(messageSource.getMessage("MARKER_WIFI_SSID", null, locale), ssid.toString()));
                     }
                 }
             }
@@ -484,7 +481,7 @@ public class MarkerService {
             }
 
             if (roamingType > 0) {
-            	networkResult.add(generateMeasurementItem(messageSource.getMessage("MARKER_ROAMING", null, locale), messageSource.getMessage(Helperfunctions.getRoamingTypeKey(roamingType), null, locale)));
+                networkResult.add(generateMeasurementItem(messageSource.getMessage("MARKER_ROAMING", null, locale), messageSource.getMessage(Helperfunctions.getRoamingTypeKey(roamingType), null, locale)));
             }
         }
 

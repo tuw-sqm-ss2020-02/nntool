@@ -40,561 +40,495 @@ import org.json.JSONObject;
  * class DBHelper.java
  * has methods to create database and tables and to add or get entities from tables
  */
-public class Database extends SQLiteOpenHelper
-{
-	/**************************** Variables ****************************/
-
-	Context ctx;
-
-	//Module Objects
-	private Tool mTool;
-	private SQLiteDatabase mDatabase;
-
-	private boolean attachFlag = false;
-
-	private static int DATABASE_VERSION = 1;
-	private static String TABLE_NAME = "";
-
-	/*******************************************************************/
-	
-	/**
-	 * standard constructor to create database
-	 * @param context Context of App
-	 * @param database_name Context of App
-	 * @param table_name Context of App
-	 */
-	public Database(Context context, String database_name, String table_name)
-	{
-		super(context, database_name, null, DATABASE_VERSION);
-
-		ctx = context;
-
-		mTool = new Tool();
-
-		TABLE_NAME = table_name;
-
-		LinkedHashMap<String, String> keys = new LinkedHashMap<>();
-		keys.put("timestamp","");
-
-		createDB(keys);
-	}
-	
-	@Override
-	public void onCreate(SQLiteDatabase db)
-	{
-
-	}
-
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
-	{
-		try
-		{
-			db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-			onCreate(db);
-		}
-		catch (Exception ex)
-		{
-			Log.e("DBHelper", "### Exception in onUpgrade() ###");
-			mTool.printTrace(ex);
-		}
-	}
-
-	public void attachDB( String attDB, String attTable )
-	{
-		try
-		{
-			mDatabase = getWritableDatabase();
-			mDatabase.execSQL("ATTACH DATABASE '" + ctx.getDatabasePath(attDB).toString() + "' AS "+attDB );
-		}
-		catch (Exception ex)
-		{
-			mTool.printTrace(ex);
-		}
-
-		TABLE_NAME = TABLE_NAME +","+attDB+"."+attTable;
-
-		attachFlag = true;
-	}
-
-	public void detachDB( String attDB, String attTable )
-	{
-		//if no attach, then do not detach
-		if( !attachFlag )
-			return;
-
-		try
-		{
-			mDatabase = getWritableDatabase();
-			mDatabase.execSQL("DETACH DATABASE " + attDB);
-		}
-		catch (Exception ex)
-		{
-			mTool.printTrace(ex);
-		}
-
-		TABLE_NAME = attTable;
-	}
-
-	public void createDB( LinkedHashMap<String, String> keys )
-	{
-		mDatabase = getWritableDatabase();
-
-		try
-		{
-			String createTable 	= "CREATE TABLE IF NOT EXISTS "+ TABLE_NAME + " (";
+public class Database extends SQLiteOpenHelper {
+    private static int DATABASE_VERSION = 1;
+    private static String TABLE_NAME = "";
+    /**************************** Variables ****************************/
 
-			createTable += "id INTEGER PRIMARY KEY AUTOINCREMENT, ";
+    Context ctx;
+    //Module Objects
+    private Tool mTool;
+    private SQLiteDatabase mDatabase;
+    private boolean attachFlag = false;
 
-			for (Map.Entry<String, String> entry : keys.entrySet())
-			{
-				createTable += entry.getKey()+" TEXT,";
-			}
+    /*******************************************************************/
 
-			createTable = createTable.substring(0,createTable.length()-1);
+    /**
+     * standard constructor to create database
+     *
+     * @param context       Context of App
+     * @param database_name Context of App
+     * @param table_name    Context of App
+     */
+    public Database(Context context, String database_name, String table_name) {
+        super(context, database_name, null, DATABASE_VERSION);
 
-			createTable += ")";
+        ctx = context;
 
-			//DEBUG
-			//mTool.printOutput(createTable);
+        mTool = new Tool();
 
-			mDatabase.execSQL(createTable);
-		}
-		catch (Exception ex)
-		{
-			mTool.printTrace(ex);
-		}
+        TABLE_NAME = table_name;
 
-		checkColumns(keys);
+        LinkedHashMap<String, String> keys = new LinkedHashMap<>();
+        keys.put("timestamp", "");
 
-		mDatabase.close();
-	}
+        createDB(keys);
+    }
 
-	public void createDB( JSONObject keys )
-	{
-		mDatabase = getWritableDatabase();
+    @Override
+    public void onCreate(SQLiteDatabase db) {
 
-		try
-		{
-			String createTable 	= "CREATE TABLE IF NOT EXISTS "+ TABLE_NAME + " (";
+    }
 
-			createTable += "id INTEGER PRIMARY KEY AUTOINCREMENT, ";
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        try {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+            onCreate(db);
+        } catch (Exception ex) {
+            Log.e("DBHelper", "### Exception in onUpgrade() ###");
+            mTool.printTrace(ex);
+        }
+    }
 
-			for( Iterator<String> iter = keys.keys(); iter.hasNext(); )
-			{
-				createTable += iter.next()+" TEXT,";
-			}
+    public void attachDB(String attDB, String attTable) {
+        try {
+            mDatabase = getWritableDatabase();
+            mDatabase.execSQL("ATTACH DATABASE '" + ctx.getDatabasePath(attDB).toString() + "' AS " + attDB);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
 
-			createTable = createTable.substring(0,createTable.length()-1);
+        TABLE_NAME = TABLE_NAME + "," + attDB + "." + attTable;
 
-			createTable += ")";
+        attachFlag = true;
+    }
 
-			//DEBUG
-			//mTool.printOutput(createTable);
+    public void detachDB(String attDB, String attTable) {
+        //if no attach, then do not detach
+        if (!attachFlag)
+            return;
 
-			mDatabase.execSQL(createTable);
-		}
-		catch (Exception ex)
-		{
-			mTool.printOutput("### Exception in createDB() ###");
-			mTool.printTrace(ex);
-		}
+        try {
+            mDatabase = getWritableDatabase();
+            mDatabase.execSQL("DETACH DATABASE " + attDB);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
 
-		checkColumns(keys);
+        TABLE_NAME = attTable;
+    }
 
-		mDatabase.close();
-	}
+    public void createDB(LinkedHashMap<String, String> keys) {
+        mDatabase = getWritableDatabase();
 
-	private void checkColumns( LinkedHashMap<String, String> keys )
-	{
-		mDatabase = getWritableDatabase();
+        try {
+            String createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (";
 
-		try
-		{
-			ArrayList<String> tmp = new ArrayList<>();
+            createTable += "id INTEGER PRIMARY KEY AUTOINCREMENT, ";
 
-			String pragmaTable 	= "PRAGMA table_info(" + TABLE_NAME + ")";
+            for (Map.Entry<String, String> entry : keys.entrySet()) {
+                createTable += entry.getKey() + " TEXT,";
+            }
 
-			Cursor result = mDatabase.rawQuery(pragmaTable, null);
+            createTable = createTable.substring(0, createTable.length() - 1);
 
-			while( result.moveToNext () )
-			{
-				tmp.add(result.getString(1));
-			}
+            createTable += ")";
 
-			result.close();
+            //DEBUG
+            //mTool.printOutput(createTable);
 
-			for( Map.Entry<String,String> entry : keys.entrySet())
-			{
-				//Search for element, if not found -> alter table
-				if (tmp.indexOf(entry.getKey()) == -1)
-				{
-					String alterTable = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + entry.getKey() + " TEXT ";
+            mDatabase.execSQL(createTable);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
 
-					mTool.printOutput("Alter Query: "+alterTable);
+        checkColumns(keys);
 
-					mDatabase.execSQL(alterTable);
-				}
-			}
-		}
-		catch (Exception ex) { mTool.printTrace(ex); }
+        mDatabase.close();
+    }
 
-		mDatabase.close();
-	}
+    public void createDB(JSONObject keys) {
+        mDatabase = getWritableDatabase();
 
-	private void checkColumns( JSONObject keys )
-	{
-		mDatabase = getWritableDatabase();
+        try {
+            String createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (";
 
-		try
-		{
-			ArrayList<String> tmp = new ArrayList<>();
+            createTable += "id INTEGER PRIMARY KEY AUTOINCREMENT, ";
 
-			String pragmaTable 	= "PRAGMA table_info(" + TABLE_NAME + ")";
+            for (Iterator<String> iter = keys.keys(); iter.hasNext(); ) {
+                createTable += iter.next() + " TEXT,";
+            }
 
-			Cursor result = mDatabase.rawQuery(pragmaTable, null);
+            createTable = createTable.substring(0, createTable.length() - 1);
 
-			while( result.moveToNext () )
-			{
-				tmp.add(result.getString(1));
-			}
+            createTable += ")";
 
-			result.close();
+            //DEBUG
+            //mTool.printOutput(createTable);
 
-			for( Iterator<String> iter = keys.keys(); iter.hasNext(); )
-			{
-				String key = iter.next();
+            mDatabase.execSQL(createTable);
+        } catch (Exception ex) {
+            mTool.printOutput("### Exception in createDB() ###");
+            mTool.printTrace(ex);
+        }
 
-				//Search for element, if not found -> alter table
-				if (tmp.indexOf(key) == -1)
-				{
-					String alterTable = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + key + " TEXT ";
+        checkColumns(keys);
 
-					mTool.printOutput("Alter Query: "+alterTable);
+        mDatabase.close();
+    }
 
-					mDatabase.execSQL(alterTable);
-				}
-			}
-		}
-		catch (Exception ex) { mTool.printTrace(ex); }
+    private void checkColumns(LinkedHashMap<String, String> keys) {
+        mDatabase = getWritableDatabase();
 
-		mDatabase.close();
-	}
+        try {
+            ArrayList<String> tmp = new ArrayList<>();
 
-	public void insert(LinkedHashMap<String, String> aData)
-	{
-		String sql = "";
-		String keys = "";
-		String values = "";
+            String pragmaTable = "PRAGMA table_info(" + TABLE_NAME + ")";
 
-		sql += "INSERT INTO "+ TABLE_NAME + " ";
+            Cursor result = mDatabase.rawQuery(pragmaTable, null);
 
+            while (result.moveToNext()) {
+                tmp.add(result.getString(1));
+            }
 
-		for (Map.Entry<String, String> entry : aData.entrySet())
-		{
-			try
-			{
-				keys += entry.getKey()+",";
-				values += "?,";
-			}
-			catch(Exception ex) { mTool.printTrace(ex); }
-		}
+            result.close();
 
-		keys = keys.substring(0,keys.length()-1);
-		values = values.substring(0,values.length()-1);
-		sql += "("+keys+") VALUES ("+values+");";
+            for (Map.Entry<String, String> entry : keys.entrySet()) {
+                //Search for element, if not found -> alter table
+                if (tmp.indexOf(entry.getKey()) == -1) {
+                    String alterTable = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + entry.getKey() + " TEXT ";
 
-		//DEBUG
-		//mTool.printOutput(sql);
+                    mTool.printOutput("Alter Query: " + alterTable);
 
-		mDatabase = getWritableDatabase();
-		mDatabase.beginTransaction();
-		SQLiteStatement stmt = mDatabase.compileStatement(sql);
+                    mDatabase.execSQL(alterTable);
+                }
+            }
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
 
-		int i = 1;
-		for (Map.Entry<String, String> entry : aData.entrySet())
-		{
-			try
-			{
-				//DEBUG
-				//mTool.printOutput( entry.getKey() + " = " + entry.getValue());
+        mDatabase.close();
+    }
 
-				String tmp = ""+entry.getValue();
+    private void checkColumns(JSONObject keys) {
+        mDatabase = getWritableDatabase();
 
-				tmp = tmp.trim();
+        try {
+            ArrayList<String> tmp = new ArrayList<>();
 
-				//Attention: on the "bind-function, the index starts at 1, not 0"
-				stmt.bindString(i++, tmp);
-			}
-			catch(Exception ex) { mTool.printTrace(ex); }
-		}
+            String pragmaTable = "PRAGMA table_info(" + TABLE_NAME + ")";
 
-		stmt.executeInsert();
-		stmt.clearBindings();
+            Cursor result = mDatabase.rawQuery(pragmaTable, null);
 
-		mDatabase.setTransactionSuccessful();
-		mDatabase.endTransaction();
+            while (result.moveToNext()) {
+                tmp.add(result.getString(1));
+            }
 
-		mDatabase.close();
-	}
+            result.close();
 
-	public void insert(JSONObject aData)
-	{
-		String sql = "";
-		String keys = "";
-		String values = "";
+            for (Iterator<String> iter = keys.keys(); iter.hasNext(); ) {
+                String key = iter.next();
 
-		sql += "INSERT INTO "+ TABLE_NAME + " ";
+                //Search for element, if not found -> alter table
+                if (tmp.indexOf(key) == -1) {
+                    String alterTable = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + key + " TEXT ";
 
-		for (Iterator<String> iter = aData.keys(); iter.hasNext(); )
-		{
-			keys += iter.next()+",";
-			values += "?,";
-		}
+                    mTool.printOutput("Alter Query: " + alterTable);
 
-		keys = keys.substring(0,keys.length()-1);
-		values = values.substring(0,values.length()-1);
-		sql += "("+keys+") VALUES ("+values+");";
+                    mDatabase.execSQL(alterTable);
+                }
+            }
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
 
-		//DEBUG
-		//mTool.printOutput(sql);
+        mDatabase.close();
+    }
 
-		mDatabase = getWritableDatabase();
-		mDatabase.beginTransaction();
-		SQLiteStatement stmt = mDatabase.compileStatement(sql);
+    public void insert(LinkedHashMap<String, String> aData) {
+        String sql = "";
+        String keys = "";
+        String values = "";
 
-		int i = 1;
-		for (Iterator<String> iter = aData.keys(); iter.hasNext(); )
-		{
-			try
-			{
-				String key = iter.next();
+        sql += "INSERT INTO " + TABLE_NAME + " ";
 
-				//DEBUG
-				//mTool.printOutput( key + " = " + aData.getString(key));
 
-				String tmp = ""+aData.getString(key);
+        for (Map.Entry<String, String> entry : aData.entrySet()) {
+            try {
+                keys += entry.getKey() + ",";
+                values += "?,";
+            } catch (Exception ex) {
+                mTool.printTrace(ex);
+            }
+        }
 
-				tmp = tmp.trim();
+        keys = keys.substring(0, keys.length() - 1);
+        values = values.substring(0, values.length() - 1);
+        sql += "(" + keys + ") VALUES (" + values + ");";
 
-				//Attention: on the "bind-function, the index starts at 1, not 0"
-				stmt.bindString(i++, tmp);
-			}
-			catch(Exception ex) { mTool.printTrace(ex); }
-		}
+        //DEBUG
+        //mTool.printOutput(sql);
 
-		stmt.executeInsert();
-		stmt.clearBindings();
+        mDatabase = getWritableDatabase();
+        mDatabase.beginTransaction();
+        SQLiteStatement stmt = mDatabase.compileStatement(sql);
 
-		mDatabase.setTransactionSuccessful();
-		mDatabase.endTransaction();
+        int i = 1;
+        for (Map.Entry<String, String> entry : aData.entrySet()) {
+            try {
+                //DEBUG
+                //mTool.printOutput( entry.getKey() + " = " + entry.getValue());
 
-		mDatabase.close();
-	}
+                String tmp = "" + entry.getValue();
 
-	public int update(ContentValues cValues, int nId)
-	{
-		int retCode = 0;
+                tmp = tmp.trim();
 
-		mDatabase = this.getWritableDatabase();
+                //Attention: on the "bind-function, the index starts at 1, not 0"
+                stmt.bindString(i++, tmp);
+            } catch (Exception ex) {
+                mTool.printTrace(ex);
+            }
+        }
 
-		if(mDatabase != null)
-		{
-			retCode = mDatabase.update(TABLE_NAME,cValues,"id="+String.valueOf(nId), null);
+        stmt.executeInsert();
+        stmt.clearBindings();
 
-			mDatabase.close();
-		}
+        mDatabase.setTransactionSuccessful();
+        mDatabase.endTransaction();
 
-		return retCode;
-	}
+        mDatabase.close();
+    }
 
-    public int deleteID(String column, String value)
-	{
+    public void insert(JSONObject aData) {
+        String sql = "";
+        String keys = "";
+        String values = "";
+
+        sql += "INSERT INTO " + TABLE_NAME + " ";
+
+        for (Iterator<String> iter = aData.keys(); iter.hasNext(); ) {
+            keys += iter.next() + ",";
+            values += "?,";
+        }
+
+        keys = keys.substring(0, keys.length() - 1);
+        values = values.substring(0, values.length() - 1);
+        sql += "(" + keys + ") VALUES (" + values + ");";
+
+        //DEBUG
+        //mTool.printOutput(sql);
+
+        mDatabase = getWritableDatabase();
+        mDatabase.beginTransaction();
+        SQLiteStatement stmt = mDatabase.compileStatement(sql);
+
+        int i = 1;
+        for (Iterator<String> iter = aData.keys(); iter.hasNext(); ) {
+            try {
+                String key = iter.next();
+
+                //DEBUG
+                //mTool.printOutput( key + " = " + aData.getString(key));
+
+                String tmp = "" + aData.getString(key);
+
+                tmp = tmp.trim();
+
+                //Attention: on the "bind-function, the index starts at 1, not 0"
+                stmt.bindString(i++, tmp);
+            } catch (Exception ex) {
+                mTool.printTrace(ex);
+            }
+        }
+
+        stmt.executeInsert();
+        stmt.clearBindings();
+
+        mDatabase.setTransactionSuccessful();
+        mDatabase.endTransaction();
+
+        mDatabase.close();
+    }
+
+    public int update(ContentValues cValues, int nId) {
         int retCode = 0;
 
         mDatabase = this.getWritableDatabase();
 
-        if(mDatabase != null && !value.equals("0") && !value.equals(""))
-		{
-			String[] args = {value};
-			retCode = mDatabase.delete(TABLE_NAME,column+"=?", args);
+        if (mDatabase != null) {
+            retCode = mDatabase.update(TABLE_NAME, cValues, "id=" + String.valueOf(nId), null);
 
-			mDatabase.close();
-		}
+            mDatabase.close();
+        }
 
-		return retCode;
+        return retCode;
     }
 
-	/**
-	 * get all entities from "resultsets" table of local database
-	 * @return allRes List of Result.java objects
-	 */
-	public ArrayList<LinkedHashMap> select(String where, String order, int asc)
-	{
-		ArrayList<LinkedHashMap> rows = new ArrayList<>();
+    public int deleteID(String column, String value) {
+        int retCode = 0;
 
-		try
-		{
-			String query = "SELECT * FROM " + TABLE_NAME + " WHERE "+ where +" ORDER BY " + order + " " + ((asc == 1) ? "ASC" : "DESC");
+        mDatabase = this.getWritableDatabase();
 
-			//Log.e("SQL-Query",query);
+        if (mDatabase != null && !value.equals("0") && !value.equals("")) {
+            String[] args = {value};
+            retCode = mDatabase.delete(TABLE_NAME, column + "=?", args);
 
-			mDatabase = this.getWritableDatabase();
+            mDatabase.close();
+        }
 
-			Cursor result = mDatabase.rawQuery(query, null);
+        return retCode;
+    }
 
-			while (result.moveToNext())
-			{
-				LinkedHashMap<String, String> columns = new LinkedHashMap<>();
+    /**
+     * get all entities from "resultsets" table of local database
+     *
+     * @return allRes List of Result.java objects
+     */
+    public ArrayList<LinkedHashMap> select(String where, String order, int asc) {
+        ArrayList<LinkedHashMap> rows = new ArrayList<>();
 
-				for (int i = 0; i < result.getColumnCount(); i++)
-				{
-					//mTool.printOutput("DB[-]: " + result.getColumnName(i) + ":" + result.getString(i));
-					columns.put(result.getColumnName(i), result.getString(i));
-				}
-				rows.add(columns);
-			}
+        try {
+            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + where + " ORDER BY " + order + " " + ((asc == 1) ? "ASC" : "DESC");
 
-			result.close();
+            //Log.e("SQL-Query",query);
 
-			mDatabase.close();
-		}
-		catch (Exception ex)
-		{
-			mTool.printTrace(ex);
-		}
+            mDatabase = this.getWritableDatabase();
 
-		return rows;
-	}
+            Cursor result = mDatabase.rawQuery(query, null);
 
-	/**
-	 * get all entities from "resultsets" table of local database
-	 * @return allRes List of Result.java objects
-	 */
-	public ArrayList<LinkedHashMap> selectAll(String order, int asc)
-	{
-		ArrayList<LinkedHashMap> rows = new ArrayList<>();
+            while (result.moveToNext()) {
+                LinkedHashMap<String, String> columns = new LinkedHashMap<>();
 
-		try
-		{
-			String query = "SELECT * FROM " + TABLE_NAME + " WHERE 1 ORDER BY " + order + " " + ((asc == 1) ? "ASC" : "DESC");
+                for (int i = 0; i < result.getColumnCount(); i++) {
+                    //mTool.printOutput("DB[-]: " + result.getColumnName(i) + ":" + result.getString(i));
+                    columns.put(result.getColumnName(i), result.getString(i));
+                }
+                rows.add(columns);
+            }
 
-			//Log.e("SQL-Query",query);
+            result.close();
 
-			mDatabase = this.getWritableDatabase();
+            mDatabase.close();
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
 
-			Cursor result = mDatabase.rawQuery(query, null);
+        return rows;
+    }
 
-			while (result.moveToNext())
-			{
-				LinkedHashMap<String, String> columns = new LinkedHashMap<>();
+    /**
+     * get all entities from "resultsets" table of local database
+     *
+     * @return allRes List of Result.java objects
+     */
+    public ArrayList<LinkedHashMap> selectAll(String order, int asc) {
+        ArrayList<LinkedHashMap> rows = new ArrayList<>();
 
-				for (int i = 0; i < result.getColumnCount(); i++)
-				{
-					//mTool.printOutput("DB[-]: " + result.getColumnName(i) + ":" + result.getString(i));
-					columns.put(result.getColumnName(i), result.getString(i));
-				}
-				rows.add(columns);
-			}
+        try {
+            String query = "SELECT * FROM " + TABLE_NAME + " WHERE 1 ORDER BY " + order + " " + ((asc == 1) ? "ASC" : "DESC");
 
-			result.close();
+            //Log.e("SQL-Query",query);
 
-			mDatabase.close();
-		}
-		catch (Exception ex)
-		{
-			mTool.printTrace(ex);
-		}
+            mDatabase = this.getWritableDatabase();
 
-		return rows;
-	}
+            Cursor result = mDatabase.rawQuery(query, null);
 
-	/**
-	 * get all entities from "resultsets" table of local database
-	 * @return Cursor
-	 */
-	public Cursor selectAllCursor(String order, int asc)
-	{
-		String ascDesc = ((asc == 1) ? "ASC" : "DESC");
-		String query = "SELECT *,id as _id FROM " + TABLE_NAME + " WHERE 1 ORDER BY "+order+" "+ascDesc;
+            while (result.moveToNext()) {
+                LinkedHashMap<String, String> columns = new LinkedHashMap<>();
 
-		mDatabase = this.getWritableDatabase();
+                for (int i = 0; i < result.getColumnCount(); i++) {
+                    //mTool.printOutput("DB[-]: " + result.getColumnName(i) + ":" + result.getString(i));
+                    columns.put(result.getColumnName(i), result.getString(i));
+                }
+                rows.add(columns);
+            }
 
-		Cursor cDatabaseCursor = mDatabase.rawQuery(query, null);
+            result.close();
 
-		return cDatabaseCursor;
-	}
+            mDatabase.close();
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
 
-	public String getValue(Cursor cCursor, String sColumn)
-	{
-		return cCursor.getString(cCursor.getColumnIndexOrThrow(sColumn));
-	}
+        return rows;
+    }
 
-	public void printCursor(Cursor cData)
-	{
-		DatabaseUtils.dumpCursor(cData);
-	}
+    /**
+     * get all entities from "resultsets" table of local database
+     *
+     * @return Cursor
+     */
+    public Cursor selectAllCursor(String order, int asc) {
+        String ascDesc = ((asc == 1) ? "ASC" : "DESC");
+        String query = "SELECT *,id as _id FROM " + TABLE_NAME + " WHERE 1 ORDER BY " + order + " " + ascDesc;
 
-	public int getLastID()
-	{
-		int nLastID = 0;
-		try
-		{
-			String query = "SELECT MAX(id) as id FROM " + TABLE_NAME;
+        mDatabase = this.getWritableDatabase();
 
-			//mTool.printOutput("SQL-Query: " +query);
+        Cursor cDatabaseCursor = mDatabase.rawQuery(query, null);
 
-			mDatabase = getWritableDatabase();
+        return cDatabaseCursor;
+    }
 
-			Cursor result = mDatabase.rawQuery(query, null);
+    public String getValue(Cursor cCursor, String sColumn) {
+        return cCursor.getString(cCursor.getColumnIndexOrThrow(sColumn));
+    }
 
-			result.moveToFirst();
+    public void printCursor(Cursor cData) {
+        DatabaseUtils.dumpCursor(cData);
+    }
 
-			nLastID = result.getInt(0);
+    public int getLastID() {
+        int nLastID = 0;
+        try {
+            String query = "SELECT MAX(id) as id FROM " + TABLE_NAME;
 
-			result.close();
+            //mTool.printOutput("SQL-Query: " +query);
 
-			mDatabase.close();
-		}
-		catch (Exception ex)
-		{
-			mTool.printTrace(ex);
-		}
+            mDatabase = getWritableDatabase();
 
-		return nLastID;
-	}
+            Cursor result = mDatabase.rawQuery(query, null);
 
-	public int getLastTrack()
-	{
-		int nLastID = 0;
-		try
-		{
-			String query = "SELECT COUNT(track_id) FROM (SELECT  * FROM " + TABLE_NAME + " GROUP BY track_id ) as tbl";
+            result.moveToFirst();
 
-			//mTool.printOutput("SQL-Query: " +query);
+            nLastID = result.getInt(0);
 
-			mDatabase = getWritableDatabase();
+            result.close();
 
-			Cursor result = mDatabase.rawQuery(query, null);
+            mDatabase.close();
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
 
-			result.moveToFirst();
+        return nLastID;
+    }
 
-			nLastID = result.getInt(0);
+    public int getLastTrack() {
+        int nLastID = 0;
+        try {
+            String query = "SELECT COUNT(track_id) FROM (SELECT  * FROM " + TABLE_NAME + " GROUP BY track_id ) as tbl";
 
-			result.close();
+            //mTool.printOutput("SQL-Query: " +query);
 
-			mDatabase.close();
-		}
-		catch (Exception ex)
-		{
-			mTool.printTrace(ex);
-		}
+            mDatabase = getWritableDatabase();
 
-		return nLastID;
-	}
+            Cursor result = mDatabase.rawQuery(query, null);
 
-	public void close()
-	{
-		mDatabase.close();
-	}
+            result.moveToFirst();
+
+            nLastID = result.getInt(0);
+
+            result.close();
+
+            mDatabase.close();
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+
+        return nLastID;
+    }
+
+    public void close() {
+        mDatabase.close();
+    }
 }

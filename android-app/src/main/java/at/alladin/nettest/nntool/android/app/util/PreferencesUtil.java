@@ -49,7 +49,7 @@ public class PreferencesUtil {
     private final static String SETTING_DOWNLOAD_ENABLED = "setting_nettest_execute_download_test";
     private final static String SETTING_UPLOAD_ENABLED = "setting_nettest_execute_upload_test";
 
-    private final static String SETTINGS_QOS_TYPE_INFORMATION_MAP= "settings_qos_type_information_map";
+    private final static String SETTINGS_QOS_TYPE_INFORMATION_MAP = "settings_qos_type_information_map";
 
     private final static String SETTINGS_IPV4_ONLY = "setting_ipv4_only";
 
@@ -80,8 +80,7 @@ public class PreferencesUtil {
     public static void setAgentUuid(final Context context, final String uuid) {
         if (uuid != null) {
             getDefaultPreferences(context).edit().putString(SETTING_AGENT_UUID, uuid).commit();
-        }
-        else{
+        } else {
             getDefaultPreferences(context).edit().remove(SETTING_AGENT_UUID).commit();
         }
     }
@@ -93,8 +92,7 @@ public class PreferencesUtil {
                 //check if uuid is valid
                 UUID.fromString(overrideUuid);
                 return overrideUuid;
-            }
-            catch (final IllegalArgumentException e) {
+            } catch (final IllegalArgumentException e) {
                 //invalid uuid
             }
         }

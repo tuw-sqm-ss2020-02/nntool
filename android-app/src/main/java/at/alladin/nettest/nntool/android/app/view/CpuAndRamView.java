@@ -65,19 +65,16 @@ public class CpuAndRamView extends RelativeLayout implements SystemInfoListener 
 
             if (memUsage != null && memUsage.getMemoryUsage() != null) {
                 ramText.setText(((int) (memUsage.getMemoryUsage() * 100f)) + "%");
-            }
-            else {
+            } else {
                 ramText.setText(R.string.not_available_short);
             }
 
             if (currentSystemInfo.getCpuUsage() != null) {
                 cpuText.setText(((int) (currentSystemInfo.getCpuUsage() * 100f)) + "%");
-            }
-            else {
+            } else {
                 cpuText.setText(R.string.not_available_short);
             }
-        }
-        else {
+        } else {
             cpuText.setText(R.string.not_available_short);
             ramText.setText(R.string.not_available_short);
         }

@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2013-2019 alladin-IT GmbH
  * Copyright 2014-2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -70,7 +70,7 @@ public class CanvasArcDoubleGaugeWithLabels extends AbstractCanvasWithLabels {
 
         canvas.save();
 
-        canvas.rotate(90 + ((360f-ARC_ANGLE)/2f), centerX, centerY);
+        canvas.rotate(90 + ((360f - ARC_ANGLE) / 2f), centerX, centerY);
         arcPaint.setColor(getResources().getColor(R.color.gauge_speed_bg));
         canvas.drawArc(speedRing.getBounds(), 0, ARC_ANGLE, false, arcPaint);
         arcPaint.setColor(getResources().getColor(R.color.gauge_progress_bg));
@@ -80,14 +80,14 @@ public class CanvasArcDoubleGaugeWithLabels extends AbstractCanvasWithLabels {
 
         //draw the progress foreground
         arcPaint.setColor(getResources().getColor(R.color.gauge_progress_fg));
-        canvas.drawArc(progressRing.getBounds(), 0, (float) (ARC_ANGLE*progressValue), false, arcPaint);
+        canvas.drawArc(progressRing.getBounds(), 0, (float) (ARC_ANGLE * progressValue), false, arcPaint);
 
         //define arcpaint for the gauges
         arcPaint.setStrokeWidth(coordFW(SMALL_POINTER_SIZE, defaultWidth));
         arcPaint.setColor(getResources().getColor(R.color.theme_app_bg));
 
         final int progressLabelSize = progressLabels.size();
-        final float radProgress = ((float) (2f*Math.PI*(progressRing.getBounds().width()/2f))) * (ARC_ANGLE/360f);
+        final float radProgress = ((float) (2f * Math.PI * (progressRing.getBounds().width() / 2f))) * (ARC_ANGLE / 360f);
         final float radProgressPart = radProgress / progressLabelSize;
 
         for (int i = 0; i < progressLabelSize; i++) {
@@ -100,7 +100,7 @@ public class CanvasArcDoubleGaugeWithLabels extends AbstractCanvasWithLabels {
         // speed arc
 
         final int speedLabelSize = speedLabels.size();
-        final float radSpeed = ((float) (2f*Math.PI*(speedRing.getBounds().width()/2f))) * (ARC_ANGLE/360f);
+        final float radSpeed = ((float) (2f * Math.PI * (speedRing.getBounds().width() / 2f))) * (ARC_ANGLE / 360f);
         final float radSpeedPart = radSpeed / (speedLabelSize - 1);
 
         //get speed log value
@@ -117,7 +117,7 @@ public class CanvasArcDoubleGaugeWithLabels extends AbstractCanvasWithLabels {
 
         for (int i = 0; i < speedLabelSize; i++) {
             final float hOffset;
-            if (i == 0){
+            if (i == 0) {
                 hOffset = i * radSpeedPart + coordFW(2, defaultWidth);
             } else if (i == (speedLabelSize - 1)) {
                 hOffset = i * radSpeedPart - arcTextPaint.measureText(speedLabels.get(i)) - coordFW(2, defaultWidth);

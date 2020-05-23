@@ -37,224 +37,209 @@ import java.lang.reflect.Method;
 /**
  * Class ListenerNetwork
  */
-public class ListenerNetwork extends PhoneStateListener
-{
-	/**************************** Variables ****************************/
+public class ListenerNetwork extends PhoneStateListener {
+    /**************************** Variables ****************************/
 
-	private Context ctx;
+    private Context ctx;
 
-	//Module Objects
-	private Tool mTool;
-	private ModulesInterface interfaceCallback;
-	private ServiceState serviceState;
-	private TelephonyManager tm;
-	private Thread pThread;
-	private boolean withIntervall = false;
+    //Module Objects
+    private Tool mTool;
+    private ModulesInterface interfaceCallback;
+    private ServiceState serviceState;
+    private TelephonyManager tm;
+    private Thread pThread;
+    private boolean withIntervall = false;
 
-	/*******************************************************************/
+    /*******************************************************************/
 
-	/**
-	 * Method ListenerNetwork
-	 * @param ctx
-	 * @param intCall
-	 */
-	public ListenerNetwork(Context ctx, ModulesInterface intCall)
-	{
-		this.ctx = ctx;
-		this.interfaceCallback = intCall;
+    /**
+     * Method ListenerNetwork
+     *
+     * @param ctx
+     * @param intCall
+     */
+    public ListenerNetwork(Context ctx, ModulesInterface intCall) {
+        this.ctx = ctx;
+        this.interfaceCallback = intCall;
 
-		mTool = new Tool();
+        mTool = new Tool();
 
-		tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-	}
+        tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+    }
 
-	/**
-	 * Method getState
-	 */
-	public void getState()
-	{
-		getData();
+    /**
+     * Method getState
+     */
+    public void getState() {
+        getData();
 
-		//ACCESS_FINE_LOCATION
-		tm.listen(
-				this,
-				PhoneStateListener.LISTEN_SIGNAL_STRENGTHS |
-						PhoneStateListener.LISTEN_DATA_CONNECTION_STATE |
-						PhoneStateListener.LISTEN_DATA_ACTIVITY |
-						PhoneStateListener.LISTEN_CELL_LOCATION |
-						PhoneStateListener.LISTEN_SERVICE_STATE
-		);
-	}
+        //ACCESS_FINE_LOCATION
+        tm.listen(
+                this,
+                PhoneStateListener.LISTEN_SIGNAL_STRENGTHS |
+                        PhoneStateListener.LISTEN_DATA_CONNECTION_STATE |
+                        PhoneStateListener.LISTEN_DATA_ACTIVITY |
+                        PhoneStateListener.LISTEN_CELL_LOCATION |
+                        PhoneStateListener.LISTEN_SERVICE_STATE
+        );
+    }
 
-	/**
-	 * Method withIntervall
-	 */
-	public void withIntervall()
-	{
-		pThread = new Thread(new WorkerThread());
-		pThread.start();
+    /**
+     * Method withIntervall
+     */
+    public void withIntervall() {
+        pThread = new Thread(new WorkerThread());
+        pThread.start();
 
-		withIntervall = true;
-	}
+        withIntervall = true;
+    }
 
-	/**
-	 * Method stopUpdates
-	 */
-	public void stopUpdates()
-	{
-		tm.listen(this, PhoneStateListener.LISTEN_NONE);
+    /**
+     * Method stopUpdates
+     */
+    public void stopUpdates() {
+        tm.listen(this, PhoneStateListener.LISTEN_NONE);
 
-		if( withIntervall )
-			pThread.interrupt();
+        if (withIntervall)
+            pThread.interrupt();
 
-		withIntervall = false;
-	}
+        withIntervall = false;
+    }
 
-	/**
-	 * Method onSignalStrengthsChanged
-	 * @require PhoneStateListener.LISTEN_SIGNAL_STRENGTHS
-	 * @param signalStrength
-	 */
-	@Override
-	public void onSignalStrengthsChanged(SignalStrength signalStrength)
-	{
-		super.onSignalStrengthsChanged(signalStrength);
+    /**
+     * Method onSignalStrengthsChanged
+     *
+     * @param signalStrength
+     * @require PhoneStateListener.LISTEN_SIGNAL_STRENGTHS
+     */
+    @Override
+    public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+        super.onSignalStrengthsChanged(signalStrength);
 
-		getData();
-	}
+        getData();
+    }
 
-	/**
-	 * Method onDataConnectionStateChanged
-	 * @require PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
-	 * @param networkState
-	 * @param networkType
-	 */
-	@Override
-	public void onDataConnectionStateChanged(int networkState, int networkType)
-	{
-		super.onDataConnectionStateChanged(networkState, networkType);
+    /**
+     * Method onDataConnectionStateChanged
+     *
+     * @param networkState
+     * @param networkType
+     * @require PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
+     */
+    @Override
+    public void onDataConnectionStateChanged(int networkState, int networkType) {
+        super.onDataConnectionStateChanged(networkState, networkType);
 
-		getData();
-	}
+        getData();
+    }
 
-	/**
-	 * Method onDataActivity
-	 * @require PhoneStateListener.LISTEN_DATA_ACTIVITY
-	 * @param directon
-	 */
-	@Override
-	public void onDataActivity(int directon)
-	{
-		super.onDataActivity(directon);
+    /**
+     * Method onDataActivity
+     *
+     * @param directon
+     * @require PhoneStateListener.LISTEN_DATA_ACTIVITY
+     */
+    @Override
+    public void onDataActivity(int directon) {
+        super.onDataActivity(directon);
 
-		getData();
-	}
+        getData();
+    }
 
-	/**
-	 * Method onCellLocationChanged
-	 * @require PhoneStateListener.LISTEN_CELL_LOCATION
-	 * @param location
-	 */
-	@Override
-	public void onCellLocationChanged(CellLocation location)
-	{
-		super.onCellLocationChanged(location);
+    /**
+     * Method onCellLocationChanged
+     *
+     * @param location
+     * @require PhoneStateListener.LISTEN_CELL_LOCATION
+     */
+    @Override
+    public void onCellLocationChanged(CellLocation location) {
+        super.onCellLocationChanged(location);
 
-		getData();
-	}
+        getData();
+    }
 
-	/**
-	 * Method onServiceStateChanged
-	 * @require PhoneStateListener.LISTEN_SERVICE_STATE
-	 * @param serviceState
-	 */
-	@Override
-	public void onServiceStateChanged(ServiceState serviceState)
-	{
-		super.onServiceStateChanged(serviceState);
+    /**
+     * Method onServiceStateChanged
+     *
+     * @param serviceState
+     * @require PhoneStateListener.LISTEN_SERVICE_STATE
+     */
+    @Override
+    public void onServiceStateChanged(ServiceState serviceState) {
+        super.onServiceStateChanged(serviceState);
 
-		this.serviceState = serviceState;
+        this.serviceState = serviceState;
 
-		getData();
-	}
+        getData();
+    }
 
-	/**
-	 * Method getData
-	 */
-	private void getData()
-	{
-		JSONObject jData = new JSONObject();
+    /**
+     * Method getData
+     */
+    private void getData() {
+        JSONObject jData = new JSONObject();
 
-		String app_operator_netcode = tm.getNetworkOperator();
-		String app_operator_simcode = tm.getSimOperator();
+        String app_operator_netcode = tm.getNetworkOperator();
+        String app_operator_simcode = tm.getSimOperator();
 
-		String app_operator_sim = "";
-		String app_operator_net = tm.getNetworkOperatorName();
+        String app_operator_sim = "";
+        String app_operator_net = tm.getNetworkOperatorName();
 
-		if(tm.getSimState() == TelephonyManager.SIM_STATE_READY)
-		{
-			app_operator_sim = tm.getSimOperatorName();
-		}
+        if (tm.getSimState() == TelephonyManager.SIM_STATE_READY) {
+            app_operator_sim = tm.getSimOperatorName();
+        }
 
-		try
-		{
-			jData.put("app_mode", mTool.isWifi(ctx) ? "WIFI" : "WWAN");
-			jData.put("app_access", mTool.getNetType(tm.getNetworkType()));
-			jData.put("app_access_id", tm.getNetworkType());
+        try {
+            jData.put("app_mode", mTool.isWifi(ctx) ? "WIFI" : "WWAN");
+            jData.put("app_access", mTool.getNetType(tm.getNetworkType()));
+            jData.put("app_access_id", tm.getNetworkType());
 
-			//--------------------------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
 
-			if( serviceState != null )
-			{
-				jData.put("app_voice", mTool.getVoicetype(serviceState.getState()));
-				jData.put("app_voice_id", getVoiceNetworkType(serviceState));
-			}
-			else
-			{
-				jData.put("app_voice", mTool.getVoicetype(-1));
-				jData.put("app_voice_id", -1);
-			}
+            if (serviceState != null) {
+                jData.put("app_voice", mTool.getVoicetype(serviceState.getState()));
+                jData.put("app_voice_id", getVoiceNetworkType(serviceState));
+            } else {
+                jData.put("app_voice", mTool.getVoicetype(-1));
+                jData.put("app_voice_id", -1);
+            }
 
-			//--------------------------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
 
-			if( !app_operator_netcode.equals("") )
-			{
-				jData.put("app_operator_net_mcc", app_operator_netcode.substring(0, 3));
-				jData.put("app_operator_net_mnc", app_operator_netcode.substring(3));
-			}
+            if (!app_operator_netcode.equals("")) {
+                jData.put("app_operator_net_mcc", app_operator_netcode.substring(0, 3));
+                jData.put("app_operator_net_mnc", app_operator_netcode.substring(3));
+            }
 
-			if( !app_operator_simcode.equals("") )
-			{
-				jData.put("app_operator_sim_mcc", app_operator_simcode.substring(0, 3));
-				jData.put("app_operator_sim_mnc", app_operator_simcode.substring(3));
-			}
+            if (!app_operator_simcode.equals("")) {
+                jData.put("app_operator_sim_mcc", app_operator_simcode.substring(0, 3));
+                jData.put("app_operator_sim_mnc", app_operator_simcode.substring(3));
+            }
 
-			if( !app_operator_net.equals("") && !app_operator_net.equals("null"))
-				jData.put("app_operator_net", app_operator_net);
+            if (!app_operator_net.equals("") && !app_operator_net.equals("null"))
+                jData.put("app_operator_net", app_operator_net);
 
-			if( !app_operator_sim.equals("") && !app_operator_sim.equals("null"))
-				jData.put("app_operator_sim", app_operator_sim);
+            if (!app_operator_sim.equals("") && !app_operator_sim.equals("null"))
+                jData.put("app_operator_sim", app_operator_sim);
 
-			//--------------------------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
 
-			//Callback
-			interfaceCallback.receiveData(jData);
-		}
-		catch (Exception ex)
-		{
-			mTool.printTrace(ex);
-		}
-	}
+            //Callback
+            interfaceCallback.receiveData(jData);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
-	/**
-	 * Method getVoiceNetworkType
-	 * @param serviceState
-	 * @return
-	 */
-    private int getVoiceNetworkType( ServiceState serviceState )
-    {
-        try
-		{
+    /**
+     * Method getVoiceNetworkType
+     *
+     * @param serviceState
+     * @return
+     */
+    private int getVoiceNetworkType(ServiceState serviceState) {
+        try {
             // Java reflection to gain access to TelephonyManager's
             // ITelephony getter
             Class c = Class.forName(serviceState.getClass().getName());
@@ -262,37 +247,32 @@ public class ListenerNetwork extends PhoneStateListener
 
             mI.setAccessible(true);
 
-			return (int) (Integer)mI.invoke(serviceState);
+            return (int) (Integer) mI.invoke(serviceState);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
         }
-        catch (Exception ex)
-		{
-			mTool.printTrace(ex);
-		}
 
         return -1;
     }
 
-	/**
-	 * Class WorkerThread
-	 */
-	class WorkerThread extends Thread
-	{
-		/**
-		 * Method run
-		 */
-		public void run()
-		{
-			while (true)
-			{
-				try
-				{
-					getData();
+    /**
+     * Class WorkerThread
+     */
+    class WorkerThread extends Thread {
+        /**
+         * Method run
+         */
+        public void run() {
+            while (true) {
+                try {
+                    getData();
 
-					//Every 10 Seconds
-					Thread.sleep(10000);
-				}
-				catch (InterruptedException ex) { mTool.printTrace(ex); }
-			}
-		}
-	}
+                    //Every 10 Seconds
+                    Thread.sleep(10000);
+                } catch (InterruptedException ex) {
+                    mTool.printTrace(ex);
+                }
+            }
+        }
+    }
 }

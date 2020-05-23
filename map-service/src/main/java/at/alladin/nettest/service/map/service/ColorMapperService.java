@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2013-2019 alladin-IT GmbH
  * Copyright 2014-2016 SPECURE GmbH 
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,9 +29,9 @@ import at.alladin.nettest.shared.server.model.ServerSettings.SpeedThresholds;
 
 @Service
 public class ColorMapperService {
-	
-	@Autowired
-	private ThresholdsPerTechnologyHelperService thresholdsHelperService;
+
+    @Autowired
+    private ThresholdsPerTechnologyHelperService thresholdsHelperService;
 
     /**
      *
@@ -51,7 +51,7 @@ public class ColorMapperService {
     }
 
     protected boolean hasTechnologyEntry(final String technology, final MapServiceOptions.SignalGroup signalGroup, final ClassificationHelper.ClassificationType classificationType) {
-        if(this.thresholdsPerClassificationType == null || thresholdsHelperService.getByClassificationType(thresholdsPerClassificationType, classificationType) == null) {
+        if (this.thresholdsPerClassificationType == null || thresholdsHelperService.getByClassificationType(thresholdsPerClassificationType, classificationType) == null) {
             return false;
         } else {
             return thresholdsHelperService.getByClassificationType(thresholdsPerClassificationType, classificationType) != null;
@@ -59,7 +59,6 @@ public class ColorMapperService {
     }
 
     /**
-     *
      * @param colors
      * @param intervals
      * @param value
@@ -67,24 +66,24 @@ public class ColorMapperService {
      */
     protected int valueToColor(final double value, final MapServiceOptions.SignalGroup signalGroup,
                                final ClassificationHelper.ClassificationType classificationType) {
-    	final ColorThresholds colorThresholds = thresholdsHelperService.getByClassificationType(skewedThresholdsPerClassificationType, classificationType);
+        final ColorThresholds colorThresholds = thresholdsHelperService.getByClassificationType(skewedThresholdsPerClassificationType, classificationType);
 
-    	if (colorThresholds == null) {
-    		throw new RuntimeException("Color mapper not initialized correctly");
-    	}
-    	
+        if (colorThresholds == null) {
+            throw new RuntimeException("Color mapper not initialized correctly");
+        }
+
         //select colours the new way
         final Long ceilingKey = colorThresholds.getColorMap().ceilingKey((long) value);
         final Long floorKey = colorThresholds.getColorMap().floorKey((long) value);
 
-        if(floorKey == null) {
+        if (floorKey == null) {
             return Integer.parseInt(colorThresholds.getColorMap().get(ceilingKey), 16);
         }
 
-        if(ceilingKey == null) {
+        if (ceilingKey == null) {
             return Integer.parseInt(colorThresholds.getDefaultColor(), 16);
         }
-        
+
         double factor = 0;
 
         if (ceilingKey == floorKey) {
@@ -101,7 +100,7 @@ public class ColorMapperService {
         final int c0g = c0 >> 8 & 0xff;
         final int c0b = c0 & 0xff;
 
-        final int r = (int) (c0r + ((c1 >> 16) - c0r) * (factor)) ;
+        final int r = (int) (c0r + ((c1 >> 16) - c0r) * (factor));
         final int g = (int) (c0g + ((c1 >> 8 & 0xff) - c0g) * (factor));
         final int b = (int) (c0b + ((c1 & 0xff) - c0b) * (factor));
         return r << 16 | g << 8 | b;
@@ -110,6 +109,7 @@ public class ColorMapperService {
     /**
      * Calculates a colour as the valueToColor method, only the resulting colour is NOT interpolated between the two
      * closest colours, but simply assigned according to the cutoff logic
+     *
      * @param value
      * @param technology
      * @param signalGroup
@@ -121,19 +121,19 @@ public class ColorMapperService {
     protected int valueToDiscreteColor(final double value, final MapServiceOptions.SignalGroup signalGroup,
                                        final ClassificationHelper.ClassificationType classificationType) {
         final ColorThresholds colorThresholds = thresholdsHelperService.getByClassificationType(thresholdsPerClassificationType, classificationType);
-        
-    	if (colorThresholds == null) {
-    		throw new RuntimeException("Color mapper not initialized correctly");
-    	}
+
+        if (colorThresholds == null) {
+            throw new RuntimeException("Color mapper not initialized correctly");
+        }
 
         final Long ceilingKey = colorThresholds.getColorMap().ceilingKey((long) value);
 
-        if(ceilingKey == null) {
+        if (ceilingKey == null) {
             return Integer.parseInt(colorThresholds.getDefaultColor(), 16);
         }
 
         return Integer.parseInt(colorThresholds.getColorMap().get(ceilingKey), 16);
-        
+
     }
 
 }

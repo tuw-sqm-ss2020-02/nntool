@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2013-2019 alladin-IT GmbH
  * Copyright 2014-2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,19 +59,19 @@ import at.alladin.nntool.shared.map.PointTileParameters;
 @CacheConfig(cacheNames = {"pointTile"})
 @Service
 public class PointTileService {
-	
-	private final Logger logger = LoggerFactory.getLogger(PointTileService.class);
 
-	@Autowired
+    private final Logger logger = LoggerFactory.getLogger(PointTileService.class);
+
+    @Autowired
     private MapCacheConfig mapCacheConfig;
 
-	@Autowired
+    @Autowired
     private MapOptionsService mapOptionsService;
 
-	@Autowired
+    @Autowired
     private ColorMapperService colorMapperService;
 
-	@Autowired
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     private ThreadLocal<TileImage>[] tileImages;
@@ -112,42 +112,42 @@ public class PointTileService {
         //List<MapServiceSettings.MapFilter> mapFilterList = mapOptionsService.getMapFilterListForKeys(params.getFilterList());
 
         if (mapParams == null || mapParams.getMapTileType() != MapTileType.POINTS
-        		|| !(mapParams instanceof PointTileParameters)) {
-        	throw new IllegalArgumentException("Invalid parameters for requested PointTile");
+                || !(mapParams instanceof PointTileParameters)) {
+            throw new IllegalArgumentException("Invalid parameters for requested PointTile");
         }
 
         final PointTileParameters params = (PointTileParameters) mapParams;
-        
+
 
         logger.info("computing points for mapoption: " + params.getMapOption());
-        
+
         final MapServiceOptions options = mapOptionsService.getMapOptionsForKey(params.getMapOption());
-        
+
         if (options == null) {
-        	throw new IllegalArgumentException("provided map option not available: " + params.getMapOption());
+            throw new IllegalArgumentException("provided map option not available: " + params.getMapOption());
         }
 
         final List<MapServiceSettings.SQLFilter> sqlFilterList = mapOptionsService.getSqlFilterList(params.getFilterMap(), true, true);
 
         //set some default options, if no parameters were provided
         if (params.getTransparency() == null) {
-        	params.setTransparency(0.6);
+            params.setTransparency(0.6);
         }
-        
+
         final double diameter;
         if (params.getPointDiameter() != null) {
-        	diameter = params.getPointDiameter();
+            diameter = params.getPointDiameter();
         } else {
-        	diameter = 12.0;
-        	params.setPointDiameter(diameter);
+            diameter = 12.0;
+            params.setPointDiameter(diameter);
         }
 
         if (params.isNoFill() == null) {
-        	params.setNoFill(false);
+            params.setNoFill(false);
         }
-        
+
         if (params.isNoColor() == null) {
-        	params.setNoColor(false);
+            params.setNoColor(false);
         }
 
         final String hightlightUUIDString = params.getHighlight();
@@ -159,7 +159,7 @@ public class PointTileService {
 
             }
         }
-        
+
         //and start calculating
         final double radius = diameter / 2d;
         final double triangleSide = diameter * 1.5;
@@ -177,38 +177,38 @@ public class PointTileService {
             for (final MapServiceSettings.SQLFilter sf : sqlFilterList) {
                 whereSQL.append(" AND ").append(sf.getWhereClause());
             }
-            
+
             String sql = null;
             //If we classifiy mobile signals, we need to grab the lte_rsrp vals for the LTE measurements
             if (options.getClassificationType() == ClassificationHelper.ClassificationType.SIGNAL && options.getSignalGroup() == MapServiceOptions.SignalGroup.MOBILE) {
                 sql = String.format(
-                		"SELECT ST_X(t.geo_location_geometry) x, ST_Y(t.geo_location_geometry) y, t.mobile_network_lte_rsrq_dbm as lte_rsrp,  %s val "
-        				//+ (hightlightUUID == null ? "" : ", t.agent_uuid ")
-                        + ", initial_network_type_id as network_type_id, to_json(network_signal_info) as signals "
-                        + " FROM measurements t"
-                        + " LEFT JOIN ias_measurements ias on t.open_data_uuid = ias.measurement_open_data_uuid"
-                        //+ (hightlightUUID == null ? "" : " LEFT JOIN ha_client c ON (t.client_uuid=c.uuid AND c.uuid=?::uuid)")
-                        + " WHERE "
-                        + " %s"
-                        + " AND t.geo_location_geometry && ST_SetSRID(ST_MakeBox2D(ST_Point(?,?), ST_Point(?,?)), 900913)"
-                        + " ORDER BY"
-                        //+ (hightlightUUID == null ? "" : " c.uuid DESC, ") 
-                        + " t.open_data_uuid", options.getSqlValueColumn(), whereSQL);
+                        "SELECT ST_X(t.geo_location_geometry) x, ST_Y(t.geo_location_geometry) y, t.mobile_network_lte_rsrq_dbm as lte_rsrp,  %s val "
+                                //+ (hightlightUUID == null ? "" : ", t.agent_uuid ")
+                                + ", initial_network_type_id as network_type_id, to_json(network_signal_info) as signals "
+                                + " FROM measurements t"
+                                + " LEFT JOIN ias_measurements ias on t.open_data_uuid = ias.measurement_open_data_uuid"
+                                //+ (hightlightUUID == null ? "" : " LEFT JOIN ha_client c ON (t.client_uuid=c.uuid AND c.uuid=?::uuid)")
+                                + " WHERE "
+                                + " %s"
+                                + " AND t.geo_location_geometry && ST_SetSRID(ST_MakeBox2D(ST_Point(?,?), ST_Point(?,?)), 900913)"
+                                + " ORDER BY"
+                                //+ (hightlightUUID == null ? "" : " c.uuid DESC, ")
+                                + " t.open_data_uuid", options.getSqlValueColumn(), whereSQL);
             } else {
                 sql = String.format(
-                		"SELECT ST_X(t.geo_location_geometry) x, ST_Y(t.geo_location_geometry) y, %1$s val "
-                		//+ (hightlightUUID == null ? "" : ", t.agent_uuid ")
-                        + ", initial_network_type_id as network_type_id, to_json(network_signal_info) as signals "
-                        + " FROM measurements t"
-                        + " LEFT JOIN ias_measurements ias on t.open_data_uuid = ias.measurement_open_data_uuid"
+                        "SELECT ST_X(t.geo_location_geometry) x, ST_Y(t.geo_location_geometry) y, %1$s val "
+                                //+ (hightlightUUID == null ? "" : ", t.agent_uuid ")
+                                + ", initial_network_type_id as network_type_id, to_json(network_signal_info) as signals "
+                                + " FROM measurements t"
+                                + " LEFT JOIN ias_measurements ias on t.open_data_uuid = ias.measurement_open_data_uuid"
 //                        + (hightlightUUID == null ? "" : " LEFT JOIN ha_client c ON (t.client_uuid=c.uuid AND c.uuid=?::uuid)")
-                        + " WHERE "
-                        //+ (hightlightUUID == null ? "" : " t.agent_uuid = ?::uuid AND ")
-                        + " %2$s"
-                        + " AND t.geo_location_geometry && ST_SetSRID(ST_MakeBox2D(ST_Point(?,?), ST_Point(?,?)), 900913)"
-                        + " ORDER BY"
-                        //+ (hightlightUUID == null ? "" : " t.agent_uuid DESC, ") 
-                        + " t.open_data_uuid", options.getSqlValueColumn(), whereSQL);
+                                + " WHERE "
+                                //+ (hightlightUUID == null ? "" : " t.agent_uuid = ?::uuid AND ")
+                                + " %2$s"
+                                + " AND t.geo_location_geometry && ST_SetSRID(ST_MakeBox2D(ST_Point(?,?), ST_Point(?,?)), 900913)"
+                                + " ORDER BY"
+                                //+ (hightlightUUID == null ? "" : " t.agent_uuid DESC, ")
+                                + " t.open_data_uuid", options.getSqlValueColumn(), whereSQL);
             }
             logger.info(sql);
 
@@ -218,63 +218,63 @@ public class PointTileService {
             try {
                 jdbcTemplate.query(sql, ps -> {
 
-	                    int i = 1;
-	
-	                    if (finalUuid != null) {
-	                        ps.setObject(i++, finalUuid.toString());
-	                    }
-	
-	                    for (final MapServiceSettings.SQLFilter sf : sqlFilterList) {
-	                        i = sf.fillParams(i, ps);
-	                    }
-	
-	                    final double margin = bbox.getRes() * triangleSide;
-	                    ps.setDouble(i++, bbox.getX1() - margin);
-	                    ps.setDouble(i++, bbox.getY1() - margin);
-	                    ps.setDouble(i++, bbox.getX2() + margin);
-	                    ps.setDouble(i++, bbox.getY2() + margin);
-	
-	                },
-	                (ResultSet rs, int rowNum)-> {
-	
-	                    int index = 1;
-	                    final double cx = rs.getDouble(index++);
-	                    final double cy = rs.getDouble(index++);
-	
-	                    //if the measurement is a 4G measurement -> use lte_rsrp instead of the normal signal
-	                    long lteSignal = 1;
-	                    if (options.getClassificationType() == ClassificationHelper.ClassificationType.SIGNAL && options.getSignalGroup() == MapServiceOptions.SignalGroup.MOBILE) {
-	                        lteSignal = rs.getLong(index++);
-	                    }
-	
-	                    long value = rs.getLong(index++);
-	
-	
-	                    final boolean highlight;
-	                    if (finalUuid != null) {
-	                        final Object clientUUID = rs.getObject(index++);
-	                        highlight = clientUUID != null;
-	                    } else {
-	                        highlight = false;
-	                    }
-	
-	                    //get the first networkType
-	                    String signalString = rs.getString("signals");
-	                    final JSONArray signalArr;
-	                    if (signalString != null) {
-	                    	signalArr = new JSONArray(rs.getString("signals"));
-	                    } else {
-	                    	signalArr = new JSONArray();
-	                    }
-	
-	                    if (lteSignal < 0) {
-	                        value = lteSignal;
-	                    }
-	
-	                    //In the ping case the thresholds are defined as ms, the values as ns => DIVIDE ET IMPERAT!
-	                    //Comment the code below in to get the point tiles with colours matching the actual used technology (matching the popup)
-	                    final Color color = new Color(colorMapperService.valueToDiscreteColor(options.getClassificationType() == ClassificationHelper.ClassificationType.PING ? value / 1e6 : value,
-	                    		options.getSignalGroup(), options.getClassificationType()));
+                            int i = 1;
+
+                            if (finalUuid != null) {
+                                ps.setObject(i++, finalUuid.toString());
+                            }
+
+                            for (final MapServiceSettings.SQLFilter sf : sqlFilterList) {
+                                i = sf.fillParams(i, ps);
+                            }
+
+                            final double margin = bbox.getRes() * triangleSide;
+                            ps.setDouble(i++, bbox.getX1() - margin);
+                            ps.setDouble(i++, bbox.getY1() - margin);
+                            ps.setDouble(i++, bbox.getX2() + margin);
+                            ps.setDouble(i++, bbox.getY2() + margin);
+
+                        },
+                        (ResultSet rs, int rowNum) -> {
+
+                            int index = 1;
+                            final double cx = rs.getDouble(index++);
+                            final double cy = rs.getDouble(index++);
+
+                            //if the measurement is a 4G measurement -> use lte_rsrp instead of the normal signal
+                            long lteSignal = 1;
+                            if (options.getClassificationType() == ClassificationHelper.ClassificationType.SIGNAL && options.getSignalGroup() == MapServiceOptions.SignalGroup.MOBILE) {
+                                lteSignal = rs.getLong(index++);
+                            }
+
+                            long value = rs.getLong(index++);
+
+
+                            final boolean highlight;
+                            if (finalUuid != null) {
+                                final Object clientUUID = rs.getObject(index++);
+                                highlight = clientUUID != null;
+                            } else {
+                                highlight = false;
+                            }
+
+                            //get the first networkType
+                            String signalString = rs.getString("signals");
+                            final JSONArray signalArr;
+                            if (signalString != null) {
+                                signalArr = new JSONArray(rs.getString("signals"));
+                            } else {
+                                signalArr = new JSONArray();
+                            }
+
+                            if (lteSignal < 0) {
+                                value = lteSignal;
+                            }
+
+                            //In the ping case the thresholds are defined as ms, the values as ns => DIVIDE ET IMPERAT!
+                            //Comment the code below in to get the point tiles with colours matching the actual used technology (matching the popup)
+                            final Color color = new Color(colorMapperService.valueToDiscreteColor(options.getClassificationType() == ClassificationHelper.ClassificationType.PING ? value / 1e6 : value,
+                                    options.getSignalGroup(), options.getClassificationType()));
 	                    /*
 	                     //Comment the code below in to get the point tiles with colours matching the chosen legend (values depending on the map filter, not the actual technology)
 	                    try {
@@ -285,17 +285,17 @@ public class PointTileService {
 	                        color = colorGray;
 	                    }
 	                    */
-	
-	                    dots.add(new Dot(cx, cy, color, highlight));
-	                    return null;
-	                });
+
+                            dots.add(new Dot(cx, cy, color, highlight));
+                            return null;
+                        });
             } catch (DataAccessException ex) {
                 throw new IllegalArgumentException(ex);
             }
-            
+
             if (dots.size() == 0) {
-            	logger.info("Requested point tile contains no measurements. Returning empty image");
-            	return null;
+                logger.info("Requested point tile contains no measurements. Returning empty image");
+                return null;
             }
 
             final int tileSizeIdx = TileHelper.getTileSizeIdx(params.getSize());
@@ -362,7 +362,7 @@ public class PointTileService {
 
         private boolean highlight;
 
-        private Dot () {
+        private Dot() {
 
         }
 

@@ -146,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_layout, targetFragment)
-                .commit();
+                    .replace(R.id.main_fragment_layout, targetFragment)
+                    .commit();
         }
     }
 
@@ -229,8 +229,7 @@ public class MainActivity extends AppCompatActivity {
                 ft.remove(oldTermsFragment);
             }
             f.show(ft, TermsAndConditionsFragment.TERMS_FRAGMENT_TAG);
-        }
-        else {
+        } else {
             registerMeasurementAgent();
             PermissionUtil.requestLocationPermission(this);
         }
@@ -245,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;

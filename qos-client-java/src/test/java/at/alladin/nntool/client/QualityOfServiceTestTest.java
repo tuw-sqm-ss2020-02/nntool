@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -106,7 +106,7 @@ public class QualityOfServiceTestTest {
     private WebsiteTestService websiteTestService;
 
     @Before
-    public void init () {
+    public void init() {
         clientHolder = ClientHolder.getInstance(TaskDescriptionHelper.createTaskDescList("host", "80",
                 null, null, "host", null, null), null);
         testSettings = new TestSettings();
@@ -142,7 +142,7 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void basicParsingOfTaskListTest () throws Exception {
+    public void basicParsingOfTaskListTest() throws Exception {
 
         // get every test type to return the correct taskDesc
         new Expectations() {{
@@ -277,7 +277,7 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void invalidQosTypeIsNotAddedTest () throws Exception {
+    public void invalidQosTypeIsNotAddedTest() throws Exception {
 
         new Expectations() {{
             httpProxyTask.getTestType();
@@ -304,7 +304,7 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void noTracerouteTestWithoutServiceClassTest () throws Exception {
+    public void noTracerouteTestWithoutServiceClassTest() throws Exception {
         clientHolder.getTaskDescList().add(tracerouteTaskDesc);
 
         testSettings.setTracerouteServiceClazz(null);
@@ -314,7 +314,7 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void noWebsiteTestWithoutServiceTest () throws Exception {
+    public void noWebsiteTestWithoutServiceTest() throws Exception {
         clientHolder.getTaskDescList().add(websiteTaskDesc);
 
         testSettings.setWebsiteTestService(null);
@@ -324,7 +324,7 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void noEchoProtocolWithoutProtocolDefinitionTest () throws Exception {
+    public void noEchoProtocolWithoutProtocolDefinitionTest() throws Exception {
         clientHolder.getTaskDescList().add(echoNoProtocolTaskDesc);
 
         qosTest = new QualityOfServiceTest(clientHolder, testSettings);
@@ -333,7 +333,7 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void unknownEchoProtocolWithoutProtocolDefinitionTest () throws Exception {
+    public void unknownEchoProtocolWithoutProtocolDefinitionTest() throws Exception {
         clientHolder.getTaskDescList().add(echoUnknownTaskDesc);
 
         qosTest = new QualityOfServiceTest(clientHolder, testSettings);
@@ -342,7 +342,7 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void basicTaskExecutionTest (@Mocked final TrafficService trafficService) throws Exception {
+    public void basicTaskExecutionTest(@Mocked final TrafficService trafficService) throws Exception {
 
         // get every test type to return the correct taskDesc
         new Expectations() {{
@@ -461,7 +461,7 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void taskExecutionWithErrorIsNotInResultsTest (@Mocked final TrafficService trafficService) throws Exception {
+    public void taskExecutionWithErrorIsNotInResultsTest(@Mocked final TrafficService trafficService) throws Exception {
 
         new Expectations() {{
 
@@ -520,7 +520,7 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void taskExecutionWithFatalErrorShowsError (@Mocked final TrafficService trafficService) throws Exception {
+    public void taskExecutionWithFatalErrorShowsError(@Mocked final TrafficService trafficService) throws Exception {
 
         final QoSTestResult fatalResult = new QoSTestResult(QosMeasurementType.TCP, tcpTask);
         fatalResult.setFatalError(true);

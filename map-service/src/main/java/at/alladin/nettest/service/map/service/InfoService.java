@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2013-2019 alladin-IT GmbH
  * Copyright 2014-2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,18 +56,14 @@ import at.alladin.nntool.shared.map.info.option.TimePeriodOption;
 @Service
 public class InfoService {
 
-    private final Logger logger = LoggerFactory.getLogger(InfoService.class);
-
     private static final NumberFormat format = NumberFormat.getNumberInstance();
-
     private final static String MOBILE_PROVIDER_SQL = "SELECT p.name as name, p.short_name as short_name FROM providers p WHERE " //(potential TODO:) readd filtering by some providers only? "p.map_filter=true"
             + " p.mcc_mnc_mappings IS NOT NULL ORDER BY p.short_name";  // allow mobile networks for wifi/browser
-
     private final static String GENERAL_PROVIDER_SQL = "SELECT p.name as name," + /*"mcc_mnc," + */ " p.short_name as short_name FROM providers p"
-    		//mcc mnc was read from db but never used
-    		//+ "WHERE p.map_filter=true"
+            //mcc mnc was read from db but never used
+            //+ "WHERE p.map_filter=true"
             + " ORDER BY p.short_name";  // allow mobile networks for wifi/browser
-
+    private final Logger logger = LoggerFactory.getLogger(InfoService.class);
     /**
      *
      */
@@ -76,9 +72,9 @@ public class InfoService {
 
     @Autowired
     private MapOptionsService mapOptionsService;
-    
+
     @Autowired
-	private ThresholdsPerTechnologyHelperService thresholdsHelperService;
+    private ThresholdsPerTechnologyHelperService thresholdsHelperService;
 
     /**
      *
@@ -87,7 +83,6 @@ public class InfoService {
     private JdbcTemplate jdbcTemplate;
 
     /**
-     *
      * @return
      * @throws JSONException
      * @throws SQLException
@@ -118,7 +113,7 @@ public class InfoService {
         filterList.add(statisticalMethodFilter);
         filterList.add(providerFilter);
         filterList.add(timePeriodFilter);
-//      browser.add(getDeviceFilter("browser", locale));
+        //browser.add(getDeviceFilter("browser", locale));
 
 
         filterList = ret.getAllTechnolgyFilter();
@@ -160,30 +155,30 @@ public class InfoService {
             info.setOverlayType(mapOption.getOverlayType());
 
 
-            if(thresholds != null) {
+            if (thresholds != null) {
 
-                for(String groupname : groupnameKeys) {
+                for (String groupname : groupnameKeys) {
                     //don't show groups that are not needed
                     if (Character.isDigit(groupname.charAt(0))) {
-                        if(!key.toLowerCase().startsWith("mobile")) {
+                        if (!key.toLowerCase().startsWith("mobile")) {
                             continue;
                         }
                     } else {
-                        if(!groupname.toLowerCase().equals(key.substring(0, key.indexOf("/")).toLowerCase())) {
+                        if (!groupname.toLowerCase().equals(key.substring(0, key.indexOf("/")).toLowerCase())) {
                             continue;
                         }
                     }
 
                     final ColorThresholds colors = thresholdsHelperService.getByClassificationType(thresholds, mapOption.getClassificationType());
 
-                    if(colors == null || colors.getColorMap() == null || colors.getDefaultColor() == null) {
+                    if (colors == null || colors.getColorMap() == null || colors.getDefaultColor() == null) {
                         continue;
                     }
 
                     final MapThresholdEntries thresholdEntries = new MapThresholdEntries();
 
                     Set<Long> keySet = null;
-                    if (mapOption.getClassificationType() == ClassificationHelper.ClassificationType.PING ) { // mapOption.classificationType == ClassificationType.SIGNAL) {
+                    if (mapOption.getClassificationType() == ClassificationHelper.ClassificationType.PING) { // mapOption.classificationType == ClassificationType.SIGNAL) {
                         thresholdEntries.getThresholdColors().add(colors.getDefaultColor());
                         //elements with reverse ordering
                         keySet = colors.getColorMap().descendingKeySet();
@@ -225,7 +220,6 @@ public class InfoService {
 
 
     /**
-     *
      * @param locale
      * @return
      */
@@ -252,13 +246,13 @@ public class InfoService {
         return ret;
     }
 
-    public TechnologyFilter getStatisticalFilter (final Locale locale) {
+    public TechnologyFilter getStatisticalFilter(final Locale locale) {
         final TechnologyFilter ret = new TechnologyFilter(getLocalizedMessage("MAP_FILTER_STATISTICAL_METHOD", locale),
                 "statistical_method");
 
         final List<AbstractOption> statisticalOptionList = new ArrayList<>();
 
-        final double[] statisticalMethodArray = { 0.8, 0.5, 0.2 };
+        final double[] statisticalMethodArray = {0.8, 0.5, 0.2};
         for (int stat = 1; stat <= statisticalMethodArray.length; stat++) {
             final StatisticalOption opt = new StatisticalOption(getLocalizedMessage("MAP_FILTER_STATISTICAL_METHOD_" + stat + "_TITLE", locale),
                     getLocalizedMessage("MAP_FILTER_STATISTICAL_METHOD_" + stat + "_SUMMARY", locale), statisticalMethodArray[stat - 1]);
@@ -279,10 +273,10 @@ public class InfoService {
         final List<AbstractOption> technologyOptionList = new ArrayList<>();
 
         technologyOptionList.add(new TechnologyOption(getLocalizedMessage("MAP_FILTER_TECHNOLOGY_ANY", locale),
-                getLocalizedMessage("MAP_FILTER_TECHNOLOGY_ANY", locale), "",  true));
-        technologyOptionList.add(new TechnologyOption(getLocalizedMessage("MAP_FILTER_TECHNOLOGY_3G_4G", locale), 
+                getLocalizedMessage("MAP_FILTER_TECHNOLOGY_ANY", locale), "", true));
+        technologyOptionList.add(new TechnologyOption(getLocalizedMessage("MAP_FILTER_TECHNOLOGY_3G_4G", locale),
                 getLocalizedMessage("MAP_FILTER_TECHNOLOGY_3G_4G", locale), "34"));
-        technologyOptionList.add(new TechnologyOption(getLocalizedMessage("MAP_FILTER_TECHNOLOGY_2G", locale), 
+        technologyOptionList.add(new TechnologyOption(getLocalizedMessage("MAP_FILTER_TECHNOLOGY_2G", locale),
                 getLocalizedMessage("MAP_FILTER_TECHNOLOGY_2G", locale), "2"));
         technologyOptionList.add(new TechnologyOption(getLocalizedMessage("MAP_FILTER_TECHNOLOGY_3G", locale),
                 getLocalizedMessage("MAP_FILTER_TECHNOLOGY_3G", locale), "3"));
@@ -295,7 +289,6 @@ public class InfoService {
     }
 
     /**
-     *
      * @param locale
      * @return
      * @throws SQLException
@@ -315,17 +308,17 @@ public class InfoService {
     }
 
     public TechnologyFilter getProviderFilter(final Locale locale) {
-    	//The provider here is using the same name as the operator filter (above), but provides a different key (this one is only used for browsers, instead of the operatorFilter)
+        //The provider here is using the same name as the operator filter (above), but provides a different key (this one is only used for browsers, instead of the operatorFilter)
         final TechnologyFilter ret = new TechnologyFilter(getLocalizedMessage("MAP_FILTER_CARRIER", locale), "provider");
 
         final List<AbstractOption> providerOptions = new ArrayList<>();
 
         providerOptions.add(new ProviderOption(getLocalizedMessage("MAP_FILTER_ALL_OPERATORS", locale), "", "", true));
 
-        
+
         final List<Provider> providerList = jdbcTemplate.query(GENERAL_PROVIDER_SQL, new ProviderRowMapper());
         providerList.forEach((Provider p) -> providerOptions.add(new ProviderOption(p.getShortname(), p.getName(), p.getName())));
-        
+
 
         ret.setOptions(providerOptions);
         return ret;
@@ -333,7 +326,6 @@ public class InfoService {
     }
 
     /**
-     *
      * @param key
      * @param locale
      * @return
@@ -350,7 +342,7 @@ public class InfoService {
     /**
      * helper class to allow easy db access for reading providers
      */
-    
+
     private class ProviderRowMapper implements RowMapper<Provider> {
 
         @Override
@@ -365,5 +357,5 @@ public class InfoService {
             return prov;
         }
     }
-    
+
 }

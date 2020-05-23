@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -66,7 +66,7 @@ public class QoSControlConnectionTest {
     private String dnsCallbackRequest, dnsCallbackResponse;
 
     @Before
-    public void init () {
+    public void init() {
         clientHolder = ClientHolder.getInstance(TaskDescriptionHelper.createTaskDescList("host", "80",
                 null, null, "host", null, null), null);
 
@@ -81,8 +81,8 @@ public class QoSControlConnectionTest {
     }
 
     @Test
-    public void basicConnectionTest (@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
-            @Mocked final BufferedReader bufferedReader) throws Exception {
+    public void basicConnectionTest(@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
+                                    @Mocked final BufferedReader bufferedReader) throws Exception {
 
         new Expectations() {{
 
@@ -124,7 +124,7 @@ public class QoSControlConnectionTest {
     }
 
     @Test(expected = SocketException.class)
-    public void basicConnectionExceptionTest (@Mocked final Socket socket, @Mocked final InetAddress inetAddress) throws Exception {
+    public void basicConnectionExceptionTest(@Mocked final Socket socket, @Mocked final InetAddress inetAddress) throws Exception {
 
         new Expectations() {{
 
@@ -152,9 +152,9 @@ public class QoSControlConnectionTest {
     }
 
     @Test
-    public void connectSendTaskCommandsWithCallbacks (@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
-                                                      @Mocked final BufferedReader bufferedReader,
-                                                      @Mocked final DnsTask dnsTask, @Mocked final TcpTask tcpTask) throws Exception {
+    public void connectSendTaskCommandsWithCallbacks(@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
+                                                     @Mocked final BufferedReader bufferedReader,
+                                                     @Mocked final DnsTask dnsTask, @Mocked final TcpTask tcpTask) throws Exception {
 
         new Expectations() {{
 
@@ -250,8 +250,8 @@ public class QoSControlConnectionTest {
     }
 
     @Test
-    public void basicConnectionProtocolErrorTest (@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
-                                     @Mocked final BufferedReader bufferedReader) throws Exception {
+    public void basicConnectionProtocolErrorTest(@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
+                                                 @Mocked final BufferedReader bufferedReader) throws Exception {
 
         new Expectations() {{
 
@@ -277,8 +277,8 @@ public class QoSControlConnectionTest {
     }
 
     @Test
-    public void basicConnectionNoAcceptErrorTest (@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
-                                                  @Mocked final BufferedReader bufferedReader) throws Exception {
+    public void basicConnectionNoAcceptErrorTest(@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
+                                                 @Mocked final BufferedReader bufferedReader) throws Exception {
 
         new Expectations() {{
 
@@ -305,8 +305,8 @@ public class QoSControlConnectionTest {
     }
 
     @Test
-    public void basicConnectionNoOKErrorTest (@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
-                                                  @Mocked final BufferedReader bufferedReader) throws Exception {
+    public void basicConnectionNoOKErrorTest(@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
+                                             @Mocked final BufferedReader bufferedReader) throws Exception {
 
         new Expectations() {{
 
@@ -334,8 +334,8 @@ public class QoSControlConnectionTest {
     }
 
     @Test
-    public void basicConnectionNoOKNullErrorTest (@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
-                                              @Mocked final BufferedReader bufferedReader) throws Exception {
+    public void basicConnectionNoOKNullErrorTest(@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
+                                                 @Mocked final BufferedReader bufferedReader) throws Exception {
 
         new Expectations() {{
 

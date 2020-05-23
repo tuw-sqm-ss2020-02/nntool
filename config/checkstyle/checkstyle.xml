@@ -210,10 +210,8 @@
     <module name="ArrayTypeStyle"/>
     <module name="AvoidEscapedUnicodeCharacters"/>
     <module name="CommentsIndentation"/>
-    <module name="FinalParameters"/>
     <module name="Indentation"/>
     <module name="OuterTypeFilename"/>
-    <module name="TodoComment"/>
     <module name="UpperEll"/>
 
     <!-- https://checkstyle.org/config_filters.html#SuppressionXpathFilter -->

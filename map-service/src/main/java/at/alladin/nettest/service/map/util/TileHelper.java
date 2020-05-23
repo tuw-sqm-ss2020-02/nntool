@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2013-2019 alladin-IT GmbH
  * Copyright 2014-2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,7 @@
  * limitations under the License.
  ******************************************************************************/
 
- package at.alladin.nettest.service.map.util;
+package at.alladin.nettest.service.map.util;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -28,7 +28,7 @@ import javax.imageio.ImageIO;
 public class TileHelper {
 
     //TODO: throw this into settings
-    private static final int[] TILE_SIZES = new int[] { 256, 512, 768 };
+    private static final int[] TILE_SIZES = new int[]{256, 512, 768};
 
     /**
      *
@@ -42,7 +42,7 @@ public class TileHelper {
      */
     private static final byte[] EMPTY_MARKER = "EMPTY".getBytes();
 
-    public static int getTileSizeIdx (final int size) {
+    public static int getTileSizeIdx(final int size) {
         int tileSizeIdx = 0;
         for (int i = 0; i < TILE_SIZES.length; i++) {
             if (size == TILE_SIZES[i]) {
@@ -54,35 +54,36 @@ public class TileHelper {
         return tileSizeIdx;
     }
 
-    public static int getTileSizeLength () {
+    public static int getTileSizeLength() {
         return TILE_SIZES.length;
     }
 
     /**
      * Return the tilesize length at the given index
+     *
      * @param index must be >= 0 and < getTileSizeLength()
      * @return the tilesize length, or -1 if the index was invalid
      */
-    public static int getTileSizeLengthAt (final int index) {
+    public static int getTileSizeLengthAt(final int index) {
         return index >= 0 && index < TILE_SIZES.length ? TILE_SIZES[index] : -1;
     }
 
-    public static byte[] getEmptyMarker () {
+    public static byte[] getEmptyMarker() {
         return EMPTY_MARKER;
     }
 
-    public static byte[] getEmptyImage (final int size) {
+    public static byte[] getEmptyImage(final int size) {
         if (!emptyImagesInitialized.getAndSet(true)) {
             initializeEmptyImages();
         }
         return EMPTY_IMAGES[getTileSizeIdx(size)];
     }
 
-    public static boolean isEmptyTile (final byte[] data) {
+    public static boolean isEmptyTile(final byte[] data) {
         return Arrays.equals(data, EMPTY_MARKER);
     }
 
-    private static void initializeEmptyImages () {
+    private static void initializeEmptyImages() {
         for (int i = 0; i < TILE_SIZES.length; i++) {
             final BufferedImage img = new BufferedImage(TILE_SIZES[i], TILE_SIZES[i], BufferedImage.TYPE_INT_ARGB);
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();

@@ -69,30 +69,25 @@ import at.alladin.nntool.shared.qos.QosMeasurementType;
 public class TitleFragment extends ActionBarFragment implements NetworkChangeListener {
 
     private final static String TAG = TitleFragment.class.getSimpleName();
-
+    AtomicBoolean isRefreshingIp = new AtomicBoolean(false);
+    boolean lostNetworkConnection = false;
+    Integer lastNetworkId = null;
     private ProviderAndSignalView providerSignalView;
-
     private GeoLocationView geoLocationView;
-
     private InterfaceTrafficView interfaceTrafficView;
-
     private Ipv4v6View ipv4v6View;
-
     private InformationProvider informationProvider;
-
     private MeasurementServerSelectionView measurementServerSelectionView;
-
     private WorkflowTitleParameter workflowTitleParameter;
 
-    public static TitleFragment newInstance () {
+    public static TitleFragment newInstance() {
         return newInstance(null);
     }
 
     /**
-     *
      * @return
      */
-    public static TitleFragment newInstance (final WorkflowParameter workflowParameter) {
+    public static TitleFragment newInstance(final WorkflowParameter workflowParameter) {
         final TitleFragment fragment = new TitleFragment();
         if (workflowParameter instanceof WorkflowTitleParameter) {
             fragment.setWorkflowTitleParameter((WorkflowTitleParameter) workflowParameter);
@@ -151,12 +146,12 @@ public class TitleFragment extends ActionBarFragment implements NetworkChangeLis
     }
 
     private void startMeasurement() {
-        final RequestMeasurementTask task = new RequestMeasurementTask(((MainActivity)getActivity()).getSelectedMeasurementPeerIdentifier(), getContext(),
+        final RequestMeasurementTask task = new RequestMeasurementTask(((MainActivity) getActivity()).getSelectedMeasurementPeerIdentifier(), getContext(),
                 new OnTaskFinishedCallback<LmapUtil.LmapTaskWrapper>() {
                     @Override
                     public void onTaskFinished(LmapUtil.LmapTaskWrapper result) {
                         if (result != null &&
-                                (result.getSpeedTaskDesc() != null || (result.getTaskDescList() != null && result.getTaskDescList().size() > 0))){
+                                (result.getSpeedTaskDesc() != null || (result.getTaskDescList() != null && result.getTaskDescList().size() > 0))) {
 
                             //fetch private ip, check if ipv6 measurement is desired
                             Map<IpResponse.IpVersion, RequestAgentIpTask.IpResponseWrapper> ipResponse = null;
@@ -328,7 +323,7 @@ public class TitleFragment extends ActionBarFragment implements NetworkChangeLis
 
     }
 
-    protected View.OnClickListener getNewOnClickListener () {
+    protected View.OnClickListener getNewOnClickListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -344,8 +339,7 @@ public class TitleFragment extends ActionBarFragment implements NetworkChangeLis
                             .create();
 
                     alert.show();
-                }
-                else {
+                } else {
                     startMeasurement();
                 }
             }
@@ -370,11 +364,6 @@ public class TitleFragment extends ActionBarFragment implements NetworkChangeLis
         this.workflowTitleParameter = workflowTitleParameter;
     }
 
-
-    AtomicBoolean isRefreshingIp = new AtomicBoolean(false);
-    boolean lostNetworkConnection = false;
-    Integer lastNetworkId = null;
-
     public void refreshAgentIp() {
         if (!isRefreshingIp.getAndSet(true)) {
             try {
@@ -384,8 +373,7 @@ public class TitleFragment extends ActionBarFragment implements NetworkChangeLis
                 });
 
                 requestAgentIpTask.execute();
-            }
-            catch (final Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
                 isRefreshingIp.set(false);
             }
@@ -404,9 +392,8 @@ public class TitleFragment extends ActionBarFragment implements NetworkChangeLis
 
         if (NetworkChangeEvent.NetworkChangeEventType.NO_CONNECTION.equals(event.getEventType())) {
             lostNetworkConnection = true;
-        }
-        else if (lostNetworkConnection && !NetworkChangeEvent.NetworkChangeEventType.NO_CONNECTION.equals(event.getEventType())) {
-            Log.i(TAG,"Lost and reestablished connection. Refreshing IPs!");
+        } else if (lostNetworkConnection && !NetworkChangeEvent.NetworkChangeEventType.NO_CONNECTION.equals(event.getEventType())) {
+            Log.i(TAG, "Lost and reestablished connection. Refreshing IPs!");
             lostNetworkConnection = false;
             hasRefreshIpStarted = true;
             refreshAgentIp();
@@ -414,7 +401,7 @@ public class TitleFragment extends ActionBarFragment implements NetworkChangeLis
 
         if (!hasRefreshIpStarted && (lastNetworkId == null || lastNetworkId != event.getNetworkType())) {
             lastNetworkId = event.getNetworkType();
-            Log.i(TAG,"NetworkType change detected. Refreshing IPs!");
+            Log.i(TAG, "NetworkType change detected. Refreshing IPs!");
             refreshAgentIp();
         }
     }

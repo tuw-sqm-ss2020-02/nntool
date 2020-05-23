@@ -22,10 +22,10 @@ import at.alladin.nntool.qos.testserver.tcp.TcpClientHandler;
 
 public class RepeatAction implements Action {
 
-	@Override
-	public boolean execute(final TcpClientHandler tcpClientHandler, final byte[] requestData, FilterOutputStream os) {
-		tcpClientHandler.getRepeat().set(true);
-		return true;
-	}
+    @Override
+    public boolean execute(final TcpClientHandler tcpClientHandler, final byte[] requestData, FilterOutputStream os) {
+        tcpClientHandler.getRepeat().set(true);
+        return true;
+    }
 
 }

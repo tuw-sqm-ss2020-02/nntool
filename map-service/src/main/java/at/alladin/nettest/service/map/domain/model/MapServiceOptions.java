@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,12 +20,12 @@ import com.google.gson.annotations.Expose;
 import at.alladin.nettest.shared.server.helper.ClassificationHelper.ClassificationType;
 
 public class MapServiceOptions {
-	
-	@Expose
-	private String groupKey;
-	
-	@Expose
-	private String typeKey;
+
+    @Expose
+    private String groupKey;
+
+    @Expose
+    private String typeKey;
 
     @Expose
     private String sqlValueColumn;
@@ -94,35 +94,35 @@ public class MapServiceOptions {
     }
 
     public String getGroupKey() {
-		return groupKey;
-	}
+        return groupKey;
+    }
 
-	public void setGroupKey(String groupKey) {
-		this.groupKey = groupKey;
-	}
+    public void setGroupKey(String groupKey) {
+        this.groupKey = groupKey;
+    }
 
-	public String getTypeKey() {
-		return typeKey;
-	}
+    public String getTypeKey() {
+        return typeKey;
+    }
 
-	public void setTypeKey(String typeKey) {
-		this.typeKey = typeKey;
-	}
+    public void setTypeKey(String typeKey) {
+        this.typeKey = typeKey;
+    }
 
 
     @Override
-	public String toString() {
-		return "MapServiceOptions [groupKey=" + groupKey + ", typeKey=" + typeKey + ", sqlValueColumn=" + sqlValueColumn
-				+ ", sqlFilter=" + sqlFilter + ", colorsSorted="
-				+ ", classificationType=" + classificationType + ", overlayType=" + overlayType
-				+ ", reverseScale=" + reverseScale + ", signalGroup=" + signalGroup + "]";
-	}
+    public String toString() {
+        return "MapServiceOptions [groupKey=" + groupKey + ", typeKey=" + typeKey + ", sqlValueColumn=" + sqlValueColumn
+                + ", sqlFilter=" + sqlFilter + ", colorsSorted="
+                + ", classificationType=" + classificationType + ", overlayType=" + overlayType
+                + ", reverseScale=" + reverseScale + ", signalGroup=" + signalGroup + "]";
+    }
 
-	/**
+    /**
      * Enum to differentiate between the coarse filtering options of the map server
      * (this does NOT differentiate between 2G, 3G, etc., look at the technology in the parameters for that)
-     * @author fk
      *
+     * @author fk
      */
     public enum SignalGroup {
         MOBILE,

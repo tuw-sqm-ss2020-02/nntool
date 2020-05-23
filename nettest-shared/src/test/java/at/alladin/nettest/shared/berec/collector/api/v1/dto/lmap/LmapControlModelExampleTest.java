@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,46 +43,45 @@ import at.alladin.nettest.shared.berec.collector.api.v1.dto.shared.QoSMeasuremen
 
 /**
  * This unit test is used to generate the example configuration file of the control model for milestone 1 deliverable 3.
- * 
- * @author alladin-IT GmbH (bp@alladin.at)
  *
+ * @author alladin-IT GmbH (bp@alladin.at)
  */
 public class LmapControlModelExampleTest extends AbstractLmapExampleTest {
 
-	@Test
-	public void produceLmapMeasurementInitiationRequest() {
-		final LmapControlDto dto = new LmapControlDto();
-		final LmapAgentDto agent = new LmapAgentDto();
+    @Test
+    public void produceLmapMeasurementInitiationRequest() {
+        final LmapControlDto dto = new LmapControlDto();
+        final LmapAgentDto agent = new LmapAgentDto();
 //		agent.setReportAgentId(true);
-		agent.setAgentId("add895c3-9a69-472b-ae38-045266df52fd");
+        agent.setAgentId("add895c3-9a69-472b-ae38-045266df52fd");
 //		agent.setReportGroupId(true);
-		agent.setGroupId("berec_reference_system");
-		agent.setLastStarted(new LocalDateTime(2011, 2, 6, 22, 42, 14));
-		dto.setAgent(agent);
-		
-		final LmapCapabilityDto capa = new LmapCapabilityDto();
-		List<String> tagList = new ArrayList<>();
-		tagList.add("version_library:1.2.1");
-		tagList.add("version_protocol:2.34.5");
-		tagList.add("tag:include_qos");
-		tagList.add("test_counter:42");
-		capa.setTag(tagList);
-		capa.setVersion("berec measurment tool - version: ma_v1.0.0_c_v2.1.4");
-		List<LmapCapabilityTaskDto> tasks = new ArrayList<>();
-		
-		LmapCapabilityTaskDto taskObj = new LmapCapabilityTaskDto();
-		taskObj.setTaskName(MeasurementTypeDto.SPEED.name());
-		taskObj.setVersion("2.1.4");
-		tasks.add(taskObj);
-		
-		taskObj = new LmapCapabilityTaskDto();
-		taskObj.setTaskName(MeasurementTypeDto.QOS.name());
-		taskObj.setVersion("3.3");
-		tasks.add(taskObj);
-		capa.setTasks(tasks);
+        agent.setGroupId("berec_reference_system");
+        agent.setLastStarted(new LocalDateTime(2011, 2, 6, 22, 42, 14));
+        dto.setAgent(agent);
 
-		dto.setCapabilities(capa);
-		
+        final LmapCapabilityDto capa = new LmapCapabilityDto();
+        List<String> tagList = new ArrayList<>();
+        tagList.add("version_library:1.2.1");
+        tagList.add("version_protocol:2.34.5");
+        tagList.add("tag:include_qos");
+        tagList.add("test_counter:42");
+        capa.setTag(tagList);
+        capa.setVersion("berec measurment tool - version: ma_v1.0.0_c_v2.1.4");
+        List<LmapCapabilityTaskDto> tasks = new ArrayList<>();
+
+        LmapCapabilityTaskDto taskObj = new LmapCapabilityTaskDto();
+        taskObj.setTaskName(MeasurementTypeDto.SPEED.name());
+        taskObj.setVersion("2.1.4");
+        tasks.add(taskObj);
+
+        taskObj = new LmapCapabilityTaskDto();
+        taskObj.setTaskName(MeasurementTypeDto.QOS.name());
+        taskObj.setVersion("3.3");
+        tasks.add(taskObj);
+        capa.setTasks(tasks);
+
+        dto.setCapabilities(capa);
+
 //		final List<TaskDto> taskList = new ArrayList<>();
 //		
 //		TaskDto taskDto = new TaskDto();
@@ -99,84 +98,84 @@ public class LmapControlModelExampleTest extends AbstractLmapExampleTest {
 //		taskDto.getOptions().add(option);
 //		taskList.add(taskDto);
 //		dto.setTasks(taskList);
-		
-		final ApiRequestInfo apiRequestInfo = new ApiRequestInfo();
-		
-		apiRequestInfo.setLanguage("en_US");
-		apiRequestInfo.setTimezone("Europe/Vienna");
-		apiRequestInfo.setAgentType(MeasurementAgentTypeDto.MOBILE);
-		apiRequestInfo.setOsName("Android");
-		apiRequestInfo.setOsVersion("8.1");
-		apiRequestInfo.setApiLevel("27");
-		apiRequestInfo.setCodeName("bullhead");
-		apiRequestInfo.setModel("MOTOG3");
-		apiRequestInfo.setAppVersionName("1.0.0");
-		apiRequestInfo.setAppVersionCode(42);
-		apiRequestInfo.setAppGitRevision("cba56293");
-		
-		dto.setAdditionalRequestInfo(apiRequestInfo);
-		
+
+        final ApiRequestInfo apiRequestInfo = new ApiRequestInfo();
+
+        apiRequestInfo.setLanguage("en_US");
+        apiRequestInfo.setTimezone("Europe/Vienna");
+        apiRequestInfo.setAgentType(MeasurementAgentTypeDto.MOBILE);
+        apiRequestInfo.setOsName("Android");
+        apiRequestInfo.setOsVersion("8.1");
+        apiRequestInfo.setApiLevel("27");
+        apiRequestInfo.setCodeName("bullhead");
+        apiRequestInfo.setModel("MOTOG3");
+        apiRequestInfo.setAppVersionName("1.0.0");
+        apiRequestInfo.setAppVersionCode(42);
+        apiRequestInfo.setAppGitRevision("cba56293");
+
+        dto.setAdditionalRequestInfo(apiRequestInfo);
+
 //		String res = objectToJson(dto);
 //		System.out.println(res);
-	}
+    }
 
     @Test
     public void produceLmapMeasurementInitiationResponse() {
-    	final LmapControlDto dto = new LmapControlDto();
-		final LmapAgentDto agent = new LmapAgentDto();
+        final LmapControlDto dto = new LmapControlDto();
+        final LmapAgentDto agent = new LmapAgentDto();
 //		agent.setReportAgentId(true);
-		agent.setAgentId("add895c3-9a69-472b-ae38-045266df52fd");
+        agent.setAgentId("add895c3-9a69-472b-ae38-045266df52fd");
 //		agent.setReportGroupId(true);
-		agent.setGroupId("berec_reference_system");
-		agent.setLastStarted(new LocalDateTime(2011, 2, 6, 22, 42, 14));
-		dto.setAgent(agent);
+        agent.setGroupId("berec_reference_system");
+        agent.setLastStarted(new LocalDateTime(2011, 2, 6, 22, 42, 14));
+        dto.setAgent(agent);
 
-		final LmapScheduleDto schedule = new LmapScheduleDto();
-		schedule.setName("immediate_speed_qos_measurement_schedule");
-		schedule.setStart("immediate_event");
-		final LmapStopDurationDto stop = new LmapStopDurationDto();
-		stop.setDuration(180000);
-		schedule.setStop(stop);
-		schedule.setExecutionMode(LmapScheduleDto.ExecutionMode.SEQUENTIAL);
-		List<String> tagList = schedule.getTags();
-		tagList.add("Base");
-		tagList.add("includes QoS");
+        final LmapScheduleDto schedule = new LmapScheduleDto();
+        schedule.setName("immediate_speed_qos_measurement_schedule");
+        schedule.setStart("immediate_event");
+        final LmapStopDurationDto stop = new LmapStopDurationDto();
+        stop.setDuration(180000);
+        schedule.setStop(stop);
+        schedule.setExecutionMode(LmapScheduleDto.ExecutionMode.SEQUENTIAL);
+        List<String> tagList = schedule.getTags();
+        tagList.add("Base");
+        tagList.add("includes QoS");
 
-		LmapActionDto action = new LmapActionDto();
-		action.setName("speed_measurement_action");
-		action.setTaskName(MeasurementTypeDto.SPEED.name());
-		schedule.getActions().add(action);
-		action = new LmapActionDto();
-		action.setName("qos_measurement_action");
-		action.setTaskName(MeasurementTypeDto.QOS.name());
-		schedule.getActions().add(action);
-		dto.getSchedules().add(schedule);
-		
-		LmapEventDto ev = new LmapEventDto();
-		ev.setName("immediate_event");
-		dto.getEvents().add(ev);
+        LmapActionDto action = new LmapActionDto();
+        action.setName("speed_measurement_action");
+        action.setTaskName(MeasurementTypeDto.SPEED.name());
+        schedule.getActions().add(action);
+        action = new LmapActionDto();
+        action.setName("qos_measurement_action");
+        action.setTaskName(MeasurementTypeDto.QOS.name());
+        schedule.getActions().add(action);
+        dto.getSchedules().add(schedule);
 
-		final LmapCapabilityDto capa = new LmapCapabilityDto();
-		tagList = new ArrayList<>();
-		tagList.add("Tag 1");
-		tagList.add("Other tag");
-		capa.setTag(tagList);
-		capa.setVersion("berec measurment tool - version: ma_v1.0.0_c_v2.1.4");
-		List<LmapCapabilityTaskDto> tasks = new ArrayList<>();
-		
-		LmapCapabilityTaskDto taskObj = new LmapCapabilityTaskDto();
-		taskObj.setTaskName(MeasurementTypeDto.SPEED.name());
-		taskObj.setVersion("2.1.4");
-		tasks.add(taskObj);
-		
-		taskObj = new LmapCapabilityTaskDto();
-		taskObj.setTaskName(MeasurementTypeDto.QOS.name());
-		taskObj.setVersion("3.3");
-		tasks.add(taskObj);
-		capa.setTasks(tasks);
+        LmapEventDto ev = new LmapEventDto();
+        ev.setName("immediate_event");
+        dto.getEvents().add(ev);
 
-		dto.setCapabilities(capa);
-		
+        final LmapCapabilityDto capa = new LmapCapabilityDto();
+        tagList = new ArrayList<>();
+        tagList.add("Tag 1");
+        tagList.add("Other tag");
+        capa.setTag(tagList);
+        capa.setVersion("berec measurment tool - version: ma_v1.0.0_c_v2.1.4");
+        List<LmapCapabilityTaskDto> tasks = new ArrayList<>();
+
+        LmapCapabilityTaskDto taskObj = new LmapCapabilityTaskDto();
+        taskObj.setTaskName(MeasurementTypeDto.SPEED.name());
+        taskObj.setVersion("2.1.4");
+        tasks.add(taskObj);
+
+        taskObj = new LmapCapabilityTaskDto();
+        taskObj.setTaskName(MeasurementTypeDto.QOS.name());
+        taskObj.setVersion("3.3");
+        tasks.add(taskObj);
+        capa.setTasks(tasks);
+
+        dto.setCapabilities(capa);
+
 //		final List<TaskDto> taskList = new ArrayList<>();
 //		
 //		TaskDto taskDto = new TaskDto();
@@ -193,8 +192,8 @@ public class LmapControlModelExampleTest extends AbstractLmapExampleTest {
 //		taskDto.getOptions().add(option);
 //		taskList.add(taskDto);
 //		dto.setTasks(taskList);
-		
-		final QoSMeasurementTypeParameters qosParams = new QoSMeasurementTypeParameters();
+
+        final QoSMeasurementTypeParameters qosParams = new QoSMeasurementTypeParameters();
         final Map<QoSMeasurementTypeDto, List<Map<String, Object>>> objectives = new HashMap<>();
         objectives.put(QoSMeasurementTypeDto.TCP, new ArrayList<Map<String, Object>>());
         qosParams.setObjectives(objectives);
@@ -222,62 +221,62 @@ public class LmapControlModelExampleTest extends AbstractLmapExampleTest {
         final SpeedMeasurementTypeParameters.MeasurementServerConfig conf = new SpeedMeasurementTypeParameters.MeasurementServerConfig();
         conf.setBaseUrl("berec.eu");
         speedParams.setMeasurementServerConfig(conf);
-        
+
         LmapTaskDto task = new LmapTaskDto();
         task.setName(MeasurementTypeDto.SPEED.name());
-		LmapOptionDto option = new LmapOptionDto();
-		option.setName(MeasurementTypeDto.SPEED.name());
-		option.setMeasurementParameters(speedParams);
-		task.getOptions().add(option);
-		
-		option = new LmapOptionDto();
-		option.setName("result_collector_base_url");
-		option.setValue("collector.berec.eu");
-		task.getOptions().add(option);
-		
-		option = new LmapOptionDto();
-		option.setName("measurement_uuid");
-		option.setValue("25c50ecc-f0f3-456f-a6c5-e738496c0bf3");
-		task.getOptions().add(option);
-		dto.getTasks().add(task);
-		
-		task = new LmapTaskDto();
-        task.setName(MeasurementTypeDto.QOS.name());
-		option = new LmapOptionDto();
-		option.setName(MeasurementTypeDto.QOS.name());
-		option.setMeasurementParameters(qosParams);
-		task.getOptions().add(option);
-		
-		option = new LmapOptionDto();
-		option.setName("result_collector_base_url");
-		option.setValue("collector.berec.eu");
-		task.getOptions().add(option);
-		
-		option = new LmapOptionDto();
-		option.setName("measurement_uuid");
-		option.setValue("25c50ecc-f0f3-456f-a6c5-e738496c0bf3");
-		task.getOptions().add(option);
-		
-		dto.getTasks().add(task);
-        
-		
-		final ApiRequestInfo apiRequestInfo = new ApiRequestInfo();
-		
-		apiRequestInfo.setLanguage("en_US");
-		apiRequestInfo.setTimezone("Europe/Vienna");
-		apiRequestInfo.setAgentType(MeasurementAgentTypeDto.MOBILE);
-		apiRequestInfo.setOsName("Android");
-		apiRequestInfo.setOsVersion("8.1");
-		apiRequestInfo.setApiLevel("27");
-		apiRequestInfo.setCodeName("bullhead");
-		apiRequestInfo.setModel("MOTOG3");
-		apiRequestInfo.setAppVersionName("1.0.0");
-		apiRequestInfo.setAppVersionCode(42);
-		apiRequestInfo.setAppGitRevision("cba56293");
-		
-		dto.setAdditionalRequestInfo(apiRequestInfo);
+        LmapOptionDto option = new LmapOptionDto();
+        option.setName(MeasurementTypeDto.SPEED.name());
+        option.setMeasurementParameters(speedParams);
+        task.getOptions().add(option);
 
-		String res = objectToJson(dto);
-		System.out.println(res);
+        option = new LmapOptionDto();
+        option.setName("result_collector_base_url");
+        option.setValue("collector.berec.eu");
+        task.getOptions().add(option);
+
+        option = new LmapOptionDto();
+        option.setName("measurement_uuid");
+        option.setValue("25c50ecc-f0f3-456f-a6c5-e738496c0bf3");
+        task.getOptions().add(option);
+        dto.getTasks().add(task);
+
+        task = new LmapTaskDto();
+        task.setName(MeasurementTypeDto.QOS.name());
+        option = new LmapOptionDto();
+        option.setName(MeasurementTypeDto.QOS.name());
+        option.setMeasurementParameters(qosParams);
+        task.getOptions().add(option);
+
+        option = new LmapOptionDto();
+        option.setName("result_collector_base_url");
+        option.setValue("collector.berec.eu");
+        task.getOptions().add(option);
+
+        option = new LmapOptionDto();
+        option.setName("measurement_uuid");
+        option.setValue("25c50ecc-f0f3-456f-a6c5-e738496c0bf3");
+        task.getOptions().add(option);
+
+        dto.getTasks().add(task);
+
+
+        final ApiRequestInfo apiRequestInfo = new ApiRequestInfo();
+
+        apiRequestInfo.setLanguage("en_US");
+        apiRequestInfo.setTimezone("Europe/Vienna");
+        apiRequestInfo.setAgentType(MeasurementAgentTypeDto.MOBILE);
+        apiRequestInfo.setOsName("Android");
+        apiRequestInfo.setOsVersion("8.1");
+        apiRequestInfo.setApiLevel("27");
+        apiRequestInfo.setCodeName("bullhead");
+        apiRequestInfo.setModel("MOTOG3");
+        apiRequestInfo.setAppVersionName("1.0.0");
+        apiRequestInfo.setAppVersionCode(42);
+        apiRequestInfo.setAppGitRevision("cba56293");
+
+        dto.setAdditionalRequestInfo(apiRequestInfo);
+
+        String res = objectToJson(dto);
+        System.out.println(res);
     }
 }

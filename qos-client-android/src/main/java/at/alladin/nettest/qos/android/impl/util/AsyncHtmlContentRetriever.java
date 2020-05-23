@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2013-2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,34 +33,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
  * @author lb
- *
  */
 public class AsyncHtmlContentRetriever extends AsyncTask<String, Void, AsyncHtmlContentRetriever.HtmlContentPojo> {
 
-	private ContentRetrieverListener listener;
-	
-	/**
-	 * 
-	 * @author lb
-	 *
-	 */
-	public static interface ContentRetrieverListener {
-		public void onContentFinished(String htmlContent, int statusCode, String errorMessage);
-	}
-	
-	/**
-	 * 
-	 * @param listener
-	 */
-	public void setContentRetrieverListener(ContentRetrieverListener listener) {
-		this.listener = listener;
-	}
-	
-	@Override
-	protected HtmlContentPojo doInBackground(String... params) {
-		HtmlContentPojo result = new HtmlContentPojo();
+    private ContentRetrieverListener listener;
+
+    /**
+     * @param inputStream
+     * @return
+     */
+    public static String convertToString(InputStream inputStream) {
+        StringBuffer string = new StringBuffer();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String l;
+        try {
+            while ((l = reader.readLine()) != null) {
+                string.append(l + "\n");
+            }
+        } catch (IOException e) {
+        }
+        return string.toString();
+    }
+
+    /**
+     * @param listener
+     */
+    public void setContentRetrieverListener(ContentRetrieverListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    protected HtmlContentPojo doInBackground(String... params) {
+        HtmlContentPojo result = new HtmlContentPojo();
         URL url;
         URLConnection connection;
         try {
@@ -68,18 +73,17 @@ public class AsyncHtmlContentRetriever extends AsyncTask<String, Void, AsyncHtml
             connection = url.openConnection();
             connection.setConnectTimeout(3000);
             connection.connect();
-        }
-        catch (Exception e) {
-        	e.printStackTrace();
-        	result.setStatusCode(-1);
-        	result.setHtmlContent(null);
-			result.setErrorMessage(e.getMessage());
-			try {
-				result.setUrl(params[0]);
-			} catch (Exception ex) {
-				//ignore
-			}
-        	return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setStatusCode(-1);
+            result.setHtmlContent(null);
+            result.setErrorMessage(e.getMessage());
+            try {
+                result.setUrl(params[0]);
+            } catch (Exception ex) {
+                //ignore
+            }
+            return result;
         }
 
         String htmlContent = "";
@@ -87,7 +91,7 @@ public class AsyncHtmlContentRetriever extends AsyncTask<String, Void, AsyncHtml
         HttpClient httpClient = new DefaultHttpClient();
         HttpResponse response;
         int statusCode = -1;
-        
+
         try {
             response = httpClient.execute(httpGet);
             statusCode = response.getStatusLine().getStatusCode();
@@ -103,94 +107,84 @@ public class AsyncHtmlContentRetriever extends AsyncTask<String, Void, AsyncHtml
             }
             */
         } catch (Exception e) {
-        	result.setStatusCode(-1);
-        	result.setHtmlContent(null);
-        	result.setUrl(url.toString());
-        	result.setErrorMessage(e.getMessage());
-        	return result;
+            result.setStatusCode(-1);
+            result.setHtmlContent(null);
+            result.setUrl(url.toString());
+            result.setErrorMessage(e.getMessage());
+            return result;
         }
 
         result.setStatusCode(statusCode);
         result.setHtmlContent(htmlContent);
         result.setUrl(url.toString());
         //error message remains null
-        
+
         return result;
-	}
-	
-	@Override
-	protected void onPostExecute(HtmlContentPojo result) {
-		super.onPostExecute(result);
-		System.out.println("response code for url: " + result.getUrl() + " code: " + result.getStatusCode() + " error: " + result.getErrorMessage());
-		if (this.listener != null) {
-			listener.onContentFinished(result.getHtmlContent(), result.getStatusCode(), result.getErrorMessage());
-		}
-	}
-	
-	/**
-	 * 
-	 * @param inputStream
-	 * @return
-	 */
-    public static String convertToString(InputStream inputStream){
-        StringBuffer string = new StringBuffer();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        String l;
-        try {
-            while ((l = reader.readLine()) != null) {
-                string.append(l + "\n");
-            }
-        } catch (IOException e) {}
-        return string.toString();
+    }
+
+    @Override
+    protected void onPostExecute(HtmlContentPojo result) {
+        super.onPostExecute(result);
+        System.out.println("response code for url: " + result.getUrl() + " code: " + result.getStatusCode() + " error: " + result.getErrorMessage());
+        if (this.listener != null) {
+            listener.onContentFinished(result.getHtmlContent(), result.getStatusCode(), result.getErrorMessage());
+        }
+    }
+
+    /**
+     * @author lb
+     */
+    public static interface ContentRetrieverListener {
+        public void onContentFinished(String htmlContent, int statusCode, String errorMessage);
     }
 
     protected class HtmlContentPojo {
-    	private String htmlContent;
-		private String url;
-		private Integer statusCode;
-		private String errorMessage;
+        private String htmlContent;
+        private String url;
+        private Integer statusCode;
+        private String errorMessage;
 
-		private HtmlContentPojo() {
+        private HtmlContentPojo() {
 
-		}
+        }
 
-		private HtmlContentPojo(final String htmlContent, final String url, final Integer statusCode, final String errorMessage) {
-			this.htmlContent = htmlContent;
-			this.url = url;
-			this.statusCode = statusCode;
-			this.errorMessage = errorMessage;
-		}
+        private HtmlContentPojo(final String htmlContent, final String url, final Integer statusCode, final String errorMessage) {
+            this.htmlContent = htmlContent;
+            this.url = url;
+            this.statusCode = statusCode;
+            this.errorMessage = errorMessage;
+        }
 
-		public String getHtmlContent() {
-			return htmlContent;
-		}
+        public String getHtmlContent() {
+            return htmlContent;
+        }
 
-		public void setHtmlContent(String htmlContent) {
-			this.htmlContent = htmlContent;
-		}
+        public void setHtmlContent(String htmlContent) {
+            this.htmlContent = htmlContent;
+        }
 
-		public String getUrl() {
-			return url;
-		}
+        public String getUrl() {
+            return url;
+        }
 
-		public void setUrl(String url) {
-			this.url = url;
-		}
+        public void setUrl(String url) {
+            this.url = url;
+        }
 
-		public Integer getStatusCode() {
-			return statusCode;
-		}
+        public Integer getStatusCode() {
+            return statusCode;
+        }
 
-		public void setStatusCode(Integer statusCode) {
-			this.statusCode = statusCode;
-		}
+        public void setStatusCode(Integer statusCode) {
+            this.statusCode = statusCode;
+        }
 
-		public String getErrorMessage() {
-			return errorMessage;
-		}
+        public String getErrorMessage() {
+            return errorMessage;
+        }
 
-		public void setErrorMessage(String errorMessage) {
-			this.errorMessage = errorMessage;
-		}
-	}
+        public void setErrorMessage(String errorMessage) {
+            this.errorMessage = errorMessage;
+        }
+    }
 }

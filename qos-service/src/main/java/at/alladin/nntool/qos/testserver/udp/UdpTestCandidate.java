@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,187 +22,169 @@ import java.util.TreeSet;
 import at.alladin.nntool.qos.testserver.entity.TestCandidate;
 
 public class UdpTestCandidate extends TestCandidate {
-	public final static int TTL = 30000;
-	
-	private TreeSet<Integer> packetsReceived;
-	private TreeSet<Integer> packetDuplicates;
-	private HashMap<Integer, Long> rttMap = new HashMap<>();
-	private int numPackets;
-	private int remotePort;
-	private boolean error;
-	private String errorMsg;
-	
-	private UdpTestCompleteCallback onUdpTestCompleteCallback;
-	private UdpPacketReceivedCallback onUdpPacketReceivedCallback;
-	
-	public UdpTestCandidate() {
-		this.packetsReceived = new TreeSet<>();
-		this.packetDuplicates = new TreeSet<>();
-		this.error = false;
-	}
+    public final static int TTL = 30000;
 
-	/**
-	 * 
-	 * @return
-	 */
-	public TreeSet<Integer> getPacketsReceived() {
-		return packetsReceived;
-	}
+    private TreeSet<Integer> packetsReceived;
+    private TreeSet<Integer> packetDuplicates;
+    private HashMap<Integer, Long> rttMap = new HashMap<>();
+    private int numPackets;
+    private int remotePort;
+    private boolean error;
+    private String errorMsg;
 
-	/**
-	 * 
-	 * @param packetsReceived
-	 */
-	public void setPacketsReceived(TreeSet<Integer> packetsReceived) {
-		this.packetsReceived = packetsReceived;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public TreeSet<Integer> getPacketDuplicates() {
-		return packetDuplicates;
-	}
+    private UdpTestCompleteCallback onUdpTestCompleteCallback;
+    private UdpPacketReceivedCallback onUdpPacketReceivedCallback;
 
-	/**
-	 * 
-	 * @param packetDuplicates
-	 */
-	public void setPacketDuplicates(TreeSet<Integer> packetDuplicates) {
-		this.packetDuplicates = packetDuplicates;
-	}
+    public UdpTestCandidate() {
+        this.packetsReceived = new TreeSet<>();
+        this.packetDuplicates = new TreeSet<>();
+        this.error = false;
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public boolean isError() {
-		return error;
-	}
+    /**
+     * @return
+     */
+    public TreeSet<Integer> getPacketsReceived() {
+        return packetsReceived;
+    }
 
-	/**
-	 * 
-	 * @param error
-	 */
-	public void setError(boolean error) {
-		this.error = error;
-	}
+    /**
+     * @param packetsReceived
+     */
+    public void setPacketsReceived(TreeSet<Integer> packetsReceived) {
+        this.packetsReceived = packetsReceived;
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public String getErrorMsg() {
-		return errorMsg;
-	}
+    /**
+     * @return
+     */
+    public TreeSet<Integer> getPacketDuplicates() {
+        return packetDuplicates;
+    }
 
-	/**
-	 * 
-	 * @param errorMsg
-	 */
-	public void setErrorMsg(String errorMsg) {
-		this.errorMsg = errorMsg;
-	}
+    /**
+     * @param packetDuplicates
+     */
+    public void setPacketDuplicates(TreeSet<Integer> packetDuplicates) {
+        this.packetDuplicates = packetDuplicates;
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public int getRemotePort() {
-		return remotePort;
-	}
+    /**
+     * @return
+     */
+    public boolean isError() {
+        return error;
+    }
 
-	/**
-	 * 
-	 * @param remotePort
-	 */
-	public void setRemotePort(int remotePort) {
-		this.remotePort = remotePort;
-	}
+    /**
+     * @param error
+     */
+    public void setError(boolean error) {
+        this.error = error;
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public int getNumPackets() {
-		return numPackets;
-	}
+    /**
+     * @return
+     */
+    public String getErrorMsg() {
+        return errorMsg;
+    }
 
-	/**
-	 * 
-	 * @param numPackets
-	 */
-	public void setNumPackets(int numPackets) {
-		this.numPackets = numPackets;
-	}
+    /**
+     * @param errorMsg
+     */
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public UdpTestCompleteCallback getOnUdpTestCompleteCallback() {
-		return onUdpTestCompleteCallback;
-	}
+    /**
+     * @return
+     */
+    public int getRemotePort() {
+        return remotePort;
+    }
 
-	/**
-	 * 
-	 * @param onUdpTestCompleteCallback
-	 */
-	public void setOnUdpTestCompleteCallback(
-			UdpTestCompleteCallback onUdpTestCompleteCallback) {
-		this.onUdpTestCompleteCallback = onUdpTestCompleteCallback;
-	}
-	
-	/**
-	 * 	
-	 * @return
-	 */
-	public UdpPacketReceivedCallback getOnUdpPacketReceivedCallback() {
-		return onUdpPacketReceivedCallback;
-	}
+    /**
+     * @param remotePort
+     */
+    public void setRemotePort(int remotePort) {
+        this.remotePort = remotePort;
+    }
 
-	/**
-	 * 
-	 * @param onUdpPacketReceivedCallback
-	 */
-	public void setOnUdpPacketReceivedCallback(
-			UdpPacketReceivedCallback onUdpPacketReceivedCallback) {
-		this.onUdpPacketReceivedCallback = onUdpPacketReceivedCallback;
-	}
+    /**
+     * @return
+     */
+    public int getNumPackets() {
+        return numPackets;
+    }
 
-	/**
-	 *
-	 * @return
-	 */
-	public HashMap<Integer, Long> getRttMap() {
-		return rttMap;
-	}
+    /**
+     * @param numPackets
+     */
+    public void setNumPackets(int numPackets) {
+        this.numPackets = numPackets;
+    }
 
-	/**
-	 *
-	 * @param rttMap
-	 */
-	public void setRttMap(HashMap<Integer, Long> rttMap) {
-		this.rttMap = rttMap;
-	}
+    /**
+     * @return
+     */
+    public UdpTestCompleteCallback getOnUdpTestCompleteCallback() {
+        return onUdpTestCompleteCallback;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "UdpTestCandidate{" +
-				"packetsReceived=" + packetsReceived +
-				", packetDuplicates=" + packetDuplicates +
-				", rttMap=" + rttMap +
-				", numPackets=" + numPackets +
-				", remotePort=" + remotePort +
-				", error=" + error +
-				", errorMsg='" + errorMsg + '\'' +
-				", onUdpTestCompleteCallback=" + onUdpTestCompleteCallback +
-				", onUdpPacketReceivedCallback=" + onUdpPacketReceivedCallback +
-				"} " + super.toString();
-	}
+    /**
+     * @param onUdpTestCompleteCallback
+     */
+    public void setOnUdpTestCompleteCallback(
+            UdpTestCompleteCallback onUdpTestCompleteCallback) {
+        this.onUdpTestCompleteCallback = onUdpTestCompleteCallback;
+    }
+
+    /**
+     * @return
+     */
+    public UdpPacketReceivedCallback getOnUdpPacketReceivedCallback() {
+        return onUdpPacketReceivedCallback;
+    }
+
+    /**
+     * @param onUdpPacketReceivedCallback
+     */
+    public void setOnUdpPacketReceivedCallback(
+            UdpPacketReceivedCallback onUdpPacketReceivedCallback) {
+        this.onUdpPacketReceivedCallback = onUdpPacketReceivedCallback;
+    }
+
+    /**
+     * @return
+     */
+    public HashMap<Integer, Long> getRttMap() {
+        return rttMap;
+    }
+
+    /**
+     * @param rttMap
+     */
+    public void setRttMap(HashMap<Integer, Long> rttMap) {
+        this.rttMap = rttMap;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "UdpTestCandidate{" +
+                "packetsReceived=" + packetsReceived +
+                ", packetDuplicates=" + packetDuplicates +
+                ", rttMap=" + rttMap +
+                ", numPackets=" + numPackets +
+                ", remotePort=" + remotePort +
+                ", error=" + error +
+                ", errorMsg='" + errorMsg + '\'' +
+                ", onUdpTestCompleteCallback=" + onUdpTestCompleteCallback +
+                ", onUdpPacketReceivedCallback=" + onUdpPacketReceivedCallback +
+                "} " + super.toString();
+    }
 }

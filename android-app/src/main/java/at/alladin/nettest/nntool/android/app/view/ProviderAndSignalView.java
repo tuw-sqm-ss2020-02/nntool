@@ -72,8 +72,7 @@ public class ProviderAndSignalView extends RelativeLayout implements NetworkChan
             if (NetworkChangeEvent.NetworkChangeEventType.NO_CONNECTION.equals(lastNetworkChangeEvent.getEventType())) {
                 providerText.setText("-");
                 signalText.setText("-");
-            }
-            else {
+            } else {
                 providerText.setText(event.getOperatorName());
             }
         }
@@ -87,8 +86,7 @@ public class ProviderAndSignalView extends RelativeLayout implements NetworkChan
                     && NetworkChangeEvent.NetworkChangeEventType.NO_CONNECTION.equals(lastNetworkChangeEvent.getEventType())) {
                 providerText.setText("-");
                 signalText.setText("-");
-            }
-            else {
+            } else {
                 if (event.getCurrentSignalStrength() != null) {
                     final CellInfoWrapper wrapper = event.getCurrentSignalStrength().getCellInfoWrapper();
                     final String signalInfo = getResources().getString(R.string.signal_info,
@@ -96,8 +94,7 @@ public class ProviderAndSignalView extends RelativeLayout implements NetworkChan
                             event.getCurrentSignalStrength().getSignalDbm());
 
                     signalText.setText(signalInfo);
-                }
-                else {
+                } else {
                     signalText.setText("-");
                 }
             }
@@ -108,9 +105,9 @@ public class ProviderAndSignalView extends RelativeLayout implements NetworkChan
         final CellInfoWrapper wrapper = ss.getCellInfoWrapper();
         if (wrapper != null && wrapper.getCellIdentityWrapper() != null
                 && wrapper.getCellIdentityWrapper().getCellInfoType() != null) {
-            final TechnologyType  technologyType = wrapper.getCellIdentityWrapper().getCellInfoType().getTechnologyType();
+            final TechnologyType technologyType = wrapper.getCellIdentityWrapper().getCellInfoType().getTechnologyType();
             if (technologyType != null) {
-                Log.d(TAG,"CellInfoType: " + wrapper.getCellIdentityWrapper().getCellInfoType() + " techType: " + technologyType);
+                Log.d(TAG, "CellInfoType: " + wrapper.getCellIdentityWrapper().getCellInfoType() + " techType: " + technologyType);
                 switch (technologyType) {
                     case TECH_WLAN:
                         return getResources().getString(R.string.technology_wlan);

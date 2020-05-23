@@ -17,5 +17,5 @@
 package at.alladin.nntool.client.v2.task;
 
 public interface ControlConnectionResponseCallback {
-	void onResponse(final String response, final String request);
+    void onResponse(final String response, final String request);
 }
