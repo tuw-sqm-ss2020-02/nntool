@@ -80,8 +80,8 @@ public abstract class Helperfunctions {
     }
 
     /**
-     * @param id
-     * @return
+     * @param id timezone id
+     * @return timezone
      * @deprecated is this still in use?
      */
     @Deprecated
@@ -90,8 +90,8 @@ public abstract class Helperfunctions {
     }
 
     /**
-     * @param timezoneId
-     * @return
+     * @param timezoneId timezone id
+     * @return time with timezone
      * @deprecated is this still in use?
      */
     @Deprecated
@@ -103,8 +103,8 @@ public abstract class Helperfunctions {
     }
 
     /**
-     * @param lang
-     * @return
+     * @param lang time format language
+     * @return datatime format
      * @deprecated is this still in use?
      */
     @Deprecated

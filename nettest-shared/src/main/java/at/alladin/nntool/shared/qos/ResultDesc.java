@@ -212,7 +212,7 @@ public class ResultDesc implements Comparable<ResultDesc> {
     }
 
     /**
-     * @return
+     * @return result as json
      * @throws JSONException
      */
     public JSONObject toJson() throws JSONException {

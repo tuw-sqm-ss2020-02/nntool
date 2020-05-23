@@ -184,8 +184,9 @@ public final class TestScriptInterpreter {
     }
 
     /**
-     * @param args
-     * @return
+     *
+     * @param args range of the random generator
+     * @return a random number in the given range
      * @throws ScriptException
      */
     private static int random(String[] args) throws ScriptException {
@@ -214,8 +215,8 @@ public final class TestScriptInterpreter {
     }
 
     /**
-     * @param args
-     * @return
+     * @param args prefix, suffix, length
+     * @return a random url
      * @throws ScriptException
      */
     private static String randomUrl(String[] args) throws ScriptException {
@@ -231,10 +232,10 @@ public final class TestScriptInterpreter {
     }
 
     /**
+     *
      * @param args
-     * @param hstore
      * @param object
-     * @return
+     * @return eval result as object
      * @throws ScriptException
      */
     private static Object eval(String[] args, AbstractResult object) throws ScriptException {
@@ -297,7 +298,10 @@ public final class TestScriptInterpreter {
 
     /**
      * @param args
-     * @return
+     * @param fieldNameToFieldMap
+     * @param object
+     * @param options
+     * @return parsed object
      * @throws ScriptException
      */
     private static Object parse(String[] args, Map<String, Field> fieldNameToFieldMap, Object object, ResultOptions options) throws ScriptException {

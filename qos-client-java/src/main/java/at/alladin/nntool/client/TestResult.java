@@ -37,7 +37,7 @@ public abstract class TestResult {
     public int port_remote;
 
     /**
-     * "<Standard name for protocol> (<Name of cypher suite>)"
+     * "Standard name for protocol (Name of cypher suite)"
      */
     public String encryption = "NONE";
 

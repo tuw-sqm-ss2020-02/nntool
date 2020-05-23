@@ -36,10 +36,8 @@ public interface Collector<T, JSONTYPE> {
     public long getNanoPause();
 
     /**
-     * returns a Json object representing the result of the collector
-     *
      * @param clean if set to true the current results are wiped out
-     * @return
+     * @return returns a Json object representing the result of the collector
      * @throws JSONException
      */
     public JSONTYPE getJsonResult(boolean clean) throws JSONException;
@@ -51,7 +49,7 @@ public interface Collector<T, JSONTYPE> {
      * @param clean
      * @param relTimeStamp
      * @param timeUnit
-     * @return
+     * @return result as json
      * @throws JSONException
      */
     public JSONTYPE getJsonResult(boolean clean, long relTimeStamp, TimeUnit timeUnit) throws JSONException;

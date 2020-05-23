@@ -48,9 +48,7 @@ public class IpResource {
 
     /**
      * Get client public IP address.
-     * Returns public IP address and version of requesting client.
-     *
-     * @return
+     * @return Returns public IP address and version of requesting client.
      * @throws UnknownHostException
      */
     @io.swagger.annotations.ApiOperation(value = "Get client public IP address.", notes = "Returns public IP address and version of requesting client.")

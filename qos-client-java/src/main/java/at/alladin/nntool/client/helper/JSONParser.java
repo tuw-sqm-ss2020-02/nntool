@@ -55,6 +55,7 @@ public class JSONParser {
     }
 
     /**
+     *
      * @param object
      * @return
      * @throws JSONException

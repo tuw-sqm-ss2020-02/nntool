@@ -41,9 +41,8 @@ public final class IpAddressHelper {
 
     /**
      * Extract the IPv4 or IPv6 address from a HTTPServletRequest.
-     *
-     * @param request
-     * @return
+     * @param request HttpServletRequest object
+     * @return Inet name
      * @throws UnknownHostException
      */
     public static InetAddress extractIpAddressFromHttpServletRequest(HttpServletRequest request) throws UnknownHostException {

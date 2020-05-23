@@ -42,7 +42,9 @@ public final class ResultComparer {
     /**
      * @param result1
      * @param result2
-     * @return
+     * @param fieldNameToFieldMap
+     * @param options
+     * @return result description
      * @throws IllegalAccessException
      * @throws IllegalArgumentException
      */

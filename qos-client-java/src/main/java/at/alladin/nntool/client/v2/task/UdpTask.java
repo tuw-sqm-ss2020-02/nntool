@@ -358,6 +358,8 @@ public class UdpTask extends AbstractQoSTask {
     }
 
     /**
+     *
+     * @param packetData
      * @return
      * @throws Exception
      */
@@ -431,8 +433,10 @@ public class UdpTask extends AbstractQoSTask {
     }
 
     /**
+     *
      * @param socket
-     * @return
+     * @param packets
+     * @param packetData
      * @throws InterruptedException
      */
     public void receiveUdpPackets(final DatagramSocket socket, int packets, final UdpPacketData packetData) throws InterruptedException {

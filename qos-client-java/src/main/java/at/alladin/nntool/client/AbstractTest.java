@@ -175,10 +175,9 @@ public abstract class AbstractTest {
     }
 
     /**
-     * @param message
-     * @return
-     * @throws IOException
+     * @param message that will be send
      * @throws UnsupportedEncodingException
+     * @throws IOException
      */
     protected void sendMessage(final String message) throws UnsupportedEncodingException, IOException {
         String send;

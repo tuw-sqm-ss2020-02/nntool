@@ -39,7 +39,7 @@ public interface MkitService extends Callable<MkitService.MkitResult> {
      * Set possible input for the given mkit test
      * setTestToExecute needs be called before addInput
      *
-     * @param input, may be null if no input is required
+     * @param input may be null if no input is required
      */
     void addInput(final String input);
 
@@ -51,7 +51,7 @@ public interface MkitService extends Callable<MkitService.MkitResult> {
      * where the " VALUE" is optional (if not provided, true is assumed)
      * the whitespace is only there, if a value is actually provided
      *
-     * @param flags, may be null if no flags are requested
+     * @param flags may be null if no flags are requested
      */
     void addFlags(final String flags);
 

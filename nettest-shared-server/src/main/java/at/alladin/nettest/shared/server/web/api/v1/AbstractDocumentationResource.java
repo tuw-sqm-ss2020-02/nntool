@@ -76,7 +76,7 @@ public abstract class AbstractDocumentationResource {
 
     /**
      * Redirects to the Swagger/OpenApi specification.
-     * This request redirects the user to the Swagger/OpenAPI specification at /v2/api-docs?group=<group>.
+     * This request redirects the user to the Swagger/OpenAPI specification at /v2/api-docs?group=[group].
      *
      * @param response
      * @throws IOException

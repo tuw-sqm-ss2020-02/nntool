@@ -241,9 +241,9 @@
  * Each client is communicating with the test server by using a simple protocol. This protocol is called QoS Testserver Protocol (QTP) and consists of three parts.
  * These parts have to be executed in the correct order. All parts are important and none must be omitted. They are:<br>
  * <ol>
- * 		<li>establishing connection / handshake</h1>
- *		<li>test request / test result</h1>
- *		<li>close connection</h1> 		
+ * 		<li>establishing connection / handshake</li>
+ *		<li>test request / test result</li>
+ *		<li>close connection</li>
  * </ol>
  * <br>
  * The rules for the QTP are:
@@ -357,7 +357,7 @@
  * 		<li><b>ID</b> - If this appendix is added to a command the server will answer this command by adding this same appendix to the response. This is used for multi-threaded environments. The example from above<b>TCPTEST OUT 80 +ID17</b> would produce a reponse that will look like this: <b>OK +ID17</b></li>
  * </ul>
  * <br>
- * <h2>3. Server Settings</h3>
+ * <h2>3. Server Settings</h2>
  * The server settings can be set by using either predefined default values, command line parameters or a settings file.<br>
  * <h3>3.1 Preset default values</h3>
  * If neither a configuration file is available nor the command line parameters are set then the default values are used. They are:  

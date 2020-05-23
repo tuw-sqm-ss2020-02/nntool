@@ -161,8 +161,9 @@ public class SystemApi {
     }
 
     /**
-     * @param path
-     * @return
+     *
+     * @param path traceroute
+     * @return traceroute formatted
      * @throws JSONException
      */
     public String parseTraceroute(String path) throws JSONException { // TODO: is this one used?

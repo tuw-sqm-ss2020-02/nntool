@@ -37,8 +37,8 @@ public interface QoSMeasurementClientControlListener {
 
     /**
      * If the qos test finished naturally
-     *
-     * @param
+     * @param qostTestUuid
+     * @param resultCollector
      */
     public void onMeasurementFinished(String qostTestUuid, QoSResultCollector resultCollector);
 }

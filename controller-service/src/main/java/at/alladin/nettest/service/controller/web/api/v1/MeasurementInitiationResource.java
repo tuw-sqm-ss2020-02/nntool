@@ -67,10 +67,8 @@ public class MeasurementInitiationResource {
 
     /**
      * Request a new measurement.
-     * This request will fetch the current measurement parameters and configuration from the server.
-     *
      * @param measurementInitiationRequest
-     * @return
+     * @return This request will fetch the current measurement parameters and configuration from the server.
      * @throws UnknownHostException
      */
     @io.swagger.annotations.ApiOperation(value = "Request a new measurement.", notes = "This request will fetch the current measurement parameters and configuration from the server.")
