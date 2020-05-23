@@ -36,7 +36,7 @@ public final class RevisionHelper {
         boolean _dirty = false;
         final InputStream svnIS = RevisionHelper.class.getClassLoader().getResourceAsStream("revision.properties");
         final Properties properties = new Properties();
-        if (svnIS != null)
+        if (svnIS != null){
             try {
                 properties.load(svnIS);
                 _describe = properties.getProperty("git.describe");
@@ -52,6 +52,7 @@ public final class RevisionHelper {
                 _buildTime = Long.parseLong(properties.getProperty("build.time"));
             } catch (final Exception e) { // there isn't much we can do here about it..
             }
+        }
         describe = _describe == null ? "?" : _describe;
         revision = _revision == null ? "?" : _revision;
         gitId = _gitId == null ? "?" : _gitId;

@@ -123,10 +123,10 @@ public class CouchDbTemplate implements CouchDbOperations {
     protected <T> void handleCouchDbResponse(final CouchDbResponse response, CouchDbEntityInformation<T, String> entityInformation, T nullableEntity) {
         final String error = response.getError();
 
-        if (StringUtils.hasLength(error)) {
+        /*if (StringUtils.hasLength(error)) {
             // TODO: process error
             //throw new CouchDbDatabaseException("response contains error: " + error); // TODO: custom exception, more info: id, rev, reason
-        }
+        }*/
 
         updateEntity(nullableEntity, entityInformation, response);
     }
@@ -149,9 +149,9 @@ public class CouchDbTemplate implements CouchDbOperations {
             final CouchDbResponse response = responseList.get(i);
 
             final String error = response.getError();
-            if (error != null) {
+            /*if (error != null) {
                 // TODO: process error
-            }
+            }*/
 
             final T entity = entityList.get(i);
             updateEntity(entity, entityInformation, response);

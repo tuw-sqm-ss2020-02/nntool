@@ -70,9 +70,9 @@ public class PartTreeMangoBasedCouchDbQuery extends AbstractCouchDbRepositoryQue
             return docs;
         } else if (method.isStreamQuery()) {
             return docs.stream();
-        } /*else if (method.isPageQuery()) {
-			return new PageImpl<>(docs, accessor.getPageable(), ...);
-		}*/ else if (docs.size() > 0) {
+        /*} else if (method.isPageQuery()) {
+			return new PageImpl<>(docs, accessor.getPageable(), ...);*/
+		} else if (docs.size() > 0) {
             return docs.get(0);
         }
 

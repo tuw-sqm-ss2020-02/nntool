@@ -148,7 +148,9 @@
       <property name="ignoreEnums" value="false"/>
     </module>
     <module name="RightCurly"/>
-    <module name="NeedBraces"/>
+    <module name="NeedBraces">
+      <property name="allowSingleLineStatement" value="true"/>
+    </module>
 
     <!-- Annotation Checks                          -->
     <!-- See https://checkstyle.sourceforge.io/config_annotation.html -->

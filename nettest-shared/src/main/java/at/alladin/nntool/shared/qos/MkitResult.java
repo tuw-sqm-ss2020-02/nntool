@@ -86,38 +86,41 @@ public abstract class MkitResult extends AbstractResult {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         MkitResult other = (MkitResult) obj;
+
         if (bytesDownload == null) {
-            if (other.bytesDownload != null)
-                return false;
-        } else if (!bytesDownload.equals(other.bytesDownload))
+            if (other.bytesDownload != null) return false;
+        } else if (!bytesDownload.equals(other.bytesDownload)) {
             return false;
+        }
+
         if (bytesUpload == null) {
-            if (other.bytesUpload != null)
-                return false;
-        } else if (!bytesUpload.equals(other.bytesUpload))
+            if (other.bytesUpload != null) return false;
+        } else if (!bytesUpload.equals(other.bytesUpload)) {
             return false;
+        }
+
         if (result == null) {
-            if (other.result != null)
-                return false;
-        } else if (!result.equals(other.result))
+            if (other.result != null) return false;
+        } else if (!result.equals(other.result)) {
             return false;
+        }
+
         if (status == null) {
-            if (other.status != null)
-                return false;
-        } else if (!status.equals(other.status))
+            if (other.status != null) return false;
+        } else if (!status.equals(other.status)) {
             return false;
+        }
+
         if (testType == null) {
-            if (other.testType != null)
-                return false;
-        } else if (!testType.equals(other.testType))
+            if (other.testType != null) return false;
+        } else if (!testType.equals(other.testType)) {
             return false;
+        }
+
         return true;
     }
 

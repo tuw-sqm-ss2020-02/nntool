@@ -104,10 +104,12 @@ public abstract class AbstractTest {
         log(String.format(Locale.US, "thread %d: ReceiveBufferSize: '%s'.", threadId, s.getReceiveBufferSize()));
         log(String.format(Locale.US, "thread %d: SendBufferSize: '%s'.", threadId, s.getSendBufferSize()));
 
-        if (in != null)
+        if (in != null){
             totalDown += in.getCount();
-        if (out != null)
+        }
+        if (out != null){
             totalUp += out.getCount();
+        }
 
         in = new InputStreamCounter(s.getInputStream());
         reader = new BufferedReader(new InputStreamReader(in, "US-ASCII"), 4096);
@@ -153,8 +155,9 @@ public abstract class AbstractTest {
                     log(String.format(Locale.US, "thread %d: invalid CHUNKSIZE: '%s'", threadId, line));
                     return null;
                 }
-                if (buf == null || buf != null && buf.length != chunksize)
+                if (buf == null || buf != null && buf.length != chunksize) {
                     buf = new byte[chunksize];
+                }
 
                 s.setSoTimeout(0);
                 return s;

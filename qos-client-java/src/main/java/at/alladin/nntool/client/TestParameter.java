@@ -92,11 +92,9 @@ public class TestParameter implements Serializable {
     }
 
     public String getUUID() {
-        if (token == null)
-            return null;
+        if (token == null) return null;
         final String[] parts = token.split("_");
-        if (parts == null || parts.length <= 0)
-            return null;
+        if (parts == null || parts.length <= 0) return null;
         return parts[0];
     }
 
@@ -141,14 +139,18 @@ public class TestParameter implements Serializable {
     }
 
     public void check() throws IllegalArgumentException {
-        if (host == null || host.length() == 0)
+        if (host == null || host.length() == 0) {
             throw new IllegalArgumentException("no host");
-        if (port <= 0)
+        }
+        if (port <= 0) {
             throw new IllegalArgumentException("no port");
-        if (getUUID() == null)
+        }
+        if (getUUID() == null) {
             throw new IllegalArgumentException("no uuid");
-        if (numThreads <= 0)
+        }
+        if (numThreads <= 0) {
             throw new IllegalArgumentException("num threads <= 0");
+        }
         //if (pretestDuration < 0)
         //  throw new IllegalArgumentException("pretestDuration < 0");
     }

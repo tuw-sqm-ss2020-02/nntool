@@ -207,10 +207,9 @@ public class ResultComparer {
                     }
                 }
                 return compareResult;
-            }
 
-            //if the field is not a collection it can (hopefully) be compared
-            else if (f.get(expectedResult) != null) {
+                //if the field is not a collection it can (hopefully) be compared
+            } else if (f.get(expectedResult) != null) {
                 final Object leftPart = String.valueOf(f.get(result));
                 final Object rightPart = String.valueOf(f.get(expectedResult));
 

@@ -82,8 +82,7 @@ public class QoSMeasurementContext {
         if (controlServerPort != that.controlServerPort) return false;
         if (useTls != that.useTls) return false;
         if (controlServerApiVersion != that.controlServerApiVersion) return false;
-        if (controlServerHost != null ? !controlServerHost.equals(that.controlServerHost) : that.controlServerHost != null)
-            return false;
+        if (controlServerHost != null ? !controlServerHost.equals(that.controlServerHost) : that.controlServerHost != null) return false;
 
         return true;
     }

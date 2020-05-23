@@ -208,28 +208,41 @@ public class DnsResult extends AbstractResult {
          */
         @Override
         public boolean equals(Object obj) {
-            if (this == obj)
+            if (this == obj){
                 return true;
-            if (obj == null)
+            }
+            if (obj == null){
                 return false;
-            if (getClass() != obj.getClass())
+            }
+            if (getClass() != obj.getClass()){
                 return false;
+            }
             DnsEntry other = (DnsEntry) obj;
+
             if (address == null) {
-                if (other.address != null)
+                if (other.address != null){
                     return false;
-            } else if (!address.equals(other.address))
+                }
+            } else if (!address.equals(other.address)) {
                 return false;
+            }
+
             if (priority == null) {
-                if (other.priority != null)
+                if (other.priority != null){
                     return false;
-            } else if (!priority.equals(other.priority))
+                }
+            } else if (!priority.equals(other.priority)) {
                 return false;
+            }
+
             if (ttl == null) {
-                if (other.ttl != null)
+                if (other.ttl != null){
                     return false;
-            } else if (!ttl.equals(other.ttl))
+                }
+            } else if (!ttl.equals(other.ttl)) {
                 return false;
+            }
+
             return true;
         }
     }

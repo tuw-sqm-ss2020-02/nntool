@@ -180,11 +180,10 @@ public class MapOptionsService {
                 put("operator", new MapServiceSettings.MapFilter() {
                     @Override
                     public MapServiceSettings.SQLFilter getFilter(final String input) {
-                        if (Strings.isNullOrEmpty(input))
-                            return null;
-                        if (input.equals("other"))
+                        if (Strings.isNullOrEmpty(input)) return null;
+                        if (input.equals("other")) {
                             return new MapServiceSettings.SQLFilter("t.mobile_sim_operator_name IS NULL");
-                        else
+                        }else {
                             return new MapServiceSettings.SQLFilter("t.mobile_sim_operator_name=?") {
                                 @Override
                                 public int fillParams(int i, final PreparedStatement ps) throws SQLException {
@@ -192,6 +191,7 @@ public class MapOptionsService {
                                     return i;
                                 }
                             };
+                        }
                     }
                 });
 
@@ -213,8 +213,7 @@ public class MapOptionsService {
                 put("technology", new MapServiceSettings.MapFilter() {
                     @Override
                     public MapServiceSettings.SQLFilter getFilter(final String input) { // do not filter if empty
-                        if (Strings.isNullOrEmpty(input))
-                            return null;
+                        if (Strings.isNullOrEmpty(input)) return null;
                         try {
                             final int technology = Integer.parseInt(input);
                             // use old numeric network type (replicate network_type_table here)
@@ -249,12 +248,10 @@ public class MapOptionsService {
                 put("period", new MapServiceSettings.MapFilter() {
                     @Override
                     public MapServiceSettings.SQLFilter getFilter(final String input) {
-                        if (Strings.isNullOrEmpty(input))
-                            return null;
+                        if (Strings.isNullOrEmpty(input)) return null;
                         try {
                             final int period = Integer.parseInt(input);
-                            if (period <= 0 || period > 730)
-                                return null;
+                            if (period <= 0 || period > 730) return null;
 
                             return new MapServiceSettings.SQLFilter("(t.start_time)::timestamp > NOW() - CAST(? AS INTERVAL)") {
                                 @Override

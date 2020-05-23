@@ -574,15 +574,17 @@ public class QualityOfServiceTest implements Callable<QoSResultCollector> {
                 t.interrupt();
             }
         }
-        if (executor != null)
+        if (executor != null) {
             executor.shutdownNow();
+        }
     }
 
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        if (executor != null)
+        if (executor != null) {
             executor.shutdownNow();
+        }
     }
 
     private void openControlConnections(int concurrencyGroup) {

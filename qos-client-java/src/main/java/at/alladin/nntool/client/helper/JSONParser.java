@@ -184,8 +184,9 @@ public class JSONParser {
             e.printStackTrace();
         }
 
-        if (jObj == null)
+        if (jObj == null) {
             jObj = createErrorJSON();
+        }
 
         // return JSONObject
         return jObj;

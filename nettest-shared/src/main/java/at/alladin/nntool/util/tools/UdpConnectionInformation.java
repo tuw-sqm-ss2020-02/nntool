@@ -34,8 +34,7 @@ public class UdpConnectionInformation extends ConnectionInformation {
         UdpConnectionInformation conn = new UdpConnectionInformation();
 
         String[] token = str.trim().replaceAll(" +", " ").split(" ");
-        if (token.length < 12)
-            return null;
+        if (token.length < 12) return null;
 
         try {
             conn.setLocalAddr(getAddress(addrSize, token[1]));

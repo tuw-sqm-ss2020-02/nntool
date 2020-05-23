@@ -176,16 +176,17 @@ public class ClientHolder {
         // }
 
         final TrustManager tm;
-        if (cert == null)
+        if (cert == null) {
             tm = getTrustingManager();
-        else
+        } else {
             tm = new javax.net.ssl.X509TrustManager() {
                 public X509Certificate[] getAcceptedIssuers() {
                     // System.out.println("getAcceptedIssuers");
-                    if (ca == null)
+                    if (ca == null) {
                         return new X509Certificate[]{cert};
-                    else
+                    }else {
                         return new X509Certificate[]{ca};
+                    }
                 }
 
                 public void checkClientTrusted(final X509Certificate[] certs, final String authType)
@@ -198,14 +199,14 @@ public class ClientHolder {
                         throws CertificateException {
                     // System.out.println("checkServerTrusted: " +
                     // Arrays.toString(certs) + " - " + authType);
-                    if (certs == null)
-                        throw new CertificateException();
-                    for (final X509Certificate c : certs)
-                        if (cert.equals(c))
-                            return;
+                    if (certs == null) throw new CertificateException();
+                    for (final X509Certificate c : certs) {
+                        if (cert.equals(c)) return;
+                    }
                     throw new CertificateException();
                 }
             };
+        }
 
         final TrustManager[] trustManagers = new TrustManager[]{tm};
 
@@ -279,10 +280,11 @@ public class ClientHolder {
     public boolean abortTest(final boolean error) {
         System.out.println("RMBTClient stopTest");
 
-        if (error)
+        if (error) {
             setErrorStatus();
-        else
+        }else {
             setStatus(TestStatus.ABORTED);
+        }
         aborted.set(true);
 
         return true;
@@ -334,8 +336,9 @@ public class ClientHolder {
 
     public void stopTrafficMeasurement(final int threadId, final TestStatus status) {
         final TestMeasurement testMeasurement = measurementMap.get(status);
-        if (testMeasurement != null)
+        if (testMeasurement != null) {
             testMeasurement.stop(threadId);
+        }
     }
 
     public String getErrorMsg() {
@@ -344,22 +347,27 @@ public class ClientHolder {
 
     private void setErrorStatus() {
         final TestStatus lastStatus = testStatus.getAndSet(TestStatus.ERROR);
-        if (lastStatus != TestStatus.ERROR)
+        if (lastStatus != TestStatus.ERROR) {
             statusBeforeError.set(lastStatus);
+        }
     }
 
     void log(final CharSequence text) {
-        if (outputToStdout)
+        if (outputToStdout) {
             System.out.println(text);
-        if (outputCallback != null)
+        }
+        if (outputCallback != null) {
             outputCallback.log(text);
+        }
     }
 
     void log(final Exception e) {
-        if (outputToStdout)
+        if (outputToStdout) {
             e.printStackTrace(System.out);
-        if (outputCallback != null)
+        }
+        if (outputCallback != null) {
             outputCallback.log(String.format(Locale.US, "Error: %s", e.getMessage()));
+        }
     }
 
 

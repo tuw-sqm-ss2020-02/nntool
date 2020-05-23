@@ -121,9 +121,9 @@ public class QoSMeasurementClient {
                     //qosResult.setTestToken(qosTest.getRMBTClient().getTestParameter().getToken()); //TODO: comment in
 
                     if (!cancelled.get()) {
-                        if (qosResult != null && !qosTest.getStatus().equals(QoSTestEnum.ERROR)) {
+                        /*if (qosResult != null && !qosTest.getStatus().equals(QoSTestEnum.ERROR)) {
                             //client.sendQoSResult(qosResult);  //TODO: comment in
-                        }
+                        }*/
                         //notify of result
                         for (QoSMeasurementClientControlListener listener : controlListeners) {
                             //listener.onMeasurementFinished(qosTest.getRMBTClient().getTestUuid(), qosResult); //TODO: comment in

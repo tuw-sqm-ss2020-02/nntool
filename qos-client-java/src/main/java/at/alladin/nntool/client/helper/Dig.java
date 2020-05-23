@@ -52,10 +52,11 @@ public class Dig {
         System.out.println("; java dig 0.0 <> " + name + " axfr");
         if (response.isSigned()) {
             System.out.print(";; TSIG ");
-            if (response.isVerified())
+            if (response.isVerified()) {
                 System.out.println("ok");
-            else
+            }else {
                 System.out.println("failed");
+            }
         }
 
         if (response.getRcode() != Rcode.NOERROR) {
@@ -64,8 +65,9 @@ public class Dig {
         }
 
         Record[] records = response.getSectionArray(Section.ANSWER);
-        for (int i = 0; i < records.length; i++)
+        for (int i = 0; i < records.length; i++) {
             System.out.println(records[i]);
+        }
 
         System.out.print(";; done (");
         System.out.print(response.getHeader().getCount(Section.ANSWER));
@@ -89,13 +91,15 @@ public class Dig {
 
         try {
             arg = 0;
-            if (argv[arg].startsWith("@"))
+            if (argv[arg].startsWith("@")) {
                 server = argv[arg++].substring(1);
+            }
 
-            if (server != null)
+            if (server != null) {
                 res = new SimpleResolver(server);
-            else
+            }else {
                 res = new SimpleResolver();
+            }
 
             String nameString = argv[arg++];
             if (nameString.equals("-x")) {
@@ -105,16 +109,18 @@ public class Dig {
             } else {
                 name = Name.fromString(nameString, Name.root);
                 type = Type.value(argv[arg]);
-                if (type < 0)
+                if (type < 0) {
                     type = Type.A;
-                else
+                }else {
                     arg++;
+                }
 
                 dclass = DClass.value(argv[arg]);
-                if (dclass < 0)
+                if (dclass < 0) {
                     dclass = DClass.IN;
-                else
+                }else {
                     arg++;
+                }
             }
 
             while (argv[arg].startsWith("-") && argv[arg].length() > 1) {
@@ -122,10 +128,11 @@ public class Dig {
                     case 'p':
                         String portStr;
                         int port;
-                        if (argv[arg].length() > 2)
+                        if (argv[arg].length() > 2) {
                             portStr = argv[arg].substring(2);
-                        else
+                        }else {
                             portStr = argv[++arg];
+                        }
                         port = Integer.parseInt(portStr);
                         if (port < 0 || port > 65536) {
                             System.out.println("Invalid port");
@@ -136,10 +143,11 @@ public class Dig {
 
                     case 'b':
                         String addrStr;
-                        if (argv[arg].length() > 2)
+                        if (argv[arg].length() > 2) {
                             addrStr = argv[arg].substring(2);
-                        else
+                        }else {
                             addrStr = argv[++arg];
+                        }
                         InetAddress addr;
                         try {
                             addr = InetAddress.getByName(addrStr);
@@ -152,10 +160,11 @@ public class Dig {
 
                     case 'k':
                         String key;
-                        if (argv[arg].length() > 2)
+                        if (argv[arg].length() > 2) {
                             key = argv[arg].substring(2);
-                        else
+                        }else {
                             key = argv[++arg];
+                        }
                         res.setTSIGKey(TSIG.fromString(key));
                         break;
 
@@ -170,10 +179,11 @@ public class Dig {
                     case 'e':
                         String ednsStr;
                         int edns;
-                        if (argv[arg].length() > 2)
+                        if (argv[arg].length() > 2) {
                             ednsStr = argv[arg].substring(2);
-                        else
+                        }else {
                             ednsStr = argv[++arg];
+                        }
                         edns = Integer.parseInt(ednsStr);
                         if (edns < 0 || edns > 1) {
                             System.out.println("Unsupported " +
@@ -200,24 +210,27 @@ public class Dig {
             }
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            if (name == null)
+            if (name == null) {
                 usage();
+            }
         }
         if (res == null)
             res = new SimpleResolver();
 
         rec = Record.newRecord(name, type, dclass);
         query = Message.newQuery(rec);
-        if (printQuery)
+        if (printQuery) {
             System.out.println(query);
+        }
         startTime = System.currentTimeMillis();
         response = res.send(query);
         endTime = System.currentTimeMillis();
 
-        if (type == Type.AXFR)
+        if (type == Type.AXFR) {
             doAXFR(response);
-        else
+        }else {
             doQuery(response, endTime - startTime);
+        }
     }
 
     public static DnsRequest doRequest(String domain, String record, int timeout) throws Exception {
