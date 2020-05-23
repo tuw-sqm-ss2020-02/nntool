@@ -19,7 +19,10 @@ package at.alladin.nettest.shared.server.config.spring;
 /**
  * @author alladin-IT GmbH (bp@alladin.at)
  */
-public class SpringConstants {
+public final class SpringConstants {
+
+    private SpringConstants() {
+    }
 
     /**
      *

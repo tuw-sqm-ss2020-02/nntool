@@ -35,7 +35,7 @@ import at.alladin.nettest.couchdb.client.config.CouchDbConnectionProperties;
 /**
  * @author alladin-IT GmbH (bp@alladin.at)
  */
-public class CloudantCouchDbClient implements CouchDbClient {
+public final class CloudantCouchDbClient implements CouchDbClient {
 
     private static final Logger logger = LoggerFactory.getLogger(CloudantCouchDbClient.class);
 

@@ -27,6 +27,9 @@ public final class RevisionHelper {
     public static final long buildTime;
     public static final boolean dirty;
 
+    private RevisionHelper() {
+    }
+
     static {
         String _describe = null;
         String _revision = null;

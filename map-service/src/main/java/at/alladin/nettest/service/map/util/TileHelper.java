@@ -42,6 +42,9 @@ public class TileHelper {
      */
     private static final byte[] EMPTY_MARKER = "EMPTY".getBytes();
 
+    private TileHelper() {
+    }
+
     public static int getTileSizeIdx(final int size) {
         int tileSizeIdx = 0;
         for (int i = 0; i < TILE_SIZES.length; i++) {

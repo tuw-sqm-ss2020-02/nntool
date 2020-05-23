@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.util.StringUtils;
 
-public class IpAddressHelper {
+public final class IpAddressHelper {
 
     /**
      * HTTP header field names that can contain forwarded IP address values.

@@ -25,6 +25,9 @@ public class GeographyHelper {
     // http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/
     private static final double MAX_EXTENT = 20037508.342789244;
 
+    private GeographyHelper() {
+    }
+
     /**
      * @param zoom zoomlevel
      * @return resolution in meters per pixel

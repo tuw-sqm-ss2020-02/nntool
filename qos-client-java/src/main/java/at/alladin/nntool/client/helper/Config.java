@@ -19,7 +19,7 @@ package at.alladin.nntool.client.helper;
 /**
  * The system defaults.
  */
-public abstract interface Config {
+public class Config {
 
     /*********************
      *
@@ -57,4 +57,6 @@ public abstract interface Config {
     public static final String MLAB_NS = "http://mlab-ns.appspot.com/ndt?format=json";
     public static final String NDT_FALLBACK_HOST = "ndt.iupui.donar.measurement-lab.org";
 
+    private Config() {
+    }
 }

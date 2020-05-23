@@ -24,7 +24,10 @@ import at.alladin.nntool.util.net.sip.SipResponseMessage.SipResponseType;
 /**
  * @author lb@alladin.at
  */
-public class SipUtil {
+public final class SipUtil {
+
+    private SipUtil(){
+    }
 
     /**
      * generates INVITE request using From as Via header

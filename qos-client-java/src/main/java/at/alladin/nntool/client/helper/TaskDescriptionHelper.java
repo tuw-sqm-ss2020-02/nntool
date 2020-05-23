@@ -29,6 +29,9 @@ import at.alladin.nntool.client.v2.task.TaskDesc;
  */
 public class TaskDescriptionHelper {
 
+    private TaskDescriptionHelper() {
+    }
+
     public static List<TaskDesc> createTaskDescList(final String host, final String controlConnectionPort, final int[] tcpTestPorts, final int[] udpTestPorts,
                                                     final String echoServiceHost, final int[] echoServiceTcpPorts, final int[] echoServiceUdpPorts) {
         final List<TaskDesc> taskDescList = new ArrayList<>();

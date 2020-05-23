@@ -199,9 +199,7 @@
     <module name="FinalClass"/>
     <module name="HideUtilityClassConstructor"/>
     <module name="InnerTypeLast"/>
-    <module name="InterfaceIsType">
-      <property name="allowMarkerInterfaces" value="false"/>
-    </module>
+    <module name="InterfaceIsType"/>
     <module name="OneTopLevelClass"/>
     <module name="ThrowsCount">
       <property name="ignorePrivateMethods" value="false"/>

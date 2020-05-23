@@ -88,9 +88,9 @@ public class CouchDbRepositoryConfigurationExtension extends RepositoryConfigura
      */
     @Override
     public void postProcess(BeanDefinitionBuilder builder, AnnotationRepositoryConfigurationSource config) {
-        builder.addDependsOn(BeanNames.COUCHDB_OPERATIONS_MAPPING);
+        builder.addDependsOn(BeanNames.COUCHDB_OPERATIONS_MAPPING.getName());
         //builder.addDependsOn("couchDbDatabaseMapping");
-        builder.addPropertyReference("couchDbOperationsMapping", BeanNames.COUCHDB_OPERATIONS_MAPPING);
+        builder.addPropertyReference("couchDbOperationsMapping", BeanNames.COUCHDB_OPERATIONS_MAPPING.getName());
     }
 
     /*
@@ -104,6 +104,6 @@ public class CouchDbRepositoryConfigurationExtension extends RepositoryConfigura
         builder.addPropertyReference("couchDbClient", "couchDbClient"); // TODO: BeanNames.
         builder.addPropertyReference("couchDbDatabaseMapping", "couchDbDatabaseMapping"); // TODO: BeanNames.
 
-        registry.registerBeanDefinition(BeanNames.COUCHDB_OPERATIONS_MAPPING, builder.getBeanDefinition());
+        registry.registerBeanDefinition(BeanNames.COUCHDB_OPERATIONS_MAPPING.getName(), builder.getBeanDefinition());
     }
 }

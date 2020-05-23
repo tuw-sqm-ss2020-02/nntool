@@ -19,10 +19,13 @@ package at.alladin.nettest.shared.server.config;
 /**
  * @author alladin-IT GmbH (bp@alladin.at)
  */
-public class NettestConstants {
+public final class NettestConstants {
 
     /**
      *
      */
     public static final String EXTERNAL_CONFIG_LOCATION = "/etc/nettest";
+
+    private NettestConstants() {
+    }
 }

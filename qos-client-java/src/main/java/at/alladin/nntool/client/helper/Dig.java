@@ -36,6 +36,9 @@ public class Dig {
     static Name name = null;
     static int type = Type.A, dclass = DClass.IN;
 
+    private Dig() {
+    }
+
     static void usage() {
         System.out.println("Usage: dig [@server] name [<type>] [<class>] " +
                 "[options]");

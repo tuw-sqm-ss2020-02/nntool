@@ -25,7 +25,10 @@ import at.alladin.nntool.util.ByteUtil;
  *
  * @author lb
  */
-public class RealtimeTransportProtocol {
+public final class RealtimeTransportProtocol {
+
+    private RealtimeTransportProtocol() {
+    }
 
     /**
      * creates the first 4 bytes of the RTP header

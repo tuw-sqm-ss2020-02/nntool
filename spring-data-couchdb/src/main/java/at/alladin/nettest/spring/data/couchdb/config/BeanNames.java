@@ -19,8 +19,18 @@ package at.alladin.nettest.spring.data.couchdb.config;
 /**
  * @author alladin-IT GmbH (bp@alladin.at)
  */
-public interface BeanNames {
 
-    public static final String COUCHDB_OPERATIONS_MAPPING = "couchDbRepositoryOperationsMapping";
+public enum BeanNames {
 
+    COUCHDB_OPERATIONS_MAPPING("couchDbRepositoryOperationsMapping");
+
+    protected String name;
+
+    private BeanNames(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

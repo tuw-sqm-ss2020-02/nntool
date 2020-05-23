@@ -24,7 +24,10 @@ import java.util.Arrays;
  *
  * @author lb
  */
-public class ByteUtil {
+public final class ByteUtil {
+
+    private ByteUtil() {
+    }
 
     /**
      * get an int value from a byte array

@@ -22,7 +22,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ToolUtils {
+public final class ToolUtils {
+
+    private ToolUtils() {
+    }
 
     /**
      * @param path

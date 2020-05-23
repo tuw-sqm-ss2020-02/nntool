@@ -40,8 +40,10 @@ import at.alladin.nntool.util.net.udp.UdpStreamSender;
 /**
  * @author lb
  */
-public class RtpUtil {
+public final class RtpUtil {
 
+    private RtpUtil() {
+    }
 
     public static <T extends Closeable> T runVoipStream(T socket, final boolean closeOnFinish, InetAddress targetHost, int targetPort, int sampleRate,
                                                         int bps, RealtimeTransportProtocol.PayloadType payloadType, long sequenceNumber, int ssrc,

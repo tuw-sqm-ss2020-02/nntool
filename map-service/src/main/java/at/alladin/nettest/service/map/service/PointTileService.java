@@ -352,7 +352,7 @@ public class PointTileService {
 
     }
 
-    private static class Dot {
+    private final static class Dot {
 
         private double x;
 

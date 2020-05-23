@@ -46,7 +46,7 @@ import at.alladin.nntool.shared.qos.AbstractResult;
 import at.alladin.nntool.shared.qos.ResultOptions;
 import at.alladin.nntool.shared.qos.testscript.TestScriptInterpreter.EvalResult.EvalResultType;
 
-public class TestScriptInterpreter {
+public final class TestScriptInterpreter {
     /**
      *
      */
@@ -74,6 +74,9 @@ public class TestScriptInterpreter {
     private static ScriptEngine jsEngine;
     private static Method jsEngineNativeObjectGetter;
     private static boolean alredayLookedForGetter = false;
+
+    private TestScriptInterpreter() {
+    }
 
     /**
      * @param command

@@ -20,7 +20,10 @@ import com.fatboyindustrial.gsonjodatime.Converters;
 import com.google.gson.GsonBuilder;
 
 
-public class GsonBasicHelper {
+public final class GsonBasicHelper {
+
+    private GsonBasicHelper() {
+    }
 
     public static GsonBuilder getDateTimeGsonBuilder() {
         final GsonBuilder gsonBuilder = new GsonBuilder()

@@ -29,12 +29,15 @@ import at.alladin.nntool.shared.qos.testscript.TestScriptInterpreter.EvalResult;
 /**
  * @author lb
  */
-public class ResultComparer {
+public final class ResultComparer {
     public final static int RESULT_COULD_NOT_COMPARE = -1;
     public final static int RESULT_FAILURE = 0;
     public final static int RESULT_SUCCESS = 1;
 
     private final static Class<?> MAX_COMPARING_CLASS = AbstractResult.class;
+
+    private ResultComparer() {
+    }
 
     /**
      * @param result1

@@ -46,7 +46,7 @@ import at.alladin.nntool.client.v2.task.service.TestMeasurement;
 import at.alladin.nntool.client.v2.task.service.TrafficService;
 import at.alladin.nntool.util.tools.InformationCollectorTool;
 
-public class ClientHolder {
+public final class ClientHolder {
     public final static String TASK_UDP = "udp";
     public final static String TASK_TCP = "tcp";
     public final static String TASK_DNS = "dns";

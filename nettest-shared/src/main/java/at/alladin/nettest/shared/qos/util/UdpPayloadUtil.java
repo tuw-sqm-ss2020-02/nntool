@@ -27,7 +27,10 @@ import at.alladin.nettest.shared.qos.UdpPayload;
 /**
  *
  */
-public class UdpPayloadUtil {
+public final class UdpPayloadUtil {
+
+    private UdpPayloadUtil() {
+    }
 
     public static UdpPayload toUdpPayload(final byte[] payload) {
         final UdpPayload udpPayload = new UdpPayload();

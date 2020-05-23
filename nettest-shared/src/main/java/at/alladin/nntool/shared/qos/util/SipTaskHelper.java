@@ -21,7 +21,7 @@ import java.util.Random;
 
 import com.google.common.base.Strings;
 
-public class SipTaskHelper {
+public final class SipTaskHelper {
 
     //default timeout = 5s
     public final static long DEFAULT_TIMEOUT = 5000000000L;
@@ -81,6 +81,9 @@ public class SipTaskHelper {
     public final static String PARAM_RESULT_CSSR = PARAM_PREFIX_RESULT + "_cssr";
 
     public final static String PARAM_RESULT_DCR = PARAM_PREFIX_RESULT + "_dcr";
+
+    private SipTaskHelper() {
+    }
 
     public static void preProcess(final Map<String, Object> params) {
         if (params == null) {
