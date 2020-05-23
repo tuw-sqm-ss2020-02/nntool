@@ -163,19 +163,20 @@
     <!-- Checks for common coding problems               -->
     <!-- See https://checkstyle.org/config_coding.html -->
     <module name="AvoidDoubleBraceInitialization"/>
-    <module name="AvoidInlineConditionals"/>
     <module name="DefaultComesLast"/>
     <module name="EmptyStatement"/>
     <module name="EqualsHashCode"/>
     <module name="FallThrough"/>
-    <module name="HiddenField"/>
+    <module name="HiddenField">
+      <property name="ignoreConstructorParameter" value="true"/>
+      <property name="ignoreSetter" value="true"/>
+    </module>
     <module name="IllegalInstantiation">
       <property name="classes" value="java.lang.Boolean"/>
     </module>
     <module name="InnerAssignment"/>
     <module name="MagicNumber"/>
     <module name="MissingSwitchDefault"/>
-    <module name="MultipleStringLiterals"/>
     <module name="MultipleVariableDeclarations"/>
     <module name="NoArrayTrailingComma"/>
     <module name="NoEnumTrailingComma"/>

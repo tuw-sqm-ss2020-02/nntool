@@ -32,7 +32,7 @@ public interface TracerouteService extends Callable<List<HopDetail>> {
 
     public void setHost(String host);
 
-    public void setResultListObject(List<HopDetail> resultList);
+    public void setResultList(List<HopDetail> resultList);
 
     public int getMaxHops();
 

@@ -130,9 +130,10 @@ public abstract class Helperfunctions {
             return null;
         }
 
-        int latd, lond; // latitude degrees and minutes, longitude degrees and
-        // minutes
-        double latm, lonm; // latitude and longitude seconds.
+        int latd; // latitude degrees and minutes
+        int lond; // longitude degrees and minutes
+        double latm; // latitude seconds.
+        double lonm; // longitude seconds.
 
         // decimal degrees to degrees minutes seconds
 

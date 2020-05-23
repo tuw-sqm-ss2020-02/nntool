@@ -156,7 +156,7 @@ public class HttpProxyTask extends AbstractQoSTask {
         while ((nread = dis.read(dataBytes)) != -1) {
             md5.contentLength += nread;
         }
-        ;
+
 
         dis.close();
 

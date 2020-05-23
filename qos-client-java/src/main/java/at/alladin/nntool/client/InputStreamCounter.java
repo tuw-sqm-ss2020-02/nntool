@@ -40,8 +40,8 @@ public class InputStreamCounter extends FilterInputStream {
     }
 
     @Override
-    public int read(final byte[] buffer, final int offset, final int count) throws IOException {
-        final int read = in.read(buffer, offset, count);
+    public int read(final byte[] buffer, final int offset, final int cnt) throws IOException {
+        final int read = in.read(buffer, offset, cnt);
         if (read != -1)
             this.count += read;
         return read;

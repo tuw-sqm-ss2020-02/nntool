@@ -55,7 +55,7 @@ public class NonTransparentProxyTask extends AbstractQoSTask {
         super(nnTest, taskDesc, threadId, threadId);
 
         String requestString = (String) taskDesc.getParams().get(PARAM_PROXY_REQUEST);
-        ;
+
 
         if (!requestString.endsWith("\n")) {
             requestString += "\n";

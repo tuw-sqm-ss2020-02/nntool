@@ -141,10 +141,10 @@ public class InformationCollectorTool {
     }
 
     /**
-     * @param timeout
+     * @param milTimeout
      */
-    public void setTimeOut(final long timeout) {
-        this.timeout.set(timeout);
+    public void initTimeOutAsLong(final long milTimeout) {
+        this.timeout.set(milTimeout);
     }
 
     /**

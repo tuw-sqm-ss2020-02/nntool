@@ -82,7 +82,7 @@ public class TracerouteTask extends AbstractQoSTask {
             pingTool.setMaxHops(maxHops);
 
             final List<HopDetail> pingDetailList = new ArrayList<TracerouteService.HopDetail>();
-            pingTool.setResultListObject(pingDetailList);
+            pingTool.setResultList(pingDetailList);
 
             final Future<List<HopDetail>> traceFuture = ClientHolder.getCommonThreadPool().submit(pingTool);
 

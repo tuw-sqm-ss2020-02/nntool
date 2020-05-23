@@ -128,6 +128,8 @@ public class ResultComparer {
                         return RESULT_SUCCESS;
                     case OTHER:
                         return RESULT_COULD_NOT_COMPARE;
+                    default:
+                        break;
                 }
             } else {
                 return ResultComparer.RESULT_COULD_NOT_COMPARE;
@@ -197,7 +199,8 @@ public class ResultComparer {
 
                     for (Object item : collection) {
                         //compare each field on the right side with the current field from the left side
-                        if ((compareResult = runCompare(operator, controlFlag, item, expectedItem)) == ResultComparer.RESULT_SUCCESS) {
+                        compareResult = runCompare(operator, controlFlag, item, expectedItem);
+                        if (compareResult == ResultComparer.RESULT_SUCCESS) {
                             //if there was a success then return to previous for and continue with the next item
                             break;
                         }
@@ -238,6 +241,9 @@ public class ResultComparer {
                         if ((compare(leftPart, rightPart) >= 0) ^ controlFlag) {
                             resultOfCompare = ResultComparer.RESULT_FAILURE;
                         }
+                        break;
+
+                    default:
                         break;
                 }
             }

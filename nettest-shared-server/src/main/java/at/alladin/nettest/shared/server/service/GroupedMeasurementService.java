@@ -167,19 +167,13 @@ public class GroupedMeasurementService {
 
                 //if key starts with SPEED or QOS -> start w/different values
                 final Object value;
-                switch (keyPath[0].toLowerCase()) {
-                    case SPEED_PREFIX:
-                        if (subMeasurements != null) {
-                            value = getObjectAt(Arrays.copyOfRange(keyPath, 1, keyPath.length), subMeasurements.get(MeasurementTypeDto.SPEED), FullSpeedMeasurement.class);
-                            break;
-                        }
-                    case QOS_PREFIX:
-                        if (subMeasurements != null) {
-                            value = getObjectAt(Arrays.copyOfRange(keyPath, 1, keyPath.length), subMeasurements.get(MeasurementTypeDto.QOS), FullQoSMeasurement.class);
-                            break;
-                        }
-                    default:
-                        value = getObjectAt(keyPath, measurement, FullMeasurementResponse.class);
+
+                if(keyPath[0].toLowerCase().equals(SPEED_PREFIX) && subMeasurements != null){
+                    value = getObjectAt(Arrays.copyOfRange(keyPath, 1, keyPath.length), subMeasurements.get(MeasurementTypeDto.SPEED), FullSpeedMeasurement.class);
+                }else if(keyPath[0].toLowerCase().equals(QOS_PREFIX) && subMeasurements != null){
+                    value = getObjectAt(Arrays.copyOfRange(keyPath, 1, keyPath.length), subMeasurements.get(MeasurementTypeDto.QOS), FullQoSMeasurement.class);
+                }else{
+                    value = getObjectAt(keyPath, measurement, FullMeasurementResponse.class);
                 }
 
                 if (value == null) {

@@ -124,12 +124,12 @@ public abstract class MkitResult extends AbstractResult {
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
-        result = prime * result + ((bytesDownload == null) ? 0 : bytesDownload.hashCode());
-        result = prime * result + ((bytesUpload == null) ? 0 : bytesUpload.hashCode());
-        result = prime * result + ((this.result == null) ? 0 : this.result.hashCode());
-        result = prime * result + ((status == null) ? 0 : status.hashCode());
-        result = prime * result + ((testType == null) ? 0 : testType.hashCode());
-        return result;
+        int res = 1;
+        res = prime * res + ((bytesDownload == null) ? 0 : bytesDownload.hashCode());
+        res = prime * res + ((bytesUpload == null) ? 0 : bytesUpload.hashCode());
+        res = prime * res + ((this.result == null) ? 0 : this.result.hashCode());
+        res = prime * res + ((status == null) ? 0 : status.hashCode());
+        res = prime * res + ((testType == null) ? 0 : testType.hashCode());
+        return res;
     }
 }

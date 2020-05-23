@@ -58,12 +58,12 @@ public class LoadBalancingService {
      * @return
      */
     public MeasurementServerDto getNextAvailableMeasurementServer(final String settingsUuid, final String preferredId) {
-        LoadBalancingSettingsDto settings = fetchSettings(settingsUuid);
-        if (settings == null) {
+        LoadBalancingSettingsDto settingsDto = fetchSettings(settingsUuid);
+        if (settingsDto == null) {
             return null;
         }
 
-        if (settings.getNextFreeUrl() == null) {
+        if (settingsDto.getNextFreeUrl() == null) {
             //TODO: if no load balancer is configured, return default server????
             //return storageService.getTaskDto(type, capability, settingsUuid)
             return null;
@@ -81,7 +81,7 @@ public class LoadBalancingService {
         final HttpEntity<?> httpEntity = new HttpEntity<>(headers);
 
         try {
-            ResponseEntity<ApiResponse<MeasurementServerDto>> responseEntity = restTemplate.exchange(settings.getNextFreeUrl(),
+            ResponseEntity<ApiResponse<MeasurementServerDto>> responseEntity = restTemplate.exchange(settingsDto.getNextFreeUrl(),
                     HttpMethod.GET, httpEntity, new ParameterizedTypeReference<ApiResponse<MeasurementServerDto>>() {
                     });
 
@@ -90,7 +90,7 @@ public class LoadBalancingService {
                 return response != null ? response.getData() : null;
             }
         } catch (final Exception e) {
-            logger.info("Error fetching info from load balancing service: [{}] {}", settings.getNextFreeUrl(), e.getLocalizedMessage());
+            logger.info("Error fetching info from load balancing service: [{}] {}", settingsDto.getNextFreeUrl(), e.getLocalizedMessage());
             //e.printStackTrace();
         }
 

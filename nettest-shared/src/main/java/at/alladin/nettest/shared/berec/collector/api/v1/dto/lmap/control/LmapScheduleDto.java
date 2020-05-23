@@ -308,7 +308,7 @@ public class LmapScheduleDto {
     public static enum ExecutionMode {
         SEQUENTIAL,    // The Actions of the Schedule are executed sequentially.
         PARALLEL, // The Actions of the Schedule are executed concurrently.
-        PIPELINED, // The Actions of the Schedule are executed in a pipelined mode. Output created by an Action is passed as input to the subsequent Action.
+        PIPELINED // The Actions of the Schedule are executed in a pipelined mode. Output created by an Action is passed as input to the subsequent Action.
     }
 }
 

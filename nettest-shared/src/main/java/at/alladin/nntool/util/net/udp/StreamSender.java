@@ -172,7 +172,7 @@ public interface StreamSender<T> {
             return isNonblocking;
         }
 
-        public void setNonblocking(boolean isNonblocking) {
+        public void setIsNonblocking(boolean isNonblocking) {
             this.isNonblocking = isNonblocking;
         }
 

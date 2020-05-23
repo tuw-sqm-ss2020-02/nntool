@@ -142,7 +142,12 @@ public class ResultDesc implements Comparable<ResultDesc> {
     }
 
     public String getParsedValue() {
-        return (parsedValue != null ? parsedValue : (parsedValue = String.valueOf(TestScriptInterpreter.interpret(value, fieldNameToFieldMap, resultObject, true, options))));
+        if(parsedValue != null){
+            return parsedValue;
+        }else{
+            parsedValue = String.valueOf(TestScriptInterpreter.interpret(value, fieldNameToFieldMap, resultObject, true, options));
+            return parsedValue;
+        }
     }
 
     public QosMeasurementType getTestType() {

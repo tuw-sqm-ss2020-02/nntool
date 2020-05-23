@@ -74,6 +74,9 @@ public class TestSettings {
                     }
                 }
                 break;
+
+            default:
+                break;
         }
     }
 

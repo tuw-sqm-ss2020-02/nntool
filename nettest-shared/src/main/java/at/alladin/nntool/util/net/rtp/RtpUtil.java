@@ -192,7 +192,7 @@ public class RtpUtil {
                 final float jitter = prevJitter + ((float) delta - prevJitter) / 16f;
                 jitterMap.put(x, jitter);
                 maxDelta = Math.max(delta, maxDelta);
-                ;
+
                 skew += TimeUnit.NANOSECONDS.convert((long) (((float) (j.rtpPacket.getTimestamp() - i.rtpPacket.getTimestamp()) / (float) sampleRate) * 1000f), TimeUnit.MILLISECONDS) - tsDiff;
                 maxJitter = Math.max((long) jitter, maxJitter);
                 meanJitter += jitter;

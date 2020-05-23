@@ -38,7 +38,7 @@ public class SimpleCouchDbEntityInformation<T> implements CouchDbEntityInformati
 
     //private static final Logger logger = LoggerFactory.getLogger(SimpleCouchDbEntityInformation.class);
 
-    private static final String[] PROPERTY_NAMES_ID = {"_id", "id", /*"uuid"*/};
+    private static final String[] PROPERTY_NAMES_ID = {"_id", "id" /*"uuid"*/};
     private static final String[] PROPERTY_NAMES_REV = {"_rev", "rev", "revision"};
 
     protected final Class<T> javaType;

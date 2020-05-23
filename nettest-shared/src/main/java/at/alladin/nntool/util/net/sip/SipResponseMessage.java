@@ -72,9 +72,9 @@ public class SipResponseMessage extends SipMessage {
                     return RINGING;
                 case 200:
                     return OK;
+                default:
+                    return null;
             }
-
-            return null;
         }
 
         public int getCode() {

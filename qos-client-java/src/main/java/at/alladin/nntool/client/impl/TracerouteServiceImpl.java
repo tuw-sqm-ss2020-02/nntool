@@ -152,8 +152,7 @@ public class TracerouteServiceImpl implements TracerouteService {
         return hasMaxHopsExceeded;
     }
 
-    @Override
-    public void setResultListObject(List<HopDetail> resultList) {
+    public void setResultList(List<HopDetail> resultList) {
         this.resultList = resultList;
     }
 
@@ -184,7 +183,7 @@ public class TracerouteServiceImpl implements TracerouteService {
             System.out.println(pingResult);
 
             time = durationNs;
-            ;
+
             final Matcher pingPacket = PATTERN_PING_PACKET.matcher(pingResult);
 
             if (pingPacket.find()) {
@@ -207,9 +206,9 @@ public class TracerouteServiceImpl implements TracerouteService {
             final Matcher fromIpMatcher = PATTERN_FROM_IP.matcher(pingResult);
             if (fromIpMatcher.find()) {
                 fromIp = fromIpMatcher.group(1);
-                String time = fromIpMatcher.group(4);
-                if (time != null) {
-                    this.time = TimeUnit.NANOSECONDS.convert((int) (Float.parseFloat(time) * 1000f), TimeUnit.MICROSECONDS);
+                String ipTime = fromIpMatcher.group(4);
+                if (ipTime != null) {
+                    this.time = TimeUnit.NANOSECONDS.convert((int) (Float.parseFloat(ipTime) * 1000f), TimeUnit.MICROSECONDS);
                 }
             } else {
                 fromIp = "*";

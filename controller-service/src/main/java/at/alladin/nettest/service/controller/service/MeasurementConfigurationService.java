@@ -110,6 +110,8 @@ public class MeasurementConfigurationService {
                                     case LmapTaskDto.ENCRYPTION:
                                         option.setValue(String.valueOf(encryption));
                                         break;
+                                    default:
+                                        break;
                                 }
                             }
                         }

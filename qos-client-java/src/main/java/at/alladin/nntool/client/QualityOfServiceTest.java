@@ -431,10 +431,10 @@ public class QualityOfServiceTest implements Callable<QoSResultCollector> {
         return result;
     }
 
-    private void updateQoSStatus(QoSTestEnum status) {
-        this.status.set(status);
+    private void updateQoSStatus(QoSTestEnum qosStatus) {
+        this.status.set(qosStatus);
         for (QoSMeasurementClientProgressListener l : progressListeners) {
-            l.onQoSStatusChanged(status);
+            l.onQoSStatusChanged(qosStatus);
         }
     }
 
@@ -456,8 +456,7 @@ public class QualityOfServiceTest implements Callable<QoSResultCollector> {
      * @return
      */
     public int getProgress() {
-        final int progress = this.progress.get();
-        return progress;
+        return this.progress.get();
     }
 
     /**
@@ -486,8 +485,7 @@ public class QualityOfServiceTest implements Callable<QoSResultCollector> {
      * @return
      */
     public QoSTestEnum getStatus() {
-        final QoSTestEnum status = this.status.get();
-        return status;
+        return this.status.get();
     }
 
     /**
@@ -501,8 +499,7 @@ public class QualityOfServiceTest implements Callable<QoSResultCollector> {
      * @return
      */
     public QoSTestErrorEnum getErrorStatus() {
-        final QoSTestErrorEnum status = this.errorStatus.get();
-        return status;
+        return this.errorStatus.get();
     }
 
     /**
