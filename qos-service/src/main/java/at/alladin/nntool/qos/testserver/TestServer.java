@@ -125,14 +125,14 @@ public class TestServer {
 
             public void checkClientTrusted(final X509Certificate[] certs, final String authType)
                     throws CertificateException {
-                System.out.println("[TRUSTING] checkClientTrusted: " +
-                        Arrays.toString(certs) + " - " + authType);
+                System.out.println("[TRUSTING] checkClientTrusted: "
+                        + Arrays.toString(certs) + " - " + authType);
             }
 
             public void checkServerTrusted(final X509Certificate[] certs, final String authType)
                     throws CertificateException {
-                System.out.println("[TRUSTING] checkServerTrusted: " +
-                        Arrays.toString(certs) + " - " + authType);
+                System.out.println("[TRUSTING] checkServerTrusted: "
+                        + Arrays.toString(certs) + " - " + authType);
             }
         };
     }
@@ -177,14 +177,14 @@ public class TestServer {
 
                 public void checkClientTrusted(final X509Certificate[] certs, final String authType)
                         throws CertificateException {
-                    System.out.println("checkClientTrusted: " +
-                            Arrays.toString(certs) + " - " + authType);
+                    System.out.println("checkClientTrusted: "
+                            + Arrays.toString(certs) + " - " + authType);
                 }
 
                 public void checkServerTrusted(final X509Certificate[] certs, final String authType)
                         throws CertificateException {
-                    System.out.println("checkServerTrusted: " +
-                            Arrays.toString(certs) + " - " + authType);
+                    System.out.println("checkServerTrusted: "
+                            + Arrays.toString(certs) + " - " + authType);
                     if (certs == null)
                         throw new CertificateException();
                     for (final X509Certificate c : certs)

@@ -107,8 +107,8 @@ public abstract class CpuStat {
             long cpu = 0;
 
             CoreUsage core = coreUsageList.get(cpuCore);
-            cpu += core.getIowait() + core.getIrq() + core.getNice() + core.getSoftirq() +
-                    core.getSystem() + core.getUser();
+            cpu += core.getIowait() + core.getIrq() + core.getNice() + core.getSoftirq()
+                    + core.getSystem() + core.getUser();
             return cpu;
         }
 

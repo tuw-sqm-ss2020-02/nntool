@@ -52,9 +52,9 @@ public abstract class AbstractVersionResource {
      */
     protected String getVersionInformation() {
         if (buildProperties != null) {
-            return buildProperties.getVersion() +
-                    " (" + buildProperties.get("build_date") + ")" +
-                    ", " + buildProperties.get("git.version_string");
+            return buildProperties.getVersion()
+                    + " (" + buildProperties.get("build_date") + ")"
+                    + ", " + buildProperties.get("git.version_string");
         }
 
         return "0.0.0 (unknown)";

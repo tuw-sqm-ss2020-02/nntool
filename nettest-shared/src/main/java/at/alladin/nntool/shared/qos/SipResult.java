@@ -188,21 +188,21 @@ public class SipResult extends AbstractResult {
 
     @Override
     public String toString() {
-        return "SipResult{" +
-                "port=" + port +
-                ", timeout=" + timeout +
-                ", count=" + count +
-                ", callDuration=" + callDuration +
-                ", objectiveTo='" + objectiveTo + '\'' +
-                ", objectivefrom='" + objectivefrom + '\'' +
-                ", objectiveVia='" + objectiveVia + '\'' +
-                ", resultTo='" + resultTo + '\'' +
-                ", resultFrom='" + resultFrom + '\'' +
-                ", resultVia='" + resultVia + '\'' +
-                ", result='" + result + '\'' +
-                ", callCompletionSuccessRate=" + callCompletionSuccessRate +
-                ", callSetupSuccessRate=" + callSetupSuccessRate +
-                ", callDroppedCallRate=" + callDroppedCallRate +
-                "} " + super.toString();
+        return "SipResult{"
+                + "port=" + port
+                + ", timeout=" + timeout
+                + ", count=" + count
+                + ", callDuration=" + callDuration
+                + ", objectiveTo='" + objectiveTo + '\''
+                + ", objectivefrom='" + objectivefrom + '\''
+                + ", objectiveVia='" + objectiveVia + '\''
+                + ", resultTo='" + resultTo + '\''
+                + ", resultFrom='" + resultFrom + '\''
+                + ", resultVia='" + resultVia + '\''
+                + ", result='" + result + '\''
+                + ", callCompletionSuccessRate=" + callCompletionSuccessRate
+                + ", callSetupSuccessRate=" + callSetupSuccessRate
+                + ", callDroppedCallRate=" + callDroppedCallRate
+                + "} " + super.toString();
     }
 }

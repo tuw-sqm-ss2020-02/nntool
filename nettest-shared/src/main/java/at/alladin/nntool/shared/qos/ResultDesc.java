@@ -145,9 +145,9 @@ public class ResultDesc implements Comparable<ResultDesc> {
     }
 
     public String getParsedValue() {
-        if(parsedValue != null){
+        if (parsedValue != null) {
             return parsedValue;
-        }else{
+        } else {
             parsedValue = String.valueOf(TestScriptInterpreter.interpret(value, fieldNameToFieldMap, resultObject, true, options));
             return parsedValue;
         }

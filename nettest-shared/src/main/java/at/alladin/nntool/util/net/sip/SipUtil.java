@@ -26,7 +26,7 @@ import at.alladin.nntool.util.net.sip.SipResponseMessage.SipResponseType;
  */
 public final class SipUtil {
 
-    private SipUtil(){
+    private SipUtil() {
     }
 
     /**

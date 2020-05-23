@@ -79,7 +79,7 @@ public class MkitTask extends AbstractQoSTask {
             inputArray = new ArrayList<>();
         }
 
-        flagArray = new JsonArray();//gson.fromJson((String) taskDesc.getParams().get(PARAM_FLAGS), JsonArray.class);
+        flagArray = new JsonArray(); //gson.fromJson((String) taskDesc.getParams().get(PARAM_FLAGS), JsonArray.class);
     }
 
     public QoSTestResult call() throws Exception {

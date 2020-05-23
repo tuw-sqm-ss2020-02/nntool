@@ -104,10 +104,10 @@ public abstract class AbstractTest {
         log(String.format(Locale.US, "thread %d: ReceiveBufferSize: '%s'.", threadId, s.getReceiveBufferSize()));
         log(String.format(Locale.US, "thread %d: SendBufferSize: '%s'.", threadId, s.getSendBufferSize()));
 
-        if (in != null){
+        if (in != null) {
             totalDown += in.getCount();
         }
-        if (out != null){
+        if (out != null) {
             totalUp += out.getCount();
         }
 

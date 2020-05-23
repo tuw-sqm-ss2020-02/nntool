@@ -43,9 +43,9 @@ public class MapMarkerResponse {
 
     @Override
     public String toString() {
-        return "MapMarkerResponse{" +
-                "mapMarkers=" + mapMarkers +
-                '}';
+        return "MapMarkerResponse{"
+                + "mapMarkers=" + mapMarkers
+                + '}';
     }
 
     public static class MapMarker {

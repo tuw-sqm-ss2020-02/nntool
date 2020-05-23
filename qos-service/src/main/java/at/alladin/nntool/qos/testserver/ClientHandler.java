@@ -276,8 +276,8 @@ public class ClientHandler implements Runnable {
         int randomPort = 0;
         Random rand = new Random();
         if ((TestServer.getInstance().serverPreferences.getUdpPortMax() > 0) && (TestServer.getInstance().serverPreferences.getUdpPortMin() <= TestServer.getInstance().serverPreferences.getUdpPortMax())) {
-            randomPort = rand.nextInt(TestServer.getInstance().serverPreferences.getUdpPortMax() - TestServer.getInstance().serverPreferences.getUdpPortMin()) +
-                    TestServer.getInstance().serverPreferences.getUdpPortMin();
+            randomPort = rand.nextInt(TestServer.getInstance().serverPreferences.getUdpPortMax() - TestServer.getInstance().serverPreferences.getUdpPortMin())
+                    + TestServer.getInstance().serverPreferences.getUdpPortMin();
 
         }
         TestServerConsole.log("Requested UDP Port. Picked random port number: " + randomPort, 0, TestServerServiceEnum.TEST_SERVER);
@@ -352,8 +352,8 @@ public class ClientHandler implements Runnable {
 
             sendCommand(QoSServiceProtocol.RESPONSE_OK, command);
         } catch (Exception e) {
-            TestServerConsole.error(name + (command == null ?
-                    " [No command submitted]" : " [Command: " + command + "]"), e, 1, TestServerServiceEnum.TCP_SERVICE);
+            TestServerConsole.error(name + (command == null
+                    ? " [No command submitted]" : " [Command: " + command + "]"), e, 1, TestServerServiceEnum.TCP_SERVICE);
         } finally {
             //is beeing done inside TcpServer now:
             //tcpServer.removeCandidate(socket.getInetAddress());
@@ -384,8 +384,8 @@ public class ClientHandler implements Runnable {
             Thread.sleep(100);
             sendCommand(QoSServiceProtocol.RESPONSE_OK, command);
         } catch (Exception e) {
-            TestServerConsole.error(name + (command == null ?
-                    " [No command submitted]" : " [Command: " + command + "]"), e, 1, TestServerServiceEnum.TCP_SERVICE);
+            TestServerConsole.error(name + (command == null
+                    ? " [No command submitted]" : " [Command: " + command + "]"), e, 1, TestServerServiceEnum.TCP_SERVICE);
         } finally {
             //is beeing done inside TcpServer now:
             //tcpServer.removeCandidate(socket.getInetAddress());

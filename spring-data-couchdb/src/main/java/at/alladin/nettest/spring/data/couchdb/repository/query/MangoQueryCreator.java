@@ -165,9 +165,9 @@ public class MangoQueryCreator extends AbstractQueryCreator<String, Selector> {
                 .map(o -> {
                     final String sortQuery = transformSortQuery(o.getProperty());
 
-                    return o.getDirection() == Direction.DESC ?
-                            com.cloudant.client.api.query.Sort.desc(sortQuery) :
-                            com.cloudant.client.api.query.Sort.asc(sortQuery);
+                    return o.getDirection() == Direction.DESC
+                            ? com.cloudant.client.api.query.Sort.desc(sortQuery)
+                            : com.cloudant.client.api.query.Sort.asc(sortQuery);
                 })
                 .collect(Collectors.toList());
 

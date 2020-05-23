@@ -299,8 +299,8 @@ public class VoipTask extends AbstractQoSTask {
                 resultLatch.await(CONTROL_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS);
             }
 
-            final RtpQoSResult rtpResults = rtpControlDataList.size() > 0 ?
-                    RtpUtil.calculateQoS(rtpControlDataList, initialSequenceNumber, sampleRate, buffer) : null;
+            final RtpQoSResult rtpResults = rtpControlDataList.size() > 0
+                    ? RtpUtil.calculateQoS(rtpControlDataList, initialSequenceNumber, sampleRate, buffer) : null;
 
             putRtpResultIntoQoS(result, rtpResults);
 

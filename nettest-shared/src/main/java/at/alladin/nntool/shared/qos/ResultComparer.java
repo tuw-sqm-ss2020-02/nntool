@@ -92,15 +92,15 @@ public final class ResultComparer {
      */
     private static ResultDesc getResultDescription(AbstractResult result1, AbstractResult result2, Map<String, Field> fieldNameToFieldMap, ResultOptions options) {
         if ("true".equals(result1.getSuccessCondition()) || "1".equals(result1.getSuccessCondition())) {
-            ResultDesc resultDesc = (runCompare(result2, result1) == RESULT_SUCCESS ?
-                    new ResultDesc(ResultDesc.STATUS_CODE_SUCCESS, result1.getOnSuccess(), result2, fieldNameToFieldMap, options) :
-                    new ResultDesc(ResultDesc.STATUS_CODE_FAILURE, result1.getOnFailure(), result2, fieldNameToFieldMap, options));
+            ResultDesc resultDesc = (runCompare(result2, result1) == RESULT_SUCCESS
+                    ? new ResultDesc(ResultDesc.STATUS_CODE_SUCCESS, result1.getOnSuccess(), result2, fieldNameToFieldMap, options)
+                    : new ResultDesc(ResultDesc.STATUS_CODE_FAILURE, result1.getOnFailure(), result2, fieldNameToFieldMap, options));
 
             return resultDesc;
         } else {
-            ResultDesc resultDesc = (runCompare(result2, result1) == RESULT_FAILURE ?
-                    new ResultDesc(ResultDesc.STATUS_CODE_SUCCESS, result1.getOnSuccess(), result2, fieldNameToFieldMap, options) :
-                    new ResultDesc(ResultDesc.STATUS_CODE_FAILURE, result1.getOnFailure(), result2, fieldNameToFieldMap, options));
+            ResultDesc resultDesc = (runCompare(result2, result1) == RESULT_FAILURE
+                    ? new ResultDesc(ResultDesc.STATUS_CODE_SUCCESS, result1.getOnSuccess(), result2, fieldNameToFieldMap, options)
+                    : new ResultDesc(ResultDesc.STATUS_CODE_FAILURE, result1.getOnFailure(), result2, fieldNameToFieldMap, options));
 
             return resultDesc;
         }
@@ -114,9 +114,9 @@ public final class ResultComparer {
     private static int runCompare(AbstractResult result, AbstractResult expectedResult) {
         //makes the comparison shorter (less code) and (maybe ;)) faster. needed for the logical xor operation:
         if (expectedResult.getOperator() != null) {
-            boolean controlFlag = (expectedResult.getOperator().equals(AbstractResult.COMPARATOR_EQUALS) ||
-                    expectedResult.getOperator().equals(AbstractResult.COMPARATOR_GREATER_THEN) ||
-                    expectedResult.getOperator().equals(AbstractResult.COMPARATOR_GREATER_OR_EQUALS)) ? true : false;
+            boolean controlFlag = (expectedResult.getOperator().equals(AbstractResult.COMPARATOR_EQUALS)
+                    || expectedResult.getOperator().equals(AbstractResult.COMPARATOR_GREATER_THEN)
+                    || expectedResult.getOperator().equals(AbstractResult.COMPARATOR_GREATER_OR_EQUALS)) ? true : false;
 
             return runCompare(expectedResult.getOperator(), controlFlag, result, expectedResult);
         } else if (expectedResult.getEvaluate() != null) {

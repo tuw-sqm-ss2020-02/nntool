@@ -366,8 +366,8 @@ public class QualityOfServiceTest implements Callable<QoSResultCollector> {
                         } else {
                             System.out.println("test: " + curResult.getTestType().name() + " failed. Could not connect to QoSControlServer.");
                         }
-                        System.out.println("test " + curResult.getTestType().name() + " finished (" + (progress.get() + 1) + " out of " +
-                                testSize + ", CONCURRENCY GROUP=" + groupId + ")");
+                        System.out.println("test " + curResult.getTestType().name() + " finished (" + (progress.get() + 1) + " out of "
+                                + testSize + ", CONCURRENCY GROUP=" + groupId + ")");
                         Counter testTypeCounter = testGroupCounterMap.get(curResult.getTestType());
                         if (testTypeCounter != null) {
                             testTypeCounter.value++;

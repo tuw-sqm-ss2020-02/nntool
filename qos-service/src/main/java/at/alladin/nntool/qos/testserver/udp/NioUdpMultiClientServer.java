@@ -145,8 +145,8 @@ public class NioUdpMultiClientServer extends AbstractUdpServer<DatagramChannel> 
                                     TestServerConsole.error(getName(), e, 1, TestServerServiceEnum.UDP_SERVICE);
                                 }
 
-                                TestServerConsole.log("received UDP from: " + dp.getAddress().toString() + ":" + dp.getPort() + " (on local port :" + ((InetSocketAddress) channel.getLocalAddress()).getPort() + ") , #" +
-                                        packetNumber + " TimeStamp: " + timeStamp + ", containing: " + clientUuid, 1, TestServerServiceEnum.UDP_SERVICE);
+                                TestServerConsole.log("received UDP from: " + dp.getAddress().toString() + ":" + dp.getPort() + " (on local port :" + ((InetSocketAddress) channel.getLocalAddress()).getPort() + ") , #"
+                                        + packetNumber + " TimeStamp: " + timeStamp + ", containing: " + clientUuid, 1, TestServerServiceEnum.UDP_SERVICE);
 
                             } else {
                                 //RtpPacket received:

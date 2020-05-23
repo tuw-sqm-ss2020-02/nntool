@@ -38,9 +38,9 @@ public class IasMeasurementBatchPreparedStatementSetter implements BatchPrepared
     public IasMeasurementBatchPreparedStatementSetter(List<FullMeasurementResponse> measurements) {
         this.IasMeasurements = measurements.stream()
                 .filter(m -> {
-                    return m.getMeasurements() != null &&
-                            m.getMeasurements().get(MeasurementTypeDto.SPEED) != null &&
-                            m.getMeasurements().get(MeasurementTypeDto.SPEED) instanceof FullSpeedMeasurement;
+                    return m.getMeasurements() != null
+                            && m.getMeasurements().get(MeasurementTypeDto.SPEED) != null
+                            && m.getMeasurements().get(MeasurementTypeDto.SPEED) instanceof FullSpeedMeasurement;
                 })
                 .map(m -> {
                     return new OpenDataFullIasMeasurement(

@@ -61,12 +61,12 @@ public final class SpringApplicationHelper {
 
         final Environment environment = app.run(args).getEnvironment();
 
-        logger.info("\n----------------------------------------------------------------\n\t" +
-                        "Application '{}' is running!\n\t\n\t" +
-                        "Local: \t\thttp://localhost:{}\n\t" +
-                        "External: \thttp://{}:{}\n\t" +
-                        "Profile(s): \t{}\n\t" +
-                        "Properties: \t{}"
+        logger.info("\n----------------------------------------------------------------\n\t"
+                        + "Application '{}' is running!\n\t\n\t"
+                        + "Local: \t\thttp://localhost:{}\n\t"
+                        + "External: \thttp://{}:{}\n\t"
+                        + "Profile(s): \t{}\n\t"
+                        + "Properties: \t{}"
                         + "\n----------------------------------------------------------------",
                 environment.getProperty("spring.application.name"),
                 environment.getProperty("server.port"),

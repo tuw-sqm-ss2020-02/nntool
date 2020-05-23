@@ -215,7 +215,7 @@ public class TestServerImpl {
 
                 // Load the JKS key chain
                 KeyStore ks = KeyStore.getInstance(TestServer.QOS_KEY_TYPE);
-                InputStream fis = TestServer.class.getResourceAsStream(TestServer.QOS_KEY_FILE);//new FileInputStream(serverKey);
+                InputStream fis = TestServer.class.getResourceAsStream(TestServer.QOS_KEY_FILE); //new FileInputStream(serverKey);
                 ks.load(fis, TestServer.QOS_KEY_PASSWORD.toCharArray());
                 fis.close();
                 kmf.init(ks, TestServer.QOS_KEY_PASSWORD.toCharArray());

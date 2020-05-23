@@ -40,8 +40,8 @@ public class Dig {
     }
 
     static void usage() {
-        System.out.println("Usage: dig [@server] name [<type>] [<class>] " +
-                "[options]");
+        System.out.println("Usage: dig [@server] name [<type>] [<class>] "
+                + "[options]");
         System.exit(0);
     }
 
@@ -57,7 +57,7 @@ public class Dig {
             System.out.print(";; TSIG ");
             if (response.isVerified()) {
                 System.out.println("ok");
-            }else {
+            } else {
                 System.out.println("failed");
             }
         }
@@ -100,7 +100,7 @@ public class Dig {
 
             if (server != null) {
                 res = new SimpleResolver(server);
-            }else {
+            } else {
                 res = new SimpleResolver();
             }
 
@@ -114,14 +114,14 @@ public class Dig {
                 type = Type.value(argv[arg]);
                 if (type < 0) {
                     type = Type.A;
-                }else {
+                } else {
                     arg++;
                 }
 
                 dclass = DClass.value(argv[arg]);
                 if (dclass < 0) {
                     dclass = DClass.IN;
-                }else {
+                } else {
                     arg++;
                 }
             }
@@ -133,7 +133,7 @@ public class Dig {
                         int port;
                         if (argv[arg].length() > 2) {
                             portStr = argv[arg].substring(2);
-                        }else {
+                        } else {
                             portStr = argv[++arg];
                         }
                         port = Integer.parseInt(portStr);
@@ -148,7 +148,7 @@ public class Dig {
                         String addrStr;
                         if (argv[arg].length() > 2) {
                             addrStr = argv[arg].substring(2);
-                        }else {
+                        } else {
                             addrStr = argv[++arg];
                         }
                         InetAddress addr;
@@ -165,7 +165,7 @@ public class Dig {
                         String key;
                         if (argv[arg].length() > 2) {
                             key = argv[arg].substring(2);
-                        }else {
+                        } else {
                             key = argv[++arg];
                         }
                         res.setTSIGKey(TSIG.fromString(key));
@@ -184,14 +184,14 @@ public class Dig {
                         int edns;
                         if (argv[arg].length() > 2) {
                             ednsStr = argv[arg].substring(2);
-                        }else {
+                        } else {
                             ednsStr = argv[++arg];
                         }
                         edns = Integer.parseInt(ednsStr);
                         if (edns < 0 || edns > 1) {
-                            System.out.println("Unsupported " +
-                                    "EDNS level: " +
-                                    edns);
+                            System.out.println("Unsupported "
+                                    + "EDNS level: "
+                                    + edns);
                             return;
                         }
                         res.setEDNS(edns);
@@ -217,8 +217,9 @@ public class Dig {
                 usage();
             }
         }
-        if (res == null)
+        if (res == null) {
             res = new SimpleResolver();
+        }
 
         rec = Record.newRecord(name, type, dclass);
         query = Message.newQuery(rec);
@@ -231,7 +232,7 @@ public class Dig {
 
         if (type == Type.AXFR) {
             doAXFR(response);
-        }else {
+        } else {
             doQuery(response, endTime - startTime);
         }
     }

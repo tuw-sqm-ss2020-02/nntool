@@ -184,7 +184,7 @@ public final class ClientHolder {
                     // System.out.println("getAcceptedIssuers");
                     if (ca == null) {
                         return new X509Certificate[]{cert};
-                    }else {
+                    } else {
                         return new X509Certificate[]{ca};
                     }
                 }
@@ -282,7 +282,7 @@ public final class ClientHolder {
 
         if (error) {
             setErrorStatus();
-        }else {
+        } else {
             setStatus(TestStatus.ABORTED);
         }
         aborted.set(true);

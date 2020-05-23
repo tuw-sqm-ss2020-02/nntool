@@ -175,16 +175,16 @@ public class UdpTestCandidate extends TestCandidate {
      */
     @Override
     public String toString() {
-        return "UdpTestCandidate{" +
-                "packetsReceived=" + packetsReceived +
-                ", packetDuplicates=" + packetDuplicates +
-                ", rttMap=" + rttMap +
-                ", numPackets=" + numPackets +
-                ", remotePort=" + remotePort +
-                ", error=" + error +
-                ", errorMsg='" + errorMsg + '\'' +
-                ", onUdpTestCompleteCallback=" + onUdpTestCompleteCallback +
-                ", onUdpPacketReceivedCallback=" + onUdpPacketReceivedCallback +
-                "} " + super.toString();
+        return "UdpTestCandidate{"
+                + "packetsReceived=" + packetsReceived
+                + ", packetDuplicates=" + packetDuplicates
+                + ", rttMap=" + rttMap
+                + ", numPackets=" + numPackets
+                + ", remotePort=" + remotePort
+                + ", error=" + error
+                + ", errorMsg='" + errorMsg + '\''
+                + ", onUdpTestCompleteCallback=" + onUdpTestCompleteCallback
+                + ", onUdpPacketReceivedCallback=" + onUdpPacketReceivedCallback
+                + "} " + super.toString();
     }
 }

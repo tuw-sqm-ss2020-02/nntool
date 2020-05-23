@@ -45,9 +45,9 @@ public class SipResponseMessage extends SipMessage {
 
     @Override
     public String toString() {
-        return "SipResponseMessage{" +
-                "type=" + type +
-                "} " + super.toString();
+        return "SipResponseMessage{"
+                + "type=" + type
+                + "} " + super.toString();
     }
 
     /**

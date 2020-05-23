@@ -94,13 +94,13 @@ public class MapCoordinate {
 
     @Override
     public String toString() {
-        return "MapCoordinate{" +
-                "lat=" + lat +
-                ", lon=" + lon +
-                ", x=" + x +
-                ", y=" + y +
-                ", zoom=" + zoom +
-                ", size=" + size +
-                '}';
+        return "MapCoordinate{"
+                + "lat=" + lat
+                + ", lon=" + lon
+                + ", x=" + x
+                + ", y=" + y
+                + ", zoom=" + zoom
+                + ", size=" + size
+                + '}';
     }
 }

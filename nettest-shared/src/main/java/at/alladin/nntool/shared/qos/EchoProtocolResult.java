@@ -91,13 +91,13 @@ public class EchoProtocolResult extends AbstractResult {
 
     @Override
     public String toString() {
-        return "EchoProtocolResult{" +
-                "host=" + host +
-                ", port=" + port +
-                ", protocol=" + protocol +
-                ", payload=" + payload +
-                ", status=" + status +
-                ", result=" + result +
-                '}';
+        return "EchoProtocolResult{"
+                + "host=" + host
+                + ", port=" + port
+                + ", protocol=" + protocol
+                + ", payload=" + payload
+                + ", status=" + status
+                + ", result=" + result
+                + '}';
     }
 }

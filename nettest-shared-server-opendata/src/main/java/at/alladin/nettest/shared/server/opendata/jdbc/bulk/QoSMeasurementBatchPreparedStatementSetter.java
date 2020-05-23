@@ -38,9 +38,9 @@ public class QoSMeasurementBatchPreparedStatementSetter implements BatchPrepared
     public QoSMeasurementBatchPreparedStatementSetter(List<FullMeasurementResponse> measurements) {
         this.qosMeasurements = measurements.stream()
                 .filter(m -> {
-                    return m.getMeasurements() != null &&
-                            m.getMeasurements().get(MeasurementTypeDto.QOS) != null &&
-                            m.getMeasurements().get(MeasurementTypeDto.QOS) instanceof FullQoSMeasurement;
+                    return m.getMeasurements() != null
+                            && m.getMeasurements().get(MeasurementTypeDto.QOS) != null
+                            && m.getMeasurements().get(MeasurementTypeDto.QOS) instanceof FullQoSMeasurement;
                 })
                 .map(m -> {
                     return new OpenDataFullQoSMeasurement(

@@ -98,11 +98,11 @@ public class QoSMeasurementContext {
 
     @Override
     public String toString() {
-        return "QoSMeasurementContext{" +
-                "controlServerHost='" + controlServerHost + '\'' +
-                ", controlServerPort=" + controlServerPort +
-                ", useTls=" + useTls +
-                ", controlServerApiVersion=" + controlServerApiVersion +
-                '}';
+        return "QoSMeasurementContext{"
+                + "controlServerHost='" + controlServerHost + '\''
+                + ", controlServerPort=" + controlServerPort
+                + ", useTls=" + useTls
+                + ", controlServerApiVersion=" + controlServerApiVersion
+                + '}';
     }
 }

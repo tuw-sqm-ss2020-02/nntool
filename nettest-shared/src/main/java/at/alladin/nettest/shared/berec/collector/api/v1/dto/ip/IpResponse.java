@@ -86,10 +86,10 @@ public class IpResponse {
 
     @Override
     public String toString() {
-        return "IpResponse{" +
-                "ipAddress='" + ipAddress + '\'' +
-                ", version=" + version +
-                '}';
+        return "IpResponse{"
+                + "ipAddress='" + ipAddress + '\''
+                + ", version=" + version
+                + '}';
     }
 
     /**

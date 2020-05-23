@@ -304,21 +304,21 @@ public class SpeedMeasurementResult extends SubMeasurementResult {
 
     @Override
     public String toString() {
-        return "SpeedMeasurementResult{" +
-                "bytesDownload=" + bytesDownload +
-                ", bytesDownloadIncludingSlowStart=" + bytesDownloadIncludingSlowStart +
-                ", bytesUpload=" + bytesUpload +
-                ", bytesUploadIncludingSlowStart=" + bytesUploadIncludingSlowStart +
-                ", durationRttNs=" + durationRttNs +
-                ", durationDownloadNs=" + durationDownloadNs +
-                ", durationUploadNs=" + durationUploadNs +
-                ", relativeStartTimeRttNs=" + relativeStartTimeRttNs +
-                ", relativeStartTimeDownloadNs=" + relativeStartTimeDownloadNs +
-                ", relativeStartTimeUploadNs=" + relativeStartTimeUploadNs +
-                ", rttInfo=" + rttInfo +
-                ", downloadRawData=" + downloadRawData +
-                ", uploadRawData=" + uploadRawData +
-                ", connectionInfo=" + connectionInfo +
-                '}';
+        return "SpeedMeasurementResult{"
+                + "bytesDownload=" + bytesDownload
+                + ", bytesDownloadIncludingSlowStart=" + bytesDownloadIncludingSlowStart
+                + ", bytesUpload=" + bytesUpload
+                + ", bytesUploadIncludingSlowStart=" + bytesUploadIncludingSlowStart
+                + ", durationRttNs=" + durationRttNs
+                + ", durationDownloadNs=" + durationDownloadNs
+                + ", durationUploadNs=" + durationUploadNs
+                + ", relativeStartTimeRttNs=" + relativeStartTimeRttNs
+                + ", relativeStartTimeDownloadNs=" + relativeStartTimeDownloadNs
+                + ", relativeStartTimeUploadNs=" + relativeStartTimeUploadNs
+                + ", rttInfo=" + rttInfo
+                + ", downloadRawData=" + downloadRawData
+                + ", uploadRawData=" + uploadRawData
+                + ", connectionInfo=" + connectionInfo
+                + '}';
     }
 }

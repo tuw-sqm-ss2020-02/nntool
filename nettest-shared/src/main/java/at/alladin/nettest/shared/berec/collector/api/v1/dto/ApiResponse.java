@@ -72,8 +72,8 @@ public class ApiResponse<T> extends ApiBase<T> {
 
     @Override
     public String toString() {
-        return "ApiResponse{" +
-                "errors=" + errors +
-                "} " + super.toString();
+        return "ApiResponse{"
+                + "errors=" + errors
+                + "} " + super.toString();
     }
 }

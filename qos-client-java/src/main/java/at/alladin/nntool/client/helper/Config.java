@@ -33,7 +33,7 @@ public class Config {
     public static final String CONTROL_DEFAULT_SERVER = "";    //TODO: replace w/useful value and replace as a whole once POC phase is over
     public static final int CONTROL_PORT = 443;
     public static final boolean CONTROL_SSL = true;
-    public static final boolean QOS_SSL = true;//true;
+    public static final boolean QOS_SSL = true; //true;
     public static final String CONTROL_PATH = "";
     public static final String CONTROL_MAIN_URL = "/";
     public static final String CONTROL_V2_TESTS = "/qosTestRequest";

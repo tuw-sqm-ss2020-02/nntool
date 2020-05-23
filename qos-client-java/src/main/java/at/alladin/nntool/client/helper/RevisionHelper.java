@@ -39,7 +39,7 @@ public final class RevisionHelper {
         boolean _dirty = false;
         final InputStream svnIS = RevisionHelper.class.getClassLoader().getResourceAsStream("revision.properties");
         final Properties properties = new Properties();
-        if (svnIS != null){
+        if (svnIS != null) {
             try {
                 properties.load(svnIS);
                 _describe = properties.getProperty("git.describe");

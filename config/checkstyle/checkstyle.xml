@@ -125,7 +125,6 @@
 
     <!-- Checks for whitespace                               -->
     <!-- See https://checkstyle.org/config_whitespace.html -->
-    <module name="EmptyLineSeparator"/>
     <module name="GenericWhitespace"/>
     <module name="MethodParamPad"/>
     <module name="NoLineWrap"/>
@@ -175,7 +174,6 @@
       <property name="classes" value="java.lang.Boolean"/>
     </module>
     <module name="InnerAssignment"/>
-    <module name="MagicNumber"/>
     <module name="MissingSwitchDefault"/>
     <module name="MultipleVariableDeclarations"/>
     <module name="NoArrayTrailingComma"/>
