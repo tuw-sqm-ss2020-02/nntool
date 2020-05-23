@@ -114,7 +114,9 @@ public class VoipTask extends AbstractQoSTask {
     private Integer incomingPort;
 
     /**
+     * @param nnTest
      * @param taskDesc
+     * @param threadId
      */
     public VoipTask(QualityOfServiceTest nnTest, TaskDesc taskDesc, int threadId) {
         super(nnTest, taskDesc, threadId, threadId);

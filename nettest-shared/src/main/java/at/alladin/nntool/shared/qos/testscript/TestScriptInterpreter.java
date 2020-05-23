@@ -80,6 +80,7 @@ public final class TestScriptInterpreter {
 
     /**
      * @param command
+     * @param resultOptions
      * @return
      */
     public static Object interpret(String command, ResultOptions resultOptions) {
@@ -88,6 +89,10 @@ public final class TestScriptInterpreter {
 
     /**
      * @param command
+     * @param fieldNameToFieldMap
+     * @param resultOptions
+     * @param object
+     * @param useRecursion
      * @return
      */
     public synchronized static Object interpret(String command, Map<String, Field> fieldNameToFieldMap, AbstractResult object, boolean useRecursion, ResultOptions resultOptions) {
@@ -184,7 +189,6 @@ public final class TestScriptInterpreter {
     }
 
     /**
-     *
      * @param args range of the random generator
      * @return a random number in the given range
      * @throws ScriptException
@@ -232,7 +236,6 @@ public final class TestScriptInterpreter {
     }
 
     /**
-     *
      * @param args
      * @param object
      * @return eval result as object

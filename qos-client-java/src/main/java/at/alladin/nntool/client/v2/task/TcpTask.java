@@ -45,7 +45,9 @@ public class TcpTask extends AbstractQoSTask {
     private final long timeout;
 
     /**
+     * @param nnTest
      * @param taskDesc
+     * @param threadId
      */
     public TcpTask(QualityOfServiceTest nnTest, TaskDesc taskDesc, int threadId) {
         super(nnTest, taskDesc, threadId, threadId);

@@ -127,6 +127,7 @@ public class MeasurementConfigurationService {
      * Fetches the matching task configurations for the given capabilities.
      *
      * @param capabilities
+     * @param useIPv6
      * @return
      */
     private List<LmapTaskDto> getTaskListForCapabilities(final LmapCapabilityDto capabilities, boolean useIPv6) {

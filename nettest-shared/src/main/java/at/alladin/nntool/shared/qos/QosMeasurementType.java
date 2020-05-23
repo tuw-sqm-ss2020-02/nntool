@@ -107,9 +107,6 @@ public enum QosMeasurementType {
      */
     public static final Map<String, QosMeasurementType> CONSTANTS = new HashMap<>();
 
-    /**
-     *
-     */
     static {
         for (QosMeasurementType c : values()) {
             CONSTANTS.put(c.value, c);
@@ -135,6 +132,9 @@ public enum QosMeasurementType {
 
     /**
      * @param value
+     * @param descriptionKey
+     * @param nameKey
+     * @param resultClass
      */
     private QosMeasurementType(String value, String descriptionKey, String nameKey, Class<? extends AbstractResult> resultClass) {
         this.value = value;

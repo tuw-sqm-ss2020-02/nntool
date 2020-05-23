@@ -50,7 +50,6 @@ public class QoSControlConnection extends AbstractTest implements Runnable {
     /**
      * @param client
      * @param params
-     * @param threadId
      */
     public QoSControlConnection(ClientHolder client, TestParameter params) {
         super(client, params, 1);

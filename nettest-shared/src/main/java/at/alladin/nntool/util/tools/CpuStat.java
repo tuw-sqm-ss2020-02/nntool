@@ -34,11 +34,13 @@ public abstract class CpuStat {
     }
 
     /**
+     * @param getByCore
      * @return
      */
     protected abstract CpuUsage getCurrentCpuUsage(boolean getByCore);
 
     /**
+     * @param getByCore
      * @return
      */
     public float[] update(boolean getByCore) {

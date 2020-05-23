@@ -57,7 +57,7 @@ public class ApiRequest<T> extends ApiBase<T> {
 
     /**
      * @param data
-     * @param errors
+     * @param requestInfo
      */
     public ApiRequest(T data, ApiRequestInfo requestInfo) {
         super(data);

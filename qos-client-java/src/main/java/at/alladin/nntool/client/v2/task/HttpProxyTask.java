@@ -70,7 +70,9 @@ public class HttpProxyTask extends AbstractQoSTask {
     private final long downloadTimeout;
 
     /**
+     * @param nnTest
      * @param taskDesc
+     * @param threadId
      */
     public HttpProxyTask(QualityOfServiceTest nnTest, TaskDesc taskDesc, int threadId) {
         super(nnTest, taskDesc, threadId, threadId);

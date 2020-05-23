@@ -33,6 +33,7 @@ public interface ResponseHelper {
 
     /**
      * @param data
+     * @param <T>
      * @return
      */
     public static <T> ResponseEntity<ApiResponse<T>> ok(T data) {
@@ -40,7 +41,8 @@ public interface ResponseHelper {
     }
 
     /**
-     * @param data
+     * @param page
+     * @param <T>
      * @return
      */
     public static <T> ResponseEntity<ApiResponse<ApiPagination<T>>> ok(Page<T> page) {
@@ -49,6 +51,7 @@ public interface ResponseHelper {
 
     /**
      * @param errors
+     * @param <T>
      * @return
      */
     public static <T> ResponseEntity<ApiResponse<?>> internalServerError(List<ApiError> errors) {
@@ -58,6 +61,7 @@ public interface ResponseHelper {
     /**
      * @param data
      * @param errors
+     * @param <T>
      * @return
      */
     public static <T> ResponseEntity<ApiResponse<?>> internalServerError(T data, List<ApiError> errors) {
@@ -68,6 +72,7 @@ public interface ResponseHelper {
      * @param data
      * @param errors
      * @param status
+     * @param <T>
      * @return
      */
     public static <T> ResponseEntity<ApiResponse<?>> error(T data, List<ApiError> errors, HttpStatus status) {

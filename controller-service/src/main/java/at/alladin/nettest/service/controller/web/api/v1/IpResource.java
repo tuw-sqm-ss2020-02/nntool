@@ -48,6 +48,7 @@ public class IpResource {
 
     /**
      * Get client public IP address.
+     * @param request
      * @return Returns public IP address and version of requesting client.
      * @throws UnknownHostException
      */

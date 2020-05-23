@@ -46,7 +46,9 @@ public class TaskDesc extends TestParameter implements Serializable {
      * @param token
      * @param duration
      * @param numThreads
+     * @param numPings
      * @param startTime
+     * @param params
      */
     public TaskDesc(String host, int port, boolean encryption, String token,
                     int duration, int numThreads, int numPings, long startTime, Map<String, Object> params) {

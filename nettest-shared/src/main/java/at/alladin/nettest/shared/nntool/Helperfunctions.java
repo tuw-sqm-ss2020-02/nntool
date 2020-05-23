@@ -576,6 +576,7 @@ public abstract class Helperfunctions {
     /**
      * @param glue
      * @param array
+     * @param <T>
      * @return
      */
     public static <T extends Object> String join(String glue, T[] array) {

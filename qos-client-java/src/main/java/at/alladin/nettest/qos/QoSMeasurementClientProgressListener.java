@@ -31,7 +31,7 @@ public interface QoSMeasurementClientProgressListener {
 
     /**
      * On progress for the specific qosTypes
-     *
+     * @param qosType
      * @param progress [0, 1]
      */
     public void onQoSTypeProgress(QosMeasurementType qosType, float progress);

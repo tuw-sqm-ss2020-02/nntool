@@ -52,7 +52,9 @@ public class TracerouteTask extends AbstractQoSTask {
     private final int maxHops;
 
     /**
+     * @param nnTest
      * @param taskDesc
+     * @param threadId
      */
     public TracerouteTask(QualityOfServiceTest nnTest, TaskDesc taskDesc, int threadId) {
         super(nnTest, taskDesc, threadId, threadId);

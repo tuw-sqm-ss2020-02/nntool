@@ -63,7 +63,9 @@ public class DnsTask extends AbstractQoSTask {
     private final long timeout;
 
     /**
+     * @param nnTest
      * @param taskDesc
+     * @param threadId
      */
     public DnsTask(QualityOfServiceTest nnTest, TaskDesc taskDesc, int threadId) {
         super(nnTest, taskDesc, threadId, threadId);
@@ -79,6 +81,8 @@ public class DnsTask extends AbstractQoSTask {
      * @param domainName
      * @param record
      * @param resolver
+     * @param timeout
+     * @param testResult
      * @return
      */
     public static List<Map<String, Object>> lookupDns(String domainName, String record, String resolver, int timeout, QoSTestResult testResult) {

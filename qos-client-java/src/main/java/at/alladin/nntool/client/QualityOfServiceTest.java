@@ -102,6 +102,8 @@ public class QualityOfServiceTest implements Callable<QoSResultCollector> {
 
     /**
      * @param client
+     * @param nnTestSettings
+     * @param listeners
      */
     public QualityOfServiceTest(ClientHolder client, TestSettings nnTestSettings, List<QoSMeasurementClientProgressListener> listeners) {
         System.out.println("\n\n---- Initializing QoS Tests ----\n");

@@ -28,7 +28,6 @@ public final class ToolUtils {
     }
 
     /**
-     * @param path
      * @param file
      * @return
      */

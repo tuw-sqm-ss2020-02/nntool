@@ -87,7 +87,11 @@ public class ApiPagination<T> {
     private final long totalElements;
 
     /**
-     * @param page
+     * @param content
+     * @param pageNumber
+     * @param pageSize
+     * @param totalElements
+     * @param totalPages
      */
     @JsonCreator
     public ApiPagination(@JsonProperty("content") List<T> content,

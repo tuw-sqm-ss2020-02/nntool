@@ -95,7 +95,9 @@ public class UdpTask extends AbstractQoSTask {
 
 
     /**
+     * @param nnTest
      * @param taskDesc
+     * @param threadId
      */
     public UdpTask(QualityOfServiceTest nnTest, TaskDesc taskDesc, int threadId) {
         super(nnTest, taskDesc, threadId, threadId);

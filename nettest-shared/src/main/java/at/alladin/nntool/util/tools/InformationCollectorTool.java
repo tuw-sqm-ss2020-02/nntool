@@ -184,7 +184,7 @@ public class InformationCollectorTool {
     }
 
     /**
-     * @param jsonObjectName
+     * @param clean
      * @return
      */
     public JSONObject getJsonObject(final boolean clean) {

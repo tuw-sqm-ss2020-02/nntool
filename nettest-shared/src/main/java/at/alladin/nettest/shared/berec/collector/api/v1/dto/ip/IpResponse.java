@@ -118,7 +118,7 @@ public class IpResponse {
         IPv6;
 
         /**
-         * @param inetAddress
+         * @param addr
          * @return
          */
         public static IpVersion fromInetAddress(InetAddress addr) {

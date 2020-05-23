@@ -37,7 +37,8 @@ public interface WebsiteTestService {
     public long getDownloadDuration();
 
     /**
-     *
+     * @param targetUrl
+     * @param timeOut
      */
     public void run(final String targetUrl, final long timeOut);
 

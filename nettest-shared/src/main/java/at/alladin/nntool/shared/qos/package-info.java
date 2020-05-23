@@ -3637,8 +3637,6 @@
  * If dns_result_info does not hold the value: "TIMEOUT" (dns_result_info != "TIMEOUT) on_success is beeing used, else on_failure will be returned. The other new thing in this example is the missing "on_success". As also mentioned in 2.1.3 a result message can be omitted if the corresponding on_success or on_failure is missing.<br><br>
  * In the last step we need to put these conditions together. Let's take the second option (because of its simplicity) and the timeout-condition:<br><b>
  * {"\"operator\"=>\"eq\", \"on_failure\"=>\"dns.unknowndomain.failure\", \"on_success\"=>\"dns.unknowndomain.success\", \"dns_result_status\"=>\"NXDOMAIN\"","\"operator\"=>\"ne\", \"on_failure\"=>\"test.timeout.exceeded\", \"dns_result_info\"=>\"TIMEOUT\""}<br>
- */
-/**
  * This package evaluates and compares QoS test results. It also is used to document the functionality of the {@link at.alladin.nntool.shared.qos.testscript.TestScriptInterpreter}
  *
  * <br><br>

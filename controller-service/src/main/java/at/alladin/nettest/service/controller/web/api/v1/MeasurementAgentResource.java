@@ -65,7 +65,7 @@ public class MeasurementAgentResource {
      * Registers a new  measurement agent.
      * This resource is used to register new measurement agents. Measurement agents will be assigned a UUID. Terms and conditions must be accepted in the request object.
      *
-     * @param registrationRequest
+     * @param registrationApiRequest
      * @return
      */
     @io.swagger.annotations.ApiOperation(value = "Registers a new measurement agent.", notes = "This resource is used to register new measurement agents. Measurement agents will be assigned a UUID. Terms and conditions must be accepted in the request object.")

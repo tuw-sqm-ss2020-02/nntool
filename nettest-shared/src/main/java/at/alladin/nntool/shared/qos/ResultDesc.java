@@ -108,6 +108,9 @@ public class ResultDesc implements Comparable<ResultDesc> {
     /**
      * @param statusCode
      * @param key
+     * @param resultObject
+     * @param fieldNameToFieldMap
+     * @param options
      */
     public ResultDesc(String statusCode, String key, AbstractResult resultObject, Map<String, Field> fieldNameToFieldMap, ResultOptions options) {
         this.statusCode = statusCode;

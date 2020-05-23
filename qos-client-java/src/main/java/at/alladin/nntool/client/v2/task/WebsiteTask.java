@@ -51,7 +51,7 @@ public class WebsiteTask extends AbstractQoSTask {
 
 
     /**
-     * @param client
+     * @param nnTest
      * @param taskDesc
      * @param threadId
      */

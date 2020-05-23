@@ -82,8 +82,10 @@ public abstract class AbstractQoSTask extends AbstractTest implements QoSTask {
 
     /**
      * this constructor set the priority to max
-     *
+     * @param nnTest
      * @param taskDesc
+     * @param threadId
+     * @param id
      */
     public AbstractQoSTask(QualityOfServiceTest nnTest, TaskDesc taskDesc, int threadId, int id) {
         this(nnTest, taskDesc, threadId, id, Integer.MAX_VALUE);
@@ -272,7 +274,7 @@ public abstract class AbstractQoSTask extends AbstractTest implements QoSTask {
     }
 
     /**
-     *
+     * @param result
      */
     public void onStart(QoSTestResult result) {
         this.testStartTimestampNs = (System.nanoTime() - getQoSTest().getTestSettings().getStartTimeNs());
@@ -282,7 +284,7 @@ public abstract class AbstractQoSTask extends AbstractTest implements QoSTask {
     }
 
     /**
-     *
+     * @param result
      */
     public void onEnd(QoSTestResult result) {
         this.testEndTimestampNs = (System.nanoTime() - getQoSTest().getTestSettings().getStartTimeNs());
@@ -362,6 +364,7 @@ public abstract class AbstractQoSTask extends AbstractTest implements QoSTask {
 
     /**
      * @param command
+     * @param callback
      * @throws IOException
      */
     public void sendCommand(String command, ControlConnectionResponseCallback callback) throws IOException {

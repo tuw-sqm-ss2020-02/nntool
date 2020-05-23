@@ -48,9 +48,6 @@ public class SystemApi {
      */
     private static final DecimalFormat DEFAULT_PERCENT_FORMAT = new DecimalFormat("0.#");
 
-    /**
-     *
-     */
     static {
         DEFAULT_DECIMAL_FORMAT.setMaximumFractionDigits(2);
     }
@@ -161,7 +158,6 @@ public class SystemApi {
     }
 
     /**
-     *
      * @param path traceroute
      * @return traceroute formatted
      * @throws JSONException

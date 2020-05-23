@@ -41,6 +41,8 @@ public class TestMeasurement {
     /**
      * @param rxBytes
      * @param txBytes
+     * @param timeStampStart
+     * @param timeStampStop
      */
     public TestMeasurement(long rxBytes, long txBytes, long timeStampStart, long timeStampStop) {
         this.rxBytes = rxBytes;

@@ -36,6 +36,12 @@ public final class RealtimeTransportProtocol {
      * @param version
      * @param hasPadding
      * @param hasExtension
+     * @param csrcCount
+     * @param payloadType
+     * @param sequenceNumber
+     * @param setMarker
+     * @param ssrc
+     * @param timeStamp
      * @return
      */
     public static byte[] createHeaderBytes(RtpVersion version, boolean hasPadding, boolean hasExtension,

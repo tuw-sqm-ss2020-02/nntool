@@ -88,6 +88,8 @@ public class GroupedMeasurementService {
      *
      * @param measurement the measurement result to be grouped
      * @param groupStructure the structure to be applied to the measurement as obtained w/ServerResource.getSetting(speedtestDetailGroups) TODO: make this more specific
+     * @param locale
+     * @param geoAccuracyDetailLimit
      * @return a DetailMeasurementResponse with the grouped measurement result
      */
     public DetailMeasurementResponse groupResult(final FullMeasurementResponse measurement, final List<SpeedtestDetailGroup> groupStructure, final Locale locale,

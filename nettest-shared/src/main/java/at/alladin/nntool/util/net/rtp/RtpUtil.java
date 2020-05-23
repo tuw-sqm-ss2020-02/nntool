@@ -70,6 +70,9 @@ public final class RtpUtil {
      * @param timeout
      * @param useNio
      * @param receiveCallback
+     * @param closeOnFinish
+     * @param incomingPort
+     * @param <T>
      * @throws InterruptedException
      * @throws TimeoutException
      * @throws IOException
@@ -163,6 +166,9 @@ public final class RtpUtil {
 
     /**
      * @param rtpControlDataMap
+     * @param buffer
+     * @param initialSequenceNumber
+     * @param sampleRate
      */
     public static RtpQoSResult calculateQoS(Map<Integer, RtpControlData> rtpControlDataMap,
                                             long initialSequenceNumber, int sampleRate, long buffer) {

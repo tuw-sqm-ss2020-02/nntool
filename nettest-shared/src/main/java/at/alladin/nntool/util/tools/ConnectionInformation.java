@@ -76,7 +76,7 @@ public abstract class ConnectionInformation {
     }
 
     /**
-     * @param ipString
+     * @param bytes
      * @return
      */
     public static boolean isMappedIPv4Address(byte[] bytes) {
@@ -98,6 +98,7 @@ public abstract class ConnectionInformation {
 
     /**
      * @param ipString
+     * @param addrSizeInBytes
      * @return
      */
     private static byte[] ipHexStringToBytes(String ipString, int addrSizeInBytes) {

@@ -44,6 +44,7 @@ public final class ResultComparer {
      * @param result2
      * @param fieldNameToFieldMap
      * @param options
+     * @param <T>
      * @return result description
      * @throws IllegalAccessException
      * @throws IllegalArgumentException
@@ -85,7 +86,7 @@ public final class ResultComparer {
     /**
      * @param result1
      * @param result2
-     * @param hstore
+     * @param fieldNameToFieldMap
      * @param options
      * @return
      */
@@ -180,6 +181,7 @@ public final class ResultComparer {
 
     /**
      * @param f
+     * @param operator
      * @param controlFlag
      * @param result
      * @param expectedResult

@@ -32,6 +32,7 @@ public interface QoSMeasurementClientControlListener {
 
     /**
      * If the qos test ran into an error
+     * @param e
      */
     public void onMeasurementError(Exception e);
 

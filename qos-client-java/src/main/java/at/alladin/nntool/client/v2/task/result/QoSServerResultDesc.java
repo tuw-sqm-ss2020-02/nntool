@@ -52,6 +52,7 @@ public class QoSServerResultDesc implements Serializable {
      * @param desc
      * @param testType
      * @param status
+     * @param uidSet
      */
     public QoSServerResultDesc(String desc, QosMeasurementType testType, DetailType status, Set<Long> uidSet) {
         this.desc = desc;

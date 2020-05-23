@@ -29,7 +29,9 @@ import at.alladin.nntool.client.v2.task.result.QoSTestResult;
 public class EchoProtocolTcpTask extends AbstractEchoProtocolTask {
 
     /**
+     * @param nnTest
      * @param taskDesc
+     * @param threadId
      */
 
     public EchoProtocolTcpTask(QualityOfServiceTest nnTest, TaskDesc taskDesc, int threadId) {

@@ -97,7 +97,6 @@ public class RtpPacket {
     }
 
     /**
-     * @param packet
      * @return
      */
     public PayloadType getPayloadType() {
@@ -105,7 +104,6 @@ public class RtpPacket {
     }
 
     /**
-     * @param packet
      * @param payloadType
      */
     public void setPayloadType(PayloadType payloadType) {
@@ -113,7 +111,6 @@ public class RtpPacket {
     }
 
     /**
-     * @param packet
      * @return
      */
     public boolean hasMarker() {
@@ -121,7 +118,6 @@ public class RtpPacket {
     }
 
     /**
-     * @param packet
      * @param hasMarker
      */
     public void setHasMarker(boolean hasMarker) {
@@ -129,7 +125,6 @@ public class RtpPacket {
     }
 
     /**
-     * @param packet
      * @return
      */
     public RtpVersion getVersion() {
@@ -144,7 +139,6 @@ public class RtpPacket {
     }
 
     /**
-     * @param packet
      * @return
      */
     public int getCsrcCount() {
@@ -175,7 +169,6 @@ public class RtpPacket {
     }
 
     /**
-     * @param packet
      * @return
      */
     public boolean hasPadding() {
@@ -190,7 +183,6 @@ public class RtpPacket {
     }
 
     /**
-     * @param packet
      * @return
      */
     public boolean hasExtension() {

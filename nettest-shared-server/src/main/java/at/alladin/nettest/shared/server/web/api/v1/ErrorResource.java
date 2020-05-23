@@ -66,7 +66,7 @@ public class ErrorResource implements ErrorController {
     private Environment env;
 
     /**
-     * @param request
+     * @param webRequest
      * @param response
      * @return
      */
@@ -83,7 +83,7 @@ public class ErrorResource implements ErrorController {
     }
 
     /**
-     * @param errorMap
+     * @param webRequest
      * @param includeStackTrace
      * @return
      */

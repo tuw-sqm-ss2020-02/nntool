@@ -45,6 +45,9 @@ public final class SpringApplicationHelper {
     }
 
     /**
+     * @param configDirectoryName
+     * @param args
+     * @param sources
      * @throws Exception
      */
     public static void runSpingApplication(String configDirectoryName, String[] args, Class<?>... sources) throws Exception {
@@ -76,7 +79,6 @@ public final class SpringApplicationHelper {
 
     /**
      * @param configDirectoryName
-     * @param args
      * @param application
      * @param sources
      * @return

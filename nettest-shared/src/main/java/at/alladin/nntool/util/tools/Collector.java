@@ -24,6 +24,7 @@ public interface Collector<T, JSONTYPE> {
 
     /**
      * @param delta time diff since last call
+     * @param timeUnit
      * @return
      */
     public CollectorData<T> update(float delta, TimeUnit timeUnit);

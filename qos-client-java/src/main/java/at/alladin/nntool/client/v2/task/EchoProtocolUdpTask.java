@@ -31,7 +31,9 @@ import at.alladin.nntool.client.v2.task.result.QoSTestResult;
 public class EchoProtocolUdpTask extends AbstractEchoProtocolTask {
 
     /**
+     * @param nnTest
      * @param taskDesc
+     * @param threadId
      */
     public EchoProtocolUdpTask(QualityOfServiceTest nnTest, TaskDesc taskDesc, int threadId) {
         super(nnTest, taskDesc, threadId, threadId);

@@ -47,7 +47,8 @@ public class QoSTestResult extends TestResult {
     private boolean fatalError = false;
 
     /**
-     *
+     * @param testType
+     * @param qosTask
      */
     public QoSTestResult(QosMeasurementType testType, AbstractQoSTask qosTask) {
         this.testType = testType;

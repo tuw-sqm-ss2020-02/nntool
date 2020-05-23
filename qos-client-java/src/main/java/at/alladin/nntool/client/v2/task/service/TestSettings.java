@@ -155,7 +155,7 @@ public class TestSettings {
 
     /**
      * set the {@link TracerouteService} implementation for traceroute functionality
-     *
+     * @param tracerouteServiceClazz
      * @TracerouteServicengTool
      */
     public void setTracerouteServiceClazz(Class<? extends TracerouteService> tracerouteServiceClazz) {

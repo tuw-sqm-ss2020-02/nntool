@@ -105,8 +105,13 @@ public class ApiError {
     private final String trace;
 
     /**
-     * @param title
+     * @param times
+     * @param path
+     * @param status
+     * @param error
      * @param message
+     * @param exception
+     * @param trace
      */
     public ApiError(LocalDateTime times, String path, Integer status, String error, String message, String exception, String trace) {
         this.time = times;

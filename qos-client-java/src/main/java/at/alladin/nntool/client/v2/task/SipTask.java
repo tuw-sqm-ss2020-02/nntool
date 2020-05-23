@@ -58,7 +58,9 @@ public class SipTask extends AbstractQoSTask {
     private float callCompletionSuccessRate = 0f;
 
     /**
+     * @param nnTest
      * @param taskDesc
+     * @param threadId
      */
     public SipTask(QualityOfServiceTest nnTest, TaskDesc taskDesc, int threadId) {
         super(nnTest, taskDesc, threadId, threadId);
