@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,57 +25,56 @@ import at.alladin.nettest.shared.berec.collector.api.v1.dto.shared.QoSMeasuremen
 
 /**
  * The specific QoS type
- * 
- * @author bp
  *
+ * @author bp
  */
 public enum QosMeasurementType {
 
-	/**
-	 * 
-	 */
+    /**
+     *
+     */
     @SerializedName("tcp")
     TCP("tcp", "test.tcp", "name.tcp", TcpResult.class),
-    
+
     /**
-     * 
+     *
      */
     @SerializedName("udp")
     UDP("udp", "test.udp", "name.udp", UdpResult.class),
-    
+
     /**
-	 * 
-	 */
+     *
+     */
     @SerializedName("dns")
     DNS("dns", "test.dns", "name.dns", DnsResult.class),
-    
+
     /**
-	 * 
-	 */
+     *
+     */
     @SerializedName("non_transparent_proxy")
     NON_TRANSPARENT_PROXY("non_transparent_proxy", "test.ntp", "name.non_transparent_proxy", NonTransparentProxyResult.class),
-    
+
     /**
-	 * 
-	 */
+     *
+     */
     @SerializedName("http_proxy")
     HTTP_PROXY("http_proxy", "test.http", "name.http_proxy", HttpProxyResult.class),
-    
+
     /**
-	 * 
-	 */
+     *
+     */
     @SerializedName("voip")
     VOIP("voip", "test.voip", "name.voip", VoipResult.class),
-    
+
     /**
-	 * 
-	 */
+     *
+     */
     @SerializedName("traceroute")
     TRACEROUTE("traceroute", "test.trace", "name.trace", TracerouteResult.class),
-    
+
     /**
-	 * 
-	 */
+     *
+     */
     @SerializedName("website")
     WEBSITE("website", "test.website", "name.website", WebsiteResult.class),
 
@@ -104,33 +103,10 @@ public enum QosMeasurementType {
     MKIT_DASH("mkit_dash", "test.mkit_dash", "name.mkit_dash", MkitDashResult.class);
 
     /**
-     * 
-     */
-    private final String value;
-    
-    /**
-     * 
-     */
-    private final String descriptionKey;
-    
-    /**
-     * 
-     */
-    private final String nameKey;
-    
-    /**
-     * 
-     */
-    private final Class<? extends AbstractResult> resultClass;
-    
-    /**
-     * 
+     *
      */
     public static final Map<String, QosMeasurementType> CONSTANTS = new HashMap<>();
 
-    /**
-     * 
-     */
     static {
         for (QosMeasurementType c : values()) {
             CONSTANTS.put(c.value, c);
@@ -138,8 +114,27 @@ public enum QosMeasurementType {
     }
 
     /**
-     * 
+     *
+     */
+    private final String value;
+    /**
+     *
+     */
+    private final String descriptionKey;
+    /**
+     *
+     */
+    private final String nameKey;
+    /**
+     *
+     */
+    private final Class<? extends AbstractResult> resultClass;
+
+    /**
      * @param value
+     * @param descriptionKey
+     * @param nameKey
+     * @param resultClass
      */
     private QosMeasurementType(String value, String descriptionKey, String nameKey, Class<? extends AbstractResult> resultClass) {
         this.value = value;
@@ -148,54 +143,12 @@ public enum QosMeasurementType {
         this.resultClass = resultClass;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Enum#toString()
-     */
-    @Override
-    public String toString() {
-        return this.value;
-    }
-
     /**
-     * 
-     * @return
-     */
-    public String getValue() {
-		return value;
-	}
-    
-    /**
-     * 
-     * @return
-     */
-    public String getDescriptionKey() {
-		return descriptionKey;
-	}
-    
-    /**
-     * 
-     * @return
-     */
-    public String getNameKey() {
-		return nameKey;
-	}
-    
-    /**
-     * 
-     * @return
-     */
-    public Class<? extends AbstractResult> getResultClass() {
-		return resultClass;
-	}
-    
-    /**
-     * 
      * @param value
      * @return
      */
     public static QosMeasurementType fromValue(String value) {
-    	final QosMeasurementType constant = CONSTANTS.get(value);
+        final QosMeasurementType constant = CONSTANTS.get(value);
         if (constant == null) {
             throw new IllegalArgumentException(value);
         } else {
@@ -203,39 +156,8 @@ public enum QosMeasurementType {
         }
     }
 
-    public QoSMeasurementTypeDto getQosMeasurementTypeDto() {
-        switch(this) {
-            case DNS:
-                return QoSMeasurementTypeDto.DNS;
-            case TCP:
-                return QoSMeasurementTypeDto.TCP;
-            case UDP:
-                return QoSMeasurementTypeDto.UDP;
-            case VOIP:
-                return QoSMeasurementTypeDto.VOIP;
-            case WEBSITE:
-                return QoSMeasurementTypeDto.WEBSITE;
-            case HTTP_PROXY:
-                return QoSMeasurementTypeDto.HTTP_PROXY;
-            case ECHO_PROTOCOL:
-                return QoSMeasurementTypeDto.ECHO_PROTOCOL;
-            case NON_TRANSPARENT_PROXY:
-                return QoSMeasurementTypeDto.NON_TRANSPARENT_PROXY;
-            case TRACEROUTE:
-                return QoSMeasurementTypeDto.TRACEROUTE;
-            case SIP:
-                return QoSMeasurementTypeDto.SIP;
-            case MKIT_WEB_CONNECTIVITY:
-                return QoSMeasurementTypeDto.MKIT_WEB_CONNECTIVITY;
-            case MKIT_DASH:
-                return QoSMeasurementTypeDto.MKIT_DASH;
-            default:
-                return null;
-        }
-    }
-
     public static QosMeasurementType fromQosTypeDto(final QoSMeasurementTypeDto dto) {
-        switch(dto) {
+        switch (dto) {
             case DNS:
                 return DNS;
             case TCP:
@@ -260,6 +182,74 @@ public enum QosMeasurementType {
                 return MKIT_WEB_CONNECTIVITY;
             case MKIT_DASH:
                 return MKIT_DASH;
+            default:
+                return null;
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Enum#toString()
+     */
+    @Override
+    public String toString() {
+        return this.value;
+    }
+
+    /**
+     * @return
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * @return
+     */
+    public String getDescriptionKey() {
+        return descriptionKey;
+    }
+
+    /**
+     * @return
+     */
+    public String getNameKey() {
+        return nameKey;
+    }
+
+    /**
+     * @return
+     */
+    public Class<? extends AbstractResult> getResultClass() {
+        return resultClass;
+    }
+
+    public QoSMeasurementTypeDto getQosMeasurementTypeDto() {
+        switch (this) {
+            case DNS:
+                return QoSMeasurementTypeDto.DNS;
+            case TCP:
+                return QoSMeasurementTypeDto.TCP;
+            case UDP:
+                return QoSMeasurementTypeDto.UDP;
+            case VOIP:
+                return QoSMeasurementTypeDto.VOIP;
+            case WEBSITE:
+                return QoSMeasurementTypeDto.WEBSITE;
+            case HTTP_PROXY:
+                return QoSMeasurementTypeDto.HTTP_PROXY;
+            case ECHO_PROTOCOL:
+                return QoSMeasurementTypeDto.ECHO_PROTOCOL;
+            case NON_TRANSPARENT_PROXY:
+                return QoSMeasurementTypeDto.NON_TRANSPARENT_PROXY;
+            case TRACEROUTE:
+                return QoSMeasurementTypeDto.TRACEROUTE;
+            case SIP:
+                return QoSMeasurementTypeDto.SIP;
+            case MKIT_WEB_CONNECTIVITY:
+                return QoSMeasurementTypeDto.MKIT_WEB_CONNECTIVITY;
+            case MKIT_DASH:
+                return QoSMeasurementTypeDto.MKIT_DASH;
             default:
                 return null;
         }

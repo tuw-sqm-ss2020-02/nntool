@@ -31,6 +31,7 @@ import android.webkit.WebViewClient;
 
 /**
  * Basic fragment that enables easy setting of web view fragments
+ *
  * @author Felix Kendlbacher (alladin-IT GmbH)
  */
 public abstract class WebViewFragment extends ActionBarFragment {
@@ -46,13 +47,10 @@ public abstract class WebViewFragment extends ActionBarFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        final WebView webview = new WebView(getActivity())
-        {
+        final WebView webview = new WebView(getActivity()) {
             @Override
-            public boolean onKeyDown(final int keyCode, final KeyEvent event)
-            {
-                if (keyCode == KeyEvent.KEYCODE_BACK && canGoBack())
-                {
+            public boolean onKeyDown(final int keyCode, final KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && canGoBack()) {
                     goBack();
                     return true;
                 }
@@ -62,12 +60,10 @@ public abstract class WebViewFragment extends ActionBarFragment {
         };
 
         webview.getSettings().setJavaScriptEnabled(true);
-        webview.setWebViewClient(new WebViewClient()
-        {
+        webview.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedError(final WebView view, final int errorCode, final String description,
-                                        final String failingUrl)
-            {
+                                        final String failingUrl) {
                 handleWebviewError(webview, errorCode);
                 super.onReceivedError(view, errorCode, description, failingUrl);
             }

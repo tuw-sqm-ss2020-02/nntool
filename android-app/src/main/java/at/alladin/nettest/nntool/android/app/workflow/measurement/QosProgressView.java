@@ -48,12 +48,9 @@ public class QosProgressView extends LinearLayout {
     private final static String TAG = "QosProgressView";
 
     private Map<QoSMeasurementTypeDto, SettingsResponse.TranslatedQoSTypeInfo> qosTranslationInfo = null;
-
-    private class ViewHolder {
-        View mainView;
-        ProgressBar progressBar;
-        TextView titleText;
-    }
+    private Map<QosMeasurementType, ViewHolder> viewHolderMap = new HashMap<>();
+    private Handler handler = new Handler();
+    private Set<QosMeasurementType> qosFinishedSet = new HashSet<>();
 
     public QosProgressView(Context context) {
         super(context);
@@ -69,12 +66,6 @@ public class QosProgressView extends LinearLayout {
         super(context, attrs, defStyleAttr);
         init();
     }
-
-    private Map<QosMeasurementType, ViewHolder> viewHolderMap = new HashMap<>();
-
-    private Handler handler = new Handler();
-
-    private Set<QosMeasurementType> qosFinishedSet = new HashSet<>();
 
     public void init() {
         inflate(getContext(), R.layout.qos_measurement_progress_view, this);
@@ -105,8 +96,7 @@ public class QosProgressView extends LinearLayout {
         if (qosTranslationInfo != null) {
             SettingsResponse.TranslatedQoSTypeInfo typeInfo = qosTranslationInfo.get(qosType.getQosMeasurementTypeDto());
             holder.titleText.setText(typeInfo != null ? typeInfo.getName() : qosType.toString());
-        }
-        else {
+        } else {
             holder.titleText.setText(qosType.toString());
         }
         viewHolderMap.put(qosType, holder);
@@ -138,7 +128,8 @@ public class QosProgressView extends LinearLayout {
                 final Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
                 anim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
-                    public void onAnimationStart(Animation animation) { }
+                    public void onAnimationStart(Animation animation) {
+                    }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
@@ -147,7 +138,8 @@ public class QosProgressView extends LinearLayout {
                     }
 
                     @Override
-                    public void onAnimationRepeat(Animation animation) { }
+                    public void onAnimationRepeat(Animation animation) {
+                    }
                 });
 
 
@@ -158,5 +150,11 @@ public class QosProgressView extends LinearLayout {
 
     private List<QosMeasurementType> getDummyQosTestNameList() {
         return Arrays.asList(QosMeasurementType.values());
+    }
+
+    private class ViewHolder {
+        View mainView;
+        ProgressBar progressBar;
+        TextView titleText;
     }
 }

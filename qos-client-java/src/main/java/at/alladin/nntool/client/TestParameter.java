@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,9 +18,8 @@ package at.alladin.nntool.client;
 
 import java.io.Serializable;
 
-public class TestParameter implements Serializable
-{
-    
+public class TestParameter implements Serializable {
+
     private String host;
     private int port;
     private boolean encryption;
@@ -31,11 +30,11 @@ public class TestParameter implements Serializable
     private int numPings;
     private long startTime;
 
-    public TestParameter() { }
+    public TestParameter() {
+    }
 
     public TestParameter(final String host, final int port, final boolean encryption, final String token,
-            final int duration, final int numThreads, final int numPings, final long startTime)
-    {
+                         final int duration, final int numThreads, final int numPings, final long startTime) {
         super();
         this.host = host;
         this.port = port;
@@ -46,10 +45,9 @@ public class TestParameter implements Serializable
         this.numPings = numPings;
         this.startTime = startTime;
     }
-    
+
     public TestParameter(final String host, final int port, final boolean encryption,
-                         final int duration, final int numThreads, final int numPings)
-    {
+                         final int duration, final int numThreads, final int numPings) {
         super();
         this.host = host;
         this.port = port;
@@ -61,108 +59,99 @@ public class TestParameter implements Serializable
         this.startTime = 0;
     }
 
+    public String getHost() {
+        return host;
+    }
+
     public void setHost(String host) {
         this.host = host;
+    }
+
+    public int getPort() {
+        return port;
     }
 
     public void setPort(int port) {
         this.port = port;
     }
 
+    public boolean isEncryption() {
+        return encryption;
+    }
+
     public void setEncryption(boolean encryption) {
         this.encryption = encryption;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public void setToken(String token) {
         this.token = token;
     }
 
-    public void setPretestDuration(int pretestDuration) {
-        this.pretestDuration = pretestDuration;
+    public String getUUID() {
+        if (token == null) return null;
+        final String[] parts = token.split("_");
+        if (parts == null || parts.length <= 0) return null;
+        return parts[0];
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public void setDuration(int duration) {
         this.duration = duration;
     }
 
+    public int getPretestDuration() {
+        return pretestDuration;
+    }
+
+    public void setPretestDuration(int pretestDuration) {
+        this.pretestDuration = pretestDuration;
+    }
+
+    public int getNumThreads() {
+        return numThreads;
+    }
+
     public void setNumThreads(int numThreads) {
         this.numThreads = numThreads;
+    }
+
+    public int getNumPings() {
+        return numPings;
     }
 
     public void setNumPings(int numPings) {
         this.numPings = numPings;
     }
 
+    public long getStartTime() {
+        return startTime;
+    }
+
     public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
 
-    public String getHost()
-    {
-        return host;
-    }
-    
-    public int getPort()
-    {
-        return port;
-    }
-    
-    public boolean isEncryption()
-    {
-        return encryption;
-    }
-    
-    public String getToken()
-    {
-        return token;
-    }
-    
-    public String getUUID()
-    {
-        if (token == null)
-            return null;
-        final String[] parts = token.split("_");
-        if (parts == null || parts.length <= 0)
-            return null;
-        return parts[0];
-    }
-    
-    public int getDuration()
-    {
-        return duration;
-    }
-    
-    public int getPretestDuration()
-    {
-        return pretestDuration;
-    }
-    
-    public int getNumThreads()
-    {
-        return numThreads;
-    }
-    
-    public int getNumPings()
-    {
-        return numPings;
-    }
-    
-    public long getStartTime()
-    {
-        return startTime;
-    }
-
-    public void check() throws IllegalArgumentException
-    {
-        if (host == null || host.length() == 0)
+    public void check() throws IllegalArgumentException {
+        if (host == null || host.length() == 0) {
             throw new IllegalArgumentException("no host");
-        if (port <= 0)
+        }
+        if (port <= 0) {
             throw new IllegalArgumentException("no port");
-        if (getUUID() == null)
+        }
+        if (getUUID() == null) {
             throw new IllegalArgumentException("no uuid");
-        if (numThreads <= 0)
+        }
+        if (numThreads <= 0) {
             throw new IllegalArgumentException("num threads <= 0");
-//        if (pretestDuration < 0)
-//            throw new IllegalArgumentException("pretestDuration < 0");
+        }
+        //if (pretestDuration < 0)
+        //  throw new IllegalArgumentException("pretestDuration < 0");
     }
 }

@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2016-2019 alladin-IT GmbH
  * Copyright 2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,101 +21,101 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class Provider {
-	
-	private String name;
-	
-	private String shortname;
-	
-	private List<ProviderMccMncMapping> mccMncMappings;
-	
-	public String getName() {
-		return name;
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    private String name;
 
-	public String getShortname() {
-		return shortname;
-	}
+    private String shortname;
 
-	public void setShortname(String shortname) {
-		this.shortname = shortname;
-	}
+    private List<ProviderMccMncMapping> mccMncMappings;
 
-	public List<ProviderMccMncMapping> getMccMncMappings() {
-		return mccMncMappings;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setMccMncMappings(List<ProviderMccMncMapping> mccMncMappings) {
-		this.mccMncMappings = mccMncMappings;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public static class ProviderMccMncMapping {
-		private MccMnc simMccMnc;
-		
-		private MccMnc networkMccMnc;
-		
-		private LocalDateTime conditionValidFrom;
-		
-		private LocalDateTime conditionValidTo;
+    public String getShortname() {
+        return shortname;
+    }
 
-		public MccMnc getSimMccMnc() {
-			return simMccMnc;
-		}
+    public void setShortname(String shortname) {
+        this.shortname = shortname;
+    }
 
-		public void setSimMccMnc(MccMnc simMccMnc) {
-			this.simMccMnc = simMccMnc;
-		}
+    public List<ProviderMccMncMapping> getMccMncMappings() {
+        return mccMncMappings;
+    }
 
-		public MccMnc getNetworkMccMnc() {
-			return networkMccMnc;
-		}
+    public void setMccMncMappings(List<ProviderMccMncMapping> mccMncMappings) {
+        this.mccMncMappings = mccMncMappings;
+    }
 
-		public void setNetworkMccMnc(MccMnc networkMccMnc) {
-			this.networkMccMnc = networkMccMnc;
-		}
+    public static class ProviderMccMncMapping {
+        private MccMnc simMccMnc;
 
-		public LocalDateTime getConditionValidFrom() {
-			return conditionValidFrom;
-		}
+        private MccMnc networkMccMnc;
 
-		public void setConditionValidFrom(LocalDateTime conditionValidFrom) {
-			this.conditionValidFrom = conditionValidFrom;
-		}
+        private LocalDateTime conditionValidFrom;
 
-		public LocalDateTime getConditionValidTo() {
-			return conditionValidTo;
-		}
+        private LocalDateTime conditionValidTo;
 
-		public void setConditionValidTo(LocalDateTime conditionValidTo) {
-			this.conditionValidTo = conditionValidTo;
-		}
+        public MccMnc getSimMccMnc() {
+            return simMccMnc;
+        }
 
-	}
-	
-	public static class MccMnc {
-		
-		private Integer mcc;
-		
-		private Integer mnc;
+        public void setSimMccMnc(MccMnc simMccMnc) {
+            this.simMccMnc = simMccMnc;
+        }
 
-		public Integer getMcc() {
-			return mcc;
-		}
+        public MccMnc getNetworkMccMnc() {
+            return networkMccMnc;
+        }
 
-		public void setMcc(Integer mcc) {
-			this.mcc = mcc;
-		}
+        public void setNetworkMccMnc(MccMnc networkMccMnc) {
+            this.networkMccMnc = networkMccMnc;
+        }
 
-		public Integer getMnc() {
-			return mnc;
-		}
+        public LocalDateTime getConditionValidFrom() {
+            return conditionValidFrom;
+        }
 
-		public void setMnc(Integer mnc) {
-			this.mnc = mnc;
-		}
-		
-	}
+        public void setConditionValidFrom(LocalDateTime conditionValidFrom) {
+            this.conditionValidFrom = conditionValidFrom;
+        }
+
+        public LocalDateTime getConditionValidTo() {
+            return conditionValidTo;
+        }
+
+        public void setConditionValidTo(LocalDateTime conditionValidTo) {
+            this.conditionValidTo = conditionValidTo;
+        }
+
+    }
+
+    public static class MccMnc {
+
+        private Integer mcc;
+
+        private Integer mnc;
+
+        public Integer getMcc() {
+            return mcc;
+        }
+
+        public void setMcc(Integer mcc) {
+            this.mcc = mcc;
+        }
+
+        public Integer getMnc() {
+            return mnc;
+        }
+
+        public void setMnc(Integer mnc) {
+            this.mnc = mnc;
+        }
+
+    }
 }

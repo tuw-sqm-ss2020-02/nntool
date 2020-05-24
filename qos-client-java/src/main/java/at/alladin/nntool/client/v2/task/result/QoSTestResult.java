@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,85 +24,77 @@ import at.alladin.nntool.client.TestResult;
 import at.alladin.nntool.client.v2.task.AbstractQoSTask;
 
 /**
- * 
  * @author lb
- *
  */
 public class QoSTestResult extends TestResult {
 
-	/**
-	 * 
-	 */
-	private final HashMap<String, Object> resultMap;
-	
-	/**
-	 * 
-	 */
-	private final QosMeasurementType testType;
-	
-	/**
-	 * 
-	 */
-	private boolean fatalError = false;
-	
-	/**
-	 * 
-	 */
-	private final AbstractQoSTask qosTask;
-	
-	/**
-	 * 
-	 */
-	public QoSTestResult(QosMeasurementType testType, AbstractQoSTask qosTask) {
-		this.testType = testType;
-		this.qosTask = qosTask;
-		resultMap = new HashMap<>();
-		resultMap.put("test_type", testType.name().toLowerCase(Locale.US));
-	}
+    /**
+     *
+     */
+    private final HashMap<String, Object> resultMap;
 
-	/**
-	 * 
-	 * @return
-	 */
-	public QosMeasurementType getTestType() {
-		return testType;
-	}
+    /**
+     *
+     */
+    private final QosMeasurementType testType;
+    /**
+     *
+     */
+    private final AbstractQoSTask qosTask;
+    /**
+     *
+     */
+    private boolean fatalError = false;
 
-	/**
-	 * 
-	 * @return
-	 */
-	public HashMap<String, Object> getResultMap() {
-		return resultMap;
-	}
+    /**
+     * @param testType
+     * @param qosTask
+     */
+    public QoSTestResult(QosMeasurementType testType, AbstractQoSTask qosTask) {
+        this.testType = testType;
+        this.qosTask = qosTask;
+        resultMap = new HashMap<>();
+        resultMap.put("test_type", testType.name().toLowerCase(Locale.US));
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public boolean isFatalError() {
-		return fatalError;
-	}
+    /**
+     * @return
+     */
+    public QosMeasurementType getTestType() {
+        return testType;
+    }
 
-	/**
-	 * 
-	 * @param fatalError
-	 */
-	public void setFatalError(boolean fatalError) {
-		this.fatalError = fatalError;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public AbstractQoSTask getQosTask() {
-		return qosTask;
-	}
+    /**
+     * @return
+     */
+    public HashMap<String, Object> getResultMap() {
+        return resultMap;
+    }
 
-	@Override
-	public String toString() {
-		return "QoSTestResult [resultMap=" + resultMap + ", testType="
-				+ testType + ", fatalError=" + fatalError + "]";
-	}
+    /**
+     * @return
+     */
+    public boolean isFatalError() {
+        return fatalError;
+    }
+
+    /**
+     * @param fatalError
+     */
+    public void setFatalError(boolean fatalError) {
+        this.fatalError = fatalError;
+    }
+
+    /**
+     * @return
+     */
+    public AbstractQoSTask getQosTask() {
+        return qosTask;
+    }
+
+    @Override
+    public String toString() {
+        return "QoSTestResult [resultMap=" + resultMap + ", testType="
+                + testType + ", fatalError=" + fatalError + "]";
+    }
 }

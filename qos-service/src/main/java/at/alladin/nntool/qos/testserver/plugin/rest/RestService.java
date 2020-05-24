@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2017-2019 alladin-IT GmbH
  * Copyright 2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,121 +37,113 @@ import at.alladin.nntool.qos.testserver.TestServer;
 import at.alladin.nntool.qos.testserver.util.TestServerConsole;
 
 /**
- * 
  * @author lb
- *
  */
 public class RestService extends ServiceSetting {
-	public static final String PARAM_REST = "server.service.rest";
-	public static final String PARAM_REST_PORT = "server.service.rest.port";
-	public static final String PARAM_REST_IP = "server.service.rest.ip";
-	public static final String PARAM_REST_SSL = "server.service.rest.ssl";
-	public final static String QOS_KEY_FILE_ABSOLUTE = "src/at/alladin/rmbt/qos/testserver/" + TestServer.QOS_KEY_FILE;
-	
-	public final static String DEFAULT_REST_SERVICE_IP = "127.0.0.1";
+    public static final String PARAM_REST = "server.service.rest";
+    public static final String PARAM_REST_PORT = "server.service.rest.port";
+    public static final String PARAM_REST_IP = "server.service.rest.ip";
+    public static final String PARAM_REST_SSL = "server.service.rest.ssl";
+    public final static String QOS_KEY_FILE_ABSOLUTE = "src/at/alladin/rmbt/qos/testserver/" + TestServer.QOS_KEY_FILE;
 
-	AtomicBoolean isRunning = new AtomicBoolean(false);
-	
-	int port = 0;
-	
-	boolean isSsl = false;
-	
-	String ip;
+    public final static String DEFAULT_REST_SERVICE_IP = "127.0.0.1";
+    private final ServerPreferences serverPreferences;
+    private AtomicBoolean isRunning = new AtomicBoolean(false);
+    private int port = 0;
+    private boolean isSsl = false;
+    private String ip;
 
-	final ServerPreferences serverPreferences;
-	
-	public RestService(Properties prop, ServerPreferences serverPreferences) {
-		this(false, serverPreferences);
-		setParam(prop);
-	}
-	
-	public RestService(boolean isEnabled, ServerPreferences serverPreferences) {
-		super("REST SERVICE", isEnabled);
-		this.serverPreferences = serverPreferences;
-	}
+    public RestService(Properties prop, ServerPreferences serverPreferences) {
+        this(false, serverPreferences);
+        setParam(prop);
+    }
 
-	@Override
-	public void start() throws UnknownHostException {
-		if (isEnabled) {
-			final boolean isRunning = this.isRunning.getAndSet(true);
-			if (!isRunning) {
-				if (isEnabled && port <= 0) {
-					this.isEnabled = false;
-					TestServerConsole.log("Could not start RestService. Parameter missing: 'server.service.rest.port'", 1, TestServerServiceEnum.TEST_SERVER);
-				}
-				 
-			    Component component = new Component();
+    public RestService(boolean isEnabled, ServerPreferences serverPreferences) {
+        super("REST SERVICE", isEnabled);
+        this.serverPreferences = serverPreferences;
+    }
+
+    /**
+     * @param json
+     * @param error
+     * @return errors as json object
+     * @throws JSONException
+     */
+    public static JSONObject addError(JSONObject json, String error) throws JSONException {
+        JSONArray errorArray = json.optJSONArray("errors");
+        if (errorArray == null) {
+            errorArray = new JSONArray();
+        }
+        errorArray.put(error);
+        json.put("errors", errorArray);
+        return json;
+    }
+
+    @Override
+    public void start() throws UnknownHostException {
+        if (isEnabled) {
+            final boolean isrunning = this.isRunning.getAndSet(true);
+            if (!isrunning) {
+                if (isEnabled && port <= 0) {
+                    this.isEnabled = false;
+                    TestServerConsole.log("Could not start RestService. Parameter missing: 'server.service.rest.port'", 1, TestServerServiceEnum.TEST_SERVER);
+                }
+
+                Component component = new Component();
 
                 Server s = component.getServers().add(isSsl ? Protocol.HTTPS : Protocol.HTTP, ip, port);
 
-			    if (isSsl) {
-				    Series<Parameter> parameters = s.getContext().getParameters();				    
-				    parameters.add("keystorePath", QOS_KEY_FILE_ABSOLUTE);
-				    parameters.add("keystorePassword", TestServer.QOS_KEY_PASSWORD);
-				    parameters.add("keyPassword", TestServer.QOS_KEY_PASSWORD);
-				    parameters.add("keystoreType", TestServer.QOS_KEY_TYPE);
-			    }
+                if (isSsl) {
+                    Series<Parameter> parameters = s.getContext().getParameters();
+                    parameters.add("keystorePath", QOS_KEY_FILE_ABSOLUTE);
+                    parameters.add("keystorePassword", TestServer.QOS_KEY_PASSWORD);
+                    parameters.add("keyPassword", TestServer.QOS_KEY_PASSWORD);
+                    parameters.add("keystoreType", TestServer.QOS_KEY_TYPE);
+                }
 
-			    component.getDefaultHost().attach("", new RestletApplication());
-			    
-			    try {
-					component.start();
-					TestServerConsole.log("[" + getName() + "] started: " + toString(), 1, TestServerServiceEnum.TEST_SERVER);
-				} catch (Exception e) {
-					TestServerConsole.error(getName(), e, 0, TestServerServiceEnum.TEST_SERVER);
-				}  
-			}
-		}
-	}
+                component.getDefaultHost().attach("", new RestletApplication());
 
-	@Override
-	public void stop() {
-		if (isEnabled && isRunning.get()) {
-			
-			isRunning.set(false);
-		}
-	}
+                try {
+                    component.start();
+                    TestServerConsole.log("[" + getName() + "] started: " + toString(), 1, TestServerServiceEnum.TEST_SERVER);
+                } catch (Exception e) {
+                    TestServerConsole.error(getName(), e, 0, TestServerServiceEnum.TEST_SERVER);
+                }
+            }
+        }
+    }
 
-	@Override
-	public void setParam(Properties properties) {
-   		String param = properties.getProperty(PARAM_REST);
-   		if (param!=null) {
-   			setEnabled(Boolean.parseBoolean(param.trim()));
-   		}
+    @Override
+    public void stop() {
+        if (isEnabled && isRunning.get()) {
 
-   		param = properties.getProperty(PARAM_REST_SSL);
-   		if (param!=null) {
-   			isSsl = Boolean.parseBoolean(param.trim());
-   		}
+            isRunning.set(false);
+        }
+    }
 
-   		param = properties.getProperty(PARAM_REST_PORT);
-   		if (param!=null) {
-   			port = Integer.parseInt(param);
-   		}
+    @Override
+    public void setParam(Properties properties) {
+        String param = properties.getProperty(PARAM_REST);
+        if (param != null) {
+            setIsEnabled(Boolean.parseBoolean(param.trim()));
+        }
 
-   		param = properties.getProperty(PARAM_REST_IP);
-  		ip = param != null ? param : DEFAULT_REST_SERVICE_IP;
-	}
+        param = properties.getProperty(PARAM_REST_SSL);
+        if (param != null) {
+            isSsl = Boolean.parseBoolean(param.trim());
+        }
 
-	@Override
-	public String toString() {
-		return "RestService [isRunning=" + isRunning + ", port=" + port + ", isSsl=" + isSsl + ", ip=" + ip + "]";
-	}
-	
-	/**
-	 * 
-	 * @param json
-	 * @param error
-	 * @return
-	 * @throws JSONException 
-	 */
-	public static JSONObject addError(JSONObject json, String error) throws JSONException {
-		JSONArray errorArray = json.optJSONArray("errors");
-		if (errorArray == null) {
-			errorArray = new JSONArray();
-		}
-		errorArray.put(error);
-		json.put("errors", errorArray);
-		return json;
-	}
+        param = properties.getProperty(PARAM_REST_PORT);
+        if (param != null) {
+            port = Integer.parseInt(param);
+        }
+
+        param = properties.getProperty(PARAM_REST_IP);
+        ip = param != null ? param : DEFAULT_REST_SERVICE_IP;
+    }
+
+    @Override
+    public String toString() {
+        return "RestService [isRunning=" + isRunning + ", port=" + port + ", isSsl=" + isSsl + ", ip=" + ip + "]";
+    }
 }

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -65,9 +65,18 @@ public class QualityOfServiceTestTest {
 
     private QualityOfServiceTest qosTest;
 
-    private TaskDesc httpProxyTaskDesc, nonTransparentProxyTaskDesc, dnsTaskDesc, tcpTaskDesc, udpTaskDesc,
-            voipTaskDesc, tracerouteTaskDesc, websiteTaskDesc, echoTcpTaskDesc,
-            echoUdpTaskDesc, echoUnknownTaskDesc, echoNoProtocolTaskDesc;
+    private TaskDesc httpProxyTaskDesc;
+    private TaskDesc nonTransparentProxyTaskDesc;
+    private TaskDesc dnsTaskDesc;
+    private TaskDesc tcpTaskDesc;
+    private TaskDesc udpTaskDesc;
+    private TaskDesc voipTaskDesc;
+    private TaskDesc tracerouteTaskDesc;
+    private TaskDesc websiteTaskDesc;
+    private TaskDesc echoTcpTaskDesc;
+    private TaskDesc echoUdpTaskDesc;
+    private TaskDesc echoUnknownTaskDesc;
+    private TaskDesc echoNoProtocolTaskDesc;
 
     @Mocked
     private DnsTask dnsTask;
@@ -106,7 +115,7 @@ public class QualityOfServiceTestTest {
     private WebsiteTestService websiteTestService;
 
     @Before
-    public void init () {
+    public void init() {
         clientHolder = ClientHolder.getInstance(TaskDescriptionHelper.createTaskDescList("host", "80",
                 null, null, "host", null, null), null);
         testSettings = new TestSettings();
@@ -138,123 +147,123 @@ public class QualityOfServiceTestTest {
         echoParams.put(AbstractEchoProtocolTask.PROTOCOL, "Not an echo protocol");
         echoUnknownTaskDesc = new TaskDesc("host", 80, false, "token", 1, 1, 1, 1, echoParams, ClientHolder.TASK_ECHO_PROTOCOL);
         echoNoProtocolTaskDesc = new TaskDesc("host", 80, false, "token", 1, 1, 1, 1, new HashMap<String, Object>(), ClientHolder.TASK_ECHO_PROTOCOL);
-
     }
 
     @Test
-    public void basicParsingOfTaskListTest () throws Exception {
+    public void basicParsingOfTaskListTest() throws Exception {
 
         // get every test type to return the correct taskDesc
-        new Expectations() {{
+        new Expectations() {
+            {
+                httpProxyTask.getTestType();
+                result = QosMeasurementType.HTTP_PROXY;
+                httpProxyTask.getTestServerAddr();
+                minTimes = 0;
+                result = "test_server_address";
+                httpProxyTask.getTaskDesc();
+                result = httpProxyTaskDesc;
 
-            httpProxyTask.getTestType();
-            result = QosMeasurementType.HTTP_PROXY;
-            httpProxyTask.getTestServerAddr();
-            minTimes = 0;
-            result = "test_server_address";
-            httpProxyTask.getTaskDesc();
-            result = httpProxyTaskDesc;
-
-            nonTransparentProxyTask.getTestType();
-            result = QosMeasurementType.NON_TRANSPARENT_PROXY;
-            nonTransparentProxyTask.getTestServerAddr();
-            minTimes = 0;
-            result = "other_test_server_address";
-            nonTransparentProxyTask.getTaskDesc();
-            result = nonTransparentProxyTaskDesc;
-
-
-            dnsTask.getTestType();
-            result = QosMeasurementType.DNS;
-            dnsTask.getTaskDesc();
-            minTimes = 0;
-            result = dnsTaskDesc;
-            dnsTask.getTestServerAddr();
-            minTimes = 0;
-            result = "test_server_address";
+                nonTransparentProxyTask.getTestType();
+                result = QosMeasurementType.NON_TRANSPARENT_PROXY;
+                nonTransparentProxyTask.getTestServerAddr();
+                minTimes = 0;
+                result = "other_test_server_address";
+                nonTransparentProxyTask.getTaskDesc();
+                result = nonTransparentProxyTaskDesc;
 
 
-            tcpTask.getTestType();
-            result = QosMeasurementType.TCP;
-            tcpTask.getTaskDesc();
-            minTimes = 0;
-            result = tcpTaskDesc;
-            tcpTask.getTestServerAddr();
-            minTimes = 0;
-            result = "third_test_server_address";
+                dnsTask.getTestType();
+                result = QosMeasurementType.DNS;
+                dnsTask.getTaskDesc();
+                minTimes = 0;
+                result = dnsTaskDesc;
+                dnsTask.getTestServerAddr();
+                minTimes = 0;
+                result = "test_server_address";
 
-            udpTask.getTestType();
-            result = QosMeasurementType.UDP;
-            udpTask.getTaskDesc();
-            minTimes = 0;
-            result = udpTaskDesc;
-            udpTask.getTestServerAddr();
-            minTimes = 0;
-            result = "test_server_address";
 
-            voipTask.getTestType();
-            result = QosMeasurementType.VOIP;
-            voipTask.getTaskDesc();
-            minTimes = 0;
-            result = voipTaskDesc;
-            voipTask.getTestServerAddr();
-            minTimes = 0;
-            result = "test_server_address";
+                tcpTask.getTestType();
+                result = QosMeasurementType.TCP;
+                tcpTask.getTaskDesc();
+                minTimes = 0;
+                result = tcpTaskDesc;
+                tcpTask.getTestServerAddr();
+                minTimes = 0;
+                result = "third_test_server_address";
 
-            tracerouteTask.getTestType();
-            result = QosMeasurementType.TRACEROUTE;
-            tracerouteTask.getTaskDesc();
-            minTimes = 0;
-            result = tracerouteTaskDesc;
-            tracerouteTask.getTestServerAddr();
-            minTimes = 0;
-            result = "other_test_server_address";
+                udpTask.getTestType();
+                result = QosMeasurementType.UDP;
+                udpTask.getTaskDesc();
+                minTimes = 0;
+                result = udpTaskDesc;
+                udpTask.getTestServerAddr();
+                minTimes = 0;
+                result = "test_server_address";
 
-            websiteTask.getTestType();
-            result = QosMeasurementType.WEBSITE;
-            websiteTask.getTaskDesc();
-            minTimes = 0;
-            result = websiteTaskDesc;
-            websiteTask.getTestServerAddr();
-            minTimes = 0;
-            result = "test_server_address";
+                voipTask.getTestType();
+                result = QosMeasurementType.VOIP;
+                voipTask.getTaskDesc();
+                minTimes = 0;
+                result = voipTaskDesc;
+                voipTask.getTestServerAddr();
+                minTimes = 0;
+                result = "test_server_address";
 
-            echoProtocolTcpTask.getTestType();
-            result = QosMeasurementType.ECHO_PROTOCOL;
-            echoProtocolTcpTask.getTaskDesc();
-            minTimes = 0;
-            result = echoTcpTaskDesc;
-            echoProtocolTcpTask.getTestServerAddr();
-            minTimes = 0;
-            result = "test_server_address";
+                tracerouteTask.getTestType();
+                result = QosMeasurementType.TRACEROUTE;
+                tracerouteTask.getTaskDesc();
+                minTimes = 0;
+                result = tracerouteTaskDesc;
+                tracerouteTask.getTestServerAddr();
+                minTimes = 0;
+                result = "other_test_server_address";
 
-            echoProtocolUdpTask.getTestType();
-            result = QosMeasurementType.ECHO_PROTOCOL;
-            echoProtocolUdpTask.getTaskDesc();
-            minTimes = 0;
-            result = echoUdpTaskDesc;
-            echoProtocolUdpTask.getTestServerAddr();
-            minTimes = 0;
-            result = "test_server_address";
+                websiteTask.getTestType();
+                result = QosMeasurementType.WEBSITE;
+                websiteTask.getTaskDesc();
+                minTimes = 0;
+                result = websiteTaskDesc;
+                websiteTask.getTestServerAddr();
+                minTimes = 0;
+                result = "test_server_address";
 
-            httpProxyTask.getTestType();
-            result = QosMeasurementType.HTTP_PROXY;
-            httpProxyTask.getTaskDesc();
-            minTimes = 0;
-            result = httpProxyTaskDesc;
-            httpProxyTask.getTestServerAddr();
-            minTimes = 0;
-            result = "third_test_server_address";
+                echoProtocolTcpTask.getTestType();
+                result = QosMeasurementType.ECHO_PROTOCOL;
+                echoProtocolTcpTask.getTaskDesc();
+                minTimes = 0;
+                result = echoTcpTaskDesc;
+                echoProtocolTcpTask.getTestServerAddr();
+                minTimes = 0;
+                result = "test_server_address";
 
-            nonTransparentProxyTask.getTestType();
-            result = QosMeasurementType.NON_TRANSPARENT_PROXY;
-            nonTransparentProxyTask.getTaskDesc();
-            minTimes = 0;
-            result = nonTransparentProxyTaskDesc;
-            nonTransparentProxyTask.getTestServerAddr();
-            minTimes = 0;
-            result = "test_server_address";
-        }};
+                echoProtocolUdpTask.getTestType();
+                result = QosMeasurementType.ECHO_PROTOCOL;
+                echoProtocolUdpTask.getTaskDesc();
+                minTimes = 0;
+                result = echoUdpTaskDesc;
+                echoProtocolUdpTask.getTestServerAddr();
+                minTimes = 0;
+                result = "test_server_address";
+
+                httpProxyTask.getTestType();
+                result = QosMeasurementType.HTTP_PROXY;
+                httpProxyTask.getTaskDesc();
+                minTimes = 0;
+                result = httpProxyTaskDesc;
+                httpProxyTask.getTestServerAddr();
+                minTimes = 0;
+                result = "third_test_server_address";
+
+                nonTransparentProxyTask.getTestType();
+                result = QosMeasurementType.NON_TRANSPARENT_PROXY;
+                nonTransparentProxyTask.getTaskDesc();
+                minTimes = 0;
+                result = nonTransparentProxyTaskDesc;
+                nonTransparentProxyTask.getTestServerAddr();
+                minTimes = 0;
+                result = "test_server_address";
+            }
+        };
 
 
         clientHolder.getTaskDescList().add(httpProxyTaskDesc);
@@ -277,19 +286,21 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void invalidQosTypeIsNotAddedTest () throws Exception {
+    public void invalidQosTypeIsNotAddedTest() throws Exception {
 
-        new Expectations() {{
-            httpProxyTask.getTestType();
-            result = QosMeasurementType.HTTP_PROXY;
-            httpProxyTask.getTestServerAddr();
-            minTimes = 0;
-            result = "test_server_address";
-            httpProxyTask.getTaskDesc();
-            minTimes = 0;
-            result = httpProxyTaskDesc;
+        new Expectations() {
+            {
+                httpProxyTask.getTestType();
+                result = QosMeasurementType.HTTP_PROXY;
+                httpProxyTask.getTestServerAddr();
+                minTimes = 0;
+                result = "test_server_address";
+                httpProxyTask.getTaskDesc();
+                minTimes = 0;
+                result = httpProxyTaskDesc;
 
-        }};
+            }
+        };
 
         final String invalidQosId = "INVALID_QOS_TEST_ID";
 
@@ -304,7 +315,7 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void noTracerouteTestWithoutServiceClassTest () throws Exception {
+    public void noTracerouteTestWithoutServiceClassTest() throws Exception {
         clientHolder.getTaskDescList().add(tracerouteTaskDesc);
 
         testSettings.setTracerouteServiceClazz(null);
@@ -314,7 +325,7 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void noWebsiteTestWithoutServiceTest () throws Exception {
+    public void noWebsiteTestWithoutServiceTest() throws Exception {
         clientHolder.getTaskDescList().add(websiteTaskDesc);
 
         testSettings.setWebsiteTestService(null);
@@ -324,7 +335,7 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void noEchoProtocolWithoutProtocolDefinitionTest () throws Exception {
+    public void noEchoProtocolWithoutProtocolDefinitionTest() throws Exception {
         clientHolder.getTaskDescList().add(echoNoProtocolTaskDesc);
 
         qosTest = new QualityOfServiceTest(clientHolder, testSettings);
@@ -333,7 +344,7 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void unknownEchoProtocolWithoutProtocolDefinitionTest () throws Exception {
+    public void unknownEchoProtocolWithoutProtocolDefinitionTest() throws Exception {
         clientHolder.getTaskDescList().add(echoUnknownTaskDesc);
 
         qosTest = new QualityOfServiceTest(clientHolder, testSettings);
@@ -342,41 +353,42 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void basicTaskExecutionTest (@Mocked final TrafficService trafficService) throws Exception {
+    public void basicTaskExecutionTest(@Mocked final TrafficService trafficService) throws Exception {
 
         // get every test type to return the correct taskDesc
-        new Expectations() {{
+        new Expectations() {
+            {
+                dnsTask.getTestType();
+                result = QosMeasurementType.DNS;
+                dnsTask.getTaskDesc();
+                minTimes = 0;
+                result = dnsTaskDesc;
+                dnsTask.getTestServerAddr();
+                minTimes = 0;
+                result = "test_server_address";
 
-            dnsTask.getTestType();
-            result = QosMeasurementType.DNS;
-            dnsTask.getTaskDesc();
-            minTimes = 0;
-            result = dnsTaskDesc;
-            dnsTask.getTestServerAddr();
-            minTimes = 0;
-            result = "test_server_address";
+                tcpTask.getTestType();
+                result = QosMeasurementType.TCP;
+                tcpTask.getTaskDesc();
+                minTimes = 0;
+                result = tcpTaskDesc;
+                tcpTask.getTestServerAddr();
+                minTimes = 0;
+                result = "other_test_server_address";
 
-            tcpTask.getTestType();
-            result = QosMeasurementType.TCP;
-            tcpTask.getTaskDesc();
-            minTimes = 0;
-            result = tcpTaskDesc;
-            tcpTask.getTestServerAddr();
-            minTimes = 0;
-            result = "other_test_server_address";
+                trafficService.start();
+                times = 1;
 
-            trafficService.start();
-            times = 1;
+                tcpTask.call();
+                times = 2;
+                result = new QoSTestResult(QosMeasurementType.TCP, tcpTask);
 
-            tcpTask.call();
-            times = 2;
-            result = new QoSTestResult(QosMeasurementType.TCP, tcpTask);
+                dnsTask.call();
+                times = 1;
+                result = new QoSTestResult(QosMeasurementType.DNS, dnsTask);
 
-            dnsTask.call();
-            times = 1;
-            result = new QoSTestResult(QosMeasurementType.DNS, dnsTask);
-
-        }};
+            }
+        };
 
         final QoSMeasurementClientProgressListener listener = new QoSMeasurementClientProgressListener() {
             @Override
@@ -461,45 +473,46 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void taskExecutionWithErrorIsNotInResultsTest (@Mocked final TrafficService trafficService) throws Exception {
+    public void taskExecutionWithErrorIsNotInResultsTest(@Mocked final TrafficService trafficService) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                dnsTask.getTestType();
+                result = QosMeasurementType.DNS;
+                dnsTask.getTaskDesc();
+                minTimes = 0;
+                result = dnsTaskDesc;
+                dnsTask.getTestServerAddr();
+                minTimes = 0;
+                result = "test_server_address";
 
-            dnsTask.getTestType();
-            result = QosMeasurementType.DNS;
-            dnsTask.getTaskDesc();
-            minTimes = 0;
-            result = dnsTaskDesc;
-            dnsTask.getTestServerAddr();
-            minTimes = 0;
-            result = "test_server_address";
+                tcpTask.getTestType();
+                result = QosMeasurementType.TCP;
+                tcpTask.getTaskDesc();
+                minTimes = 0;
+                result = tcpTaskDesc;
+                tcpTask.getTestServerAddr();
+                minTimes = 0;
+                result = "other_test_server_address";
+                tcpTask.hasConnectionError();
+                returns(
+                        false,
+                        true
+                );
 
-            tcpTask.getTestType();
-            result = QosMeasurementType.TCP;
-            tcpTask.getTaskDesc();
-            minTimes = 0;
-            result = tcpTaskDesc;
-            tcpTask.getTestServerAddr();
-            minTimes = 0;
-            result = "other_test_server_address";
-            tcpTask.hasConnectionError();
-            returns(
-                    false,
-                    true
-            );
+                trafficService.start();
+                times = 1;
 
-            trafficService.start();
-            times = 1;
+                tcpTask.call();
+                times = 2;
+                result = new QoSTestResult(QosMeasurementType.TCP, tcpTask);
 
-            tcpTask.call();
-            times = 2;
-            result = new QoSTestResult(QosMeasurementType.TCP, tcpTask);
+                dnsTask.call();
+                times = 1;
+                result = new QoSTestResult(QosMeasurementType.DNS, dnsTask);
 
-            dnsTask.call();
-            times = 1;
-            result = new QoSTestResult(QosMeasurementType.DNS, dnsTask);
-
-        }};
+            }
+        };
 
         clientHolder.getTaskDescList().add(dnsTaskDesc);
         clientHolder.getTaskDescList().add(tcpTaskDesc);
@@ -520,51 +533,52 @@ public class QualityOfServiceTestTest {
     }
 
     @Test
-    public void taskExecutionWithFatalErrorShowsError (@Mocked final TrafficService trafficService) throws Exception {
+    public void taskExecutionWithFatalErrorShowsError(@Mocked final TrafficService trafficService) throws Exception {
 
         final QoSTestResult fatalResult = new QoSTestResult(QosMeasurementType.TCP, tcpTask);
         fatalResult.setFatalError(true);
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                dnsTask.getTestType();
+                result = QosMeasurementType.DNS;
+                dnsTask.getTaskDesc();
+                minTimes = 0;
+                result = dnsTaskDesc;
+                dnsTask.getTestServerAddr();
+                minTimes = 0;
+                result = "test_server_address";
 
-            dnsTask.getTestType();
-            result = QosMeasurementType.DNS;
-            dnsTask.getTaskDesc();
-            minTimes = 0;
-            result = dnsTaskDesc;
-            dnsTask.getTestServerAddr();
-            minTimes = 0;
-            result = "test_server_address";
+                tcpTask.getTestType();
+                result = QosMeasurementType.TCP;
+                tcpTask.getTaskDesc();
+                minTimes = 0;
+                result = tcpTaskDesc;
+                tcpTask.getTestServerAddr();
+                minTimes = 0;
+                result = "other_test_server_address";
+                tcpTask.hasConnectionError();
+                returns(
+                        false,
+                        true
+                );
 
-            tcpTask.getTestType();
-            result = QosMeasurementType.TCP;
-            tcpTask.getTaskDesc();
-            minTimes = 0;
-            result = tcpTaskDesc;
-            tcpTask.getTestServerAddr();
-            minTimes = 0;
-            result = "other_test_server_address";
-            tcpTask.hasConnectionError();
-            returns(
-                    false,
-                    true
-            );
+                trafficService.start();
+                times = 1;
 
-            trafficService.start();
-            times = 1;
+                tcpTask.call();
+                times = 2;
+                returns(
+                        new QoSTestResult(QosMeasurementType.TCP, tcpTask),
+                        fatalResult
+                );
 
-            tcpTask.call();
-            times = 2;
-            returns(
-                    new QoSTestResult(QosMeasurementType.TCP, tcpTask),
-                    fatalResult
-            );
+                dnsTask.call();
+                times = 1;
+                result = new QoSTestResult(QosMeasurementType.DNS, dnsTask);
 
-            dnsTask.call();
-            times = 1;
-            result = new QoSTestResult(QosMeasurementType.DNS, dnsTask);
-
-        }};
+            }
+        };
 
         clientHolder.getTaskDescList().add(dnsTaskDesc);
         clientHolder.getTaskDescList().add(tcpTaskDesc);

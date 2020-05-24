@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2013-2019 alladin-IT GmbH
  * Copyright 2014-2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +24,7 @@ public abstract class MapTileParameters {
     /**
      *
      */
-//    protected static final int MAX_ZOOM = 21;
+    //    protected static final int MAX_ZOOM = 21;
 
     protected Integer zoom;
 
@@ -33,23 +33,23 @@ public abstract class MapTileParameters {
     protected Integer y;
 
     protected Integer size;
-    
+
     protected Integer period;
-    
+
     protected String technology;
-    
+
     protected String provider;
-    
+
     protected String operator;
 
     protected String mapOption = "mobile/download"; //default value
 
     protected Float quantile;
-    
+
     protected String highlight;
-    
-    protected String highlightUuid; 
-    
+
+    protected String highlightUuid;
+
     protected String clientUuid;
 
     protected List<String> filterList;
@@ -63,13 +63,11 @@ public abstract class MapTileParameters {
     protected Double transparency;
 
     /**
-     *
      * @return whether the given parameters shall be cached
      */
     public abstract boolean isNoCache();
 
     /**
-     *
      * @return the type of the given parameter object
      */
     public abstract MapTileType getMapTileType();
@@ -146,60 +144,60 @@ public abstract class MapTileParameters {
         this.transparency = transparency;
     }
 
-	public Integer getPeriod() {
-		return period;
-	}
+    public Integer getPeriod() {
+        return period;
+    }
 
-	public void setPeriod(Integer period) {
-		this.period = period;
-	}
+    public void setPeriod(Integer period) {
+        this.period = period;
+    }
 
-	public String getTechnology() {
-		return technology;
-	}
+    public String getTechnology() {
+        return technology;
+    }
 
-	public void setTechnology(String technology) {
-		this.technology = technology;
-	}
+    public void setTechnology(String technology) {
+        this.technology = technology;
+    }
 
-	public String getProvider() {
-		return provider;
-	}
+    public String getProvider() {
+        return provider;
+    }
 
-	public void setProvider(String provider) {
-		this.provider = provider;
-	}
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
 
-	public String getOperator() {
-		return operator;
-	}
+    public String getOperator() {
+        return operator;
+    }
 
-	public void setOperator(String operator) {
-		this.operator = operator;
-	}
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
 
-	public String getHighlight() {
-		return highlight;
-	}
+    public String getHighlight() {
+        return highlight;
+    }
 
-	public void setHighlight(String highlight) {
-		this.highlight = highlight;
-	}
+    public void setHighlight(String highlight) {
+        this.highlight = highlight;
+    }
 
-	public String getHighlightUuid() {
-		return highlightUuid;
-	}
+    public String getHighlightUuid() {
+        return highlightUuid;
+    }
 
-	public void setHighlightUuid(String highlightUuid) {
-		this.highlightUuid = highlightUuid;
-	}
+    public void setHighlightUuid(String highlightUuid) {
+        this.highlightUuid = highlightUuid;
+    }
 
-	public String getClientUuid() {
-		return clientUuid;
-	}
+    public String getClientUuid() {
+        return clientUuid;
+    }
 
-	public void setClientUuid(String clientUuid) {
-		this.clientUuid = clientUuid;
-	}
-	
+    public void setClientUuid(String clientUuid) {
+        this.clientUuid = clientUuid;
+    }
+
 }

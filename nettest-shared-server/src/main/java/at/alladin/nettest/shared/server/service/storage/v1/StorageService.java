@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,42 +43,40 @@ import at.alladin.nettest.shared.berec.loadbalancer.api.v1.dto.MeasurementServer
 import at.alladin.nettest.shared.server.service.storage.v1.exception.StorageServiceException;
 
 /**
- * 
  * @author alladin-IT GmbH (bp@alladin.at)
- *
  */
 public interface StorageService {
 
-	MeasurementResultResponse save(LmapReportDto lmapReportDto, String systemUuid) throws StorageServiceException;
+    MeasurementResultResponse save(LmapReportDto lmapReportDto, String systemUuid) throws StorageServiceException;
 
-	MeasurementResultResponse save(LmapReportDto lmapReportDto) throws StorageServiceException; // TODO: custom exception
-	
-	RegistrationResponse registerMeasurementAgent(ApiRequest<RegistrationRequest> registrationRequest) throws StorageServiceException; // TODO: custom exception
-	
-	boolean isValidMeasurementAgentUuid(String measurementAgentUuid) throws StorageServiceException;
-	
-	SettingsResponse getSettings(String settingsUuid) throws StorageServiceException; // TODO: custom exception
-	
-	LmapTaskDto getTaskDto(MeasurementTypeDto type, LmapCapabilityTaskDto capability, String settingsUuid, boolean useIPv6) throws StorageServiceException; // TODO: add client info to fetch personalized settings 
+    MeasurementResultResponse save(LmapReportDto lmapReportDto) throws StorageServiceException; // TODO: custom exception
 
-	FullMeasurementResponse getFullMeasurementByAgentAndMeasurementUuid(String measurementAgentUuid, String measurementUuid, Locale locale) throws StorageServiceException;
-	
-	DetailMeasurementResponse getDetailMeasurementByAgentAndMeasurementUuid(String measurementAgentUuid, String measurementUuid, String settingsUuid, Locale locale) throws StorageServiceException;
-	
-	Page<BriefMeasurementResponse> getPagedBriefMeasurementResponseByAgentUuid(String measurementAgentUuid, 
-			Pageable pageable) throws StorageServiceException;
-	
-	DisassociateResponse disassociateMeasurement(String agentUuid, String measurementUuid) throws StorageServiceException;
-	
-	DisassociateResponse disassociateAllMeasurements(String agentUuid) throws StorageServiceException;
-	
-	SpeedMeasurementPeerResponse getSpeedMeasurementPeers(ApiRequest<SpeedMeasurementPeerRequest> speedMeasurementPeerRequest) throws StorageServiceException;
-	
-	Map<Locale, Map<String, String>> getTranslations();
-	
-  List<MeasurementServerDto> getAllActiveSpeedMeasurementServers() throws StorageServiceException;
-	
-	MeasurementServerDto getSpeedMeasurementServerByPublicIdentifier(final String identifier);
-	
-	LoadBalancingSettingsDto getLoadBalancingSettings(final String settingsUuid);
+    RegistrationResponse registerMeasurementAgent(ApiRequest<RegistrationRequest> registrationRequest) throws StorageServiceException; // TODO: custom exception
+
+    boolean isValidMeasurementAgentUuid(String measurementAgentUuid) throws StorageServiceException;
+
+    SettingsResponse getSettings(String settingsUuid) throws StorageServiceException; // TODO: custom exception
+
+    LmapTaskDto getTaskDto(MeasurementTypeDto type, LmapCapabilityTaskDto capability, String settingsUuid, boolean useIPv6) throws StorageServiceException; // TODO: add client info to fetch personalized settings
+
+    FullMeasurementResponse getFullMeasurementByAgentAndMeasurementUuid(String measurementAgentUuid, String measurementUuid, Locale locale) throws StorageServiceException;
+
+    DetailMeasurementResponse getDetailMeasurementByAgentAndMeasurementUuid(String measurementAgentUuid, String measurementUuid, String settingsUuid, Locale locale) throws StorageServiceException;
+
+    Page<BriefMeasurementResponse> getPagedBriefMeasurementResponseByAgentUuid(String measurementAgentUuid,
+                                                                               Pageable pageable) throws StorageServiceException;
+
+    DisassociateResponse disassociateMeasurement(String agentUuid, String measurementUuid) throws StorageServiceException;
+
+    DisassociateResponse disassociateAllMeasurements(String agentUuid) throws StorageServiceException;
+
+    SpeedMeasurementPeerResponse getSpeedMeasurementPeers(ApiRequest<SpeedMeasurementPeerRequest> speedMeasurementPeerRequest) throws StorageServiceException;
+
+    Map<Locale, Map<String, String>> getTranslations();
+
+    List<MeasurementServerDto> getAllActiveSpeedMeasurementServers() throws StorageServiceException;
+
+    MeasurementServerDto getSpeedMeasurementServerByPublicIdentifier(final String identifier);
+
+    LoadBalancingSettingsDto getLoadBalancingSettings(final String settingsUuid);
 }

@@ -32,7 +32,7 @@ public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     private final LayoutInflater inflater;
 
-    public MapInfoWindowAdapter (final LayoutInflater inflater) {
+    public MapInfoWindowAdapter(final LayoutInflater inflater) {
         this.inflater = inflater;
     }
 

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * 
  * @author Lukasz Budryk (lb@alladin.at)
  */
 @io.swagger.annotations.ApiModel(description = "Holds statistical information of a single provider.")
@@ -43,7 +42,7 @@ public class ProviderStatisticDto {
     @SerializedName("provider_asn")
     @JsonProperty(required = true, value = "provider_asn")
     private Integer providerAsn;
-    
+
     @io.swagger.annotations.ApiModelProperty(required = true, value = "The download (percentile) of this provider in bps.")
     @JsonPropertyDescription("The download (percentile) of this provider in bps.")
     @Expose
@@ -71,14 +70,14 @@ public class ProviderStatisticDto {
     @SerializedName("count")
     @JsonProperty(required = true, value = "count")
     private Long count;
-    
+
     @io.swagger.annotations.ApiModelProperty(required = false, value = "The MCC/MNC of the provider.")
     @JsonPropertyDescription("The MCC/MNC of the provider.")
     @Expose
     @SerializedName("mcc_mnc")
     @JsonProperty(required = true, value = "mcc_mnc")
     private String mccMnc;
-    
+
     @io.swagger.annotations.ApiModelProperty(required = false, value = "The country code of the provider.")
     @JsonPropertyDescription("The country code of the provider.")
     @Expose
@@ -102,28 +101,28 @@ public class ProviderStatisticDto {
     }
 
     public Integer getProviderAsn() {
-		return providerAsn;
-	}
+        return providerAsn;
+    }
 
-	public void setProviderAsn(Integer providerAsn) {
-		this.providerAsn = providerAsn;
-	}
-    
+    public void setProviderAsn(Integer providerAsn) {
+        this.providerAsn = providerAsn;
+    }
+
     public Long getDownloadBps() {
-		return downloadBps;
-	}
-    
+        return downloadBps;
+    }
+
     public void setDownloadBps(Long downloadBps) {
-		this.downloadBps = downloadBps;
-	}
-    
+        this.downloadBps = downloadBps;
+    }
+
     public Long getUploadBps() {
-		return uploadBps;
-	}
-    
+        return uploadBps;
+    }
+
     public void setUploadBps(Long uploadBps) {
-		this.uploadBps = uploadBps;
-	}
+        this.uploadBps = uploadBps;
+    }
 
     public Long getRttNs() {
         return rttNs;
@@ -141,34 +140,34 @@ public class ProviderStatisticDto {
         this.count = count;
     }
 
-	public String getMccMnc() {
-		return mccMnc;
-	}
+    public String getMccMnc() {
+        return mccMnc;
+    }
 
-	public void setMccMnc(String mccMnc) {
-		this.mccMnc = mccMnc;
-	}
+    public void setMccMnc(String mccMnc) {
+        this.mccMnc = mccMnc;
+    }
 
-	public String getCountryCode() {
-		return countryCode;
-	}
+    public String getCountryCode() {
+        return countryCode;
+    }
 
-	public void setCountryCode(String countryCode) {
-		this.countryCode = countryCode;
-	}
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
 
-	public Integer getSignalStrengthDbm() {
-		return signalStrengthDbm;
-	}
+    public Integer getSignalStrengthDbm() {
+        return signalStrengthDbm;
+    }
 
-	public void setSignalStrengthDbm(Integer signalStrengthDbm) {
-		this.signalStrengthDbm = signalStrengthDbm;
-	}
+    public void setSignalStrengthDbm(Integer signalStrengthDbm) {
+        this.signalStrengthDbm = signalStrengthDbm;
+    }
 
-	@Override
-	public String toString() {
-		return "ProviderStatisticDto [providerName=" + providerName + ", downloadMedBps=" + downloadBps + ", uploadMedBps=" + uploadBps + ", rttNs="
-				+ rttNs + ", count=" + count + ", mccMnc=" + mccMnc + ", asn="
-				+ providerAsn + ", countryCode=" + countryCode + ", signalStrengthDbm=" + signalStrengthDbm + "]";
-	}
+    @Override
+    public String toString() {
+        return "ProviderStatisticDto [providerName=" + providerName + ", downloadMedBps=" + downloadBps + ", uploadMedBps=" + uploadBps + ", rttNs="
+                + rttNs + ", count=" + count + ", mccMnc=" + mccMnc + ", asn="
+                + providerAsn + ", countryCode=" + countryCode + ", signalStrengthDbm=" + signalStrengthDbm + "]";
+    }
 }

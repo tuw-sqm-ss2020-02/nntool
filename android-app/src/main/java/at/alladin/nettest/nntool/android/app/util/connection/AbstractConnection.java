@@ -41,7 +41,7 @@ public abstract class AbstractConnection<T> {
     public AbstractConnection(final boolean isEncrypted, final String hostname,
                               final String hostname6, final int port, final String pathPrefix,
                               final Class<T> serviceClazz) {
-        this ((isEncrypted ? "https://" : "http://") + hostname + ":" + port + pathPrefix,
+        this((isEncrypted ? "https://" : "http://") + hostname + ":" + port + pathPrefix,
                 (isEncrypted ? "https://" : "http://") + hostname6 + ":" + port + pathPrefix, serviceClazz);
     }
 
@@ -63,8 +63,7 @@ public abstract class AbstractConnection<T> {
 
             System.out.println("BASE URL: " + r.baseUrl().toString());
             controllerService = r.create(serviceClazz);
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
 
@@ -78,8 +77,7 @@ public abstract class AbstractConnection<T> {
 
             System.out.println("BASE URL v6: " + r6.baseUrl().toString());
             controllerService6 = r6.create(serviceClazz);
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }

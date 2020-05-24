@@ -99,10 +99,10 @@ public class MapFragment extends SupportMapFragment {
     public void onStart() {
         super.onStart();
 
-       getMapAsync(googleMap -> {
-               if (googleMap == null) {
-                        return;
-                    }
+        getMapAsync(googleMap -> {
+            if (googleMap == null) {
+                return;
+            }
             map = googleMap;
             map.setTrafficEnabled(false);
             map.setIndoorEnabled(false);
@@ -137,11 +137,11 @@ public class MapFragment extends SupportMapFragment {
                         final MapMarkerResponse.MapMarker marker = result.getMapMarkers().get(0);
                         currentMarker = map.addMarker(
                                 new MarkerOptions()
-                                .position(new LatLng(marker.getLatitude(), marker.getLongitude()))
-                                .title(getString(R.string.map_marker_popup_title))
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                                        .position(new LatLng(marker.getLatitude(), marker.getLongitude()))
+                                        .title(getString(R.string.map_marker_popup_title))
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
 
-                                .snippet(parseMapMarkerIntoString(marker))
+                                        .snippet(parseMapMarkerIntoString(marker))
                         );
 
                         currentMarker.showInfoWindow();
@@ -187,7 +187,7 @@ public class MapFragment extends SupportMapFragment {
         return R.string.help_link_map_section;
     }
 
-    private String parseMapMarkerIntoString (final MapMarkerResponse.MapMarker marker) {
+    private String parseMapMarkerIntoString(final MapMarkerResponse.MapMarker marker) {
         final StringBuilder builder = new StringBuilder();
         final Iterator<DetailMeasurementGroupItem> it = marker.getResultItems().iterator();
         while (it.hasNext()) {

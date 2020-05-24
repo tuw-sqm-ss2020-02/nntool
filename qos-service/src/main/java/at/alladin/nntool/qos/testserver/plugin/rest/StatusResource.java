@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2017-2019 alladin-IT GmbH
  * Copyright 2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,30 +29,28 @@ import at.alladin.nntool.qos.testserver.util.TestServerConsole;
 import at.alladin.nntool.qos.testserver.util.TestServerConsole.ErrorReport;
 
 /**
- * 
  * @author lb
- *
  */
 public class StatusResource extends ServerResource {
 
-	@Get
-	public String request() throws JSONException {
-		JSONObject json = new JSONObject();
+    @Get
+    public String request() throws JSONException {
+        JSONObject json = new JSONObject();
 
-		json.put("starttime", TestServer.getInstance().serverPreferences.getStartTimestamp());
-		json.put("version", TestServer.TEST_SERVER_VERSION_MAJOR + "." + TestServer.TEST_SERVER_VERSION_MINOR + "." + TestServer.TEST_SERVER_VERSION_PATCH);
-		
-		if (TestServerConsole.errorReportMap.size() > 0) {
-			setStatus(Status.SERVER_ERROR_INTERNAL);
-			
-			JSONArray errors = new JSONArray();
-			for (ErrorReport er : TestServerConsole.errorReportMap.values()) {
-				errors.put(er.toJson());
-			}
-			
-			json.put("errors", errors);
-		}
-		
-		return json.toString();
-	}
+        json.put("starttime", TestServer.getInstance().serverPreferences.getStartTimestamp());
+        json.put("version", TestServer.TEST_SERVER_VERSION_MAJOR + "." + TestServer.TEST_SERVER_VERSION_MINOR + "." + TestServer.TEST_SERVER_VERSION_PATCH);
+
+        if (TestServerConsole.ERROR_REPORT_MAP.size() > 0) {
+            setStatus(Status.SERVER_ERROR_INTERNAL);
+
+            JSONArray errors = new JSONArray();
+            for (ErrorReport er : TestServerConsole.ERROR_REPORT_MAP.values()) {
+                errors.put(er.toJson());
+            }
+
+            json.put("errors", errors);
+        }
+
+        return json.toString();
+    }
 }

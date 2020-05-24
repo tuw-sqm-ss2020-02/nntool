@@ -25,16 +25,17 @@ import org.json.JSONObject;
 /**
  * Interface ModulesInterface
  */
-public interface ModulesInterface
-{
+public interface ModulesInterface {
     /**
      * Method receiveString
+     *
      * @param message
      */
     void receiveString(String message);
 
     /**
      * Method receiveData
+     *
      * @param message
      */
     void receiveData(JSONObject message);

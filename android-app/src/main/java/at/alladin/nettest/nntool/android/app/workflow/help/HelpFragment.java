@@ -37,6 +37,22 @@ public class HelpFragment extends WebViewFragment {
 
     private String helpUrlSection;
 
+    public static HelpFragment newInstance() {
+        return newInstance(null);
+    }
+
+    /**
+     * Returns a new help-fragment with @section appended to the url
+     *
+     * @param section (without the #)
+     * @return
+     */
+    public static HelpFragment newInstance(final String section) {
+        final HelpFragment fragment = new HelpFragment();
+        fragment.setHelpUrlSection(section);
+        return fragment;
+    }
+
     @Override
     protected String getOnErrorHtmlPath() {
         return "file:///android_asset/help_unavailable.html";
@@ -45,21 +61,6 @@ public class HelpFragment extends WebViewFragment {
     @Override
     protected String getWebviewUrl() {
         return getString(R.string.default_help_page_link) + (helpUrlSection == null ? "" : '#' + helpUrlSection);
-    }
-
-    public static HelpFragment newInstance() {
-        return newInstance(null);
-    }
-
-    /**
-     * Returns a new help-fragment with @section appended to the url
-     * @param section (without the #)
-     * @return
-     */
-    public static HelpFragment newInstance (final String section) {
-        final HelpFragment fragment = new HelpFragment();
-        fragment.setHelpUrlSection(section);
-        return fragment;
     }
 
     @Override

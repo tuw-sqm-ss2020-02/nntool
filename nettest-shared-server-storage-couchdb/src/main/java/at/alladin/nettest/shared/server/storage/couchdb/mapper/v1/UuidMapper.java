@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,26 +21,24 @@ import java.util.UUID;
 import org.mapstruct.Mapper;
 
 /**
- * 
  * @author alladin-IT GmbH (bp@alladin.at)
- *
  */
 @Mapper(componentModel = "spring")
 public interface UuidMapper {
 
-	default UUID map(String s) {
-		if (s == null) {
-			return null;
-		}
-		
-		return UUID.fromString(s);
-	}
-	
-	default String map(UUID s) {
-		if (s == null) {
-			return null;
-		}
-		
-		return s.toString();
-	}
+    default UUID map(String s) {
+        if (s == null) {
+            return null;
+        }
+
+        return UUID.fromString(s);
+    }
+
+    default String map(UUID s) {
+        if (s == null) {
+            return null;
+        }
+
+        return s.toString();
+    }
 }

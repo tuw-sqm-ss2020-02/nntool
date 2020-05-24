@@ -38,10 +38,10 @@ import java.util.ArrayList;
  * setUse...(...false) aufgerufen), führt {@link #initDevices(android.content.Context)} einen Rescan
  * der Geräte und Neuaufbau der Listen durch.</p>
  * <p> Damit der Zugriff auf die Speichermedien klappt, muss im Manifest stehen:</p>
-<pre><code>{@code
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
-}</code></pre>
+ * <pre><code>{@code
+ * <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+ * <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
+ * }</code></pre>
  * <p>Wenn das auch auf Geräten mit CyanogenMod laufen soll, darf man anders als in der
  * Android-Doku beschrieben allerdings das maxSdkVersion <b>nicht</b> angeben.
  *
@@ -58,24 +58,19 @@ import java.util.ArrayList;
  * {@link android.os.storage.StorageManager}, die hier per Reflection herausgeführt ist.</p>
  *
  * @author Jörg Wirtgen (jow@ct.de)
- *
  * @version 0.9
- *
  */
 public class Environment4 {
-    private static final String TAG = "Environment4";
-
-    public final static String TYPE_PRIMARY     = "primär";
-    public final static String TYPE_INTERNAL    = "intern";
-    public final static String TYPE_SD               = "MicroSD";
-    public final static String TYPE_USB             = "USB";
-    public final static String TYPE_UNKNOWN   = "unbekannt";
-
+    public final static String TYPE_PRIMARY = "primär";
+    public final static String TYPE_INTERNAL = "intern";
+    public final static String TYPE_SD = "MicroSD";
+    public final static String TYPE_USB = "USB";
+    public final static String TYPE_UNKNOWN = "unbekannt";
     public final static String WRITE_NONE = "none";
     public final static String WRITE_READONLY = "readonly";
     public final static String WRITE_APPONLY = "apponly";
     public final static String WRITE_FULL = "readwrite";
-
+    private static final String TAG = "Environment4";
     private static Device[] devices, externalstorage, storage;
     private static BroadcastReceiver receiver;
     private static boolean useReceiver = true;
@@ -94,13 +89,12 @@ public class Environment4 {
      * man per {@link de.jockels.tools.Environment4.Device#isAvailable()}. Die Liste ist
      * somit eher als Geräte-Übersicht nützlich.
      *
-     * @see de.jockels.tools.Environment4.Device
-     *
      * @param context Context des Aufrufers, also this oder in Fragments getActivity()
      * @return eine Liste der passenden {@link de.jockels.tools.Environment4.Device}
+     * @see de.jockels.tools.Environment4.Device
      */
     public static Device[] getDevices(Context context) {
-        if (devices==null) initDevices(context);
+        if (devices == null) initDevices(context);
         return devices;
     }
 
@@ -115,13 +109,12 @@ public class Environment4 {
      * aufgenommen. Die Liste ist somit nützlich zum Festlegen eines Datei-Speicherorts,
      * wenn andere Apps Zugriff drauf haben dürfen.
      *
-     * @see de.jockels.tools.Environment4.Device
-     *
      * @param context Context des Aufrufers, also this oder in Fragments getActivity()
      * @return eine Liste der passenden {@link de.jockels.tools.Environment4.Device}
+     * @see de.jockels.tools.Environment4.Device
      */
     public static Device[] getExternalStorage(Context context) {
-        if (devices==null) initDevices(context);
+        if (devices == null) initDevices(context);
         return externalstorage;
     }
 
@@ -137,13 +130,12 @@ public class Environment4 {
      * aufgenommen. Die Liste ist somit nützlich zum Festlegen eines Datei-Speicherorts,
      * wobei Speichern in Index 0 verhindert, dass andere Apps die Daten lesen können.
      *
-     * @see de.jockels.tools.Environment4.Device
-     *
      * @param context Context des Aufrufers, also this oder in Fragments getActivity()
      * @return eine Liste der passenden {@link de.jockels.tools.Environment4.Device}
+     * @see de.jockels.tools.Environment4.Device
      */
     public static Device[] getStorage(Context context) {
-        if (devices==null) initDevices(context);
+        if (devices == null) initDevices(context);
         return storage;
     }
 
@@ -178,8 +170,8 @@ public class Environment4 {
      * man daran denken, bei App-Ende setUseReceiver(context, false) aufzurufen.
      *
      * @param context der Context der App
-     * @param use true schaltet den BroadcastReceiver sofort ein, false schaltet ihn aus und
-     *              ruft auch Context.unregisterReceiver auf.
+     * @param use     true schaltet den BroadcastReceiver sofort ein, false schaltet ihn aus und
+     *                ruft auch Context.unregisterReceiver auf.
      */
     public static void setUseReceiver(Context context, boolean use) {
         if (use && receiver == null) {
@@ -210,7 +202,7 @@ public class Environment4 {
      */
     public static void initDevices(Context context) {
         // Userverzeichnis
-        if (userDir ==null) userDir = "/Android/data/" + context.getPackageName();
+        if (userDir == null) userDir = "/Android/data/" + context.getPackageName();
 
         // Broadcast-Receiver
         setUseReceiver(context, useReceiver);
@@ -234,13 +226,13 @@ public class Environment4 {
             // ersten Eintrag auf isPrimary
             Device primary = null;
             for (Device d : temp) if (d.mPrimary) primary = d;
-            if (primary==null) for (Device d : temp)
+            if (primary == null) for (Device d : temp)
                 if (!d.mRemovable) {
                     d.mPrimary = true;
                     primary = d;
                     break;
                 }
-            if (primary==null) {
+            if (primary == null) {
                 primary = temp[0];
                 primary.mPrimary = true;
             }
@@ -249,10 +241,10 @@ public class Environment4 {
             File[] files = ContextCompat.getExternalFilesDirs(context, null);
             File[] caches = ContextCompat.getExternalCacheDirs(context);
             for (Device d : temp) {
-                if (files!=null) for (File f : files)
-                    if (f!=null && f.getAbsolutePath().startsWith(d.getAbsolutePath())) d.mFiles = f;
-                if (caches!=null) for (File f : caches)
-                    if (f!=null && f.getAbsolutePath().startsWith(d.getAbsolutePath())) d.mCache = f;
+                if (files != null) for (File f : files)
+                    if (f != null && f.getAbsolutePath().startsWith(d.getAbsolutePath())) d.mFiles = f;
+                if (caches != null) for (File f : caches)
+                    if (f != null && f.getAbsolutePath().startsWith(d.getAbsolutePath())) d.mCache = f;
             }
 
             // die drei Listen erzeugen
@@ -261,7 +253,10 @@ public class Environment4 {
             ArrayList<Device> tempExt = new ArrayList<Device>(10);
             for (Device d : temp) {
                 tempDev.add(d);
-                if (d.isAvailable()) {tempExt.add(d); tempStor.add(d);}
+                if (d.isAvailable()) {
+                    tempExt.add(d);
+                    tempStor.add(d);
+                }
             }
 
             // internen Speicher (pre-unified) einbinden -- tritt hauptsächlich bei Geräten auf,
@@ -274,7 +269,7 @@ public class Environment4 {
             // temp in devices-Tabelle übernehmen
             devices = tempDev.toArray(new Device[tempDev.size()]);
             storage = tempStor.toArray(new Device[tempStor.size()]);
-            externalstorage= tempExt.toArray(new Device[tempExt.size()]);
+            externalstorage = tempExt.toArray(new Device[tempExt.size()]);
 
             setUseReceiver(context, false);
         } catch (Exception e) {
@@ -310,6 +305,7 @@ public class Environment4 {
 
         /**
          * Erzeugen aus context.getDataDirectory(), also interner Speicher
+         *
          * @param context der Context der App
          */
         Device(Context context) {
@@ -323,6 +319,7 @@ public class Environment4 {
 
         /**
          * Einlesen aus einem StorageVolume per Reflection
+         *
          * @param storage
          * @throws NoSuchMethodException
          * @throws InvocationTargetException
@@ -330,7 +327,7 @@ public class Environment4 {
          */
         @SuppressWarnings("NullArgumentToVariableArgMethod")
         Device(Object storage) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-            super((String)storage.getClass().getMethod("getPath",null).invoke(storage, null));
+            super((String) storage.getClass().getMethod("getPath", null).invoke(storage, null));
             for (Method m : storage.getClass().getMethods()) {
                 if (m.getName().equals("getUserLabel") && m.getParameterTypes().length == 0 && m.getReturnType() == String.class)
                     mUserLabel = (String) m.invoke(storage, null); // ab Android 4.4
@@ -353,15 +350,15 @@ public class Environment4 {
                 // getMtpReserveSpace (ab 4.0) für diese Zwecke unwichtig
                 // getStorageId (ab 4.0) für diese Zwecke unwichtig
             }
-            if (mState==null) mState = getState();
+            if (mState == null) mState = getState();
 
             if (mPrimary)
                 mType = TYPE_PRIMARY;
             else {
                 String n = getAbsolutePath().toLowerCase();
-                if (n.indexOf("sd")>0)
+                if (n.indexOf("sd") > 0)
                     mType = TYPE_SD;
-                else  if (n.indexOf("usb")>0)
+                else if (n.indexOf("usb") > 0)
                     mType = TYPE_USB;
                 else
                     mType = TYPE_UNKNOWN + " " + getAbsolutePath();
@@ -372,12 +369,14 @@ public class Environment4 {
          * Liefert den Typ des Geräts zurück
          *
          * @return ein String mit TYPE_PRIMARY = Festspeicher, TYPE_SD = SD-Karte (auch
-         *      im Akkuschacht sitzende), TYPE_USB = USB-Speicher, TYPE_INTERNAL =
-         *      die bis Android 2.x vorhandene /data-Partition, TYPE_UNKNOWN bei sonstigen,
-         *      wozu wohl auch speziell verschlüsselte Bereiche zählen; habe ich bisher nur
-         *      bei einem Note4 und Galaxy S5 mal gesehen und noch nicht weiter untersucht.
+         * im Akkuschacht sitzende), TYPE_USB = USB-Speicher, TYPE_INTERNAL =
+         * die bis Android 2.x vorhandene /data-Partition, TYPE_UNKNOWN bei sonstigen,
+         * wozu wohl auch speziell verschlüsselte Bereiche zählen; habe ich bisher nur
+         * bei einem Note4 und Galaxy S5 mal gesehen und noch nicht weiter untersucht.
          */
-        public String getType() {return mType;}
+        public String getType() {
+            return mType;
+        }
 
         /**
          * Liefert die Zugriffsart zurück. Bis Android 4.3 hatte man Vollzugriff auf alles, doch
@@ -405,7 +404,7 @@ public class Environment4 {
                 try {
                     mWriteState = WRITE_NONE;
                     File[] root = listFiles();
-                    if (root==null || root.length==0) throw new IOException("root empty/unreadable");
+                    if (root == null || root.length == 0) throw new IOException("root empty/unreadable");
                     mWriteState = WRITE_READONLY;
                     File t = File.createTempFile("jow", null, getFilesDir());
                     //noinspection ResultOfMethodCallIgnored
@@ -416,7 +415,7 @@ public class Environment4 {
                     t.delete();
                     mWriteState = WRITE_FULL;
                 } catch (IOException ignore) {
-                    Log.v(TAG, "test "+getAbsolutePath()+" ->"+mWriteState+"<- "+ignore.getMessage());
+                    Log.v(TAG, "test " + getAbsolutePath() + " ->" + mWriteState + "<- " + ignore.getMessage());
                 }
             }
             return mWriteState;
@@ -427,13 +426,13 @@ public class Environment4 {
          * noch keinen Schreibzugriff, das kann man per {@link #getAccess()} erfahren.
          *
          * @return true, wenn Device vorhanden ist, im Allgemeinen hat man dann auch
-         *      Lesezugriff. Schreibzugriff nicht unbedingt. false, wenn Device fehlt.
+         * Lesezugriff. Schreibzugriff nicht unbedingt. false, wenn Device fehlt.
          */
         public boolean isAvailable() {
             String s = getState();
             return (
                     Environment.MEDIA_MOUNTED.equals(s) ||
-                    Environment.MEDIA_MOUNTED_READ_ONLY.equals(s)
+                            Environment.MEDIA_MOUNTED_READ_ONLY.equals(s)
             );
             // MEDIA_SHARED: als USB freigegeben; bitte Handy auf MTP umstellen
         }
@@ -447,13 +446,13 @@ public class Environment4 {
          * größer Null ist.
          *
          * @return ein String wie in {@link android.os.Environment} definiert. Im Allgemeinen
-         *      bedeuten nur MEDIA_MOUNTED und MEDIA_MOUNTED_READ_ONLY, dass das
-         *      Device wirklich funktioniert. Die anderen sind mehr oder weniger nur Fehlerhinweise,
-         *      z.B. MEDIA_SHARED = ist per USB an einen PC weitergereicht und kann daher nicht
-         *      gelesen werden.
+         * bedeuten nur MEDIA_MOUNTED und MEDIA_MOUNTED_READ_ONLY, dass das
+         * Device wirklich funktioniert. Die anderen sind mehr oder weniger nur Fehlerhinweise,
+         * z.B. MEDIA_SHARED = ist per USB an einen PC weitergereicht und kann daher nicht
+         * gelesen werden.
          */
         public String getState() {
-            if (mRemovable || mState==null) {
+            if (mRemovable || mState == null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                     // Android 5.0? Da gibts was neues
                     mState = Environment.getExternalStorageState(this);
@@ -463,7 +462,7 @@ public class Environment4 {
                 else if (canRead() && getTotalSpace() > 0)
                     // lesbar und Größe vorhanden => gibt es
                     mState = Environment.MEDIA_MOUNTED;
-                else if (mState==null || Environment.MEDIA_MOUNTED.equals(mState))
+                else if (mState == null || Environment.MEDIA_MOUNTED.equals(mState))
                     // nicht lesbar, keine Größe aber noch MOUNTED || oder ungesetzt => UNKNOWN
                     mState = EnvironmentCompat.MEDIA_UNKNOWN;
             }
@@ -481,7 +480,7 @@ public class Environment4 {
         }
 
         public File getCacheDir() {
-            if (mCache==null) {
+            if (mCache == null) {
                 mCache = new File(this, userDir + "/cache");
                 if (!mCache.isDirectory())
                     //noinspection ResultOfMethodCallIgnored
@@ -495,34 +494,52 @@ public class Environment4 {
          * {@link android.content.Context#getExternalFilesDir(String)} bekommt.
          *
          * @return true beim primären externen Speicher, false bei weiteren externen
-         *      Speichern und bei einer etwaigen /data-Partition
+         * Speichern und bei einer etwaigen /data-Partition
          */
-        public boolean isPrimary() { return mPrimary; }
+        public boolean isPrimary() {
+            return mPrimary;
+        }
 
         /**
          * Untersucht, ob das Device im Betrieb entnommen werden kann.
          *
          * @return true, wenn der Nutzer das Device jederzeit herausnehmen kann. False,
-         *      falls fest eingebaut oder nur nach Ausschalten entnehmbar. True bedeutet
-         *      also nicht, dass das Device auch wirklich vorhanden ist, sondern das bekommt
-         *      man auch für SD-Slots im Akkuschacht.
+         * falls fest eingebaut oder nur nach Ausschalten entnehmbar. True bedeutet
+         * also nicht, dass das Device auch wirklich vorhanden ist, sondern das bekommt
+         * man auch für SD-Slots im Akkuschacht.
          */
-        public boolean isRemovable() { return mRemovable; }
+        public boolean isRemovable() {
+            return mRemovable;
+        }
 
         /**
          * Liefert zurück, ob es sich um einen unified Memory handelt. Das war eine mit
          * Android 3 eingeführte Speichertechnik. Hat nur interne Bedeutung.
          *
          * @return true für moderne Geräte mit unified Memory, bei denen sich die /data-
-         *      Partition und der primäre Speicher eine echte Partition teilen. False bei älteren
-         *      Geräten; bedeutet, dass die /data-Partition auch noch vorhanden ist und von
-         *      {@link #getDevices(android.content.Context)} am Index 1 geliefert wird.
+         * Partition und der primäre Speicher eine echte Partition teilen. False bei älteren
+         * Geräten; bedeutet, dass die /data-Partition auch noch vorhanden ist und von
+         * {@link #getDevices(android.content.Context)} am Index 1 geliefert wird.
          */
-        public boolean isEmulated() { return mEmulated; }
-        public boolean isAllowMassStorage() { return mAllowMassStorage; }
-        public long getMaxFileSize() { return mMaxFileSize; }
-        public String getUserLabel() { return mUserLabel; }
-        public String getUuid() { return mUuid; }
+        public boolean isEmulated() {
+            return mEmulated;
+        }
+
+        public boolean isAllowMassStorage() {
+            return mAllowMassStorage;
+        }
+
+        public long getMaxFileSize() {
+            return mMaxFileSize;
+        }
+
+        public String getUserLabel() {
+            return mUserLabel;
+        }
+
+        public String getUuid() {
+            return mUuid;
+        }
     }
 }
  

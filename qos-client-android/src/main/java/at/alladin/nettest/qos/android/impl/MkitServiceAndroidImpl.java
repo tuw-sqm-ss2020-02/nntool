@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,47 +32,17 @@ import io.ooni.mk.MKAsyncTask;
  */
 public class MkitServiceAndroidImpl implements MkitService {
 
-    public final static class MkitResultJsonImpl implements MkitService.MkitResult {
-
-        private String result;
-
-        public MkitResultJsonImpl (final String result) {
-            this.result = result;
-        }
-
-        @Override
-        public JSONObject toJson() {
-            try {
-                return new JSONObject(result);
-            } catch (JSONException ex) {
-                Log.i(TAG, result);
-                Log.e(TAG, ex.getMessage());
-                return null;
-            }
-        }
-
-        @Override
-        public String toString() {
-            return result;
-        }
-    }
-
     private final static String TAG = "NdtAndroidImpl";
-
     //The geoip paths are set on startup of the main activity
     public static String geoIPCountryDBPath;
     public static String geoIPASNDBPath;
     public static String caBundlePath;
-
     private JSONArray mkitInputArray;
     private JSONObject mkitFlagObject;
-
     private MkitTestEnum mkitTestEnum;
     private JSONObject mkitTestConfig;
     private MkitResult result;
-
     private MkitTestProgressListener listener;
-
     private float currentProgress = 0;
 
     @Override
@@ -86,7 +56,7 @@ public class MkitServiceAndroidImpl implements MkitService {
             mkitTestConfig = null;
         }
         if (mkitTestConfig == null) {
-            throw new UnsupportedMkitTestException("Specified mkit test not available. (" + mkitTestEnum+ ")");
+            throw new UnsupportedMkitTestException("Specified mkit test not available. (" + mkitTestEnum + ")");
         }
     }
 
@@ -136,7 +106,7 @@ public class MkitServiceAndroidImpl implements MkitService {
                         if ("measurement".equals(keyValue) && valueObj.has("json_str")) {
                             result = new MkitResultJsonImpl(valueObj.getString("json_str"));
                         } else if (listener != null && "status.progress".equals(keyValue) && valueObj.has("percentage")) {
-                             listener.onProgress((float) valueObj.getDouble("percentage"));
+                            listener.onProgress((float) valueObj.getDouble("percentage"));
                         }
                     }
                 } catch (JSONException ex) {
@@ -163,12 +133,13 @@ public class MkitServiceAndroidImpl implements MkitService {
      * Construct a test for the given enum
      * Will return a ready-to-use test, with all necessary options set
      * or NULL, if the test is not supported by the Android Impl
-     *
+     * <p>
      * List of (theoretically) available tests can be found in the nettests.hpp file on github (under MK_ENUM_TEST)
      * (current link: https://github.com/measurement-kit/measurement-kit/blob/master/include/measurement_kit/nettests/nettests.hpp)
+     *
      * @return
      */
-    private JSONObject getTestForEnum (final MkitTestEnum mkitTestEnum) throws JSONException {
+    private JSONObject getTestForEnum(final MkitTestEnum mkitTestEnum) throws JSONException {
         switch (mkitTestEnum) {
             case MKIT_DASH:
                 mkitTestConfig = new JSONObject();
@@ -189,6 +160,7 @@ public class MkitServiceAndroidImpl implements MkitService {
 
     /**
      * Takes the current result and current ndtTestEnum to postprocess obtained results
+     *
      * @return the result to be used from here on out (may be null, if the result is null)
      */
     private MkitResult postProcessResult() {
@@ -253,7 +225,6 @@ public class MkitServiceAndroidImpl implements MkitService {
         }
     }
 
-
     @Override
     public void addFlags(final String flags) {
 
@@ -279,6 +250,31 @@ public class MkitServiceAndroidImpl implements MkitService {
     @Override
     public void setOnMkitTestProgressListener(final MkitTestProgressListener listener) {
         this.listener = listener;
+    }
+
+    public final static class MkitResultJsonImpl implements MkitService.MkitResult {
+
+        private String result;
+
+        public MkitResultJsonImpl(final String result) {
+            this.result = result;
+        }
+
+        @Override
+        public JSONObject toJson() {
+            try {
+                return new JSONObject(result);
+            } catch (JSONException ex) {
+                Log.i(TAG, result);
+                Log.e(TAG, ex.getMessage());
+                return null;
+            }
+        }
+
+        @Override
+        public String toString() {
+            return result;
+        }
     }
 
 

@@ -54,111 +54,26 @@ public class SpeedFragment extends ActionBarFragment implements ServiceConnectio
     private final static String TAG = "SPEED_FRAGMENT";
 
     private final static float baseProgressPercentage = 0.25f;
-
-    private MeasurementService measurementService;
-
-    private SpeedMeasurementState speedMeasurementState;
-
-    private TopProgressBarView topProgressBarView;
-
-    private BottomMeasurementResultSummaryView bottomMeasurementResultSummary;
-
-    private CanvasArcDoubleGaugeWithLabels cadlabprogView;
-
-    private AlladinTextView gaugePhaseIndicator;
-
-    private AtomicBoolean sendingResults = new AtomicBoolean(false);
-
-    private boolean isQoSEnabled = true;
-
-    public static SpeedFragment newInstance(final WorkflowParameter parameter) {
-        final SpeedFragment fragment = new SpeedFragment();
-        if (parameter instanceof WorkflowMeasurementParameter) {
-            fragment.setQoSEnabled(((WorkflowMeasurementParameter)parameter).isQoSEnabled());
-        }
-        return fragment;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_speed, container, false);
-        topProgressBarView = view.findViewById(R.id.top_progress_bar_view);
-        topProgressBarView.setLeftText("0 %");
-        topProgressBarView.setRightIcon(getResources().getString(R.string.ifont_hourglass));
-        topProgressBarView.setVisibility(View.VISIBLE);
-        cadlabprogView = view.findViewById(R.id.canvas_arc_double_gauge_with_labels);
-        bottomMeasurementResultSummary = view.findViewById(R.id.bottom_measurement_result_summary_view);
-        bottomMeasurementResultSummary.setVisibility(View.VISIBLE);
-        gaugePhaseIndicator = view.findViewById(R.id.gauge_phase_indicator);
-
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        //prevent back key press
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-        getView().setOnKeyListener((v, keyCode, event) -> {
-
-            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                AlertDialogUtil.showCancelDialog(getContext(), R.string.alert_cancel_measurement_title, R.string.alert_cancel_measurement_content,
-                        (dialog, which) -> {
-                            measurementService.stopSpeedMeasurement();
-                            ((MainActivity) getActivity()).navigateTo(WorkflowTarget.TITLE);
-                            dialog.cancel();
-                        },
-                            (dialog, which) -> dialog.cancel()
-                        );
-                return true;
-            }
-
-            return false;
-        });
-
-        final Intent serviceIntent = new Intent(getContext(), MeasurementService.class);
-        getContext().bindService(serviceIntent, this, Context.BIND_AUTO_CREATE);
-
-        if (!sendingResults.get()) {
-            //only if we are not currently sending any results
-            handler.post(updateUiRunnable);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        handler.removeCallbacks(updateUiRunnable);
-        getContext().unbindService(this);
-        super.onPause();
-    }
-
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-        Log.d(TAG, "ON SERVICE CONNECTED");
-        measurementService = ((MeasurementService.MeasurementServiceBinder) service).getService();
-        if (measurementService != null) {
-            this.speedMeasurementState = measurementService.getJniSpeedMeasurementClient().getSpeedMeasurementState();
-            measurementService.setOnMeasurementErrorListener((ex) ->
-            {
-                getActivity().runOnUiThread(() -> {
-                    AlertDialogUtil.showAlertDialog(getContext(), R.string.alert_error_during_measurement_title, R.string.alert_error_during_measurement_content,
-                            (dialog, which) -> ((MainActivity) getActivity()).navigateTo(WorkflowTarget.TITLE));
-                });
-            });
-        }
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        Log.d(TAG, "ON SERVICE DISCONNECTED");
-        measurementService = null;
-    }
-
     final private Handler handler = new Handler();
-
+    private MeasurementService measurementService;
+    private SpeedMeasurementState speedMeasurementState;
+    private TopProgressBarView topProgressBarView;
+    private BottomMeasurementResultSummaryView bottomMeasurementResultSummary;
+    private CanvasArcDoubleGaugeWithLabels cadlabprogView;
+    private AlladinTextView gaugePhaseIndicator;
+    private AtomicBoolean sendingResults = new AtomicBoolean(false);
+    final Runnable showResultsRunnable = new Runnable() {
+        @Override
+        public void run() {
+            final MainActivity activity = (MainActivity) getActivity();
+            if (measurementService.hasFollowUpAction()) {
+                measurementService.executeFollowUpAction(activity);
+            } else {
+                measurementService.sendResults(activity, sendingResults);
+            }
+        }
+    };
+    private boolean isQoSEnabled = true;
     final Runnable updateUiRunnable = new Runnable() {
         @Override
         public void run() {
@@ -232,25 +147,98 @@ public class SpeedFragment extends ActionBarFragment implements ServiceConnectio
 
             if (!postResultRunnable) {
                 handler.postDelayed(this, 50);
-            }
-            else {
+            } else {
                 Log.d(TAG, "post result runnable started");
                 handler.postDelayed(showResultsRunnable, 1000);
             }
         }
     };
 
-    final Runnable showResultsRunnable = new Runnable() {
-        @Override
-        public void run() {
-            final MainActivity activity = (MainActivity) getActivity();
-            if (measurementService.hasFollowUpAction()) {
-                measurementService.executeFollowUpAction(activity);
-            } else {
-                measurementService.sendResults(activity, sendingResults);
-            }
+    public static SpeedFragment newInstance(final WorkflowParameter parameter) {
+        final SpeedFragment fragment = new SpeedFragment();
+        if (parameter instanceof WorkflowMeasurementParameter) {
+            fragment.setQoSEnabled(((WorkflowMeasurementParameter) parameter).isQoSEnabled());
         }
-    };
+        return fragment;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_speed, container, false);
+        topProgressBarView = view.findViewById(R.id.top_progress_bar_view);
+        topProgressBarView.setLeftText("0 %");
+        topProgressBarView.setRightIcon(getResources().getString(R.string.ifont_hourglass));
+        topProgressBarView.setVisibility(View.VISIBLE);
+        cadlabprogView = view.findViewById(R.id.canvas_arc_double_gauge_with_labels);
+        bottomMeasurementResultSummary = view.findViewById(R.id.bottom_measurement_result_summary_view);
+        bottomMeasurementResultSummary.setVisibility(View.VISIBLE);
+        gaugePhaseIndicator = view.findViewById(R.id.gauge_phase_indicator);
+
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //prevent back key press
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener((v, keyCode, event) -> {
+
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                AlertDialogUtil.showCancelDialog(getContext(), R.string.alert_cancel_measurement_title, R.string.alert_cancel_measurement_content,
+                        (dialog, which) -> {
+                            measurementService.stopSpeedMeasurement();
+                            ((MainActivity) getActivity()).navigateTo(WorkflowTarget.TITLE);
+                            dialog.cancel();
+                        },
+                        (dialog, which) -> dialog.cancel()
+                );
+                return true;
+            }
+
+            return false;
+        });
+
+        final Intent serviceIntent = new Intent(getContext(), MeasurementService.class);
+        getContext().bindService(serviceIntent, this, Context.BIND_AUTO_CREATE);
+
+        if (!sendingResults.get()) {
+            //only if we are not currently sending any results
+            handler.post(updateUiRunnable);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        handler.removeCallbacks(updateUiRunnable);
+        getContext().unbindService(this);
+        super.onPause();
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        Log.d(TAG, "ON SERVICE CONNECTED");
+        measurementService = ((MeasurementService.MeasurementServiceBinder) service).getService();
+        if (measurementService != null) {
+            this.speedMeasurementState = measurementService.getJniSpeedMeasurementClient().getSpeedMeasurementState();
+            measurementService.setOnMeasurementErrorListener((ex) ->
+            {
+                getActivity().runOnUiThread(() -> {
+                    AlertDialogUtil.showAlertDialog(getContext(), R.string.alert_error_during_measurement_title, R.string.alert_error_during_measurement_content,
+                            (dialog, which) -> ((MainActivity) getActivity()).navigateTo(WorkflowTarget.TITLE));
+                });
+            });
+        }
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        Log.d(TAG, "ON SERVICE DISCONNECTED");
+        measurementService = null;
+    }
 
     @Override
     public Integer getTitleStringId() {

@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2017-2019 alladin-IT GmbH
  * Copyright 2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,66 +18,60 @@
 package at.alladin.nntool.qos.testserver.entity;
 
 /**
- * 
  * @author lb
- *
  */
 public class TestCandidate extends AbstractTtlObject {
-	public final static int DEFAULT_TTL = 30000; 
-	
-	private int resetTtl = DEFAULT_TTL;
-	private int testCounter = 0;
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public int getResetTtl() {
-		return resetTtl;
-	}
+    public final static int DEFAULT_TTL = 30000;
 
-	/**
-	 * 
-	 * @param resetTtl
-	 */
-	public void setResetTtl(int resetTtl) {
-		this.resetTtl = resetTtl;
-	}
+    private int resetTtl = DEFAULT_TTL;
+    private int testCounter = 0;
 
-	/**
-	 * 
-	 */
-	public int increaseTestCounter(boolean resetTtl) {
-		if (resetTtl) {
-			resetTtl(this.resetTtl);
-		}
-		return ++testCounter;
-	}
+    /**
+     * @return
+     */
+    public int getResetTtl() {
+        return resetTtl;
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public int decreaseTestCounter(boolean resetTtl) {
-		if (resetTtl) {
-			resetTtl(this.resetTtl);
-		}
-		return --testCounter;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public int getTestCounter() {
-		return testCounter;
-	}
-	
-	/**
-	 * 
-	 * @param counter
-	 */
-	public void setTestCounter(int counter) {
-		testCounter = counter;
-	}
+    /**
+     * @param resetTtl
+     */
+    public void setResetTtl(int resetTtl) {
+        this.resetTtl = resetTtl;
+    }
+
+    /**
+     * @param rTtl
+     */
+    public int increaseTestCounter(boolean rTtl) {
+        if (rTtl) {
+            resetTtl(this.resetTtl);
+        }
+        return ++testCounter;
+    }
+
+    /**
+     * @param rTtl
+     * @return
+     */
+    public int decreaseTestCounter(boolean rTtl) {
+        if (rTtl) {
+            resetTtl(this.resetTtl);
+        }
+        return --testCounter;
+    }
+
+    /**
+     * @return
+     */
+    public int getTestCounter() {
+        return testCounter;
+    }
+
+    /**
+     * @param counter
+     */
+    public void setTestCounter(int counter) {
+        testCounter = counter;
+    }
 }

@@ -54,17 +54,16 @@ import java.util.Collections;
 /**
  * Class DemoApplication
  */
-public class DemoApplication extends AppCompatActivity
-{
+public class DemoApplication extends AppCompatActivity {
+    // Identifier for the permission request
+    private static final int ACCESS_FINE_LOCATION_PERMISSIONS_REQUEST = 1;
+    /**************************** Variables ****************************/
+
+    Context ctx;
     /****************************** Objects *******************************/
 
     private WSTool wsTool = WSTool.getInstance();
     private Tool mTool = wsTool.getToolObject();
-
-    /**************************** Variables ****************************/
-
-    Context ctx;
-
     //Module Objects
     private String[] mDrawerTitles;
     private DrawerLayout mDrawerLayout;
@@ -74,18 +73,15 @@ public class DemoApplication extends AppCompatActivity
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
 
-    // Identifier for the permission request
-    private static final int ACCESS_FINE_LOCATION_PERMISSIONS_REQUEST = 1;
-
     /*******************************************************************/
 
     /**
      * Method onCreate
+     *
      * @param savedInstanceState Bundle of savedInstanceState
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_measuerment);
@@ -113,8 +109,7 @@ public class DemoApplication extends AppCompatActivity
 
         mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, navDrawerItems));
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name)
-        {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -144,34 +139,15 @@ public class DemoApplication extends AppCompatActivity
     }
 
     /**
-     * Class SlideMenuClickListener
-     */
-    private class SlideMenuClickListener implements ListView.OnItemClickListener
-    {
-        /**
-         * @param parent
-         * @param view
-         * @param position
-         * @param id
-         */
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-        {
-            displayView(position);
-        }
-    }
-
-    /**
      * Method dispplayView
+     *
      * @param position
      */
-    private void displayView(int position)
-    {
+    private void displayView(int position) {
         FocusedFragment fragment = null;
         String fragmentTag = "";
 
-        switch (position)
-        {
+        switch (position) {
             case 0:
                 fragment = new SpeedFragment();
                 fragmentTag = "SpeedFragment";
@@ -190,10 +166,9 @@ public class DemoApplication extends AppCompatActivity
                 break;
         }
 
-        if (fragment != null)
-        {
+        if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame_container, (Fragment)fragment,fragmentTag).addToBackStack(fragmentTag).commit();
+            fragmentManager.beginTransaction().replace(R.id.frame_container, (Fragment) fragment, fragmentTag).addToBackStack(fragmentTag).commit();
             fragmentManager.executePendingTransactions();
 
             mDrawerList.setItemChecked(position, true);
@@ -208,8 +183,7 @@ public class DemoApplication extends AppCompatActivity
      * onResume
      */
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
     }
 
@@ -217,8 +191,7 @@ public class DemoApplication extends AppCompatActivity
      * Method onPause
      */
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
     }
 
@@ -227,8 +200,7 @@ public class DemoApplication extends AppCompatActivity
      * @return boolean
      */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
 
@@ -237,11 +209,9 @@ public class DemoApplication extends AppCompatActivity
      * @return boolean
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         // toggle nav drawer on selecting action bar app icon/title
-        if (mDrawerToggle.onOptionsItemSelected(item))
-        {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
@@ -251,8 +221,7 @@ public class DemoApplication extends AppCompatActivity
     /**
      * Method checkFirstRun
      */
-    public void checkFirstRun()
-    {
+    public void checkFirstRun() {
         //Get App Version
         wsTool.getAppVersion();
     }
@@ -260,42 +229,49 @@ public class DemoApplication extends AppCompatActivity
     /**
      * Method checkPersmission
      */
-    public void checkPermission()
-    {
-        if(
-                ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,Manifest.permission.READ_PHONE_STATE)!= PackageManager.PERMISSION_GRANTED
-        )
-        {
+    public void checkPermission() {
+        if (
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                        ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
+        ) {
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION))
-            {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                 // Show an expanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
-            }
-            else
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_PHONE_STATE}, ACCESS_FINE_LOCATION_PERMISSIONS_REQUEST);
+            } else
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE}, ACCESS_FINE_LOCATION_PERMISSIONS_REQUEST);
         }
     }
 
     /**
-     *
      * @param requestCode
      * @param permissions
      * @param grantResults
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
-    {
-        if (requestCode == ACCESS_FINE_LOCATION_PERMISSIONS_REQUEST )
-        {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        if (requestCode == ACCESS_FINE_LOCATION_PERMISSIONS_REQUEST) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 Toast.makeText(this, "Berechtigungen hinzugefügt", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+        } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    /**
+     * Class SlideMenuClickListener
+     */
+    private class SlideMenuClickListener implements ListView.OnItemClickListener {
+        /**
+         * @param parent
+         * @param view
+         * @param position
+         * @param id
+         */
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            displayView(position);
         }
     }
 }

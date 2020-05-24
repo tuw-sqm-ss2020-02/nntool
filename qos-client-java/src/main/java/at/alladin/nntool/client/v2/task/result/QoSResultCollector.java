@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,48 +24,45 @@ import org.json.JSONObject;
 
 /**
  * collects all test results
- * @author lb
  *
+ * @author lb
  */
 public class QoSResultCollector {
-	private List<QoSTestResult> results = new ArrayList<>();
+    private List<QoSTestResult> results = new ArrayList<>();
 
-	private String testToken;
+    private String testToken;
 
-	/**
-	 * 
-	 * @return
-	 */
-	public List<QoSTestResult> getResults() {
-		return results;
-	}
+    /**
+     * @return
+     */
+    public List<QoSTestResult> getResults() {
+        return results;
+    }
 
-	public String getTestToken() {
-		return testToken;
-	}
+    /**
+     * @param results
+     */
+    public void setResults(List<QoSTestResult> results) {
+        this.results = results;
+    }
 
-	public void setTestToken(String testToken) {
-		this.testToken = testToken;
-	}
+    public String getTestToken() {
+        return testToken;
+    }
 
-	/**
-	 * 
-	 * @param results
-	 */
-	public void setResults(List<QoSTestResult> results) {
-		this.results = results;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public JSONArray toJson() {
-		JSONArray json = null;
-		json = new JSONArray();
-		for (QoSTestResult result : results) {
-			json.put(new JSONObject(result.getResultMap()));
-		}
-		return json;
-	}
+    public void setTestToken(String testToken) {
+        this.testToken = testToken;
+    }
+
+    /**
+     * @return
+     */
+    public JSONArray toJson() {
+        JSONArray json = null;
+        json = new JSONArray();
+        for (QoSTestResult result : results) {
+            json.put(new JSONObject(result.getResultMap()));
+        }
+        return json;
+    }
 }

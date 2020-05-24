@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2013-2017 alladin-IT GmbH
  * Copyright 2014-2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,32 +28,33 @@ import at.alladin.nntool.util.tools.TracerouteService.HopDetail;
 
 public interface TracerouteService extends Callable<List<HopDetail>> {
 
-	public static final class PingException extends IOException {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+    public String getHost();
 
-		public PingException(String msg) {
-			super(msg);
-		}
-	}
-	
-	public interface HopDetail {
-		public JSONObject toJson();
-		public Map<String, Object> toMap();
-	}
-	
-	public String getHost();
+    public void setHost(String host);
 
-	public void setHost(String host);
-	
-	public void setResultListObject(List<HopDetail> resultList);
+    public void setResultList(List<HopDetail> resultList);
 
-	public int getMaxHops();
+    public int getMaxHops();
 
-	public void setMaxHops(int maxHops);
-	
-	public boolean hasMaxHopsExceeded();
+    public void setMaxHops(int maxHops);
+
+    public boolean hasMaxHopsExceeded();
+
+    public interface HopDetail {
+        public JSONObject toJson();
+
+        public Map<String, Object> toMap();
+    }
+
+    public static final class PingException extends IOException {
+
+        /**
+         *
+         */
+        private static final long serialVersionUID = 1L;
+
+        public PingException(String msg) {
+            super(msg);
+        }
+    }
 }

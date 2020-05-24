@@ -64,7 +64,7 @@ public class SystemInfoGatherer
                     total += cpu;
                 }
 
-                cpuUsage = (total / (float)cpus.length);
+                cpuUsage = (total / (float) cpus.length);
             }
 
         }

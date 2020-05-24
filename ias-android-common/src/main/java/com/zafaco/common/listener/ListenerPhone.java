@@ -33,70 +33,66 @@ import org.json.JSONObject;
 /**
  * Class ListenerPhone
  */
-public class ListenerPhone extends PhoneStateListener
-{
-	/**************************** Variables ****************************/
+public class ListenerPhone extends PhoneStateListener {
+    /**************************** Variables ****************************/
 
     private Context ctx;
 
-	//Module Objects
-	private Tool mTool;
-	private ModulesInterface interfaceCallback;
-	private JSONObject jData;
-	private TelephonyManager tm;
+    //Module Objects
+    private Tool mTool;
+    private ModulesInterface interfaceCallback;
+    private JSONObject jData;
+    private TelephonyManager tm;
     private Thread pThread;
 
     private boolean withIntervall = false;
     private int state;
 
-	/*******************************************************************/
+    /*******************************************************************/
 
     /**
      * Method ListenerPhone
+     *
      * @param ctx
      * @param intCall
      */
-	public ListenerPhone(Context ctx, ModulesInterface intCall)
-	{
-		this.ctx = ctx;
-		this.interfaceCallback = intCall;
+    public ListenerPhone(Context ctx, ModulesInterface intCall) {
+        this.ctx = ctx;
+        this.interfaceCallback = intCall;
 
-		mTool = new Tool();
+        mTool = new Tool();
 
-		jData = new JSONObject();
+        jData = new JSONObject();
 
-		tm = (TelephonyManager)ctx.getSystemService(Context.TELEPHONY_SERVICE);
+        tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
 
-		if (tm != null)
-		{
-			tm.listen(this, PhoneStateListener.LISTEN_CALL_STATE);
-		}
-	}
+        if (tm != null) {
+            tm.listen(this, PhoneStateListener.LISTEN_CALL_STATE);
+        }
+    }
 
     /**
      * Method getState
      */
-	public void getState()
-	{
-		try
-		{
-			//----------------------------------------------
+    public void getState() {
+        try {
+            //----------------------------------------------
 
-			jData.put("app_call_state", mTool.isCalling(ctx) ? "1" : "0");
+            jData.put("app_call_state", mTool.isCalling(ctx) ? "1" : "0");
 
-			//----------------------------------------------
+            //----------------------------------------------
 
-			//Callback
-			interfaceCallback.receiveData(jData);
-		}
-		catch (Exception ex) { mTool.printTrace(ex); }
-	}
+            //Callback
+            interfaceCallback.receiveData(jData);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
     /**
      * Method withIntervall
      */
-	public void withIntervall()
-    {
+    public void withIntervall() {
         pThread = new Thread(new WorkerThread());
         pThread.start();
 
@@ -106,62 +102,54 @@ public class ListenerPhone extends PhoneStateListener
     /**
      * Method stopUpdates
      */
-	public void stopUpdates()
-	{
-        if( withIntervall )
+    public void stopUpdates() {
+        if (withIntervall)
             pThread.interrupt();
 
         withIntervall = false;
-	}
+    }
 
-	//PhoneStateListener.LISTEN_CALL_STATE
-	@Override
-	public void onCallStateChanged(int state, String incomingNumber)
-	{
-		super.onCallStateChanged(state, incomingNumber);
+    //PhoneStateListener.LISTEN_CALL_STATE
+    @Override
+    public void onCallStateChanged(int state, String incomingNumber) {
+        super.onCallStateChanged(state, incomingNumber);
 
         this.state = state;
 
         getData();
-	}
+    }
 
-    private void getData()
-    {
-        try
-        {
+    private void getData() {
+        try {
             //----------------------------------------------
 
             jData.put("app_call_state", state);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            {
-                if (tm.getPhoneCount() == 2)
-                {
-                    mTool.printOutput("DEBUG [getPhoneCount]:"+tm.getPhoneCount());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (tm.getPhoneCount() == 2) {
+                    mTool.printOutput("DEBUG [getPhoneCount]:" + tm.getPhoneCount());
                 }
             }
             //----------------------------------------------
 
             //Callback
             interfaceCallback.receiveData(jData);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
         }
-        catch (Exception ex) { mTool.printTrace(ex); }
     }
 
-    class WorkerThread extends Thread
-    {
-        public void run()
-        {
-            while (true)
-            {
-                try
-                {
+    class WorkerThread extends Thread {
+        public void run() {
+            while (true) {
+                try {
                     getData();
 
                     //Every 10 Seconds
                     Thread.sleep(10000);
+                } catch (InterruptedException ex) {
+                    mTool.printTrace(ex);
                 }
-                catch (InterruptedException ex) { mTool.printTrace(ex); }
             }
         }
     }

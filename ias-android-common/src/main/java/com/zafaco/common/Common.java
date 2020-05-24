@@ -26,38 +26,33 @@ import org.json.JSONObject;
 
 import java.util.Iterator;
 
-public class Common
-{
+public class Common {
     /**************************** Loging Level ****************************/
     public static boolean DEBUG = false;
     public static boolean DEBUG_CONSOLE = false;
 
     /****************** Default Measurement Parameters ********************/
 
-    private static int defaultService                               = 913;
-
-    /***************************** Variables ******************************/
-
-    private final Context ctx;
-
-    //Module Objects
-    private Tool mTool;
-
-    //Vars
-    private boolean testRunning = false;
-
+    private static int defaultService = 913;
     //Measurement Object
     private static JSONObject jsonMTWSMeasurement;
     private static JSONObject jsonMTWSMeasurementAdditional;
+    /***************************** Variables ******************************/
+
+    private final Context ctx;
+    //Module Objects
+    private Tool mTool;
+    //Vars
+    private boolean testRunning = false;
 
     /**************************** Public Functions ****************************/
 
     /**
      * Construtor
+     *
      * @param ctx Context of Common
      */
-    public Common(Context ctx)
-    {
+    public Common(Context ctx) {
         this.ctx = ctx;
 
         mTool = new Tool();
@@ -68,66 +63,56 @@ public class Common
 
     //Getter/Setter --------------------------------------------------------------------------------
 
-    /**
-     * Set DEBUG Flag
-     * @param flag
-     */
-    public void setDebug( boolean flag )
-    {
-        DEBUG = flag;
-    }
-
-    public static int getService()
-    {
+    public static int getService() {
         return defaultService;
     }
 
-    public void setMeasurementRunning(boolean flag) {
-        testRunning = flag;
+    public static JSONObject getJSONMTWSMeasurement() {
+        return jsonMTWSMeasurement;
+    }
+
+    public static void addToJSONMTWSMeasurement(JSONObject object) {
+        try {
+            for (Iterator<String> iter = object.keys(); iter.hasNext(); ) {
+                String key = iter.next();
+                jsonMTWSMeasurement.put(key, object.get(key));
+            }
+        } catch (Exception ex) {
+        }
+    }
+
+    public static JSONObject getJSONMTWSMeasurementAdditional() {
+        return jsonMTWSMeasurementAdditional;
+    }
+
+    public static void addToJSONMTWSMeasurementAdditional(JSONObject object) {
+        try {
+            for (Iterator<String> iter = object.keys(); iter.hasNext(); ) {
+                String key = iter.next();
+                jsonMTWSMeasurementAdditional.put(key, object.get(key));
+            }
+        } catch (Exception ex) {
+        }
+    }
+
+    /**
+     * Set DEBUG Flag
+     *
+     * @param flag
+     */
+    public void setDebug(boolean flag) {
+        DEBUG = flag;
     }
 
     public boolean getMeasurementRunning() {
         return testRunning;
     }
 
-    public static JSONObject getJSONMTWSMeasurement()
-    {
-        return jsonMTWSMeasurement;
+    public void setMeasurementRunning(boolean flag) {
+        testRunning = flag;
     }
 
-    public static void addToJSONMTWSMeasurement(JSONObject object)
-    {
-        try
-        {
-            for (Iterator<String> iter = object.keys(); iter.hasNext(); )
-            {
-                String key = iter.next();
-                jsonMTWSMeasurement.put(key,object.get(key));
-            }
-        }
-        catch(Exception ex) {}
-    }
-
-    public static JSONObject getJSONMTWSMeasurementAdditional()
-    {
-        return jsonMTWSMeasurementAdditional;
-    }
-
-    public static void addToJSONMTWSMeasurementAdditional(JSONObject object)
-    {
-        try
-        {
-            for (Iterator<String> iter = object.keys(); iter.hasNext(); )
-            {
-                String key = iter.next();
-                jsonMTWSMeasurementAdditional.put(key,object.get(key));
-            }
-        }
-        catch(Exception ex) {}
-    }
-
-    public void deviceData()
-    {
+    public void deviceData() {
         mTool.getDeviceData(ctx);
         mTool.getTelephonyManagerData(ctx);
         mTool.getWifiManagerData(ctx);

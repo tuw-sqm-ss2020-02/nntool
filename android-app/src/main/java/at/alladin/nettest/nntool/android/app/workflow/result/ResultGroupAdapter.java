@@ -47,18 +47,6 @@ public class ResultGroupAdapter extends BaseExpandableListAdapter {
         this.context = context;
     }
 
-    private class ViewHolder {
-        AlladinTextView icon;
-        TextView title;
-        TextView description;
-    }
-
-    private class ItemViewHolder {
-        TextView title;
-        TextView value;
-        TextView unit;
-    }
-
     @Override
     public int getGroupCount() {
         return detailMeasurementGroupList == null ? 0 : detailMeasurementGroupList.size();
@@ -107,8 +95,7 @@ public class ResultGroupAdapter extends BaseExpandableListAdapter {
             viewHolder.title = convertView.findViewById(R.id.result_list_group_title);
             viewHolder.description = convertView.findViewById(R.id.result_list_group_description);
             convertView.setTag(viewHolder);
-        }
-        else {
+        } else {
             viewHolder = (ResultGroupAdapter.ViewHolder) convertView.getTag();
         }
 
@@ -145,8 +132,7 @@ public class ResultGroupAdapter extends BaseExpandableListAdapter {
             viewHolder.value = convertView.findViewById(R.id.result_list_group_item_value);
             viewHolder.unit = convertView.findViewById(R.id.result_list_group_item_unit);
             convertView.setTag(viewHolder);
-        }
-        else {
+        } else {
             viewHolder = (ResultGroupAdapter.ItemViewHolder) convertView.getTag();
         }
 
@@ -179,6 +165,18 @@ public class ResultGroupAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
+    }
+
+    private class ViewHolder {
+        AlladinTextView icon;
+        TextView title;
+        TextView description;
+    }
+
+    private class ItemViewHolder {
+        TextView title;
+        TextView value;
+        TextView unit;
     }
 
 }

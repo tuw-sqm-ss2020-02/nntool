@@ -76,64 +76,38 @@ import at.alladin.nntool.client.v2.task.TaskDesc;
  */
 public class MeasurementService extends Service implements ServiceConnection {
 
-    final static String TAG = MeasurementService.class.getSimpleName();
-
-    public static String ACTION_START_SPEED_MEASUREMENT = "at.alladin.nettest.nntool.android.app.startSpeedMeasurement";
-
-    public static String ACTION_START_QOS_MEASUREMENT = "at.alladin.nettest.nntool.android.app.startQosMeasurement";
-
-    public static String EXTRAS_KEY_QOS_TASK_DESC_LIST = "qos_task_desk_list";
-
-    public static String EXTRAS_KEY_QOS_TASK_COLLECTOR_URL = "qos_task_collector_url";
-
-    public static String EXTRAS_KEY_SPEED_TASK_COLLECTOR_URL = "speed_task_collector_url";
-
-    public static String EXTRAS_KEY_SPEED_TASK_DESC = "speed_task_desc";
-
-    public static String EXTRAS_KEY_SPEED_TASK_CLIENT_IPV4_PRIVATE = "speed_task_client_ipv4_private";
-
-    public static String EXTRAS_KEY_SPEED_TASK_CLIENT_IPV6_PRIVATE = "speed_task_client_ipv6_private";
-
-    public static String EXTRAS_KEY_SPEED_TASK_CLIENT_IPV4_PUBLIC = "speed_task_client_ipv4_public";
-
-    public static String EXTRAS_KEY_SPEED_TASK_CLIENT_IPV6_PUBLIC = "speed_task_client_ipv6_public";
-
-    public static String EXTRAS_KEY_FOLLOW_UP_ACTIONS = "measurement_follow_up_actions";
-
-    public static String EXTRAS_KEY_SPEED_EXECUTE = "speed_execute_measurement";
-
-    public static String EXTRAS_KEY_QOS_EXECUTE = "qos_execute_measurement";
-
     public final static String IF_TRAFFIC_LIST_UPLOAD_TAG = "UPLOAD";
-
     public final static String IF_TRAFFIC_LIST_DOWNLOAD_TAG = "DOWNLOAD";
-
     public final static String IF_TRAFFIC_LIST_PING_TAG = "PING";
-
+    final static String TAG = MeasurementService.class.getSimpleName();
+    public static String ACTION_START_SPEED_MEASUREMENT = "at.alladin.nettest.nntool.android.app.startSpeedMeasurement";
+    public static String ACTION_START_QOS_MEASUREMENT = "at.alladin.nettest.nntool.android.app.startQosMeasurement";
+    public static String EXTRAS_KEY_QOS_TASK_DESC_LIST = "qos_task_desk_list";
+    public static String EXTRAS_KEY_QOS_TASK_COLLECTOR_URL = "qos_task_collector_url";
+    public static String EXTRAS_KEY_SPEED_TASK_COLLECTOR_URL = "speed_task_collector_url";
+    public static String EXTRAS_KEY_SPEED_TASK_DESC = "speed_task_desc";
+    public static String EXTRAS_KEY_SPEED_TASK_CLIENT_IPV4_PRIVATE = "speed_task_client_ipv4_private";
+    public static String EXTRAS_KEY_SPEED_TASK_CLIENT_IPV6_PRIVATE = "speed_task_client_ipv6_private";
+    public static String EXTRAS_KEY_SPEED_TASK_CLIENT_IPV4_PUBLIC = "speed_task_client_ipv4_public";
+    public static String EXTRAS_KEY_SPEED_TASK_CLIENT_IPV6_PUBLIC = "speed_task_client_ipv6_public";
+    public static String EXTRAS_KEY_FOLLOW_UP_ACTIONS = "measurement_follow_up_actions";
+    public static String EXTRAS_KEY_SPEED_EXECUTE = "speed_execute_measurement";
+    public static String EXTRAS_KEY_QOS_EXECUTE = "qos_execute_measurement";
     final MeasurementServiceBinder binder = new MeasurementServiceBinder();
 
     final AtomicBoolean isBound = new AtomicBoolean(false);
-
-    private Long overallStartTimeNs;
-
-    private Long subMeasurementStartTimeNs;
-
-    private LocalDateTime startDateTime;
-
-    private LocalDateTime endDateTime;
-
-    private String collectorUrl;
-
     /**
-     *  Boolean indicating if the currently started submeasurement is a follow up measurement to another (already executed) sub-measurement (true)
-     *  or if the currently started submeasurement is the first (false)
-    */
+     * Boolean indicating if the currently started submeasurement is a follow up measurement to another (already executed) sub-measurement (true)
+     * or if the currently started submeasurement is the first (false)
+     */
     private final AtomicBoolean isFollowUpAction = new AtomicBoolean(false);
-
     QoSMeasurementClientAndroid qosMeasurementClient;
-
     InformationCollector informationCollector;
-
+    private Long overallStartTimeNs;
+    private Long subMeasurementStartTimeNs;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
+    private String collectorUrl;
     private JniSpeedMeasurementClient jniSpeedMeasurementClient;
 
     private List<SubMeasurementResult> subMeasurementResultList = new ArrayList<>();
@@ -143,12 +117,6 @@ public class MeasurementService extends Service implements ServiceConnection {
     private ArrayList<MeasurementType> followUpActions;
 
     private OnMeasurementErrorListener onMeasurementErrorListener;
-
-    public class MeasurementServiceBinder extends Binder {
-        public MeasurementService getService() {
-            return MeasurementService.this;
-        }
-    }
 
     @Override
     public void onCreate() {
@@ -208,7 +176,7 @@ public class MeasurementService extends Service implements ServiceConnection {
         final boolean forceIpv4 = PreferencesUtil.isForceIpv4(getApplicationContext()) && clientIpv4 != null;
 
         //if ipV6 is available, use it
-        if (clientIpv6 != null && !forceIpv4)  {
+        if (clientIpv6 != null && !forceIpv4) {
             Log.d(TAG, "Using IPv6...");
             speedTaskDesc.setUseIpV6(true);
             speedTaskDesc.setClientIp(clientIpv6);
@@ -308,7 +276,7 @@ public class MeasurementService extends Service implements ServiceConnection {
         });
     }
 
-    public void stopSpeedMeasurement () {
+    public void stopSpeedMeasurement() {
         try {
             jniSpeedMeasurementClient.stopMeasurement();
         } catch (final Exception ex) {
@@ -374,8 +342,7 @@ public class MeasurementService extends Service implements ServiceConnection {
             if (ACTION_START_SPEED_MEASUREMENT.equals(intent.getAction())) {
                 startMeasurement(intent.getExtras());
                 return START_STICKY;
-            }
-            else if (ACTION_START_QOS_MEASUREMENT.equals(intent.getAction())) {
+            } else if (ACTION_START_QOS_MEASUREMENT.equals(intent.getAction())) {
                 startQosMeasurement(intent.getExtras());
                 return START_STICKY;
             }
@@ -396,6 +363,7 @@ public class MeasurementService extends Service implements ServiceConnection {
 
     /**
      * sends the results of all executed sub-measurements
+     *
      * @param mainActivity
      * @return true if the task has been executed, false if the results have already been sent
      */
@@ -454,19 +422,19 @@ public class MeasurementService extends Service implements ServiceConnection {
     }
 
     /**
-     *
      * @return true if a follow up action (e.g. QOS, SPEED) to the current measurement is desired
      */
-    public boolean hasFollowUpAction () {
+    public boolean hasFollowUpAction() {
         return followUpActions != null && followUpActions.size() > 0;
     }
 
     /**
      * Starts the next follow up action (e.g. QOS, SPEED) from the MainActivity
      * passes along the previous bundle, but removes the currently executed action from the follow up actions
+     *
      * @param activity
      */
-    public void executeFollowUpAction (final MainActivity activity) {
+    public void executeFollowUpAction(final MainActivity activity) {
         if (!hasFollowUpAction()) {
             return;
         }
@@ -479,6 +447,7 @@ public class MeasurementService extends Service implements ServiceConnection {
     /**
      * Adds the given submeasurementresult to the list of executed submeasurements
      * additionally adds time information to the submeasurement results
+     *
      * @param result
      */
     public void addSubMeasurementResult(final SubMeasurementResult result) {
@@ -507,6 +476,12 @@ public class MeasurementService extends Service implements ServiceConnection {
 
     public interface OnMeasurementErrorListener {
         void onMeasurementError(final Exception ex);
+    }
+
+    public class MeasurementServiceBinder extends Binder {
+        public MeasurementService getService() {
+            return MeasurementService.this;
+        }
     }
 
 }

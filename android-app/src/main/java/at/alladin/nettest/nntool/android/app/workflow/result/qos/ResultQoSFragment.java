@@ -61,7 +61,7 @@ public class ResultQoSFragment extends ActionBarFragment {
 
     private FullMeasurementResponse measurementResponse;
 
-    public static ResultQoSFragment newInstance (WorkflowParameter workflowParameter) {
+    public static ResultQoSFragment newInstance(WorkflowParameter workflowParameter) {
         final ResultQoSFragment fragment = new ResultQoSFragment();
         if (workflowParameter instanceof WorkflowResultParameter) {
             fragment.setWorkflowResultParameter((WorkflowResultParameter) workflowParameter);
@@ -122,7 +122,7 @@ public class ResultQoSFragment extends ActionBarFragment {
         return v;
     }
 
-    private List<QoSBoxResult> parseIntoBoxResults (final FullQoSMeasurement qoSMeasurement) {
+    private List<QoSBoxResult> parseIntoBoxResults(final FullQoSMeasurement qoSMeasurement) {
         final Map<QoSMeasurementTypeDto, QoSBoxResult> typeToBoxResult = new LinkedHashMap<>();
         for (EvaluatedQoSResult r : qoSMeasurement.getResults()) {
             QoSBoxResult boxResult = typeToBoxResult.get(r.getType());

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,27 +26,27 @@ import com.google.gson.annotations.SerializedName;
 
 public class BasicDropdownFilterDto<T> extends BasicFilterDto<T> {
 
-	@JsonPropertyDescription("Contains all available options for this dropdown filter.")
-	@Expose
-	@SerializedName("options")
-	@JsonProperty("options")
-	List<FilterEntry<T>> options = new ArrayList<>();
-	
-	public BasicDropdownFilterDto() {
-		this(null, null);
-	}
-	
-	public BasicDropdownFilterDto(final String key, final T defaultValue) {
-		setFilterType(FilterTypeDto.DROPDOWN);
-		setDefaultValue(defaultValue);
-		setKey(key);
-	}
+    @JsonPropertyDescription("Contains all available options for this dropdown filter.")
+    @Expose
+    @SerializedName("options")
+    @JsonProperty("options")
+    private List<FilterEntry<T>> options = new ArrayList<>();
 
-	public List<FilterEntry<T>> getOptions() {
-		return options;
-	}
+    public BasicDropdownFilterDto() {
+        this(null, null);
+    }
 
-	public void setOptions(List<FilterEntry<T>> options) {
-		this.options = options;
-	}
+    public BasicDropdownFilterDto(final String key, final T defaultValue) {
+        setFilterType(FilterTypeDto.DROPDOWN);
+        setDefaultValue(defaultValue);
+        setKey(key);
+    }
+
+    public List<FilterEntry<T>> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<FilterEntry<T>> options) {
+        this.options = options;
+    }
 }

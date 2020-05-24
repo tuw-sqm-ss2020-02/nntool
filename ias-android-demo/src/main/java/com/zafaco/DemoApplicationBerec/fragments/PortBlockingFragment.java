@@ -50,37 +50,84 @@ import at.alladin.nntool.client.ClientHolder;
 import at.alladin.nntool.client.helper.TaskDescriptionHelper;
 import at.alladin.nntool.client.v2.task.result.QoSResultCollector;
 
-public class PortBlockingFragment extends Fragment implements FocusedFragment
-{
-    private WSTool wsTool = WSTool.getInstance();
-    private Common mCommon = wsTool.getCommonObject();
-    private Tool mTool = wsTool.getToolObject();
-
-    private QoSMeasurementClientAndroid qosClient;
-
-    DecimalFormat f = new DecimalFormat("#0.00");
-
+public class PortBlockingFragment extends Fragment implements FocusedFragment {
     private final static String TAG = "PORT_BLOCKING_FRAGMENT";
-
     private final static Pattern resultFormatPattern = Pattern.compile("[^:]\\{");
-
+    DecimalFormat f = new DecimalFormat("#0.00");
     /**************************** Variables ****************************/
 
     Context ctx;
     View view;
+    private WSTool wsTool = WSTool.getInstance();
+    private Common mCommon = wsTool.getCommonObject();
+    private Tool mTool = wsTool.getToolObject();
+    private QoSMeasurementClientAndroid qosClient;
 
     /*******************************************************************/
+    /**
+     * Handler handleClickMeasurementStart
+     */
+    private final View.OnClickListener handleClickMeasurementStart = new View.OnClickListener() {
+        /**
+         * Method onClick
+         * @param v View
+         */
+        @Override
+        public void onClick(View v) {
+            updateButtonUi("TEST RUNNING", (Button) view.findViewById(R.id.button));
+            qosClient.addProgressListener(new QoSMeasurementClientProgressAdapter() {
+                @Override
+                public void onProgress(float progress) {
+                    Log.i(TAG, String.format("Progress %f", progress));
+                }
+            });
+            qosClient.addControlListener(new QoSMeasurementClientControlAdapter() {
+                @Override
+                public void onMeasurementStarted(List<QosMeasurementType> testsToBeExecuted) {
+                    Log.i(TAG, testsToBeExecuted.toString());
+                }
+
+                @Override
+                public void onMeasurementStopped() {
+                    Log.i(TAG, "Measurement stopped");
+                    updateButtonUi("START TEST ", (Button) view.findViewById(R.id.button));
+                }
+
+                @Override
+                public void onMeasurementError(Exception e) {
+                    Log.e(TAG, e.getMessage());
+                    updateButtonUi("START TEST ", (Button) view.findViewById(R.id.button));
+                }
+
+                @Override
+                public void onMeasurementFinished(String qosTestUuid, QoSResultCollector qoSResultCollector) {
+                    Log.i(TAG, qoSResultCollector.toJson().toString());
+                    if (qoSResultCollector.toJson().toString().equals("[]")) {
+                        updateUi(String.format("Could not connect to specified QoS service @ host: %s port: %d. " +
+                                        "\n\nPlease provide a valid configuration in the src/main/res/values/defaults.xml. See the README for more details!",
+                                getResources().getString(R.string.default_qos_control_host), getResources().getInteger(R.integer.default_qos_control_port)),
+                                (TextView) view.findViewById(R.id.results));
+                    } else {
+                        updateUi(resultFormatPattern.matcher(qoSResultCollector.toJson().toString().replace(",", ",\n")).replaceAll("\n\n{"), (TextView) view.findViewById(R.id.results));
+                    }
+                    updateButtonUi("START TEST ", (Button) view.findViewById(R.id.button));
+                }
+            });
+            qosClient.start();
+
+        }
+    };
 
     /**
      * Method onCreateView
+     *
      * @param inflater
      * @param container
      * @param savedInstanceState
      * @return
      */
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_measurement, container, false);
 
         TextView textView = view.findViewById(R.id.download_name);
@@ -128,8 +175,7 @@ public class PortBlockingFragment extends Fragment implements FocusedFragment
      * Method onResume
      */
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         ctx = Objects.requireNonNull(getActivity()).getApplicationContext();
 
         super.onResume();
@@ -139,76 +185,19 @@ public class PortBlockingFragment extends Fragment implements FocusedFragment
      * Method onDisplayView
      */
     @Override
-    public void onDisplayView()
-    {
+    public void onDisplayView() {
         ctx = Objects.requireNonNull(getActivity()).getApplication().getApplicationContext();
 
         mCommon.setDebug(true);
     }
 
     /**
-     * Handler handleClickMeasurementStart
-     */
-    private final View.OnClickListener handleClickMeasurementStart = new View.OnClickListener()
-    {
-        /**
-         * Method onClick
-         * @param v View
-         */
-        @Override
-        public void onClick(View v)
-        {
-            updateButtonUi("TEST RUNNING", (Button) view.findViewById(R.id.button));
-            qosClient.addProgressListener(new QoSMeasurementClientProgressAdapter() {
-                @Override
-                public void onProgress(float progress) {
-                    Log.i(TAG, String.format("Progress %f", progress));
-                }
-            });
-            qosClient.addControlListener(new QoSMeasurementClientControlAdapter() {
-                @Override
-                public void onMeasurementStarted(List<QosMeasurementType> testsToBeExecuted) {
-                    Log.i(TAG, testsToBeExecuted.toString());
-                }
-
-                @Override
-                public void onMeasurementStopped() {
-                    Log.i(TAG, "Measurement stopped");
-                    updateButtonUi("START TEST ", (Button) view.findViewById(R.id.button));
-                }
-
-                @Override
-                public void onMeasurementError(Exception e) {
-                    Log.e(TAG, e.getMessage());
-                    updateButtonUi("START TEST ", (Button) view.findViewById(R.id.button));
-                }
-
-                @Override
-                public void onMeasurementFinished(String qosTestUuid, QoSResultCollector qoSResultCollector) {
-                    Log.i(TAG, qoSResultCollector.toJson().toString());
-                    if (qoSResultCollector.toJson().toString().equals("[]")) {
-                        updateUi(String.format("Could not connect to specified QoS service @ host: %s port: %d. " +
-                                        "\n\nPlease provide a valid configuration in the src/main/res/values/defaults.xml. See the README for more details!",
-                                getResources().getString(R.string.default_qos_control_host), getResources().getInteger(R.integer.default_qos_control_port)),
-                                (TextView) view.findViewById(R.id.results));
-                    } else {
-                        updateUi(resultFormatPattern.matcher(qoSResultCollector.toJson().toString().replace(",", ",\n")).replaceAll("\n\n{"), (TextView) view.findViewById(R.id.results));
-                    }
-                    updateButtonUi("START TEST ", (Button) view.findViewById(R.id.button));
-                }
-            });
-            qosClient.start();
-
-        }
-    };
-
-    /**
      * Method updateButtonUi - Show Text on UI
-     * @param message Message to Show
+     *
+     * @param message  Message to Show
      * @param buttonid button id
      */
-    private void updateButtonUi(final String message, final Button buttonid)
-    {
+    private void updateButtonUi(final String message, final Button buttonid) {
         Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -219,11 +208,11 @@ public class PortBlockingFragment extends Fragment implements FocusedFragment
 
     /**
      * Method updateUi - Show Text on UI
+     *
      * @param message Message to Show
-     * @param textid testView id
+     * @param textid  testView id
      */
-    private void updateUi(final String message, final TextView textid)
-    {
+    private void updateUi(final String message, final TextView textid) {
         Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
             @Override
             public void run() {

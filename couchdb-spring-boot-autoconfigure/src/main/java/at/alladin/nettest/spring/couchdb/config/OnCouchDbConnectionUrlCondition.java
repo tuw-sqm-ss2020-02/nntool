@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,13 +20,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionMessage;
 import org.springframework.boot.autoconfigure.condition.OnPropertyListCondition;
 
 /**
- * 
  * @author alladin-IT GmbH (bp@alladin.at)
- *
  */
 class OnCouchDbConnectionUrlCondition extends OnPropertyListCondition {
 
-	OnCouchDbConnectionUrlCondition() {
-		super("spring.couchdb.connection.url", () -> ConditionMessage.forCondition("CouchDB connection URL"));
-	}
+    OnCouchDbConnectionUrlCondition() {
+        super("spring.couchdb.connection.url", () -> ConditionMessage.forCondition("CouchDB connection URL"));
+    }
 }

@@ -44,12 +44,6 @@ public class ResultQoSTypeDetailAdapter extends ArrayAdapter<EvaluatedQoSResult>
         this.context = context;
     }
 
-    private class ViewHolder {
-        TextView testNumber;
-        TextView summary;
-        AlladinTextView checkmark;
-    }
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -63,8 +57,7 @@ public class ResultQoSTypeDetailAdapter extends ArrayAdapter<EvaluatedQoSResult>
             viewHolder.summary = convertView.findViewById(R.id.result_summary);
             viewHolder.checkmark = convertView.findViewById(R.id.result_checkmark);
             convertView.setTag(viewHolder);
-        }
-        else {
+        } else {
             viewHolder = (ResultQoSTypeDetailAdapter.ViewHolder) convertView.getTag();
         }
 
@@ -79,6 +72,12 @@ public class ResultQoSTypeDetailAdapter extends ArrayAdapter<EvaluatedQoSResult>
         }
 
         return convertView;
+    }
+
+    private class ViewHolder {
+        TextView testNumber;
+        TextView summary;
+        AlladinTextView checkmark;
     }
 
 

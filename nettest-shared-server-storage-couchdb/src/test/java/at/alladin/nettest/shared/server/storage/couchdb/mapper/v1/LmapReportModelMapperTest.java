@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,155 +47,153 @@ import at.alladin.nettest.shared.server.storage.couchdb.domain.model.Measurement
 import at.alladin.nettest.shared.server.storage.couchdb.domain.model.OperatingSystemInfo;
 
 /**
- * 
  * @author alladin-IT GmbH (bp@alladin.at)
- *
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {
-	LmapReportModelMapperImpl.class,
-	DateTimeMapperImpl.class,
-	RttInfoDtoMapperImpl.class,
-	MeasurementResultNetworkPointInTimeDtoMapperImpl.class
+        LmapReportModelMapperImpl.class,
+        DateTimeMapperImpl.class,
+        RttInfoDtoMapperImpl.class,
+        MeasurementResultNetworkPointInTimeDtoMapperImpl.class
 })
 @AutoConfigureJsonTesters
 public class LmapReportModelMapperTest {
 
-	@Autowired
-	private LmapReportModelMapper lmapReportModelMapper;
-	
-	@Autowired
-	private DateTimeMapper dateTimeMapper;
-	
-	@Autowired
-	private ObjectMapper objectMapper;
-	
-	@Value("classpath:lmap_report_model/model1.json")
-	private Resource model1Resource;
-	
-	@Test
-	public void testMapLmapReportModel() throws JsonParseException, JsonMappingException, IOException {
-		final LmapReportDto lmapReportDto = objectMapper.readValue(model1Resource.getInputStream(), LmapReportDto.class);
-		final ApiRequestInfo addReqInfo = lmapReportDto.getAdditionalRequestInfo();
-		final TimeBasedResultDto timeBasedResultDto = lmapReportDto.getTimeBasedResult();
-		
-		final Measurement measurement = lmapReportModelMapper.map(lmapReportDto);
-		final MeasurementAgentInfo agentInfo = measurement.getAgentInfo();
-		final DeviceInfo deviceInfo = measurement.getDeviceInfo();
-		final OperatingSystemInfo osInfo = deviceInfo.getOsInfo();
-		final MeasurementTime measurementTime = measurement.getMeasurementTime();
-		
-		assertNull(measurement.getId());
-		assertNull(measurement.getRev());
-		
-		assertNull(measurement.getUuid());
-		assertNull(measurement.getOpenDataUuid());
-		
-		assertEquals(dateTimeMapper.map(lmapReportDto.getDate()), measurement.getSubmitTime());
-		assertEquals(lmapReportDto.getAgentId(), agentInfo.getUuid());
-		
-		assertEquals(addReqInfo.getLanguage(),  agentInfo.getLanguage());
-		assertEquals(addReqInfo.getTimezone(),  agentInfo.getTimezone());
-		assertEquals(addReqInfo.getAgentType(), agentInfo.getType());
+    @Autowired
+    private LmapReportModelMapper lmapReportModelMapper;
 
-		assertEquals(addReqInfo.getOsName(), 	osInfo.getName());
-		assertEquals(addReqInfo.getOsVersion(), osInfo.getVersion());
-		assertEquals(addReqInfo.getApiLevel(), 	osInfo.getApiLevel());
-		
-		assertEquals(addReqInfo.getCodeName(), deviceInfo.getCodeName());
-		assertEquals(addReqInfo.getModel(),    deviceInfo.getModel());
-		assertNull(deviceInfo.getFullName());
+    @Autowired
+    private DateTimeMapper dateTimeMapper;
 
-		assertEquals(addReqInfo.getAppVersionName(), agentInfo.getAppVersionName());
-		assertEquals(addReqInfo.getAppVersionCode(), agentInfo.getAppVersionCode());
-		assertEquals(addReqInfo.getAppGitRevision(), agentInfo.getAppGitRevision());
-		
-		assertEquals(dateTimeMapper.map(timeBasedResultDto.getStartTime()), measurementTime.getStartTime());
-		assertEquals(dateTimeMapper.map(timeBasedResultDto.getEndTime()), measurementTime.getEndTime());
-		assertEquals(timeBasedResultDto.getDurationNs(), measurementTime.getDurationNs());
-		
-		// TODO: more
-	}
-	
-	@Test
-	public void testGeolocationDistanceParsingWithTwoValidValues() {
-		final LmapReportDto reportDto = new LmapReportDto();
-		final TimeBasedResultDto timeBasedResult = new TimeBasedResultDto();
-		reportDto.setTimeBasedResult(timeBasedResult);
-		final List<GeoLocationDto> geoLocations = new ArrayList<>();
-		timeBasedResult.setGeoLocations(geoLocations);
-		
-		GeoLocationDto point = new GeoLocationDto();
-		point.setLatitude(46.837817);
-		point.setLongitude(12.768663);
-		geoLocations.add(point);
-		
-		point = new GeoLocationDto();
-		point.setLatitude(46.837848);
-		point.setLongitude(12.767668);
-		geoLocations.add(point);
-		
-		final Measurement measurement = lmapReportModelMapper.map(reportDto);
-		//the correct distances are according to https://www.movable-type.co.uk/scripts/latlong.html and verified via google maps
-		assertEquals("Unexpected distance calculated", 75, measurement.getGeoLocationInfo().getDistanceMovedMetres(), 1);
-	}
+    @Autowired
+    private ObjectMapper objectMapper;
 
-	@Test
-	public void testGeolocationDistanceParsingWithMultipleValues() {
-		final LmapReportDto reportDto = new LmapReportDto();
-		final TimeBasedResultDto timeBasedResult = new TimeBasedResultDto();
-		reportDto.setTimeBasedResult(timeBasedResult);
-		final List<GeoLocationDto> geoLocations = new ArrayList<>();
-		timeBasedResult.setGeoLocations(geoLocations);
+    @Value("classpath:lmap_report_model/model1.json")
+    private Resource model1Resource;
 
-		GeoLocationDto point = new GeoLocationDto();
-		geoLocations.add(point);
+    @Test
+    public void testMapLmapReportModel() throws JsonParseException, JsonMappingException, IOException {
+        final LmapReportDto lmapReportDto = objectMapper.readValue(model1Resource.getInputStream(), LmapReportDto.class);
+        final ApiRequestInfo addReqInfo = lmapReportDto.getAdditionalRequestInfo();
+        final TimeBasedResultDto timeBasedResultDto = lmapReportDto.getTimeBasedResult();
 
-		point = new GeoLocationDto();
-		point.setLatitude(46.837817);
-		point.setLongitude(12.768663);
-		geoLocations.add(point);
+        final Measurement measurement = lmapReportModelMapper.map(lmapReportDto);
+        final MeasurementAgentInfo agentInfo = measurement.getAgentInfo();
+        final DeviceInfo deviceInfo = measurement.getDeviceInfo();
+        final OperatingSystemInfo osInfo = deviceInfo.getOsInfo();
+        final MeasurementTime measurementTime = measurement.getMeasurementTime();
 
-		geoLocations.add(new GeoLocationDto());
+        assertNull(measurement.getId());
+        assertNull(measurement.getRev());
 
-		point = new GeoLocationDto();
-		point.setLatitude(46.837848);
-		point.setLongitude(12.767668);
-		geoLocations.add(point);
-		//~75 m to this point
+        assertNull(measurement.getUuid());
+        assertNull(measurement.getOpenDataUuid());
 
-		//moving back a little
-		point = new GeoLocationDto();
-		point.setLatitude(46.837939);
-		point.setLongitude(12.768037);
-		geoLocations.add(point);
-		//~ 29m to this point (from the previous point)
+        assertEquals(dateTimeMapper.map(lmapReportDto.getDate()), measurement.getSubmitTime());
+        assertEquals(lmapReportDto.getAgentId(), agentInfo.getUuid());
 
-		final Measurement measurement = lmapReportModelMapper.map(reportDto);
-		//the correct distances are according to https://www.movable-type.co.uk/scripts/latlong.html and verified via google maps
-		assertEquals("Unexpected distance calculated", 104, measurement.getGeoLocationInfo().getDistanceMovedMetres(), 1);
-	}
+        assertEquals(addReqInfo.getLanguage(), agentInfo.getLanguage());
+        assertEquals(addReqInfo.getTimezone(), agentInfo.getTimezone());
+        assertEquals(addReqInfo.getAgentType(), agentInfo.getType());
 
-	@Test
-	public void testGeoLocationDistanceParsingWithInsufficientValues_producesNoDistanceMoved() {
-		final LmapReportDto reportDto = new LmapReportDto();
-		final TimeBasedResultDto timeBasedResult = new TimeBasedResultDto();
-		reportDto.setTimeBasedResult(timeBasedResult);
-		final List<GeoLocationDto> geoLocations = new ArrayList<>();
-		timeBasedResult.setGeoLocations(geoLocations);
+        assertEquals(addReqInfo.getOsName(), osInfo.getName());
+        assertEquals(addReqInfo.getOsVersion(), osInfo.getVersion());
+        assertEquals(addReqInfo.getApiLevel(), osInfo.getApiLevel());
 
-		GeoLocationDto point = new GeoLocationDto();
-		point.setLongitude(12.768037);
-		geoLocations.add(point);
+        assertEquals(addReqInfo.getCodeName(), deviceInfo.getCodeName());
+        assertEquals(addReqInfo.getModel(), deviceInfo.getModel());
+        assertNull(deviceInfo.getFullName());
 
-		geoLocations.add(new GeoLocationDto());
+        assertEquals(addReqInfo.getAppVersionName(), agentInfo.getAppVersionName());
+        assertEquals(addReqInfo.getAppVersionCode(), agentInfo.getAppVersionCode());
+        assertEquals(addReqInfo.getAppGitRevision(), agentInfo.getAppGitRevision());
 
-		point = new GeoLocationDto();
-		point.setLatitude(46.837939);
-		point.setLongitude(12.768037);
-		geoLocations.add(point);
+        assertEquals(dateTimeMapper.map(timeBasedResultDto.getStartTime()), measurementTime.getStartTime());
+        assertEquals(dateTimeMapper.map(timeBasedResultDto.getEndTime()), measurementTime.getEndTime());
+        assertEquals(timeBasedResultDto.getDurationNs(), measurementTime.getDurationNs());
 
-		final Measurement measurement = lmapReportModelMapper.map(reportDto);
-		assertNull("unexpected distance obtained", measurement.getGeoLocationInfo().getDistanceMovedMetres());
-	}
+        // TODO: more
+    }
+
+    @Test
+    public void testGeolocationDistanceParsingWithTwoValidValues() {
+        final LmapReportDto reportDto = new LmapReportDto();
+        final TimeBasedResultDto timeBasedResult = new TimeBasedResultDto();
+        reportDto.setTimeBasedResult(timeBasedResult);
+        final List<GeoLocationDto> geoLocations = new ArrayList<>();
+        timeBasedResult.setGeoLocations(geoLocations);
+
+        GeoLocationDto point = new GeoLocationDto();
+        point.setLatitude(46.837817);
+        point.setLongitude(12.768663);
+        geoLocations.add(point);
+
+        point = new GeoLocationDto();
+        point.setLatitude(46.837848);
+        point.setLongitude(12.767668);
+        geoLocations.add(point);
+
+        final Measurement measurement = lmapReportModelMapper.map(reportDto);
+        //the correct distances are according to https://www.movable-type.co.uk/scripts/latlong.html and verified via google maps
+        assertEquals("Unexpected distance calculated", 75, measurement.getGeoLocationInfo().getDistanceMovedMetres(), 1);
+    }
+
+    @Test
+    public void testGeolocationDistanceParsingWithMultipleValues() {
+        final LmapReportDto reportDto = new LmapReportDto();
+        final TimeBasedResultDto timeBasedResult = new TimeBasedResultDto();
+        reportDto.setTimeBasedResult(timeBasedResult);
+        final List<GeoLocationDto> geoLocations = new ArrayList<>();
+        timeBasedResult.setGeoLocations(geoLocations);
+
+        GeoLocationDto point = new GeoLocationDto();
+        geoLocations.add(point);
+
+        point = new GeoLocationDto();
+        point.setLatitude(46.837817);
+        point.setLongitude(12.768663);
+        geoLocations.add(point);
+
+        geoLocations.add(new GeoLocationDto());
+
+        point = new GeoLocationDto();
+        point.setLatitude(46.837848);
+        point.setLongitude(12.767668);
+        geoLocations.add(point);
+        //~75 m to this point
+
+        //moving back a little
+        point = new GeoLocationDto();
+        point.setLatitude(46.837939);
+        point.setLongitude(12.768037);
+        geoLocations.add(point);
+        //~ 29m to this point (from the previous point)
+
+        final Measurement measurement = lmapReportModelMapper.map(reportDto);
+        //the correct distances are according to https://www.movable-type.co.uk/scripts/latlong.html and verified via google maps
+        assertEquals("Unexpected distance calculated", 104, measurement.getGeoLocationInfo().getDistanceMovedMetres(), 1);
+    }
+
+    @Test
+    public void testGeoLocationDistanceParsingWithInsufficientValuesProducesNoDistanceMoved() {
+        final LmapReportDto reportDto = new LmapReportDto();
+        final TimeBasedResultDto timeBasedResult = new TimeBasedResultDto();
+        reportDto.setTimeBasedResult(timeBasedResult);
+        final List<GeoLocationDto> geoLocations = new ArrayList<>();
+        timeBasedResult.setGeoLocations(geoLocations);
+
+        GeoLocationDto point = new GeoLocationDto();
+        point.setLongitude(12.768037);
+        geoLocations.add(point);
+
+        geoLocations.add(new GeoLocationDto());
+
+        point = new GeoLocationDto();
+        point.setLatitude(46.837939);
+        point.setLongitude(12.768037);
+        geoLocations.add(point);
+
+        final Measurement measurement = lmapReportModelMapper.map(reportDto);
+        assertNull("unexpected distance obtained", measurement.getGeoLocationInfo().getDistanceMovedMetres());
+    }
 }

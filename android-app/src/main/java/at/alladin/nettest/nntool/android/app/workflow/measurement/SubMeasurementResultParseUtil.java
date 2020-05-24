@@ -72,7 +72,7 @@ public class SubMeasurementResultParseUtil {
             ret.setBytesDownloadIncludingSlowStart(lastDownloadEntry.getBytesIncludingSlowStart());
             //we sent the duration (not the duration_total), as the mbps are calculated from the duration => the total duration can be calculated from the relative starttimes
             ret.setDurationDownloadNs(lastDownloadEntry.getDurationNs());
-            if (timeInfo != null && timeInfo.getDownloadStart() != null ) {
+            if (timeInfo != null && timeInfo.getDownloadStart() != null) {
                 ret.setRelativeStartTimeDownloadNs(timeInfo.getRttUdpStart() != null ? timeInfo.getDownloadStart() - timeInfo.getRttUdpStart() : 0);
             }
 
@@ -91,7 +91,7 @@ public class SubMeasurementResultParseUtil {
             ret.setBytesUpload(lastUploadEntry.getBytes());
             ret.setBytesUploadIncludingSlowStart(lastUploadEntry.getBytesIncludingSlowStart());
             ret.setDurationUploadNs(lastUploadEntry.getDurationNs());
-            if (timeInfo != null && timeInfo.getUploadStart() != null ) {
+            if (timeInfo != null && timeInfo.getUploadStart() != null) {
                 ret.setRelativeStartTimeUploadNs(timeInfo.getRttUdpStart() != null ? timeInfo.getUploadStart() - timeInfo.getRttUdpStart() :
                         timeInfo.getDownloadStart() != null ? timeInfo.getUploadStart() - timeInfo.getDownloadStart() : 0);
             }
@@ -146,7 +146,7 @@ public class SubMeasurementResultParseUtil {
         return ret;
     }
 
-    private static SpeedMeasurementRawDataItemDto parseBandWidthResultIntoRawDataItem (JniSpeedMeasurementResult.BandwidthResult bandwidth) {
+    private static SpeedMeasurementRawDataItemDto parseBandWidthResultIntoRawDataItem(JniSpeedMeasurementResult.BandwidthResult bandwidth) {
         final SpeedMeasurementRawDataItemDto ret = new SpeedMeasurementRawDataItemDto();
         ret.setBytes(bandwidth.getBytes());
         ret.setRelativeTimeNs(bandwidth.getDurationNs());

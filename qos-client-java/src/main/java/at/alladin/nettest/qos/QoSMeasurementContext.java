@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,14 +26,14 @@ public class QoSMeasurementContext {
 
     private int controlServerApiVersion;
 
-    public QoSMeasurementContext (final String controlServerHost) {
+    public QoSMeasurementContext(final String controlServerHost) {
         this.controlServerHost = controlServerHost;
         this.controlServerPort = 443;
         this.useTls = true;
         this.controlServerApiVersion = 1;
     }
 
-    public QoSMeasurementContext (final String controlServerHost, final int controlServerPort, final boolean useTls, final int controlServerApiVersion) {
+    public QoSMeasurementContext(final String controlServerHost, final int controlServerPort, final boolean useTls, final int controlServerApiVersion) {
         this.controlServerHost = controlServerHost;
         this.controlServerPort = controlServerPort;
         this.useTls = useTls;
@@ -82,8 +82,7 @@ public class QoSMeasurementContext {
         if (controlServerPort != that.controlServerPort) return false;
         if (useTls != that.useTls) return false;
         if (controlServerApiVersion != that.controlServerApiVersion) return false;
-        if (controlServerHost != null ? !controlServerHost.equals(that.controlServerHost) : that.controlServerHost != null)
-            return false;
+        if (controlServerHost != null ? !controlServerHost.equals(that.controlServerHost) : that.controlServerHost != null) return false;
 
         return true;
     }
@@ -99,11 +98,11 @@ public class QoSMeasurementContext {
 
     @Override
     public String toString() {
-        return "QoSMeasurementContext{" +
-                "controlServerHost='" + controlServerHost + '\'' +
-                ", controlServerPort=" + controlServerPort +
-                ", useTls=" + useTls +
-                ", controlServerApiVersion=" + controlServerApiVersion +
-                '}';
+        return "QoSMeasurementContext{"
+                + "controlServerHost='" + controlServerHost + '\''
+                + ", controlServerPort=" + controlServerPort
+                + ", useTls=" + useTls
+                + ", controlServerApiVersion=" + controlServerApiVersion
+                + '}';
     }
 }

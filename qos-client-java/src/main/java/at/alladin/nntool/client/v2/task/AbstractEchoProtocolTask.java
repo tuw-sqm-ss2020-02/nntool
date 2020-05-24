@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,23 +35,15 @@ public abstract class AbstractEchoProtocolTask extends AbstractQoSTask {
     public final static String PARAM_PAYLOAD = "echo_protocol_objective_payload";
 
     public final static String RESULT_PORT = "echo_protocol_objective_port";
-
-    protected final static String RESULT = "echo_protocol_result";
-
-    protected final static String RESULT_TIMEOUT = "echo_protocol_objective_timeout";
-
-    protected final static String RESULT_STATUS = "echo_protocol_status";
-
-    protected final static String RESULT_RTT_NS = "echo_protocol_result_rtt_ns";
-
     public final static String PARAM_TIMEOUT = "timeout";
-
     //the port to test against
     public final static String PARAM_SERVER_PORT = "port";
-
     //the server to test against
     public final static String PARAM_SERVER_ADDRESS = "echo_protocol_objective_server_addr";
-
+    protected final static String RESULT = "echo_protocol_result";
+    protected final static String RESULT_TIMEOUT = "echo_protocol_objective_timeout";
+    protected final static String RESULT_STATUS = "echo_protocol_status";
+    protected final static String RESULT_RTT_NS = "echo_protocol_result_rtt_ns";
     protected final static long DEFAULT_TIMEOUT = 3000000000L;
 
     protected String payload;
@@ -62,7 +54,7 @@ public abstract class AbstractEchoProtocolTask extends AbstractQoSTask {
 
     protected String testHost;
 
-    public AbstractEchoProtocolTask (final QualityOfServiceTest nnTest, final TaskDesc taskDesc, final int threadId, final int id) {
+    public AbstractEchoProtocolTask(final QualityOfServiceTest nnTest, final TaskDesc taskDesc, final int threadId, final int id) {
         super(nnTest, taskDesc, threadId, id);
 
         String value = (String) taskDesc.getParams().get(PARAM_SERVER_PORT);

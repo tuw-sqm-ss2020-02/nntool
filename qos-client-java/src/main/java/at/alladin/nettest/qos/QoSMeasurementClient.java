@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,23 +16,23 @@
 
 package at.alladin.nettest.qos;
 
-import static at.alladin.nntool.client.v2.task.AbstractQoSTask.PARAM_QOS_CONCURRENCY_GROUP;
+import at.alladin.nntool.client.ClientHolder;
+import at.alladin.nntool.client.QualityOfServiceTest;
+import at.alladin.nntool.client.helper.TestStatus;
+import at.alladin.nntool.client.v2.task.TaskDesc;
+import at.alladin.nntool.client.v2.task.result.QoSResultCollector;
+import at.alladin.nntool.client.v2.task.service.TestSettings;
+import at.alladin.nntool.shared.qos.QosMeasurementType;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import at.alladin.nntool.shared.qos.QosMeasurementType;
-import at.alladin.nntool.client.QualityOfServiceTest;
-import at.alladin.nntool.client.ClientHolder;
-import at.alladin.nntool.client.helper.TestStatus;
-import at.alladin.nntool.client.v2.task.QoSTestEnum;
-import at.alladin.nntool.client.v2.task.TaskDesc;
-import at.alladin.nntool.client.v2.task.result.QoSResultCollector;
-import at.alladin.nntool.client.v2.task.service.TestSettings;
+import static at.alladin.nntool.client.v2.task.AbstractQoSTask.PARAM_QOS_CONCURRENCY_GROUP;
 
 public class QoSMeasurementClient {
 
@@ -118,15 +118,15 @@ public class QoSMeasurementClient {
 
                 try {
                     qosResult = qosTest.call();
-//                    qosResult.setTestToken(qosTest.getRMBTClient().getTestParameter().getToken()); //TODO: comment in
+                    //qosResult.setTestToken(qosTest.getRMBTClient().getTestParameter().getToken()); //TODO: comment in
 
                     if (!cancelled.get()) {
-                        if (qosResult != null && !qosTest.getStatus().equals(QoSTestEnum.ERROR)) {
-//                            client.sendQoSResult(qosResult);  //TODO: comment in
-                        }
+                        /*if (qosResult != null && !qosTest.getStatus().equals(QoSTestEnum.ERROR)) {
+                            //client.sendQoSResult(qosResult);  //TODO: comment in
+                        }*/
                         //notify of result
                         for (QoSMeasurementClientControlListener listener : controlListeners) {
-//                            listener.onMeasurementFinished(qosTest.getRMBTClient().getTestUuid(), qosResult); //TODO: comment in
+                            //listener.onMeasurementFinished(qosTest.getRMBTClient().getTestUuid(), qosResult); //TODO: comment in
                             listener.onMeasurementFinished("", qosResult);
                         }
 
@@ -169,14 +169,15 @@ public class QoSMeasurementClient {
             //reset qosTest for GC
             qosTest = null;
         }
-        
+
         if (threadRunner != null && threadRunner.isAlive() && !threadRunner.isInterrupted()) {
             threadRunner.interrupt();
         }
     }
 
     /**
-     *  Allows to provide a number of concurrencyGroups, where all tests belonging to that group will NOT be part of the QoS test
+     * Allows to provide a number of concurrencyGroups, where all tests belonging to that group will NOT be part of the QoS test
+     *
      * @param concurrencyGroups if concurrencyGroups is null, ALL concurrencyGroups will be executed
      */
     public void skipConcurrencyGroups(List<Integer> concurrencyGroups) {
@@ -186,6 +187,7 @@ public class QoSMeasurementClient {
     /**
      * Sets the types of QoS tests that shall be executed when start() is called
      * If no call to setEnabledTypes was made, ALL tests are considered enabled
+     *
      * @param enabledTypes
      */
     public void setEnabledTypes(List<QosMeasurementType> enabledTypes) {
@@ -196,6 +198,7 @@ public class QoSMeasurementClient {
 
     /**
      * Convenience function to enable a single QosMeasurementType w/out the need to put it into a list
+     *
      * @param enabledType
      */
     public void setEnabledType(QosMeasurementType enabledType) {

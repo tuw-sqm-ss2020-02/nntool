@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2013-2019 alladin-IT GmbH
  * Copyright 2014-2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,76 +36,6 @@ public class MemInfoImpl implements MemInfo {
 
     private Map<String, Long> memoryMap;
 
-    public enum MemInfoTypeEnum implements MemInfoType {
-        MEMTOTAL("MemTotal"),
-        MEMFREE("MemFree"),
-        MEMAVAILABLE("MemAvailable"),
-        BUFFERS ("Buffers"),
-        CACHED ("Cached"),
-        SWAPCACHED ("SwapCached"),
-        ACTIVE ("Active"),
-        INACTIVE ("Inactive"),
-        ACTIVE_ANON ("Active(anon)"),
-        INACTIVE_ANON ("Inactive(anon)"),
-        ACTIVE_FILE ("Active(file)"),
-        INACTIVE_FILE ("Inactive(file)"),
-        UNEVICTABLE ("Unevictable"),
-        MLOCKED ("Mlocked"),
-        SWAPTOTAL ("SwapTotal"),
-        SWAPFREE ("SwapFree"),
-        DIRTY ("Dirty"),
-        WRITEBACK ("Writeback"),
-        ANONPAGES ("AnonPages"),
-        MAPPED ("Mapped"),
-        SHMEM ("Shmem"),
-        SLAB ("Slab"),
-        SRECLAIMABLE ("SReclaimable"),
-        SUNRECLAIM ("SUnreclaim"),
-        KERNELSTACK ("KernelStack"),
-        PAGETABLES ("PageTables"),
-        NFS_UNSTABLE ("NFS_Unstable"),
-        BOUNCE ("Bounce"),
-        WRITEBACKTMP ("WritebackTmp"),
-        COMMITLIMIT ("CommitLimit"),
-        COMMITTED_AS ("Committed_AS"),
-        VMALLOCTOTAL ("VmallocTotal"),
-        VMALLOCUSED ("VmallocUsed"),
-        VMALLOCCHUNK ("VmallocChunk"),
-        HARDWARECORRUPTED ("HardwareCorrupted"),
-        ANONHUGEPAGES ("AnonHugePages"),
-        SHMEMHUGEPAGES ("ShmemHugePages"),
-        SHMEMPMDMAPPED ("ShmemPmdMapped"),
-        CMATOTAL ("CmaTotal"),
-        CMAFREE ("CmaFree"),
-        HUGEPAGES_TOTAL ("HugePages_Total"),
-        HUGEPAGES_FREE ("HugePages_Free"),
-        HUGEPAGES_RSVD ("HugePages_Rsvd"),
-        HUGEPAGES_SURP ("HugePages_Surp"),
-        HUGEPAGESIZE ("Hugepagesize"),
-        DIRECTMAP4K ("DirectMap4k"),
-        DIRECTMAP2M ("DirectMap2M"),
-        DIRECTMAP1G ("DirectMap1G");
-
-        private final String key;
-
-        MemInfoTypeEnum(final String key) {
-            this.key = key;
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-        public Long getMemoryValue(final MemInfo memInfo) {
-            if (memInfo.getMemoryMap() == null) {
-                memInfo.update();
-                return MemInfo.UNKNOWN;
-            }
-
-            return memInfo.getMemoryMap().get(key);
-        }
-    }
-
     public Map<String, Long> getMemoryMap() {
         if (memoryMap == null) {
             update();
@@ -128,13 +58,14 @@ public class MemInfoImpl implements MemInfo {
 
     /**
      * memory usage: 0..1
+     *
      * @return
      */
     public float calculateMemoryUsage() {
         final Long totalMem = getTotalMem();
         final Long freeMem = getFreeMem();
         if (totalMem != null && freeMem != null) {
-            return (float)freeMem / (float)totalMem;
+            return (float) freeMem / (float) totalMem;
         }
 
         return 0f;
@@ -149,12 +80,81 @@ public class MemInfoImpl implements MemInfo {
             Long size;
             try {
                 size = Long.parseLong(m.group(2));
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 size = UNKNOWN;
             }
 
             memoryMap.put(type, size);
+        }
+    }
+
+    public enum MemInfoTypeEnum implements MemInfoType {
+        MEMTOTAL("MemTotal"),
+        MEMFREE("MemFree"),
+        MEMAVAILABLE("MemAvailable"),
+        BUFFERS("Buffers"),
+        CACHED("Cached"),
+        SWAPCACHED("SwapCached"),
+        ACTIVE("Active"),
+        INACTIVE("Inactive"),
+        ACTIVE_ANON("Active(anon)"),
+        INACTIVE_ANON("Inactive(anon)"),
+        ACTIVE_FILE("Active(file)"),
+        INACTIVE_FILE("Inactive(file)"),
+        UNEVICTABLE("Unevictable"),
+        MLOCKED("Mlocked"),
+        SWAPTOTAL("SwapTotal"),
+        SWAPFREE("SwapFree"),
+        DIRTY("Dirty"),
+        WRITEBACK("Writeback"),
+        ANONPAGES("AnonPages"),
+        MAPPED("Mapped"),
+        SHMEM("Shmem"),
+        SLAB("Slab"),
+        SRECLAIMABLE("SReclaimable"),
+        SUNRECLAIM("SUnreclaim"),
+        KERNELSTACK("KernelStack"),
+        PAGETABLES("PageTables"),
+        NFS_UNSTABLE("NFS_Unstable"),
+        BOUNCE("Bounce"),
+        WRITEBACKTMP("WritebackTmp"),
+        COMMITLIMIT("CommitLimit"),
+        COMMITTED_AS("Committed_AS"),
+        VMALLOCTOTAL("VmallocTotal"),
+        VMALLOCUSED("VmallocUsed"),
+        VMALLOCCHUNK("VmallocChunk"),
+        HARDWARECORRUPTED("HardwareCorrupted"),
+        ANONHUGEPAGES("AnonHugePages"),
+        SHMEMHUGEPAGES("ShmemHugePages"),
+        SHMEMPMDMAPPED("ShmemPmdMapped"),
+        CMATOTAL("CmaTotal"),
+        CMAFREE("CmaFree"),
+        HUGEPAGES_TOTAL("HugePages_Total"),
+        HUGEPAGES_FREE("HugePages_Free"),
+        HUGEPAGES_RSVD("HugePages_Rsvd"),
+        HUGEPAGES_SURP("HugePages_Surp"),
+        HUGEPAGESIZE("Hugepagesize"),
+        DIRECTMAP4K("DirectMap4k"),
+        DIRECTMAP2M("DirectMap2M"),
+        DIRECTMAP1G("DirectMap1G");
+
+        private final String key;
+
+        MemInfoTypeEnum(final String key) {
+            this.key = key;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public Long getMemoryValue(final MemInfo memInfo) {
+            if (memInfo.getMemoryMap() == null) {
+                memInfo.update();
+                return MemInfo.UNKNOWN;
+            }
+
+            return memInfo.getMemoryMap().get(key);
         }
     }
 

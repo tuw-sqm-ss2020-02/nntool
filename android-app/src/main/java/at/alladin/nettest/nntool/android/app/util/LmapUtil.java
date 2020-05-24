@@ -36,62 +36,13 @@ import at.alladin.nntool.client.v2.task.TaskDesc;
 
 /**
  * TODO: move this class to somewhere else (nettest-shared?)
+ *
  * @author Lukasz Budryk (lb@alladin.at)
  */
 public class LmapUtil {
 
-    public enum LmapOption {
-        SERVER_ADDR,
-        SERVER_ADDR_IPV6,
-        SERVER_PORT,
-        ENCRYPTION,
-        RESULT_COLLECTOR_BASE_URL
-    }
-
     //TODO: remove (-> controller)
     private final static String fakeToken = "bbd1ee96-0779-4619-b993-bb4bf7089754_1528136454_3gr2gw9lVhtVONV0XO62Vamu/uw=";
-
-    public static class LmapTaskWrapper {
-        private List<TaskDesc> taskDescList;
-
-        private SpeedTaskDesc speedTaskDesc;
-
-        private String collectorUrl;
-
-        private String speedCollectorUrl;
-
-        public List<TaskDesc> getTaskDescList() {
-            return taskDescList;
-        }
-
-        public void setTaskDescList(List<TaskDesc> taskDescList) {
-            this.taskDescList = taskDescList;
-        }
-
-        public String getCollectorUrl() {
-            return collectorUrl;
-        }
-
-        public void setCollectorUrl(String collectorUrl) {
-            this.collectorUrl = collectorUrl;
-        }
-
-        public String getSpeedCollectorUrl() {
-            return speedCollectorUrl;
-        }
-
-        public void setSpeedCollectorUrl(String speedCollectorUrl) {
-            this.speedCollectorUrl = speedCollectorUrl;
-        }
-
-        public SpeedTaskDesc getSpeedTaskDesc() {
-            return speedTaskDesc;
-        }
-
-        public void setSpeedTaskDesc(SpeedTaskDesc speedTaskDesc) {
-            this.speedTaskDesc = speedTaskDesc;
-        }
-    }
 
     public static LmapTaskWrapper extractQosTaskDescList(final LmapControlDto controlDto) {
         final List<TaskDesc> taskDescList = new ArrayList<>();
@@ -175,7 +126,7 @@ public class LmapUtil {
                             }
                         }
                     }
-                //speed params
+                    //speed params
                 } else if (MeasurementTypeDto.SPEED.toString().equals(task.getName())) {
 
                     if (task.getOptions() == null) {
@@ -231,7 +182,7 @@ public class LmapUtil {
         return wrapper;
     }
 
-    private static SpeedTaskDesc parseSpeedMeasurementTypeParameters (final SpeedMeasurementTypeParameters params) {
+    private static SpeedTaskDesc parseSpeedMeasurementTypeParameters(final SpeedMeasurementTypeParameters params) {
         final SpeedTaskDesc ret = new SpeedTaskDesc();
         if (params == null) {
             return ret;
@@ -242,12 +193,12 @@ public class LmapUtil {
         }
         if (params.getMeasurementConfiguration() != null) {
             if (params.getMeasurementConfiguration().getDownloadClassList() != null) {
-               for (final SpeedMeasurementTypeParameters.SpeedMeasurementConfiguration.SpeedMeasurementClass speedClass : params.getMeasurementConfiguration().getDownloadClassList()) {
-                   if (speedClass.getDefault() && speedClass.getNumStreams() != null) {
-                       ret.setDownloadStreams(speedClass.getNumStreams());
-                       break;
-                   }
-               }
+                for (final SpeedMeasurementTypeParameters.SpeedMeasurementConfiguration.SpeedMeasurementClass speedClass : params.getMeasurementConfiguration().getDownloadClassList()) {
+                    if (speedClass.getDefault() && speedClass.getNumStreams() != null) {
+                        ret.setDownloadStreams(speedClass.getNumStreams());
+                        break;
+                    }
+                }
             }
 
             if (params.getMeasurementConfiguration().getUploadClassList() != null) {
@@ -260,5 +211,55 @@ public class LmapUtil {
             }
         }
         return ret;
+    }
+
+    public enum LmapOption {
+        SERVER_ADDR,
+        SERVER_ADDR_IPV6,
+        SERVER_PORT,
+        ENCRYPTION,
+        RESULT_COLLECTOR_BASE_URL
+    }
+
+    public static class LmapTaskWrapper {
+        private List<TaskDesc> taskDescList;
+
+        private SpeedTaskDesc speedTaskDesc;
+
+        private String collectorUrl;
+
+        private String speedCollectorUrl;
+
+        public List<TaskDesc> getTaskDescList() {
+            return taskDescList;
+        }
+
+        public void setTaskDescList(List<TaskDesc> taskDescList) {
+            this.taskDescList = taskDescList;
+        }
+
+        public String getCollectorUrl() {
+            return collectorUrl;
+        }
+
+        public void setCollectorUrl(String collectorUrl) {
+            this.collectorUrl = collectorUrl;
+        }
+
+        public String getSpeedCollectorUrl() {
+            return speedCollectorUrl;
+        }
+
+        public void setSpeedCollectorUrl(String speedCollectorUrl) {
+            this.speedCollectorUrl = speedCollectorUrl;
+        }
+
+        public SpeedTaskDesc getSpeedTaskDesc() {
+            return speedTaskDesc;
+        }
+
+        public void setSpeedTaskDesc(SpeedTaskDesc speedTaskDesc) {
+            this.speedTaskDesc = speedTaskDesc;
+        }
     }
 }

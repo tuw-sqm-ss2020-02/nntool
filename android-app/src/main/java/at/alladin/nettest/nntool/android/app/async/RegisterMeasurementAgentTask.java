@@ -45,11 +45,11 @@ public class RegisterMeasurementAgentTask extends AsyncTask<Void, Void, Registra
 
     @Override
     protected void onPreExecute() {
-       progressDialog = new BlockingProgressDialog.Builder(context)
-               .setCancelable(false)
-               .setMessage(R.string.task_register_agent_dialog_info)
-               .build();
-       progressDialog.show();
+        progressDialog = new BlockingProgressDialog.Builder(context)
+                .setCancelable(false)
+                .setMessage(R.string.task_register_agent_dialog_info)
+                .build();
+        progressDialog.show();
     }
 
     @Override

@@ -70,7 +70,6 @@ public class TitleWithRecentResultFragment extends TitleFragment implements Serv
     private SpeedMeasurementState recentSpeedMeasurementState;
 
     /**
-     *
      * @return
      */
     public static TitleWithRecentResultFragment newInstance() {
@@ -80,11 +79,11 @@ public class TitleWithRecentResultFragment extends TitleFragment implements Serv
     public static TitleWithRecentResultFragment newInstance(final WorkflowParameter parameter) {
         final TitleWithRecentResultFragment fragment = new TitleWithRecentResultFragment();
         if (parameter instanceof WorkflowRecentResultParameter) {
-             final SpeedMeasurementState state = new SpeedMeasurementState();
-             state.setMeasurementPhase(SpeedMeasurementState.MeasurementPhase.END);
-             state.setProgress(1.0f);
-             state.setMeasurementUuid(((WorkflowRecentResultParameter) parameter).getRecentResultUuid());
-             fragment.setRecentSpeedMeasurementState(state);
+            final SpeedMeasurementState state = new SpeedMeasurementState();
+            state.setMeasurementPhase(SpeedMeasurementState.MeasurementPhase.END);
+            state.setProgress(1.0f);
+            state.setMeasurementUuid(((WorkflowRecentResultParameter) parameter).getRecentResultUuid());
+            fragment.setRecentSpeedMeasurementState(state);
         }
         return fragment;
     }
@@ -103,7 +102,7 @@ public class TitleWithRecentResultFragment extends TitleFragment implements Serv
         return v;
     }
 
-    private void setMeasurementStateInBottomView () {
+    private void setMeasurementStateInBottomView() {
         if (recentSpeedMeasurementState == null) {
             return;
         }

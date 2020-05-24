@@ -47,7 +47,6 @@ public class MeasurementServerSelectionFragment extends AbstractFullScreenDialog
     private ServerItem selectedServerItem;
 
     /**
-     *
      * @return
      */
     public static MeasurementServerSelectionFragment newInstance(final List<SpeedMeasurementPeerResponse.SpeedMeasurementPeer> measurementPeerList) {
@@ -155,12 +154,6 @@ public class MeasurementServerSelectionFragment extends AbstractFullScreenDialog
 
         private int selectedIndex = -1;
 
-        private class ViewHolder {
-            RadioButton radioButton;
-            TextView name;
-            TextView description;
-        }
-
         public ServerListAdapter(final Context context, final List<ServerItem> items) {
             super(context, R.layout.measurement_server_selection_item, items);
         }
@@ -185,8 +178,7 @@ public class MeasurementServerSelectionFragment extends AbstractFullScreenDialog
                 vh.description = v.findViewById(R.id.text_server_country);
                 vh.radioButton = v.findViewById(R.id.radio_server_selected);
                 v.setTag(vh);
-            }
-            else {
+            } else {
                 vh = (ViewHolder) v.getTag();
             }
 
@@ -197,14 +189,19 @@ public class MeasurementServerSelectionFragment extends AbstractFullScreenDialog
                 if (item.getDescription() != null) {
                     vh.description.setVisibility(View.VISIBLE);
                     vh.description.setText(item.getDescription());
-                }
-                else {
+                } else {
                     vh.description.setVisibility(View.GONE);
                 }
                 vh.radioButton.setChecked(position == selectedIndex);
             }
 
             return v;
+        }
+
+        private class ViewHolder {
+            RadioButton radioButton;
+            TextView name;
+            TextView description;
         }
     }
 }

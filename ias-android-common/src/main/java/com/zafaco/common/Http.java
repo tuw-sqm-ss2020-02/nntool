@@ -38,8 +38,7 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 
-public class Http
-{
+public class Http {
     /**************************** Variables ****************************/
 
     Context ctx;
@@ -51,57 +50,51 @@ public class Http
 
     /*******************************************************************/
 
-    public Http()
-    {
+    public Http() {
         mTool = new Tool();
     }
 
     /**
      * Post the Results to the DB Server
+     *
      * @return 0 if ok, else -1
      */
-    public JSONObject genericHTTPRequest(final String sServer, final String sRequest, final HashMap<String, String> hHeader, final String sData)
-    {
+    public JSONObject genericHTTPRequest(final String sServer, final String sRequest, final HashMap<String, String> hHeader, final String sData) {
         jData = new JSONObject();
 
         //Check DB if entries have to be send to our server
-        Thread thread = new Thread(new Runnable()
-        {
+        Thread thread = new Thread(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 String sResponseServer = "";
                 StringBuilder sResponse = new StringBuilder();
 
 
                 HttpURLConnection con = null;
 
-                try
-                {
+                try {
                     //DEBUG
-                    mTool.printOutput("[genericHTTPRequest] Server: "+sServer);
-                    mTool.printOutput("[genericHTTPRequest] Request: "+sData);
+                    mTool.printOutput("[genericHTTPRequest] Server: " + sServer);
+                    mTool.printOutput("[genericHTTPRequest] Request: " + sData);
 
                     //--------------------------------------------------------------------------------------
                     URL uServer = new URL(sServer);
 
                     con = (HttpURLConnection) uServer.openConnection();
-					con.setConnectTimeout(4000);
+                    con.setConnectTimeout(4000);
                     con.setRequestMethod(sRequest);
                     con.setRequestProperty("User-Agent", "android_client");
                     con.setDoOutput(true);
 
-                    if(sData != null)
+                    if (sData != null)
                         con.setRequestProperty("Content-Length", String.valueOf(sData.length()));
 
                     //Add additional Header
-                    for (Map.Entry<String, String> entry : hHeader.entrySet())
-                    {
+                    for (Map.Entry<String, String> entry : hHeader.entrySet()) {
                         con.setRequestProperty(entry.getKey(), entry.getValue());
                     }
 
-                    if(sRequest.equals("POST"))
-                    {
+                    if (sRequest.equals("POST")) {
                         DataOutputStream dos = new DataOutputStream(con.getOutputStream());
                         dos.writeBytes(sData);
                         dos.flush();
@@ -109,16 +102,14 @@ public class Http
                     }
 
                     //Get Return Code
-                    jData.put("nCode",con.getResponseCode());
+                    jData.put("nCode", con.getResponseCode());
 
-                    if( con.getResponseCode() == 200 )
-                    {
+                    if (con.getResponseCode() == 200) {
                         InputStream ins = con.getInputStream();
                         InputStreamReader isr = new InputStreamReader(ins);
                         BufferedReader in = new BufferedReader(isr);
 
-                        while ((sResponseServer = in.readLine()) != null)
-                        {
+                        while ((sResponseServer = in.readLine()) != null) {
                             sResponse.append(sResponseServer);
                         }
                         sResponseServer = sResponse.toString();
@@ -127,25 +118,23 @@ public class Http
                     }
 
                     //Get Response
-                    jData.put("sResponse",sResponseServer);
+                    jData.put("sResponse", sResponseServer);
 
                     //--------------------------------------------------------------------------------------
 
                     //DEBUG
-                    mTool.printOutput("[genericHTTPRequest] Response["+jData.getString("nCode")+"]: "+sResponseServer);
+                    mTool.printOutput("[genericHTTPRequest] Response[" + jData.getString("nCode") + "]: " + sResponseServer);
 
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     mTool.printTrace(e);
 
-                    try
-                    {
+                    try {
                         //Get Connection Return Code
-                        jData.put("nCode",con.getResponseCode());
-                        jData.put("sResponse","-");
+                        jData.put("nCode", con.getResponseCode());
+                        jData.put("sResponse", "-");
+                    } catch (Exception ex) {
+                        mTool.printTrace(ex);
                     }
-                    catch (Exception ex) { mTool.printTrace(ex); }
                 }
 
             }
@@ -154,30 +143,26 @@ public class Http
         //Start Thread
         thread.start();
 
-        try
-        {
+        try {
             thread.join();
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
         }
-        catch (Exception ex) { mTool.printTrace(ex); }
 
         return this.jData;
     }
 
-    public JSONObject genericDownloadRequest(final String sServer, final String sRequest, final HashMap<String, String> hHeader, final String sData, final String sDestination)
-    {
+    public JSONObject genericDownloadRequest(final String sServer, final String sRequest, final HashMap<String, String> hHeader, final String sData, final String sDestination) {
         jData = new JSONObject();
 
         //Check DB if entries have to be send to our server
-        Thread thread = new Thread(new Runnable()
-        {
+        Thread thread = new Thread(new Runnable() {
             @Override
-            public void run()
-            {
-                try
-                {
+            public void run() {
+                try {
                     //DEBUG
-                    mTool.printOutput("[genericDownloadRequest] Request: "+sData);
-                    mTool.printOutput("[genericDownloadRequest] Server: "+sServer);
+                    mTool.printOutput("[genericDownloadRequest] Request: " + sData);
+                    mTool.printOutput("[genericDownloadRequest] Server: " + sServer);
 
                     URL urldbserver = new URL(sServer);
 
@@ -189,17 +174,15 @@ public class Http
                     con.setRequestProperty("User-Agent", "java_client");
                     con.setDoOutput(true);
 
-                    if(sData != null)
+                    if (sData != null)
                         con.setRequestProperty("Content-Length", String.valueOf(sData.length()));
 
                     //Add additional Header
-                    for (Map.Entry<String, String> entry : hHeader.entrySet())
-                    {
+                    for (Map.Entry<String, String> entry : hHeader.entrySet()) {
                         con.setRequestProperty(entry.getKey(), entry.getValue());
                     }
 
-                    if(sRequest.equals("POST"))
-                    {
+                    if (sRequest.equals("POST")) {
                         DataOutputStream dos = new DataOutputStream(con.getOutputStream());
                         dos.writeBytes(sData);
                         dos.flush();
@@ -207,39 +190,35 @@ public class Http
                     }
 
                     //Get Return Code
-                    jData.put("nCode",con.getResponseCode());
+                    jData.put("nCode", con.getResponseCode());
 
-                    if( con.getResponseCode() == 200 )
-                    {
+                    if (con.getResponseCode() == 200) {
                         InputStream ins = con.getInputStream();
 
                         OutputStream outputStream = new FileOutputStream(sDestination);
 
-                        mTool.printOutput("[genericDownloadRequest] Destination File: "+sDestination);
+                        mTool.printOutput("[genericDownloadRequest] Destination File: " + sDestination);
 
                         byte[] buffer = new byte[1024];
                         int length;
-                        while ((length = ins.read(buffer))>0)
-                        {
+                        while ((length = ins.read(buffer)) > 0) {
                             outputStream.write(buffer, 0, length);
                         }
                         outputStream.close();
 
                     }
-                    jData.put("nCode",con.getResponseCode());
+                    jData.put("nCode", con.getResponseCode());
 
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     mTool.printTrace(e);
 
-                    try
-                    {
+                    try {
                         //Get Connection Return Code
-                        jData.put("nCode",-1);
-                        jData.put("sResponse","-");
+                        jData.put("nCode", -1);
+                        jData.put("sResponse", "-");
+                    } catch (Exception ex) {
+                        mTool.printTrace(ex);
                     }
-                    catch (Exception ex) { mTool.printTrace(ex); }
 
                 }
 
@@ -249,12 +228,12 @@ public class Http
         //Start Thread
         thread.start();
 
-        try
-        {
+        try {
             thread.join();
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
         }
-        catch (Exception ex) { mTool.printTrace(ex); }
 
-		return this.jData;
+        return this.jData;
     }
 }

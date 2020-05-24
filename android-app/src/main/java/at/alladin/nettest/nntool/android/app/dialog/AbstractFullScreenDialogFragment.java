@@ -43,6 +43,7 @@ import at.alladin.nettest.nntool.android.app.R;
  *      <li>{@link #setOnCloseListener(OnCloseListener)} and {@link #setOnConfirmListener(OnConfirmListener)} can be used to provide listeners for the close and confirm event.</li>
  *  </ul>
  * </p>
+ *
  * @author Lukasz Budryk (lb@alladin.at)
  */
 public abstract class AbstractFullScreenDialogFragment extends DialogFragment {
@@ -55,18 +56,21 @@ public abstract class AbstractFullScreenDialogFragment extends DialogFragment {
 
     /**
      * Makes this dialog (non-)cancelable.
+     *
      * @return
      */
     public abstract boolean isCancelable();
 
     /**
      * Provides the android layout ID.
+     *
      * @return
      */
     public abstract int getLayoutId();
 
     /**
      * Is called after {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)} has initialized the fragment's view.
+     *
      * @param v
      */
     public abstract void onViewCreated(final View v);
@@ -96,14 +100,6 @@ public abstract class AbstractFullScreenDialogFragment extends DialogFragment {
         getDialog().setCancelable(isCancelable());
     }
 
-    public interface OnCloseListener {
-        void onClose();
-    }
-
-    public interface OnConfirmListener {
-        void onConfirm();
-    }
-
     @Nullable
     @Override
     public final View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -115,8 +111,7 @@ public abstract class AbstractFullScreenDialogFragment extends DialogFragment {
         b.setOnClickListener(view -> {
             if (onConfirmListener != null) {
                 onConfirmListener.onConfirm();
-            }
-            else {
+            } else {
                 dismiss();
             }
         });
@@ -128,6 +123,7 @@ public abstract class AbstractFullScreenDialogFragment extends DialogFragment {
 
     /**
      * Set toolbar title for this full screen dialog
+     *
      * @param title
      */
     protected void setToolbarTitle(final String title) {
@@ -136,6 +132,7 @@ public abstract class AbstractFullScreenDialogFragment extends DialogFragment {
 
     /**
      * Set toolbar title and show/hide close icon (which is hidden by default) for this full screen dialog
+     *
      * @param title
      * @param hasCloseIcon
      */
@@ -150,8 +147,7 @@ public abstract class AbstractFullScreenDialogFragment extends DialogFragment {
             toolbar.setNavigationOnClickListener(view -> {
                 if (onCloseListener != null) {
                     onCloseListener.onClose();
-                }
-                else {
+                } else {
                     dismiss();
                 }
             });
@@ -159,5 +155,13 @@ public abstract class AbstractFullScreenDialogFragment extends DialogFragment {
 
         toolbar.setTitle(title);
 
+    }
+
+    public interface OnCloseListener {
+        void onClose();
+    }
+
+    public interface OnConfirmListener {
+        void onConfirm();
     }
 }

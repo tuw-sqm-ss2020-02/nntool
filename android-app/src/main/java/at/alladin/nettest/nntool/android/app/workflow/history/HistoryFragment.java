@@ -90,8 +90,7 @@ public class HistoryFragment extends ActionBarFragment {
                 if (errorText != null) {
                     errorText.setVisibility(View.VISIBLE);
                 }
-            }
-            else {
+            } else {
                 final Context context = getContext();
                 if (context != null) {
                     historyListView.setAdapter(new HistoryListAdapter(getContext(), r.getData().getContent()));
@@ -119,8 +118,7 @@ public class HistoryFragment extends ActionBarFragment {
             try {
                 final String json = ObjectMapperUtil.createBasicObjectMapper().writeValueAsString(r);
                 Log.d(TAG, json);
-            }
-            catch (final Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         });
@@ -167,7 +165,7 @@ public class HistoryFragment extends ActionBarFragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.history_menu_delete:
                 deleteSelectedItem();
                 return true;

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,121 +46,123 @@ import at.alladin.nettest.spring.couchdb.config.CouchDbProperties;
 import at.alladin.nettest.spring.data.couchdb.repository.config.EnableCouchDbRepositories;
 
 /**
- * 
  * @author alladin-IT GmbH (bp@alladin.at)
- *
  */
 @EnableCouchDbRepositories("at.alladin.nettest.shared.server.storage.couchdb.domain.repository")
 @ComponentScan({
-	"at.alladin.nettest.shared.server.storage.couchdb",
+        "at.alladin.nettest.shared.server.storage.couchdb",
 })
 @Import({
-	GroupedMeasurementService.class
+        GroupedMeasurementService.class
 })
 @Configuration
 public class CouchDbStorageConfiguration extends CouchDbConfiguration {
-	
-	private final Logger logger = LoggerFactory.getLogger(CouchDbStorageConfiguration.class);
-	
-	public CouchDbStorageConfiguration(CouchDbProperties couchDbProperties) {
-		super(couchDbProperties);
-		logger.info("Initialising couchDBStorageConfiguration");
-	}
-	
-	@Primary
-	@Bean
-	public GsonBuilder couchDbGsonBuilder() {
-		final GsonBuilder gsonBuilder = super.couchDbGsonBuilder();
-		
-		gsonBuilder.registerTypeAdapter(Measurement.class, new MeasurementConverter(super.couchDbGsonBuilder().create()));
-		gsonBuilder.registerTypeAdapter(Settings.class, new SettingsConverter(super.couchDbGsonBuilder().create()));
-		
-		logger.info("registered measurement enabled gsonBuilder");
-		
-		return gsonBuilder;
-	}
 
-	public class SettingsConverter implements JsonDeserializer<Settings> {
+    private final Logger logger = LoggerFactory.getLogger(CouchDbStorageConfiguration.class);
 
-		private final Gson gson;
+    public CouchDbStorageConfiguration(CouchDbProperties couchDbProperties) {
+        super(couchDbProperties);
+        logger.info("Initialising couchDBStorageConfiguration");
+    }
 
-		public SettingsConverter(final Gson gson) {
-			this.gson = gson;
-		}
+    @Primary
+    @Bean
+    public GsonBuilder couchDbGsonBuilder() {
+        final GsonBuilder gsonBuilder = super.couchDbGsonBuilder();
 
-		@Override
-		public Settings deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-			final Settings ret = gson.fromJson(json, Settings.class);
+        gsonBuilder.registerTypeAdapter(Measurement.class, new MeasurementConverter(super.couchDbGsonBuilder().create()));
+        gsonBuilder.registerTypeAdapter(Settings.class, new SettingsConverter(super.couchDbGsonBuilder().create()));
 
-			final JsonElement measurementsJson = json.getAsJsonObject().get("measurements");
-			if (measurementsJson != null && measurementsJson.isJsonObject()) {
-				for (Entry<String, JsonElement> entry : measurementsJson.getAsJsonObject().entrySet()) {
-					final MeasurementTypeDto type;
-					try {
-						type = MeasurementTypeDto.valueOf(entry.getKey());
-					} catch (IllegalArgumentException ex) {
-						ex.printStackTrace();
-						continue;
-					}
-					Class<? extends Settings.SubMeasurementSettings> subMeasurementClass =
-							Settings.SubMeasurementSettings.class;
-					switch (type) {
-						case QOS:
-							subMeasurementClass = Settings.QoSMeasurementSettings.class;
-							break;
-						case SPEED:
-							subMeasurementClass = Settings.SpeedMeasurementSettings.class;
-							break;
-					}
+        logger.info("registered measurement enabled gsonBuilder");
 
-					ret.getMeasurements().put(type, gson.fromJson(entry.getValue(), subMeasurementClass));
-				}
-			}
+        return gsonBuilder;
+    }
 
-			return ret;
-		}
-	}
+    public class SettingsConverter implements JsonDeserializer<Settings> {
 
-	public class MeasurementConverter implements JsonDeserializer<Measurement> {
+        private final Gson gson;
 
-		private final Gson gson;
+        public SettingsConverter(final Gson gson) {
+            this.gson = gson;
+        }
 
-		public MeasurementConverter(final Gson gson) {
-			this.gson = gson;
-		}
+        @Override
+        public Settings deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            final Settings ret = gson.fromJson(json, Settings.class);
 
-		@Override
-		public Measurement deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-				throws JsonParseException {
+            final JsonElement measurementsJson = json.getAsJsonObject().get("measurements");
+            if (measurementsJson != null && measurementsJson.isJsonObject()) {
+                for (Entry<String, JsonElement> entry : measurementsJson.getAsJsonObject().entrySet()) {
+                    final MeasurementTypeDto type;
+                    try {
+                        type = MeasurementTypeDto.valueOf(entry.getKey());
+                    } catch (IllegalArgumentException ex) {
+                        ex.printStackTrace();
+                        continue;
+                    }
+                    Class<? extends Settings.SubMeasurementSettings> subMeasurementClass =
+                            Settings.SubMeasurementSettings.class;
+                    switch (type) {
+                        case QOS:
+                            subMeasurementClass = Settings.QoSMeasurementSettings.class;
+                            break;
+                        case SPEED:
+                            subMeasurementClass = Settings.SpeedMeasurementSettings.class;
+                            break;
+                        default:
+                            break;
+                    }
 
-			final Measurement ret = gson.fromJson(json, Measurement.class);
+                    ret.getMeasurements().put(type, gson.fromJson(entry.getValue(), subMeasurementClass));
+                }
+            }
 
-			final JsonElement measurementsJson = json.getAsJsonObject().get("measurements");
-			if (measurementsJson != null && measurementsJson.isJsonObject()) {
-				for (Entry<String, JsonElement> entry : measurementsJson.getAsJsonObject().entrySet()) {
-					final MeasurementTypeDto type;
-					try {
-						type = MeasurementTypeDto.valueOf(entry.getKey());
-					} catch (IllegalArgumentException ex) {
-						ex.printStackTrace();
-						continue;
-					}
-					
-					Class<? extends SubMeasurement> subMeasurementClass = SubMeasurement.class;
-					switch (type) {
-						case QOS:
-							subMeasurementClass = QoSMeasurement.class;
-							break;
-						case SPEED:
-							subMeasurementClass = SpeedMeasurement.class;
-							break;
-					}
-					
-					ret.getMeasurements().put(type, gson.fromJson(entry.getValue(), subMeasurementClass));
-				}
-			}
+            return ret;
+        }
+    }
 
-			return ret;
-		}
-	}
+    public class MeasurementConverter implements JsonDeserializer<Measurement> {
+
+        private final Gson gson;
+
+        public MeasurementConverter(final Gson gson) {
+            this.gson = gson;
+        }
+
+        @Override
+        public Measurement deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+
+            final Measurement ret = gson.fromJson(json, Measurement.class);
+
+            final JsonElement measurementsJson = json.getAsJsonObject().get("measurements");
+            if (measurementsJson != null && measurementsJson.isJsonObject()) {
+                for (Entry<String, JsonElement> entry : measurementsJson.getAsJsonObject().entrySet()) {
+                    final MeasurementTypeDto type;
+                    try {
+                        type = MeasurementTypeDto.valueOf(entry.getKey());
+                    } catch (IllegalArgumentException ex) {
+                        ex.printStackTrace();
+                        continue;
+                    }
+
+                    Class<? extends SubMeasurement> subMeasurementClass = SubMeasurement.class;
+                    switch (type) {
+                        case QOS:
+                            subMeasurementClass = QoSMeasurement.class;
+                            break;
+                        case SPEED:
+                            subMeasurementClass = SpeedMeasurement.class;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    ret.getMeasurements().put(type, gson.fromJson(entry.getValue(), subMeasurementClass));
+                }
+            }
+
+            return ret;
+        }
+    }
 }

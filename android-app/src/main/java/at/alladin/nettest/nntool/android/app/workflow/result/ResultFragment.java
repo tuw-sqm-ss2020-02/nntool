@@ -64,7 +64,7 @@ public class ResultFragment extends ActionBarFragment {
         return fragment;
     }
 
-    public static ResultFragment newInstance (WorkflowParameter workflowParameter) {
+    public static ResultFragment newInstance(WorkflowParameter workflowParameter) {
         final ResultFragment fragment = new ResultFragment();
         if (workflowParameter instanceof WorkflowResultParameter) {
             fragment.setWorkflowResultParameter((WorkflowResultParameter) workflowParameter);
@@ -81,7 +81,7 @@ public class ResultFragment extends ActionBarFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.action_bar_share_results_action:
                 shareResult();
                 return true;
@@ -100,7 +100,7 @@ public class ResultFragment extends ActionBarFragment {
         resultListView = v.findViewById(R.id.result_list_view);
         toQoSButton = v.findViewById(R.id.result_to_qos_button);
 
-        toQoSButton.setOnClickListener( view -> {
+        toQoSButton.setOnClickListener(view -> {
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.main_fragment_layout, ResultQoSFragment.newInstance(workflowResultParameter))
@@ -124,8 +124,7 @@ public class ResultFragment extends ActionBarFragment {
                 if (errorText != null) {
                     errorText.setVisibility(View.VISIBLE);
                 }
-            }
-            else {
+            } else {
                 measurementResponse = result.getData();
                 final Context context = getContext();
                 if (context != null) {

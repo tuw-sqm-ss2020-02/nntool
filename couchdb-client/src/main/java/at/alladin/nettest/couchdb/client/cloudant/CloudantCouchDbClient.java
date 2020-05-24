@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,71 +33,69 @@ import at.alladin.nettest.couchdb.client.CouchDbDatabase;
 import at.alladin.nettest.couchdb.client.config.CouchDbConnectionProperties;
 
 /**
- * 
  * @author alladin-IT GmbH (bp@alladin.at)
- *
  */
-public class CloudantCouchDbClient implements CouchDbClient {
+public final class CloudantCouchDbClient implements CouchDbClient {
 
-	private static final Logger logger = LoggerFactory.getLogger(CloudantCouchDbClient.class);
-	
-	private final CloudantClient cloudantClient;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CloudantCouchDbClient.class);
 
-	private CloudantCouchDbClient(CloudantClient cloudantClient) {
-		this.cloudantClient = cloudantClient;
-		
-		logMetaInformation();
-	}
-	
-	public static CloudantCouchDbClient build(CouchDbConnectionProperties properties) throws MalformedURLException {
-		return build(properties, null);
-	}
-	
-	public static CloudantCouchDbClient build(CouchDbConnectionProperties properties, GsonBuilder gsonBuilder) throws MalformedURLException {
-		final ClientBuilder clientBuilder = ClientBuilder
-				.url(new URL(properties.getUrl()))
-				.username(properties.getUsername())
-				.password(properties.getPassword())
-				.gsonBuilder(gsonBuilder);
-		
-		properties.getMaxConnections().ifPresent(v -> clientBuilder.maxConnections(v));
-		properties.getConnectionTimeout().ifPresent(v -> clientBuilder.connectTimeout(v, TimeUnit.SECONDS));
-		properties.getReadTimeout().ifPresent(v -> clientBuilder.readTimeout(v, TimeUnit.SECONDS));
-		
-		return new CloudantCouchDbClient(clientBuilder.build());
-	}
-	
-	private void logMetaInformation() {
-		logger.debug("--- CouchDB meta information ---");
-		
-		logger.debug("baseUri: {}", cloudantClient.getBaseUri());
-		logger.debug("allDbs: {}", cloudantClient.getAllDbs());
-		logger.debug("serverVersion: {}", cloudantClient.serverVersion());
-		logger.debug("couchDb: {}", cloudantClient.metaInformation().getCouchdb());
-		logger.debug("uuid: {}", cloudantClient.metaInformation().getUuid());
-		logger.debug("version: {}", cloudantClient.metaInformation().getVersion());
-		logger.debug("features: {}", cloudantClient.metaInformation().getFeatures());
-		logger.debug("vendor: {}", cloudantClient.metaInformation().getVendor());
-		
-		logger.debug("------");
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see at.alladin.nettest.couchdb.client.CouchDbClient#getDatabase(java.lang.String, boolean)
-	 */
-	@Override
-	public CouchDbDatabase getDatabase(String name, boolean createIfNotExists) {
-		final Database cloudantDatabase = cloudantClient.database(name, createIfNotExists);
-		return new CloudantCouchDbDatabase(cloudantDatabase);
-	}
+    private final CloudantClient cloudantClient;
 
-	/*
-	 * (non-Javadoc)
-	 * @see at.alladin.nettest.couchdb.client.CouchDbClient#shutdown()
-	 */
-	@Override
-	public void shutdown() {
-		cloudantClient.shutdown();
-	}
+    private CloudantCouchDbClient(CloudantClient cloudantClient) {
+        this.cloudantClient = cloudantClient;
+
+        logMetaInformation();
+    }
+
+    public static CloudantCouchDbClient build(CouchDbConnectionProperties properties) throws MalformedURLException {
+        return build(properties, null);
+    }
+
+    public static CloudantCouchDbClient build(CouchDbConnectionProperties properties, GsonBuilder gsonBuilder) throws MalformedURLException {
+        final ClientBuilder clientBuilder = ClientBuilder
+                .url(new URL(properties.getUrl()))
+                .username(properties.getUsername())
+                .password(properties.getPassword())
+                .gsonBuilder(gsonBuilder);
+
+        properties.getMaxConnections().ifPresent(v -> clientBuilder.maxConnections(v));
+        properties.getConnectionTimeout().ifPresent(v -> clientBuilder.connectTimeout(v, TimeUnit.SECONDS));
+        properties.getReadTimeout().ifPresent(v -> clientBuilder.readTimeout(v, TimeUnit.SECONDS));
+
+        return new CloudantCouchDbClient(clientBuilder.build());
+    }
+
+    private void logMetaInformation() {
+        LOGGER.debug("--- CouchDB meta information ---");
+
+        LOGGER.debug("baseUri: {}", cloudantClient.getBaseUri());
+        LOGGER.debug("allDbs: {}", cloudantClient.getAllDbs());
+        LOGGER.debug("serverVersion: {}", cloudantClient.serverVersion());
+        LOGGER.debug("couchDb: {}", cloudantClient.metaInformation().getCouchdb());
+        LOGGER.debug("uuid: {}", cloudantClient.metaInformation().getUuid());
+        LOGGER.debug("version: {}", cloudantClient.metaInformation().getVersion());
+        LOGGER.debug("features: {}", cloudantClient.metaInformation().getFeatures());
+        LOGGER.debug("vendor: {}", cloudantClient.metaInformation().getVendor());
+
+        LOGGER.debug("------");
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see at.alladin.nettest.couchdb.client.CouchDbClient#getDatabase(java.lang.String, boolean)
+     */
+    @Override
+    public CouchDbDatabase getDatabase(String name, boolean createIfNotExists) {
+        final Database cloudantDatabase = cloudantClient.database(name, createIfNotExists);
+        return new CloudantCouchDbDatabase(cloudantDatabase);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see at.alladin.nettest.couchdb.client.CouchDbClient#shutdown()
+     */
+    @Override
+    public void shutdown() {
+        cloudantClient.shutdown();
+    }
 }

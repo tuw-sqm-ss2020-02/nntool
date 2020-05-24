@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,22 +28,22 @@ import com.google.gson.annotations.SerializedName;
  */
 @JsonInclude(Include.NON_EMPTY)
 public class LmapStopDurationDto extends LmapStopDto {
-	
-	/**
-	 * The duration controlling the graceful forced termination of the scheduled Actions, in ms.
-	 */
-	@io.swagger.annotations.ApiModelProperty(required = true, value = "The duration controlling the graceful forced termination of the scheduled Actions, in ms.")
-	@JsonPropertyDescription("The duration controlling the graceful forced termination of the scheduled Actions, in ms.")
-	@Expose
-	@SerializedName("duration")
-	@JsonProperty(required = true, value = "duration")
-	private Integer duration;
 
-	public Integer getDuration() {
-		return duration;
-	}
+    /**
+     * The duration controlling the graceful forced termination of the scheduled Actions, in ms.
+     */
+    @io.swagger.annotations.ApiModelProperty(required = true, value = "The duration controlling the graceful forced termination of the scheduled Actions, in ms.")
+    @JsonPropertyDescription("The duration controlling the graceful forced termination of the scheduled Actions, in ms.")
+    @Expose
+    @SerializedName("duration")
+    @JsonProperty(required = true, value = "duration")
+    private Integer duration;
 
-	public void setDuration(Integer duration) {
-		this.duration = duration;
-	}
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
 }

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,31 +42,20 @@ public class MkitTask extends AbstractQoSTask {
 
     public final static long DEFAULT_TIMEOUT = 30000000000L;
 
-    public final static Gson gson = GsonBasicHelper.getDateTimeGsonBuilder().create();
-
+    public final static Gson GSON = GsonBasicHelper.getDateTimeGsonBuilder().create();
+    public final static String PARAM_TIMEOUT = "timeout";
+    public final static String PARAM_NDT_TEST = "ndt_test";
+    public final static String PARAM_INPUT = "input";
+    public final static String PARAM_FLAGS = "flags";
+    public final static String RESULT_DETAILS = "mkit_result";
+    public final static String RESULT_STATUS = "mkit_status";
     private final long timeout;
-
     private final List<String> inputArray;
-
     private final JsonArray flagArray;
-
     private MkitService.MkitTestEnum mkitTestEnum;
-
     private QosMeasurementType qosTestResultEnum;
 
-    public final static String PARAM_TIMEOUT = "timeout";
-
-    public final static String PARAM_NDT_TEST = "ndt_test";
-
-    public final static String PARAM_INPUT = "input";
-
-    public final static String PARAM_FLAGS = "flags";
-
-    public final static String RESULT_DETAILS = "mkit_result";
-
-    public final static String RESULT_STATUS = "mkit_status";
-
-    public MkitTask (final QualityOfServiceTest qosTest, final String taskId, final TaskDesc taskDesc, final int threadId) {
+    public MkitTask(final QualityOfServiceTest qosTest, final String taskId, final TaskDesc taskDesc, final int threadId) {
         super(qosTest, taskDesc, threadId, threadId);
 
         //String value = (String) taskDesc.getParams().get(PARAM_TIMEOUT);
@@ -85,12 +74,12 @@ public class MkitTask extends AbstractQoSTask {
         if (inputObj instanceof List) {
             inputArray = (List) inputObj;
         } else if (inputObj instanceof String) {
-            inputArray = gson.fromJson((String) inputObj, ArrayList.class);
+            inputArray = GSON.fromJson((String) inputObj, ArrayList.class);
         } else {
             inputArray = new ArrayList<>();
         }
 
-        flagArray = new JsonArray();//gson.fromJson((String) taskDesc.getParams().get(PARAM_FLAGS), JsonArray.class);
+        flagArray = new JsonArray(); //GSON.fromJson((String) taskDesc.getParams().get(PARAM_FLAGS), JsonArray.class);
     }
 
     public QoSTestResult call() throws Exception {
@@ -139,21 +128,17 @@ public class MkitTask extends AbstractQoSTask {
             try {
                 result = ndtFuture.get(timeout, TimeUnit.NANOSECONDS);
                 testResult.getResultMap().put(RESULT_STATUS, "OK");
-            }
-            catch (TimeoutException e) {
+            } catch (TimeoutException e) {
                 testResult.getResultMap().put(RESULT_STATUS, "TIMEOUT");
-            }
-            finally {
+            } finally {
                 if (result != null) {
                     testResult.getResultMap().put(RESULT_DETAILS, result.toString());
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             testResult.getResultMap().put(RESULT_STATUS, "ERROR");
-        }
-        finally {
+        } finally {
             onEnd(testResult);
         }
 

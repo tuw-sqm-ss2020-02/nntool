@@ -29,15 +29,14 @@ import com.zafaco.DemoApplicationBerec.R;
 /**
  * Class Preferences
  */
-public class Preferences extends AppCompatActivity
-{
+public class Preferences extends AppCompatActivity {
     /**
      * Method onCreate
+     *
      * @param savedInstanceState
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
     }
@@ -45,15 +44,14 @@ public class Preferences extends AppCompatActivity
     /**
      * Class MyPreferenceFragment
      */
-    public static class MyPreferenceFragment extends PreferenceFragment
-    {
+    public static class MyPreferenceFragment extends PreferenceFragment {
         /**
          * Method onCreate
+         *
          * @param savedInstanceState
          */
         @Override
-        public void onCreate(final Bundle savedInstanceState)
-        {
+        public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
         }

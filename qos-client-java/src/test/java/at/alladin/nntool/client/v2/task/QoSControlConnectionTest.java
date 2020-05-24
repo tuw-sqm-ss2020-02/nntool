@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -61,12 +61,14 @@ public class QoSControlConnectionTest {
 
     private int tcpCallbackCount;
 
-    private String tcpCallbackRequest, tcpCallbackResponse;
+    private String tcpCallbackRequest;
+    private String tcpCallbackResponse;
 
-    private String dnsCallbackRequest, dnsCallbackResponse;
+    private String dnsCallbackRequest;
+    private String dnsCallbackResponse;
 
     @Before
-    public void init () {
+    public void init() {
         clientHolder = ClientHolder.getInstance(TaskDescriptionHelper.createTaskDescList("host", "80",
                 null, null, "host", null, null), null);
 
@@ -81,35 +83,34 @@ public class QoSControlConnectionTest {
     }
 
     @Test
-    public void basicConnectionTest (@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
-            @Mocked final BufferedReader bufferedReader) throws Exception {
+    public void basicConnectionTest(@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
+                                    @Mocked final BufferedReader bufferedReader) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                InetAddress.getByName(anyString);
+                result = loopbackAddress;
 
-            InetAddress.getByName(anyString);
-            result = loopbackAddress;
+                bufferedReader.readLine();
+                times = 4;
+                returns(
+                        AbstractQoSTask.QOS_SERVER_PROTOCOL_VERSION,
+                        "ACCEPT ",
+                        "OK"
+                );
+                result = " ";
 
-            bufferedReader.readLine();
-            times = 4;
-            returns(
-                    AbstractQoSTask.QOS_SERVER_PROTOCOL_VERSION,
-                    "ACCEPT ",
-                    "OK"
-            );
-            result = " ";
+                socket.getOutputStream();
+                times = 1;
+                result = testOutputStream;
 
-            socket.getOutputStream();
-            times = 1;
-            result = testOutputStream;
+                socket.connect((SocketAddress) any, anyInt);
+                times = 1;
 
-            socket.connect((SocketAddress) any, anyInt);
-            times = 1;
-
-            socket.close();
-            times = 1;
-
-
-        }};
+                socket.close();
+                times = 1;
+            }
+        };
 
         controlConnection = new QoSControlConnection(clientHolder, testParameter);
         controlConnection.connect();
@@ -124,19 +125,20 @@ public class QoSControlConnectionTest {
     }
 
     @Test(expected = SocketException.class)
-    public void basicConnectionExceptionTest (@Mocked final Socket socket, @Mocked final InetAddress inetAddress) throws Exception {
+    public void basicConnectionExceptionTest(@Mocked final Socket socket, @Mocked final InetAddress inetAddress) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                InetAddress.getByName(anyString);
+                result = loopbackAddress;
 
-            InetAddress.getByName(anyString);
-            result = loopbackAddress;
 
+                socket.connect((SocketAddress) any, anyInt);
+                times = 1;
+                result = new SocketException("Forcefully thrown exception");
 
-            socket.connect((SocketAddress) any, anyInt);
-            times = 1;
-            result = new SocketException("Forcefully thrown exception");
-
-        }};
+            }
+        };
 
         controlConnection = new QoSControlConnection(clientHolder, testParameter);
 
@@ -152,44 +154,45 @@ public class QoSControlConnectionTest {
     }
 
     @Test
-    public void connectSendTaskCommandsWithCallbacks (@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
-                                                      @Mocked final BufferedReader bufferedReader,
-                                                      @Mocked final DnsTask dnsTask, @Mocked final TcpTask tcpTask) throws Exception {
+    public void connectSendTaskCommandsWithCallbacks(@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
+                                                     @Mocked final BufferedReader bufferedReader,
+                                                     @Mocked final DnsTask dnsTask, @Mocked final TcpTask tcpTask) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                InetAddress.getByName(anyString);
+                result = loopbackAddress;
 
-            InetAddress.getByName(anyString);
-            result = loopbackAddress;
+                bufferedReader.readLine();
+                returns(
+                        AbstractQoSTask.QOS_SERVER_PROTOCOL_VERSION,
+                        "ACCEPT ",
+                        "OK",
+                        " ",
+                        "INVALID SERVER RETURN",
+                        "TCP TASK +ID2",
+                        "TCP TASK +ID2",
+                        "DNS TASK +ID1"
+                );
+                result = null;
 
-            bufferedReader.readLine();
-            returns(
-                    AbstractQoSTask.QOS_SERVER_PROTOCOL_VERSION,
-                    "ACCEPT ",
-                    "OK",
-                    " ",
-                    "INVALID SERVER RETURN",
-                    "TCP TASK +ID2",
-                    "TCP TASK +ID2",
-                    "DNS TASK +ID1"
-            );
-            result = null;
+                socket.getOutputStream();
+                times = 1;
+                result = testOutputStream;
 
-            socket.getOutputStream();
-            times = 1;
-            result = testOutputStream;
+                socket.connect((SocketAddress) any, anyInt);
+                times = 1;
 
-            socket.connect((SocketAddress) any, anyInt);
-            times = 1;
+                socket.close();
 
-            socket.close();
+                dnsTask.getId();
+                result = 1;
 
-            dnsTask.getId();
-            result = 1;
+                tcpTask.getId();
+                result = 2;
 
-            tcpTask.getId();
-            result = 2;
-
-        }};
+            }
+        };
 
         controlConnection = new QoSControlConnection(clientHolder, testParameter);
         controlConnection.connect();
@@ -250,22 +253,23 @@ public class QoSControlConnectionTest {
     }
 
     @Test
-    public void basicConnectionProtocolErrorTest (@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
-                                     @Mocked final BufferedReader bufferedReader) throws Exception {
+    public void basicConnectionProtocolErrorTest(@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
+                                                 @Mocked final BufferedReader bufferedReader) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                InetAddress.getByName(anyString);
+                result = loopbackAddress;
 
-            InetAddress.getByName(anyString);
-            result = loopbackAddress;
+                bufferedReader.readLine();
+                result = "NOT A PROTOCOL";
 
-            bufferedReader.readLine();
-            result = "NOT A PROTOCOL";
+                socket.getOutputStream();
+                times = 1;
+                result = testOutputStream;
 
-            socket.getOutputStream();
-            times = 1;
-            result = testOutputStream;
-
-        }};
+            }
+        };
 
 
         controlConnection = new QoSControlConnection(clientHolder, sslTestParameter);
@@ -277,52 +281,24 @@ public class QoSControlConnectionTest {
     }
 
     @Test
-    public void basicConnectionNoAcceptErrorTest (@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
-                                                  @Mocked final BufferedReader bufferedReader) throws Exception {
+    public void basicConnectionNoAcceptErrorTest(@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
+                                                 @Mocked final BufferedReader bufferedReader) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                InetAddress.getByName(anyString);
+                result = loopbackAddress;
 
-            InetAddress.getByName(anyString);
-            result = loopbackAddress;
+                bufferedReader.readLine();
+                returns(AbstractQoSTask.QOS_SERVER_PROTOCOL_VERSION,
+                        "NOT A PROTOCOL");
 
-            bufferedReader.readLine();
-            returns(AbstractQoSTask.QOS_SERVER_PROTOCOL_VERSION,
-                    "NOT A PROTOCOL");
+                socket.getOutputStream();
+                times = 1;
+                result = testOutputStream;
 
-            socket.getOutputStream();
-            times = 1;
-            result = testOutputStream;
-
-        }};
-
-
-        controlConnection = new QoSControlConnection(clientHolder, testParameter);
-        controlConnection.connect();
-        assertNull("Control socket is not null despite protocol error", controlConnection.controlSocket);
-        assertFalse("QoSControlConnection reports as running", controlConnection.isRunning.get());
-        assertTrue("QoSControlConnection does not show connection issue", controlConnection.couldNotConnect.get());
-
-    }
-
-    @Test
-    public void basicConnectionNoOKErrorTest (@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
-                                                  @Mocked final BufferedReader bufferedReader) throws Exception {
-
-        new Expectations() {{
-
-            InetAddress.getByName(anyString);
-            result = loopbackAddress;
-
-            bufferedReader.readLine();
-            returns(AbstractQoSTask.QOS_SERVER_PROTOCOL_VERSION,
-                    "ACCEPT",
-                    "NOT A PROTOCOL");
-
-            socket.getOutputStream();
-            times = 1;
-            result = testOutputStream;
-
-        }};
+            }
+        };
 
 
         controlConnection = new QoSControlConnection(clientHolder, testParameter);
@@ -334,24 +310,55 @@ public class QoSControlConnectionTest {
     }
 
     @Test
-    public void basicConnectionNoOKNullErrorTest (@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
-                                              @Mocked final BufferedReader bufferedReader) throws Exception {
+    public void basicConnectionNoOKErrorTest(@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
+                                             @Mocked final BufferedReader bufferedReader) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                InetAddress.getByName(anyString);
+                result = loopbackAddress;
 
-            InetAddress.getByName(anyString);
-            result = loopbackAddress;
+                bufferedReader.readLine();
+                returns(AbstractQoSTask.QOS_SERVER_PROTOCOL_VERSION,
+                        "ACCEPT",
+                        "NOT A PROTOCOL");
 
-            bufferedReader.readLine();
-            returns(AbstractQoSTask.QOS_SERVER_PROTOCOL_VERSION,
-                    "ACCEPT",
-                    (String) null);
+                socket.getOutputStream();
+                times = 1;
+                result = testOutputStream;
 
-            socket.getOutputStream();
-            times = 1;
-            result = testOutputStream;
+            }
+        };
 
-        }};
+
+        controlConnection = new QoSControlConnection(clientHolder, testParameter);
+        controlConnection.connect();
+        assertNull("Control socket is not null despite protocol error", controlConnection.controlSocket);
+        assertFalse("QoSControlConnection reports as running", controlConnection.isRunning.get());
+        assertTrue("QoSControlConnection does not show connection issue", controlConnection.couldNotConnect.get());
+
+    }
+
+    @Test
+    public void basicConnectionNoOKNullErrorTest(@Mocked final Socket socket, @Mocked final InetAddress inetAddress,
+                                                 @Mocked final BufferedReader bufferedReader) throws Exception {
+
+        new Expectations() {
+            {
+                InetAddress.getByName(anyString);
+                result = loopbackAddress;
+
+                bufferedReader.readLine();
+                returns(AbstractQoSTask.QOS_SERVER_PROTOCOL_VERSION,
+                        "ACCEPT",
+                        (String) null);
+
+                socket.getOutputStream();
+                times = 1;
+                result = testOutputStream;
+
+            }
+        };
 
 
         controlConnection = new QoSControlConnection(clientHolder, testParameter);

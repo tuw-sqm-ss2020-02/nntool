@@ -42,14 +42,6 @@ public class HistoryListAdapter extends ArrayAdapter<BriefMeasurementResponse> {
 
     private String timeFormat;
 
-    private class ViewHolder {
-        TextView connection;
-        TextView date;
-        TextView ping;
-        TextView up;
-        TextView down;
-    }
-
     public HistoryListAdapter(Context context, List<BriefMeasurementResponse> objects) {
         super(context, R.layout.history_list_item, objects);
         if (context != null) {
@@ -71,8 +63,7 @@ public class HistoryListAdapter extends ArrayAdapter<BriefMeasurementResponse> {
             viewHolder.down = convertView.findViewById(R.id.history_list_item_down_text);
             viewHolder.up = convertView.findViewById(R.id.history_list_item_up_text);
             convertView.setTag(viewHolder);
-        }
-        else {
+        } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
@@ -84,13 +75,12 @@ public class HistoryListAdapter extends ArrayAdapter<BriefMeasurementResponse> {
                     speedFormat.format(m.getThroughputAvgDownloadBps() / 1e6) : getContext().getString(R.string.not_available_short));
             viewHolder.up.setText(m.getThroughputAvgUploadBps() != null ?
                     speedFormat.format(m.getThroughputAvgUploadBps() / 1e6) : getContext().getString(R.string.not_available_short));
-        }
-        else {
+        } else {
             viewHolder.ping.setText("");
             viewHolder.down.setText("");
             viewHolder.up.setText("");
         }
-        
+
         if (item.getNetworkTypeName() != null) {
             viewHolder.connection.setText(item.getNetworkTypeName());
         }
@@ -100,5 +90,13 @@ public class HistoryListAdapter extends ArrayAdapter<BriefMeasurementResponse> {
         }
 
         return convertView;
+    }
+
+    private class ViewHolder {
+        TextView connection;
+        TextView date;
+        TextView ping;
+        TextView up;
+        TextView down;
     }
 }

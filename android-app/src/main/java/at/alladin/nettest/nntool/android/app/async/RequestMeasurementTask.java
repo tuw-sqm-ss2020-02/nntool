@@ -47,13 +47,13 @@ public class RequestMeasurementTask extends AsyncTask<Void, Void, LmapControlDto
 
     private String selectedMeasurementPeerIdentifier;
 
-    public RequestMeasurementTask (final String selectedMeasurementPeerIdentifier, final Context context, final OnTaskFinishedCallback<LmapUtil.LmapTaskWrapper> callback) {
+    public RequestMeasurementTask(final String selectedMeasurementPeerIdentifier, final Context context, final OnTaskFinishedCallback<LmapUtil.LmapTaskWrapper> callback) {
         this.context = context;
         this.callback = callback;
         this.selectedMeasurementPeerIdentifier = selectedMeasurementPeerIdentifier;
     }
 
-    public RequestMeasurementTask (final Context context, final OnTaskFinishedCallback<LmapUtil.LmapTaskWrapper> callback) {
+    public RequestMeasurementTask(final Context context, final OnTaskFinishedCallback<LmapUtil.LmapTaskWrapper> callback) {
         this(null, context, callback);
     }
 

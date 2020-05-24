@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -76,35 +76,36 @@ public class EchoProtocolUdpTaskTest {
     @Test
     public void testCorrectUdpEchoResponse(@Mocked final DatagramSocket mock, @Mocked final InetAddress inetAddress) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                // spoof the internet address (as we WILL get an UnknownHostException otherwise)
+                InetAddress.getByName(anyString);
+                result = toReturn;  //return loopback address
 
-            // spoof the internet address (as we WILL get an UnknownHostException otherwise)
-            InetAddress.getByName(anyString);
-            result = toReturn;  //return loopback address
+                // check the sent data for correctness, when send is called
+                mock.send((DatagramPacket) any);
+                result = new Delegate() {
+                    void delegateMethod(DatagramPacket packet) {
+                        sendPacket = packet;
+                    }
+                };
 
-            // check the sent data for correctness, when send is called
-            mock.send((DatagramPacket) any);
-            result = new Delegate() {
-                void delegateMethod(DatagramPacket packet) {
-                    sendPacket = packet;
-                }
-            };
+                //return the correct message
+                mock.receive((DatagramPacket) any);
+                result = new Delegate() {
+                    void delegateMethod(DatagramPacket packet) {
+                        packet.setData(CORRECT_MESSAGE.getBytes());
+                    }
+                };
 
-            //return the correct message
-            mock.receive((DatagramPacket) any);
-            result = new Delegate() {
-                void delegateMethod(DatagramPacket packet) {
-                    packet.setData(CORRECT_MESSAGE.getBytes());
-                }
-            };
-
-        }};
+            }
+        };
 
         final EchoProtocolUdpTask task = new EchoProtocolUdpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
 
         assertEquals("Payload sent to server != " + CORRECT_MESSAGE, CORRECT_MESSAGE, new String(sendPacket.getData()));
-        assertEquals("Result did not return OK","OK", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
+        assertEquals("Result did not return OK", "OK", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
         assertEquals("Wrong echo service host in result", ECHO_SERVICE_HOST, res.getResultMap().get("echo_protocol_objective_host"));
         assertEquals("Wrong protocol type in result", AbstractEchoProtocolTask.PROTOCOL_UDP, res.getResultMap().get(AbstractEchoProtocolTask.RESULT_PROTOCOL));
         assertEquals("Payload stored in result !=" + CORRECT_MESSAGE, CORRECT_MESSAGE, res.getResultMap().get(AbstractEchoProtocolTask.RESULT));
@@ -112,129 +113,133 @@ public class EchoProtocolUdpTaskTest {
     }
 
     @Test
-    public void testWrongUdpEchoResponse (@Mocked final DatagramSocket mock, @Mocked final InetAddress inetAddress) throws Exception {
+    public void testWrongUdpEchoResponse(@Mocked final DatagramSocket mock, @Mocked final InetAddress inetAddress) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                // spoof the internet address (as we WILL get an UnknownHostException otherwise)
+                InetAddress.getByName(anyString);
+                result = toReturn;  //return loopback address
 
-            // spoof the internet address (as we WILL get an UnknownHostException otherwise)
-            InetAddress.getByName(anyString);
-            result = toReturn;  //return loopback address
+                // check the sent data for correctness, when send is called
+                mock.send((DatagramPacket) any);
+                result = new Delegate() {
+                    void delegateMethod(DatagramPacket packet) {
+                        sendPacket = packet;
+                    }
+                };
 
-            // check the sent data for correctness, when send is called
-            mock.send((DatagramPacket) any);
-            result = new Delegate() {
-                void delegateMethod(DatagramPacket packet) {
-                    sendPacket = packet;
-                }
-            };
+                //return the correct message
+                mock.receive((DatagramPacket) any);
+                result = new Delegate() {
+                    void delegateMethod(DatagramPacket packet) {
+                        packet.setData(WRONG_MESSAGE.getBytes());
+                    }
+                };
 
-            //return the correct message
-            mock.receive((DatagramPacket) any);
-            result = new Delegate() {
-                void delegateMethod(DatagramPacket packet) {
-                    packet.setData(WRONG_MESSAGE.getBytes());
-                }
-            };
-
-        }};
+            }
+        };
 
         final EchoProtocolUdpTask task = new EchoProtocolUdpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
 
         assertEquals("Payload sent to server != " + CORRECT_MESSAGE, CORRECT_MESSAGE, new String(sendPacket.getData()));
-        assertEquals("Result did not return ERROR","ERROR", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
+        assertEquals("Result did not return ERROR", "ERROR", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
         assertEquals("Wrong echo service host in result", ECHO_SERVICE_HOST, res.getResultMap().get("echo_protocol_objective_host"));
         assertEquals("Wrong protocol type in result", AbstractEchoProtocolTask.PROTOCOL_UDP, res.getResultMap().get(AbstractEchoProtocolTask.RESULT_PROTOCOL));
         assertEquals("Payload stored in result !=" + WRONG_MESSAGE, WRONG_MESSAGE, res.getResultMap().get(AbstractEchoProtocolTask.RESULT));
     }
 
     @Test
-    public void testCorrectUdpEchoResponseWithAdditionalWhiteSpace (@Mocked final DatagramSocket mock, @Mocked final InetAddress inetAddress) throws Exception {
+    public void testCorrectUdpEchoResponseWithAdditionalWhiteSpace(@Mocked final DatagramSocket mock, @Mocked final InetAddress inetAddress) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                // spoof the internet address (as we WILL get an UnknownHostException otherwise)
+                InetAddress.getByName(anyString);
+                result = toReturn;  //return loopback address
 
-            // spoof the internet address (as we WILL get an UnknownHostException otherwise)
-            InetAddress.getByName(anyString);
-            result = toReturn;  //return loopback address
+                // check the sent data for correctness, when send is called
+                mock.send((DatagramPacket) any);
+                result = new Delegate() {
+                    void delegateMethod(DatagramPacket packet) {
+                        sendPacket = packet;
+                    }
+                };
 
-            // check the sent data for correctness, when send is called
-            mock.send((DatagramPacket) any);
-            result = new Delegate() {
-                void delegateMethod(DatagramPacket packet) {
-                    sendPacket = packet;
-                }
-            };
+                //return the correct message
+                mock.receive((DatagramPacket) any);
+                result = new Delegate() {
+                    void delegateMethod(DatagramPacket packet) {
+                        packet.setData(WRONG_MESSAGE_ADDITIONAL_WHITESPACE.getBytes());
+                    }
+                };
 
-            //return the correct message
-            mock.receive((DatagramPacket) any);
-            result = new Delegate() {
-                void delegateMethod(DatagramPacket packet) {
-                    packet.setData(WRONG_MESSAGE_ADDITIONAL_WHITESPACE.getBytes());
-                }
-            };
-
-        }};
+            }
+        };
 
         final EchoProtocolUdpTask task = new EchoProtocolUdpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
 
         assertEquals("Payload sent to server != " + CORRECT_MESSAGE, CORRECT_MESSAGE, new String(sendPacket.getData()));
-        assertEquals("Result did not return ERROR","ERROR", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
+        assertEquals("Result did not return ERROR", "ERROR", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
         assertEquals("Wrong echo service host in result", ECHO_SERVICE_HOST, res.getResultMap().get("echo_protocol_objective_host"));
         assertEquals("Wrong protocol type in result", AbstractEchoProtocolTask.PROTOCOL_UDP, res.getResultMap().get(AbstractEchoProtocolTask.RESULT_PROTOCOL));
         assertEquals("Payload stored in result !=" + WRONG_MESSAGE_ADDITIONAL_WHITESPACE, WRONG_MESSAGE_ADDITIONAL_WHITESPACE, res.getResultMap().get(AbstractEchoProtocolTask.RESULT));
     }
 
     @Test
-    public void testUdpEchoResponseWithSocketError (@Mocked final DatagramSocket mock, @Mocked final InetAddress inetAddress) throws Exception {
+    public void testUdpEchoResponseWithSocketError(@Mocked final DatagramSocket mock, @Mocked final InetAddress inetAddress) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                // spoof the internet address (as we WILL get an UnknownHostException otherwise)
+                InetAddress.getByName(anyString);
+                result = toReturn;  //return loopback address
 
-            // spoof the internet address (as we WILL get an UnknownHostException otherwise)
-            InetAddress.getByName(anyString);
-            result = toReturn;  //return loopback address
+                // check the sent data for correctness, when send is called
+                mock.send((DatagramPacket) any);
+                result = new SocketException("Forcefully thrown exception");
 
-            // check the sent data for correctness, when send is called
-            mock.send((DatagramPacket) any);
-            result = result = new SocketException("Forcefully thrown exception");
-
-        }};
+            }
+        };
 
         final EchoProtocolUdpTask task = new EchoProtocolUdpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
 
-        assertEquals("Result did not return ERROR","ERROR", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
+        assertEquals("Result did not return ERROR", "ERROR", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
         assertEquals("Wrong echo service host in result", ECHO_SERVICE_HOST, res.getResultMap().get("echo_protocol_objective_host"));
         assertEquals("Wrong protocol type in result", AbstractEchoProtocolTask.PROTOCOL_UDP, res.getResultMap().get(AbstractEchoProtocolTask.RESULT_PROTOCOL));
     }
 
     @Test
-    public void testUdpEchoResponseWithSocketTimeoutError (@Mocked final DatagramSocket mock, @Mocked final InetAddress inetAddress) throws Exception {
+    public void testUdpEchoResponseWithSocketTimeoutError(@Mocked final DatagramSocket mock, @Mocked final InetAddress inetAddress) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                // spoof the internet address (as we WILL get an UnknownHostException otherwise)
+                InetAddress.getByName(anyString);
+                result = toReturn;  //return loopback address
 
-            // spoof the internet address (as we WILL get an UnknownHostException otherwise)
-            InetAddress.getByName(anyString);
-            result = toReturn;  //return loopback address
+                // check the sent data for correctness, when send is called
+                mock.send((DatagramPacket) any);
+                result = new Delegate() {
+                    void delegateMethod(DatagramPacket packet) {
+                        sendPacket = packet;
+                    }
+                };
 
-            // check the sent data for correctness, when send is called
-            mock.send((DatagramPacket) any);
-            result = new Delegate() {
-                void delegateMethod(DatagramPacket packet) {
-                    sendPacket = packet;
-                }
-            };
+                //return the correct message
+                mock.receive((DatagramPacket) any);
+                result = new SocketTimeoutException("Forcefully thrown exception");
 
-            //return the correct message
-            mock.receive((DatagramPacket) any);
-            result = new SocketTimeoutException("Forcefully thrown exception");
-
-        }};
+            }
+        };
 
         final EchoProtocolUdpTask task = new EchoProtocolUdpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
 
-        assertEquals("Result did not return TIMEOUT","TIMEOUT", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
+        assertEquals("Result did not return TIMEOUT", "TIMEOUT", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
         assertEquals("Wrong echo service host in result", ECHO_SERVICE_HOST, res.getResultMap().get("echo_protocol_objective_host"));
         assertEquals("Wrong protocol type in result", AbstractEchoProtocolTask.PROTOCOL_UDP, res.getResultMap().get(AbstractEchoProtocolTask.RESULT_PROTOCOL));
     }

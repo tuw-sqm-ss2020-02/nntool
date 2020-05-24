@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,136 +43,138 @@ import at.alladin.nettest.shared.server.storage.couchdb.domain.model.QoSMeasurem
 import at.alladin.nettest.shared.server.storage.couchdb.domain.model.SpeedMeasurement;
 import at.alladin.nettest.shared.server.storage.couchdb.domain.model.SubMeasurement;
 
-@Mapper(componentModel = "spring", uses = { DateTimeMapper.class, ConnectionInfoMapper.class})
+@Mapper(componentModel = "spring", uses = {DateTimeMapper.class, ConnectionInfoMapper.class})
 public interface FullMeasurementResponseMapper {
 
-	@Mappings({
-		@Mapping(source="measurementTime.startTime", target="startTime"),
-		@Mapping(source="measurementTime.durationNs", target="durationNs"),
-		@Mapping(source="measurementTime.endTime", target="endTime"),
-		@Mapping(source="geoLocationInfo.geoLocations", target="geoLocations"),
-		@Mapping(source = "geoLocationInfo.distanceMovedMetres", target="distanceMovedMetres"),
-		@Mapping(expression="java(parseSubMeasurementMap(measurement.getMeasurements()))", target="measurements"),
-		@Mapping(source = "networkInfo.computedNetworkInfo", target="computedNetworkInfo"),
-		@Mapping(source = "qosAdvancedEvaluation", target="qosAdvancedEvaluation"),
-	})
-	FullMeasurementResponse map(Measurement measurement);
-	
-	@Mappings({
-		@Mapping(source="measurementTime.relativeStartTimeNs", target="relativeStartTimeNs"),
-		@Mapping(source="measurementTime.relativeEndTimeNs", target="relativeEndTimeNs"),
-		@Mapping(source="measurementTime.durationNs", target="durationNs"),
-		@Mapping(source="measurementTime.startTime", target="startTime"),
-		@Mapping(source="measurementTime.endTime", target="endTime"),
-		@Mapping(source="statusInfo.status", target="status"),
-		@Mapping(source="statusInfo.reason", target="reason"),
-		@Mapping(source="speedRawData.download", target="downloadRawData"),
-		@Mapping(source="speedRawData.upload", target="uploadRawData"),
-		@Mapping(source="rttInfo.address", target="rttInfo.address"),
+    @Mappings({
+            @Mapping(source = "measurementTime.startTime", target = "startTime"),
+            @Mapping(source = "measurementTime.durationNs", target = "durationNs"),
+            @Mapping(source = "measurementTime.endTime", target = "endTime"),
+            @Mapping(source = "geoLocationInfo.geoLocations", target = "geoLocations"),
+            @Mapping(source = "geoLocationInfo.distanceMovedMetres", target = "distanceMovedMetres"),
+            @Mapping(expression = "java(parseSubMeasurementMap(measurement.getMeasurements()))", target = "measurements"),
+            @Mapping(source = "networkInfo.computedNetworkInfo", target = "computedNetworkInfo"),
+            @Mapping(source = "qosAdvancedEvaluation", target = "qosAdvancedEvaluation"),
+    })
+    FullMeasurementResponse map(Measurement measurement);
 
-		//rttInfo.maximumNs, minimumNs
-	})
-	FullSpeedMeasurement map(SpeedMeasurement measurement);
-	
-	@Mappings({
-		@Mapping(source="measurementTime.relativeStartTimeNs", target="relativeStartTimeNs"),
-		@Mapping(source="measurementTime.relativeEndTimeNs", target="relativeEndTimeNs"),
-		@Mapping(source="measurementTime.durationNs", target="durationNs"),
-		@Mapping(source="measurementTime.startTime", target="startTime"),
-		@Mapping(source="measurementTime.endTime", target="endTime"),
-		@Mapping(source="statusInfo.status", target="status"),
-		@Mapping(source="statusInfo.reason", target="reason"),
+    @Mappings({
+            @Mapping(source = "measurementTime.relativeStartTimeNs", target = "relativeStartTimeNs"),
+            @Mapping(source = "measurementTime.relativeEndTimeNs", target = "relativeEndTimeNs"),
+            @Mapping(source = "measurementTime.durationNs", target = "durationNs"),
+            @Mapping(source = "measurementTime.startTime", target = "startTime"),
+            @Mapping(source = "measurementTime.endTime", target = "endTime"),
+            @Mapping(source = "statusInfo.status", target = "status"),
+            @Mapping(source = "statusInfo.reason", target = "reason"),
+            @Mapping(source = "speedRawData.download", target = "downloadRawData"),
+            @Mapping(source = "speedRawData.upload", target = "uploadRawData"),
+            @Mapping(source = "rttInfo.address", target = "rttInfo.address"),
 
-		@Mapping(ignore = true, target = "keyToTranslationMap"),
-		@Mapping(ignore = true, target = "qosTypeToDescriptionMap"),
-		@Mapping(ignore = true, target = "results")
-	})
-	FullQoSMeasurement map(QoSMeasurement measurement);
+            //rttInfo.maximumNs, minimumNs
+    })
+    FullSpeedMeasurement map(SpeedMeasurement measurement);
 
-	@Mappings({
-		@Mapping(/*source=""*/ignore = true, target="cpuAverage"), // TODO
-		@Mapping(/*source=""*/ignore = true, target="cpuMedian"), // TODO
-		@Mapping(/*source=""*/ignore = true, target="cpuMin"), // TODO
-		@Mapping(/*source=""*/ignore = true, target="cpuMax"), // TODO
-		@Mapping(/*source=""*/ignore = true, target="memoryAverage"), // TODO
-		@Mapping(/*source=""*/ignore = true, target="memoryMedian"), // TODO
-		@Mapping(/*source=""*/ignore = true, target="memoryMin"), // TODO
-		@Mapping(/*source=""*/ignore = true, target="memoryMax") // TODO
-	})
-	OperatingSystemInfoDto map(OperatingSystemInfo osInfo);
+    @Mappings({
+            @Mapping(source = "measurementTime.relativeStartTimeNs", target = "relativeStartTimeNs"),
+            @Mapping(source = "measurementTime.relativeEndTimeNs", target = "relativeEndTimeNs"),
+            @Mapping(source = "measurementTime.durationNs", target = "durationNs"),
+            @Mapping(source = "measurementTime.startTime", target = "startTime"),
+            @Mapping(source = "measurementTime.endTime", target = "endTime"),
+            @Mapping(source = "statusInfo.status", target = "status"),
+            @Mapping(source = "statusInfo.reason", target = "reason"),
 
-	@Mappings({
-		@Mapping(source = "networkPointsInTime", target = "networkPointInTimeInfo"),
-		@Mapping(source = "signalInfo.signals", target = "signals"),
-	})
-	NetworkInfoDto map(NetworkInfo networkInfo);
+            @Mapping(ignore = true, target = "keyToTranslationMap"),
+            @Mapping(ignore = true, target = "qosTypeToDescriptionMap"),
+            @Mapping(ignore = true, target = "results")
+    })
+    FullQoSMeasurement map(QoSMeasurement measurement);
 
-	@Mappings({
-		@Mapping(source = "agentPrivateIp", target = "agentPrivateIp"),
-		@Mapping(source = "agentPublicIp", target = "agentPublicIp"),
-		@Mapping(source = "agentPublicIpCountryCode", target = "agentPublicIpCountryCode"),
+    @Mappings({
+            @Mapping(/*source=""*/ignore = true, target = "cpuAverage"), // TODO
+            @Mapping(/*source=""*/ignore = true, target = "cpuMedian"), // TODO
+            @Mapping(/*source=""*/ignore = true, target = "cpuMin"), // TODO
+            @Mapping(/*source=""*/ignore = true, target = "cpuMax"), // TODO
+            @Mapping(/*source=""*/ignore = true, target = "memoryAverage"), // TODO
+            @Mapping(/*source=""*/ignore = true, target = "memoryMedian"), // TODO
+            @Mapping(/*source=""*/ignore = true, target = "memoryMin"), // TODO
+            @Mapping(/*source=""*/ignore = true, target = "memoryMax") // TODO
+    })
+    OperatingSystemInfoDto map(OperatingSystemInfo osInfo);
 
-		@Mapping(source = "networkType.category", target = "networkTypeCategory"),
-		@Mapping(source = "networkType.groupName", target = "networkTypeGroupName"),
-		@Mapping(source = "networkType.networkTypeId", target = "networkTypeId"),
-		@Mapping(source = "networkType.name", target = "networkTypeName"),
+    @Mappings({
+            @Mapping(source = "networkPointsInTime", target = "networkPointInTimeInfo"),
+            @Mapping(source = "signalInfo.signals", target = "signals"),
+    })
+    NetworkInfoDto map(NetworkInfo networkInfo);
 
-		@Mapping(source = "providerInfo.countryCodeAsn", target = "countryCodeAsn"),
-		@Mapping(source = "providerInfo.provider.name", target = "providerName"),
-		@Mapping(source = "providerInfo.provider.shortName", target = "providerShortName"),
-		@Mapping(source = "providerInfo.publicIpAsName", target = "publicIpAsName"),
-		@Mapping(source = "providerInfo.publicIpAsn", target = "publicIpAsn"),
+    @Mappings({
+            @Mapping(source = "agentPrivateIp", target = "agentPrivateIp"),
+            @Mapping(source = "agentPublicIp", target = "agentPublicIp"),
+            @Mapping(source = "agentPublicIpCountryCode", target = "agentPublicIpCountryCode"),
 
-		@Mapping(source = "networkMobileInfo.networkCountry", target = "networkCountry"),
-		@Mapping(source = "networkMobileInfo.networkOperatorMccMnc", target = "networkOperatorMccMnc"),
-		@Mapping(source = "networkMobileInfo.networkOperatorName", target = "networkOperatorName"),
-		@Mapping(source = "networkMobileInfo.simCountry", target = "simCountry"),
-		@Mapping(source = "networkMobileInfo.simOperatorMccMnc", target = "simOperatorMccMnc"),
-		@Mapping(source = "networkMobileInfo.simOperatorName", target = "simOperatorName"),
+            @Mapping(source = "networkType.category", target = "networkTypeCategory"),
+            @Mapping(source = "networkType.groupName", target = "networkTypeGroupName"),
+            @Mapping(source = "networkType.networkTypeId", target = "networkTypeId"),
+            @Mapping(source = "networkType.name", target = "networkTypeName"),
 
-		@Mapping(source = "networkWifiInfo.initialSsid", target = "ssid"),
-		@Mapping(source = "networkWifiInfo.initialBssid", target = "bssid"),
-		@Mapping(source = "networkWifiInfo.frequency", target = "frequency"),
+            @Mapping(source = "providerInfo.countryCodeAsn", target = "countryCodeAsn"),
+            @Mapping(source = "providerInfo.provider.name", target = "providerName"),
+            @Mapping(source = "providerInfo.provider.shortName", target = "providerShortName"),
+            @Mapping(source = "providerInfo.publicIpAsName", target = "publicIpAsName"),
+            @Mapping(source = "providerInfo.publicIpAsn", target = "publicIpAsn"),
 
-		@Mapping(source="networkMobileInfo.roaming", target="roaming"),
-		@Mapping(source="networkMobileInfo.roamingType", target="roamingType"),
-	})
-	NetworkPointInTimeInfoDto map(NetworkPointInTime npit);
+            @Mapping(source = "networkMobileInfo.networkCountry", target = "networkCountry"),
+            @Mapping(source = "networkMobileInfo.networkOperatorMccMnc", target = "networkOperatorMccMnc"),
+            @Mapping(source = "networkMobileInfo.networkOperatorName", target = "networkOperatorName"),
+            @Mapping(source = "networkMobileInfo.simCountry", target = "simCountry"),
+            @Mapping(source = "networkMobileInfo.simOperatorMccMnc", target = "simOperatorMccMnc"),
+            @Mapping(source = "networkMobileInfo.simOperatorName", target = "simOperatorName"),
 
-	@InheritConfiguration
-	@Mappings({
-		@Mapping(source = "frequency", target="mobileFrequency")
-	})
-	ComputedNetworkPointInTimeInfoDto map(ComputedNetworkPointInTime cnpit);
+            @Mapping(source = "networkWifiInfo.initialSsid", target = "ssid"),
+            @Mapping(source = "networkWifiInfo.initialBssid", target = "bssid"),
+            @Mapping(source = "networkWifiInfo.frequency", target = "frequency"),
 
-	default String map(MccMnc mccMnc) {
-		if (mccMnc == null) {
-			return null;
-		}
+            @Mapping(source = "networkMobileInfo.roaming", target = "roaming"),
+            @Mapping(source = "networkMobileInfo.roamingType", target = "roamingType"),
+    })
+    NetworkPointInTimeInfoDto map(NetworkPointInTime npit);
 
-		Integer mcc = mccMnc.getMcc();
-		Integer mnc = mccMnc.getMnc();
+    @InheritConfiguration
+    @Mappings({
+            @Mapping(source = "frequency", target = "mobileFrequency")
+    })
+    ComputedNetworkPointInTimeInfoDto map(ComputedNetworkPointInTime cnpit);
 
-		if (mcc == null && mnc == null) {
-			return null;
-		}
+    default String map(MccMnc mccMnc) {
+        if (mccMnc == null) {
+            return null;
+        }
 
-		return mcc + "-" + mnc;
-	}
-	
-	default Map<MeasurementTypeDto, FullSubMeasurement> parseSubMeasurementMap(Map<MeasurementTypeDto, SubMeasurement> measurementParam) {
-		final Map<MeasurementTypeDto, FullSubMeasurement> ret = new HashMap<>();
-		for (MeasurementTypeDto type : measurementParam.keySet()) {
-			switch (type) {
-			case SPEED:
-				ret.put(type, this.map((SpeedMeasurement) measurementParam.get(type)));
-				break;
-			case QOS:
-				//ret.put(type, this.map((QoSMeasurement) measurementParam.get(type))); // TODO: ?
-				break;
-			}
-			
-		}
-		return ret;
-	}
+        Integer mcc = mccMnc.getMcc();
+        Integer mnc = mccMnc.getMnc();
+
+        if (mcc == null && mnc == null) {
+            return null;
+        }
+
+        return mcc + "-" + mnc;
+    }
+
+    default Map<MeasurementTypeDto, FullSubMeasurement> parseSubMeasurementMap(Map<MeasurementTypeDto, SubMeasurement> measurementParam) {
+        final Map<MeasurementTypeDto, FullSubMeasurement> ret = new HashMap<>();
+        for (MeasurementTypeDto type : measurementParam.keySet()) {
+            switch (type) {
+                case SPEED:
+                    ret.put(type, this.map((SpeedMeasurement) measurementParam.get(type)));
+                    break;
+                case QOS:
+                    //ret.put(type, this.map((QoSMeasurement) measurementParam.get(type))); // TODO: ?
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        return ret;
+    }
 }

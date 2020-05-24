@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,76 +49,74 @@ import io.swagger.annotations.ApiParam;
  * This controller is responsible for measurement initiation.
  *
  * @author alladin-IT GmbH (bp@alladin.at)
- *
  */
 @RestController
 @RequestMapping("/api/v1/measurements")
 public class MeasurementInitiationResource {
 
-	private static final Logger logger = LoggerFactory.getLogger(MeasurementInitiationResource.class);
-	
-	@Autowired
-	private StorageService storageService;
-	
-	@Autowired
-	private MeasurementConfigurationService measurementConfigurationService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeasurementInitiationResource.class);
 
-	@Autowired
-	private MeasurementDeviceInformationService measurementDeviceInformationService;
-	
-	/**
-	 * Request a new measurement.
-	 * This request will fetch the current measurement parameters and configuration from the server.
-	 *
-	 * @param measurementInitiationRequest
-	 * @return
-	 * @throws UnknownHostException 
-	 */
-	@io.swagger.annotations.ApiOperation(value = "Request a new measurement.", notes = "This request will fetch the current measurement parameters and configuration from the server.")
-	@io.swagger.annotations.ApiResponses({
-		@io.swagger.annotations.ApiResponse(code = 201, message = "Created - Measurement paramaters are provided."),
-		@io.swagger.annotations.ApiResponse(code = 400, message = "Bad Request", response = ApiResponse.class),
-		@io.swagger.annotations.ApiResponse(code = 500, message = "Internal Server Error", response = ApiResponse.class)
-	})
-	@PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> requestMeasurement(@ApiParam("Initiation request") @RequestBody LmapControlDto measurementInitiationRequest,
-			HttpServletRequest request) throws UnknownHostException {
-		
-		final LmapAgentDto agentDto = measurementInitiationRequest.getAgent();
-		
-		if (agentDto == null || agentDto.getAgentId() == null) {
-			//TODO: do we hide that in production?
-			throw new GeneralBadRequestException("No agent provided");
-		}
-		try {
-			if (!storageService.isValidMeasurementAgentUuid(agentDto.getAgentId())) {
-				throw new GeneralBadRequestException("Invalid agent provided");
-			}
-		} catch (StorageServiceException ex) {
-			throw new GeneralBadRequestException("Invalid agent provided");
-		}
-		
-		final LmapCapabilityDto capabilityDto = measurementInitiationRequest.getCapabilities();
-		
-		if (capabilityDto == null || capabilityDto.getTasks() == null || capabilityDto.getTasks().size() == 0) {
-			throw new GeneralBadRequestException("No capabilities provided");
-		}
-		
-		measurementDeviceInformationService.fillDeviceInformation(measurementInitiationRequest.getAdditionalRequestInfo(), request);
-		
-		////
-		
-		boolean useIPv6 = IpAddressHelper.extractIpAddressFromHttpServletRequest(request) instanceof Inet6Address;
-		logger.info("Measurement initiation with (useIPv6 = {})", useIPv6);
-		
-		// TODO: load balancing
-		final LmapControlDto lmapControlDto = measurementConfigurationService.getLmapControlDtoForCapabilities(capabilityDto, useIPv6);
-		lmapControlDto.setAdditionalRequestInfo(measurementInitiationRequest.getAdditionalRequestInfo());
-		lmapControlDto.setAgent(agentDto);
-		
-		//measurementInitiationRequest.getAgent().getAgentId();
-		
-		return ResponseEntity.ok(lmapControlDto);
-	}
+    @Autowired
+    private StorageService storageService;
+
+    @Autowired
+    private MeasurementConfigurationService measurementConfigurationService;
+
+    @Autowired
+    private MeasurementDeviceInformationService measurementDeviceInformationService;
+
+    /**
+     * Request a new measurement.
+     * @param measurementInitiationRequest
+     * @param request
+     * @return This request will fetch the current measurement parameters and configuration from the server.
+     * @throws UnknownHostException
+     */
+    @io.swagger.annotations.ApiOperation(value = "Request a new measurement.", notes = "This request will fetch the current measurement parameters and configuration from the server.")
+    @io.swagger.annotations.ApiResponses({
+            @io.swagger.annotations.ApiResponse(code = 201, message = "Created - Measurement paramaters are provided."),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "Bad Request", response = ApiResponse.class),
+            @io.swagger.annotations.ApiResponse(code = 500, message = "Internal Server Error", response = ApiResponse.class)
+    })
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<?> requestMeasurement(@ApiParam("Initiation request") @RequestBody LmapControlDto measurementInitiationRequest,
+                                                HttpServletRequest request) throws UnknownHostException {
+
+        final LmapAgentDto agentDto = measurementInitiationRequest.getAgent();
+
+        if (agentDto == null || agentDto.getAgentId() == null) {
+            //TODO: do we hide that in production?
+            throw new GeneralBadRequestException("No agent provided");
+        }
+        try {
+            if (!storageService.isValidMeasurementAgentUuid(agentDto.getAgentId())) {
+                throw new GeneralBadRequestException("Invalid agent provided");
+            }
+        } catch (StorageServiceException ex) {
+            throw new GeneralBadRequestException("Invalid agent provided");
+        }
+
+        final LmapCapabilityDto capabilityDto = measurementInitiationRequest.getCapabilities();
+
+        if (capabilityDto == null || capabilityDto.getTasks() == null || capabilityDto.getTasks().size() == 0) {
+            throw new GeneralBadRequestException("No capabilities provided");
+        }
+
+        measurementDeviceInformationService.fillDeviceInformation(measurementInitiationRequest.getAdditionalRequestInfo(), request);
+
+        ////
+
+        boolean useIPv6 = IpAddressHelper.extractIpAddressFromHttpServletRequest(request) instanceof Inet6Address;
+        LOGGER.info("Measurement initiation with (useIPv6 = {})", useIPv6);
+
+        // TODO: load balancing
+        final LmapControlDto lmapControlDto = measurementConfigurationService.getLmapControlDtoForCapabilities(capabilityDto, useIPv6);
+        lmapControlDto.setAdditionalRequestInfo(measurementInitiationRequest.getAdditionalRequestInfo());
+        lmapControlDto.setAgent(agentDto);
+
+        //measurementInitiationRequest.getAgent().getAgentId();
+
+        return ResponseEntity.ok(lmapControlDto);
+    }
 }

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,15 +19,18 @@ package at.alladin.nettest.service.map.util;
 import at.alladin.nettest.service.map.domain.model.BoundingBox;
 import at.alladin.nntool.shared.map.MapTileParameters;
 
-public class GeographyHelper {
+public final class GeographyHelper {
 
     // see
     // http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/
     private static final double MAX_EXTENT = 20037508.342789244;
-    
+
+    private GeographyHelper() {
+    }
+
     /**
-     * @param zoom
-     *            zoomlevel
+     * @param tileSize
+     * @param zoom zoomlevel
      * @return resolution in meters per pixel
      */
     public static double getResFromZoom(final int tileSize, final int zoom) {
@@ -36,7 +39,6 @@ public class GeographyHelper {
     }
 
     /**
-     *
      * @param tileSize
      * @param x
      * @param y
@@ -59,13 +61,11 @@ public class GeographyHelper {
         return result;
     }
 
-    public static BoundingBox xyToMeters (final MapTileParameters params) {
-        return xyToMeters(TileHelper.getTileSizeLengthAt(TileHelper.getTileSizeIdx(params.getSize()))
-        		, params.getX(), params.getY(), params.getZoom());
+    public static BoundingBox xyToMeters(final MapTileParameters params) {
+        return xyToMeters(TileHelper.getTileSizeLengthAt(TileHelper.getTileSizeIdx(params.getSize())), params.getX(), params.getY(), params.getZoom());
     }
 
     /**
-     *
      * @param lat
      * @return
      */
@@ -74,12 +74,11 @@ public class GeographyHelper {
     }
 
     /**
-     *
      * @param lon
      * @return
      */
     public static double lonToMeters(final double lon) {
         return lon * MAX_EXTENT / 180.0;
     }
-    
+
 }

@@ -37,7 +37,6 @@ public class TermsAndConditionsFragment extends AbstractFullScreenDialogFragment
     public final static int TERMS_AND_CONDITIONS_VERSION = 1;
 
     /**
-     *
      * @return
      */
     public static TermsAndConditionsFragment newInstance() {

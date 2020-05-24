@@ -46,15 +46,14 @@ public class ControllerConnection extends AbstractConnection<ControllerService> 
     public RegistrationResponse registerMeasurementAgent(final ApiRequest<RegistrationRequest> request) {
         try {
             return getControllerService().postRegisterClient(request).execute().body().getData();
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
 
         return null;
     }
 
-    public LmapControlDto requestMeasurement (final LmapControlDto request) {
+    public LmapControlDto requestMeasurement(final LmapControlDto request) {
         try {
             return getControllerService().postMeasurementRequest(request).execute().body();
         } catch (final Exception ex) {

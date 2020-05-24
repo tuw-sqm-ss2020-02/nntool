@@ -33,7 +33,6 @@ public class FunctionalityHelper {
     static Set<QosMeasurementType> unavailableQoSTypes = null;
 
     /**
-     *
      * @param isAvailableType
      * @param context
      * @return true if the given type is allowed to be executed on this android device

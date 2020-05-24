@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2013-2019 alladin-IT GmbH
  * Copyright 2014-2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,8 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-
-import at.alladin.nettest.service.map.domain.model.MapServiceOptions;
 
 public class MapServiceSettings {
 
@@ -70,15 +68,13 @@ public class MapServiceSettings {
     }
 
     //TODO: rewrite filters
+
     /**
-     *
      * @author Specure GmbH
-     *
      */
     public static abstract class MapFilter {
 
         /**
-         *
          * @param input
          * @return
          */
@@ -86,9 +82,7 @@ public class MapServiceSettings {
     }
 
     /**
-     *
      * @author Specure GmbH
-     *
      */
     public static class StaticMapFilter extends MapFilter {
 
@@ -98,7 +92,6 @@ public class MapServiceSettings {
         private final SQLFilter filter;
 
         /**
-         *
          * @param where
          */
         public StaticMapFilter(String where) {
@@ -116,19 +109,9 @@ public class MapServiceSettings {
     }
 
     /**
-     *
      * @author Specure GmbH
-     *
      */
     public static class SQLFilter {
-
-        /**
-         *
-         * @param where
-         */
-        public SQLFilter(final String where) {
-            this.where = where;
-        }
 
         /**
          *
@@ -136,10 +119,16 @@ public class MapServiceSettings {
         private final String where;
 
         /**
-         *
+         * @param where
+         */
+        public SQLFilter(final String where) {
+            this.where = where;
+        }
+
+        /**
          * @param i
          * @param ps
-         * @return
+         * @return i
          * @throws SQLException
          */
         public int fillParams(final int i, final PreparedStatement ps) throws SQLException {

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -60,14 +60,14 @@ public class TcpTaskTest {
     private TaskDesc incomingTaskDesc;
 
     @Before
-    public void init () {
+    public void init() {
         loopback = InetAddress.getLoopbackAddress();
 
         testSettings = new TestSettings();
         testSettings.setUseSsl(false);
         testSettings.setStartTimeNs(12);
         clientHolder = ClientHolder.getInstance(TaskDescriptionHelper.createTaskDescList("host", "80",
-                new int[] {80}, null, "host", null, null), null);
+                new int[]{80}, null, "host", null, null), null);
 
         qosTest = new QualityOfServiceTest(clientHolder, testSettings);
 
@@ -86,35 +86,38 @@ public class TcpTaskTest {
 
     /**
      * Outgoing TCP tests
+     * @param controlConnection
+     * @param socket
      */
 
     @Test
-    public void testTcpOutgoingSuccessful (@Mocked final QoSControlConnection controlConnection,
-                                 @Mocked final Socket socket) throws Exception {
+    public void testTcpOutgoingSuccessful(@Mocked final QoSControlConnection controlConnection,
+                                          @Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("TCPTEST OUT"), (ControlConnectionResponseCallback) any);
+                result = new Delegate() {
+                    public void delegateMethod(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        callback.onResponse("OK", cmd);
+                    }
+                };
 
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("TCPTEST OUT"), (ControlConnectionResponseCallback) any);
-            result = new Delegate () {
-                public void delegateMethod (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    callback.onResponse("OK", cmd);
-                }
-            };
+                socket.getInputStream();
+                result = new ByteArrayInputStream("PING".getBytes());
 
-            socket.getInputStream();
-            result = new ByteArrayInputStream("PING".getBytes());
+                socket.getOutputStream();
+                result = testOutputStream;
 
-            socket.getOutputStream();
-            result = testOutputStream;
-
-        }};
+            }
+        };
 
         final TcpTask tcpTask = new TcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         tcpTask.setControlConnection(controlConnection);
 
         final QoSTestResult res = tcpTask.call();
 
-        assertEquals("Result did not return OK","OK", res.getResultMap().get(TcpTask.RESULT_OUT));
+        assertEquals("Result did not return OK", "OK", res.getResultMap().get(TcpTask.RESULT_OUT));
         assertEquals("Payload sent to server != PING", "PING\n", testOutputStream.toString());
         assertEquals("Incorrect received result", "PING", res.getResultMap().get(TcpTask.RESULT_RESPONSE_OUT));
         assertEquals("Incorrect test out port", 80, res.getResultMap().get(TcpTask.RESULT_PORT_OUT));
@@ -122,184 +125,194 @@ public class TcpTaskTest {
     }
 
     @Test
-    public void testTcpOutgoingControllerSendsError (@Mocked final QoSControlConnection controlConnection) throws Exception {
+    public void testTcpOutgoingControllerSendsError(@Mocked final QoSControlConnection controlConnection) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("TCPTEST OUT"), (ControlConnectionResponseCallback) any);
+                result = new Delegate() {
+                    public void delegateMethod(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        callback.onResponse("ERROR", cmd);
+                    }
+                };
 
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("TCPTEST OUT"), (ControlConnectionResponseCallback) any);
-            result = new Delegate () {
-                public void delegateMethod (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    callback.onResponse("ERROR", cmd);
-                }
-            };
-
-        }};
+            }
+        };
 
         final TcpTask tcpTask = new TcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         tcpTask.setControlConnection(controlConnection);
 
         final QoSTestResult res = tcpTask.call();
 
-        assertEquals("Result did not return ERROR","ERROR", res.getResultMap().get(TcpTask.RESULT_OUT));
+        assertEquals("Result did not return ERROR", "ERROR", res.getResultMap().get(TcpTask.RESULT_OUT));
         assertEquals("Incorrect test out port", 80, res.getResultMap().get(TcpTask.RESULT_PORT_OUT));
 
     }
 
 
     @Test
-    public void testTcpOutgoingControllerSendsNull (@Mocked final InetAddress inetAddress, @Mocked final QoSControlConnection controlConnection,
-                                                     @Mocked final Socket socket) throws Exception {
+    public void testTcpOutgoingControllerSendsNull(@Mocked final InetAddress inetAddress, @Mocked final QoSControlConnection controlConnection,
+                                                   @Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("TCPTEST OUT"), (ControlConnectionResponseCallback) any);
+                result = new Delegate() {
+                    public void delegateMethod(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        callback.onResponse(null, cmd);
+                    }
+                };
 
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("TCPTEST OUT"), (ControlConnectionResponseCallback) any);
-            result = new Delegate () {
-                public void delegateMethod (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    callback.onResponse(null, cmd);
-                }
-            };
-
-        }};
+            }
+        };
 
         final TcpTask tcpTask = new TcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         tcpTask.setControlConnection(controlConnection);
 
         final QoSTestResult res = tcpTask.call();
 
-        assertEquals("Result did not return ERROR","ERROR", res.getResultMap().get(TcpTask.RESULT_OUT));
+        assertEquals("Result did not return ERROR", "ERROR", res.getResultMap().get(TcpTask.RESULT_OUT));
         assertEquals("Incorrect test out port", 80, res.getResultMap().get(TcpTask.RESULT_PORT_OUT));
 
     }
 
     @Test
-    public void testTcpOutgoingTimeout (@Mocked final QoSControlConnection controlConnection,
-                                        @Mocked final Socket socket) throws Exception {
+    public void testTcpOutgoingTimeout(@Mocked final QoSControlConnection controlConnection,
+                                       @Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("TCPTEST OUT"), (ControlConnectionResponseCallback) any);
+                result = new Delegate() {
+                    public void delegateMethod(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        callback.onResponse("OK", cmd);
+                    }
+                };
 
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("TCPTEST OUT"), (ControlConnectionResponseCallback) any);
-            result = new Delegate () {
-                public void delegateMethod (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    callback.onResponse("OK", cmd);
-                }
-            };
+                socket.getInputStream();
+                result = new SocketTimeoutException("Forcefully thrown exception");
 
-            socket.getInputStream();
-            result = new SocketTimeoutException("Forcefully thrown exception");
+                socket.getOutputStream();
+                result = testOutputStream;
 
-            socket.getOutputStream();
-            result = testOutputStream;
-
-        }};
+            }
+        };
 
         final TcpTask tcpTask = new TcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         tcpTask.setControlConnection(controlConnection);
 
         final QoSTestResult res = tcpTask.call();
 
-        assertEquals("Result did not return TIMEOUT","TIMEOUT", res.getResultMap().get(TcpTask.RESULT_OUT));
+        assertEquals("Result did not return TIMEOUT", "TIMEOUT", res.getResultMap().get(TcpTask.RESULT_OUT));
         assertEquals("Payload sent to server != PING", "PING\n", testOutputStream.toString());
         assertEquals("Incorrect test out port", 80, res.getResultMap().get(TcpTask.RESULT_PORT_OUT));
     }
 
     @Test
-    public void testTcpOutgoingConnectionError (@Mocked final QoSControlConnection controlConnection,
-                                        @Mocked final Socket socket) throws Exception {
+    public void testTcpOutgoingConnectionError(@Mocked final QoSControlConnection controlConnection,
+                                               @Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("TCPTEST OUT"), (ControlConnectionResponseCallback) any);
+                result = new Delegate() {
+                    public void delegateMethod(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        callback.onResponse("OK", cmd);
+                    }
+                };
 
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("TCPTEST OUT"), (ControlConnectionResponseCallback) any);
-            result = new Delegate () {
-                public void delegateMethod (AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    callback.onResponse("OK", cmd);
-                }
-            };
+                socket.getInputStream();
+                result = new ConnectException("Forcefully thrown exception");
 
-            socket.getInputStream();
-            result = new ConnectException("Forcefully thrown exception");
-
-        }};
+            }
+        };
 
         final TcpTask tcpTask = new TcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         tcpTask.setControlConnection(controlConnection);
 
         final QoSTestResult res = tcpTask.call();
 
-        assertEquals("Result did not return ERROR","ERROR", res.getResultMap().get(TcpTask.RESULT_OUT));
+        assertEquals("Result did not return ERROR", "ERROR", res.getResultMap().get(TcpTask.RESULT_OUT));
         assertEquals("Incorrect test out port", 80, res.getResultMap().get(TcpTask.RESULT_PORT_OUT));
     }
 
     /**
      * Incoming TCP tests
+     * @param socket
+     * @param controlConnection
+     * @param serverSocket
      */
 
     @Test
-    public void testTcpIncomingSuccessful (@Mocked final QoSControlConnection controlConnection,
-                                           @Mocked final ServerSocket serverSocket, @Mocked final Socket socket) throws Exception {
+    public void testTcpIncomingSuccessful(@Mocked final QoSControlConnection controlConnection,
+                                          @Mocked final ServerSocket serverSocket, @Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                //make sure the TCPTEST IN 80 cmd is sent exactly once
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, "TCPTEST IN 80", (ControlConnectionResponseCallback) any);
+                times = 1;
 
-            //make sure the TCPTEST IN 80 cmd is sent exactly once
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, "TCPTEST IN 80", (ControlConnectionResponseCallback) any);
-            times = 1;
+                socket.getInputStream();
+                result = new ByteArrayInputStream("PING".getBytes());
 
-            socket.getInputStream();
-            result = new ByteArrayInputStream("PING".getBytes());
-
-        }};
+            }
+        };
 
         final TcpTask tcpTask = new TcpTask(qosTest, incomingTaskDesc, 0);
         tcpTask.setControlConnection(controlConnection);
         final QoSTestResult res = tcpTask.call();
 
-        assertEquals("Result did not return OK","OK", res.getResultMap().get(TcpTask.RESULT_IN));
+        assertEquals("Result did not return OK", "OK", res.getResultMap().get(TcpTask.RESULT_IN));
         assertEquals("Incorrect received result", "PING", res.getResultMap().get(TcpTask.RESULT_RESPONSE_IN));
         assertEquals("Incorrect test in port", 80, res.getResultMap().get(TcpTask.RESULT_PORT_IN));
     }
 
     @Test
-    public void testTcpIncomingTimeout (@Mocked final QoSControlConnection controlConnection,
-                                        @Mocked final ServerSocket serverSocket, @Mocked final Socket socket) throws Exception {
+    public void testTcpIncomingTimeout(@Mocked final QoSControlConnection controlConnection,
+                                       @Mocked final ServerSocket serverSocket, @Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                //make sure the TCPTEST IN 80 cmd is sent exactly once
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, "TCPTEST IN 80", (ControlConnectionResponseCallback) any);
+                times = 1;
 
-            //make sure the TCPTEST IN 80 cmd is sent exactly once
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, "TCPTEST IN 80", (ControlConnectionResponseCallback) any);
-            times = 1;
+                socket.getInputStream();
+                result = new SocketTimeoutException("Forcefully thrown exception");
 
-            socket.getInputStream();
-            result = new SocketTimeoutException("Forcefully thrown exception");
-
-        }};
+            }
+        };
 
         final TcpTask tcpTask = new TcpTask(qosTest, incomingTaskDesc, 0);
         tcpTask.setControlConnection(controlConnection);
         final QoSTestResult res = tcpTask.call();
 
-        assertEquals("Result did not return TIMEOUT","TIMEOUT", res.getResultMap().get(TcpTask.RESULT_IN));
+        assertEquals("Result did not return TIMEOUT", "TIMEOUT", res.getResultMap().get(TcpTask.RESULT_IN));
         assertEquals("Incorrect test in port", 80, res.getResultMap().get(TcpTask.RESULT_PORT_IN));
     }
 
     @Test
-    public void testTcpIncomingError (@Mocked final QoSControlConnection controlConnection,
-                                        @Mocked final ServerSocket serverSocket, @Mocked final Socket socket) throws Exception {
+    public void testTcpIncomingError(@Mocked final QoSControlConnection controlConnection,
+                                     @Mocked final ServerSocket serverSocket, @Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                //make sure the TCPTEST IN 80 cmd is sent exactly once
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, "TCPTEST IN 80", (ControlConnectionResponseCallback) any);
+                times = 1;
 
-            //make sure the TCPTEST IN 80 cmd is sent exactly once
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, "TCPTEST IN 80", (ControlConnectionResponseCallback) any);
-            times = 1;
+                serverSocket.accept();
+                result = new SocketException("Forcefully thrown exception");
 
-            serverSocket.accept();
-            result = new SocketException("Forcefully thrown exception");
-
-        }};
+            }
+        };
 
         final TcpTask tcpTask = new TcpTask(qosTest, incomingTaskDesc, 0);
         tcpTask.setControlConnection(controlConnection);
         final QoSTestResult res = tcpTask.call();
 
-        assertEquals("Result did not return ERROR","ERROR", res.getResultMap().get(TcpTask.RESULT_IN));
+        assertEquals("Result did not return ERROR", "ERROR", res.getResultMap().get(TcpTask.RESULT_IN));
         assertEquals("Incorrect test in port", 80, res.getResultMap().get(TcpTask.RESULT_PORT_IN));
     }
 }

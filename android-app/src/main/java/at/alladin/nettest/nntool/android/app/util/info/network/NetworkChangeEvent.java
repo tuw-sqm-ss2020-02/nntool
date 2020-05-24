@@ -24,24 +24,14 @@ import org.joda.time.LocalDateTime;
  */
 public final class NetworkChangeEvent implements OperatorInfo {
 
-    public static enum NetworkChangeEventType {
-        NO_CONNECTION,
-        SIGNAL_UPDATE
-    }
-
+    private final long timestampNs;
+    private final LocalDateTime time;
+    private final Integer networkType;
     /**
      * System.nanoTime()
      */
     private WifiOperator wifiOperator;
-
     private MobileOperator mobileOperator;
-
-    private final long timestampNs;
-
-    private final LocalDateTime time;
-
-    private final Integer networkType;
-
     private NetworkChangeEventType eventType;
 
     public NetworkChangeEvent(final Integer networkType) {
@@ -83,12 +73,12 @@ public final class NetworkChangeEvent implements OperatorInfo {
         return networkType;
     }
 
-    public void setEventType(NetworkChangeEventType eventType) {
-        this.eventType = eventType;
-    }
-
     public NetworkChangeEventType getEventType() {
         return eventType;
+    }
+
+    public void setEventType(NetworkChangeEventType eventType) {
+        this.eventType = eventType;
     }
 
     @Override
@@ -115,5 +105,10 @@ public final class NetworkChangeEvent implements OperatorInfo {
         }
 
         return "-";
+    }
+
+    public static enum NetworkChangeEventType {
+        NO_CONNECTION,
+        SIGNAL_UPDATE
     }
 }

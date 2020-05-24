@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
  */
 public interface RunnableGatherer extends Runnable {
 
+    Interval getInterval();
+
     public static class Interval {
         private int duration;
         private TimeUnit timeUnit;
@@ -52,6 +54,4 @@ public interface RunnableGatherer extends Runnable {
             return TimeUnit.MILLISECONDS.convert(duration, timeUnit);
         }
     }
-
-    Interval getInterval();
 }

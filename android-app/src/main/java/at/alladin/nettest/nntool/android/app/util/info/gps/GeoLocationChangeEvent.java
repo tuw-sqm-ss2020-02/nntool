@@ -22,14 +22,7 @@ import at.alladin.nettest.shared.berec.collector.api.v1.dto.shared.GeoLocationDt
  * @author Lukasz Budryk (lb@alladin.at)
  */
 public class GeoLocationChangeEvent {
-    public static enum GeoLocationChangeEventType {
-        DISABLED,
-        ENABLED,
-        LOCATION_UPDATE
-    }
-
     private GeoLocationDto geoLocationDto;
-
     private GeoLocationChangeEventType eventType;
 
     public GeoLocationChangeEvent(final GeoLocationDto geoLocationDto, final GeoLocationChangeEventType type) {
@@ -59,5 +52,11 @@ public class GeoLocationChangeEvent {
                 "geoLocationDto=" + geoLocationDto +
                 ", eventType=" + eventType +
                 '}';
+    }
+
+    public static enum GeoLocationChangeEventType {
+        DISABLED,
+        ENABLED,
+        LOCATION_UPDATE
     }
 }

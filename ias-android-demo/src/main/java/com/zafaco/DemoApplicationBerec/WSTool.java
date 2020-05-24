@@ -17,7 +17,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-    
+
 package com.zafaco.DemoApplicationBerec;
 
 import java.util.Iterator;
@@ -38,150 +38,160 @@ import org.json.JSONObject;
 /**
  * Class WSTool
  */
-public final class WSTool
-{
-	//Singleton
-	private static volatile WSTool mInstance = null;
+public final class WSTool {
+    //Singleton
+    private static volatile WSTool mInstance = null;
+    /************************* Default Parameters *************************/
 
-	/**************************** Loging Level ****************************/
-	private boolean DEBUG = false;
+    private static String defaultIndexUrl = "";
+    private static JSONObject mDataStorage;
+    private static JSONObject mDataStorageUI;
+    private static JSONObject mDataStorageProblem;
+    /**************************** Loging Level ****************************/
+    private boolean DEBUG = false;
+    /****************** Measurement Parameters ********************/
+    private String platform = "mobile";
+    private boolean performRttMeasurement = true;
+    private boolean performDownloadMeasuement = true;
+    private boolean performUploadMeasurement = true;
+    private int performRouteToClientLookup = 8080;
+    private String wsTargets = "peer-ias-de-01";
+    private String wsTargetsRtt = "peer-ias-de-01";
+    private String wsTLD = "net-neutrality.tools";
+    private int wsParallelStreamsDownload = 4;
+    private int wsParallelStreamsUpload = 4;
+    private boolean wsUseEncryption = true;
+    /***************************** Variables ******************************/
+    private Context ctx;
+    private boolean startSequence = false;
+    private boolean cancelSequence = false;
 
-	/****************** Measurement Parameters ********************/
-	private String platform                         = "mobile";
+    /****************************** Objects *******************************/
+    private Common mCommon;
+    private Tool mTool;
+    private Http mHttp;
+    private Database mDatabase;
 
-	private boolean performRttMeasurement           = true;
-	private boolean performDownloadMeasuement       = true;
-	private boolean performUploadMeasurement        = true;
+    private SharedPreferences appPref;
 
-	private int performRouteToClientLookup          = 8080;
+    /**************************** Public Functions ****************************/
 
-	private String wsTargets						= "peer-ias-de-01";
-	private String wsTargetsRtt						= "peer-ias-de-01";
-	private String wsTLD 							= "net-neutrality.tools";
+    /**
+     * constructor of java
+     */
+    private WSTool() {
+        mTool = new Tool();
+        mHttp = new Http();
 
-	private int wsParallelStreamsDownload      		= 4;
-	private int wsParallelStreamsUpload        		= 4;
+        mDataStorage = new JSONObject();
+        mDataStorageUI = new JSONObject();
+        mDataStorageProblem = new JSONObject();
 
-	private boolean wsUseEncryption		        		= true;
+        setString("app_version", BuildConfig.VERSION_NAME);
+        setStringUI("app_version", BuildConfig.VERSION_NAME);
+    }
 
-	/************************* Default Parameters *************************/
+    /**
+     * Method getInstance
+     *
+     * @return
+     */
+    public static WSTool getInstance() {
+        if (mInstance == null) {
+            if (mInstance == null) {
+                if (mInstance == null) {
+                    mInstance = new WSTool();
+                }
+            }
+        }
+        return mInstance;
+    }
 
-	private static String defaultIndexUrl                         = "";
+    //----------------------------------------------------------------------------------------------
 
-	/***************************** Variables ******************************/
-	private Context ctx;
+    /**
+     * Method addToJSONMeasurement
+     *
+     * @param object
+     */
+    public static void addToJSONMeasurement(JSONObject object) {
+        try {
+            for (Iterator<String> iter = object.keys(); iter.hasNext(); ) {
+                String key = iter.next();
+                mDataStorage.put(key, object.getString(key));
+            }
+        } catch (Exception ex) {
+        }
+    }
 
-	private static JSONObject mDataStorage;
-	private static JSONObject mDataStorageUI;
-	private static JSONObject mDataStorageProblem;
+    /**
+     * Method getJSONMeasurement
+     *
+     * @return
+     */
+    public static JSONObject getJSONMeasurement() {
+        return mDataStorage;
+    }
 
-	private boolean startSequence = false;
-	private boolean cancelSequence = false;
+    /**
+     * Method getCtx
+     *
+     * @return
+     */
+    public Context getCtx() {
+        return this.ctx;
+    }
 
-	/****************************** Objects *******************************/
-	private Common mCommon;
-	private Tool mTool;
-	private Http mHttp;
-	private Database mDatabase;
-
-	private SharedPreferences appPref;
-
-	/**************************** Public Functions ****************************/
-
-	/**
-	 * Method getInstance
-	 * @return
-	 */
-	public static WSTool getInstance()
-	{
-		if (mInstance == null)
-		{
-			if (mInstance == null)
-			{
-				if (mInstance == null)
-				{
-					mInstance = new WSTool();
-				}
-			}
-		}
-		return mInstance;
-	}
-
-	/**
-	 * constructor of java
-	 */
-	private WSTool()
-	{
-		mTool = new Tool();
-		mHttp = new Http();
-
-		mDataStorage = new JSONObject();
-		mDataStorageUI = new JSONObject();
-		mDataStorageProblem = new JSONObject();
-
-		setString("app_version", BuildConfig.VERSION_NAME);
-		setStringUI("app_version", BuildConfig.VERSION_NAME);
-	}
-
-	//----------------------------------------------------------------------------------------------
-
-	/**
-	 * Method getCtx
-	 * @return
-	 */
-	public Context getCtx()
-	{
-		return this.ctx;
-	}
-
-	/**
-	 * Method setCtx
-	 * @param ctx
-	 */
-	public void setCtx(Context ctx)
-	{
-		this.ctx = ctx;
+    /**
+     * Method setCtx
+     *
+     * @param ctx
+     */
+    public void setCtx(Context ctx) {
+        this.ctx = ctx;
 
         mCommon = new Common(ctx);
 
-		//mSpeed = new Speed(ctx);
+        //mSpeed = new Speed(ctx);
 
-		mCommon.setDebug(DEBUG);
-	}
+        mCommon.setDebug(DEBUG);
+    }
 
-	/**
-	 * Method getCommonObject
-	 * @return
-	 */
-	public Common getCommonObject()
-	{
-		return this.mCommon;
-	}
+    /**
+     * Method getCommonObject
+     *
+     * @return
+     */
+    public Common getCommonObject() {
+        return this.mCommon;
+    }
 
-	/**
-	 * Method getToolObject
-	 * @return
-	 */
-	public Tool getToolObject()
-	{
-		return this.mTool;
-	}
+    //----------------------------------------------------------------------------------------------
 
-	/**
-	 * Method getVersion
-	 * @param sTestCase
-	 * @return
-	 */
-	public String getVersion(String sTestCase)
-	{
-		JSONObject jData = new JSONObject();
+    /**
+     * Method getToolObject
+     *
+     * @return
+     */
+    public Tool getToolObject() {
+        return this.mTool;
+    }
 
-		try
-        {
+    //----------------------------------------------------------------------------------------------
+
+    /**
+     * Method getVersion
+     *
+     * @param sTestCase
+     * @return
+     */
+    public String getVersion(String sTestCase) {
+        JSONObject jData = new JSONObject();
+
+        try {
             jData.put("common", com.zafaco.common.BuildConfig.VERSION_NAME);
 
-            switch (sTestCase)
-            {
+            switch (sTestCase) {
                 case "app":
                     //Special Case
                     return BuildConfig.VERSION_NAME;
@@ -189,563 +199,489 @@ public final class WSTool
                     jData.put("speed", com.zafaco.moduleSpeed.BuildConfig.VERSION_NAME);
                     break;
             }
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
         }
-		catch (Exception ex) { mTool.printTrace(ex); }
 
-		return jData.toString();
-	}
+        return jData.toString();
+    }
 
-	//----------------------------------------------------------------------------------------------
+    /**
+     * Method initSpeedParameter
+     */
+    public void initSpeedParameter() {
+        try {
+            JSONObject mMeasurementParameter = new JSONObject();
 
-	/**
-	 * Method initSpeedParameter
-	 */
-	public void initSpeedParameter()
-	{
-		try
-		{
-			JSONObject mMeasurementParameter = new JSONObject();
-
-			mMeasurementParameter.put("cmd", "start");
-			mMeasurementParameter.put("platform", platform);
-			mMeasurementParameter.put("wsTargets", new JSONArray().put(wsTargets));
-			mMeasurementParameter.put("wsTargetsRtt", new JSONArray().put(wsTargetsRtt));
-			mMeasurementParameter.put("wsTLD", wsTLD);
-			mMeasurementParameter.put("wsTargetPort", 80);
-			mMeasurementParameter.put("wsWss", 0);
-			mMeasurementParameter.put("wsAuthToken", "placeholderToken");
-			mMeasurementParameter.put("wsAuthTimestamp", "placeholderTimestamp");
+            mMeasurementParameter.put("cmd", "start");
+            mMeasurementParameter.put("platform", platform);
+            mMeasurementParameter.put("wsTargets", new JSONArray().put(wsTargets));
+            mMeasurementParameter.put("wsTargetsRtt", new JSONArray().put(wsTargetsRtt));
+            mMeasurementParameter.put("wsTLD", wsTLD);
+            mMeasurementParameter.put("wsTargetPort", 80);
+            mMeasurementParameter.put("wsWss", 0);
+            mMeasurementParameter.put("wsAuthToken", "placeholderToken");
+            mMeasurementParameter.put("wsAuthTimestamp", "placeholderTimestamp");
 
             mMeasurementParameter.put("performRttMeasurement", performRttMeasurement);
             mMeasurementParameter.put("performDownloadMeasurement", performDownloadMeasuement);
             mMeasurementParameter.put("performUploadMeasurement", performUploadMeasurement);
 
-			mMeasurementParameter.put("wsParallelStreamsDownload", wsParallelStreamsDownload);
-			mMeasurementParameter.put("wsParallelStreamsUpload", wsParallelStreamsUpload);
+            mMeasurementParameter.put("wsParallelStreamsDownload", wsParallelStreamsDownload);
+            mMeasurementParameter.put("wsParallelStreamsUpload", wsParallelStreamsUpload);
 
-			mMeasurementParameter.put("cookieId", false);
+            mMeasurementParameter.put("cookieId", false);
 
-			//Add to Library
-			Common.addToJSONMTWSMeasurement(mMeasurementParameter);
+            //Add to Library
+            Common.addToJSONMTWSMeasurement(mMeasurementParameter);
 
-			//Add to UI
-			addToJSONUI(mMeasurementParameter);
-		}
-		catch(JSONException ex) { mTool.printTrace(ex); }
-	}
+            //Add to UI
+            addToJSONUI(mMeasurementParameter);
+        } catch (JSONException ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
-	//----------------------------------------------------------------------------------------------
+    /**
+     * Method getObject
+     *
+     * @param sKey
+     * @param nDefault
+     * @return
+     */
+    public Object getObject(String sKey, Object nDefault) {
+        try {
+            return mDataStorage.get(sKey);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
 
-	/**
-	 * Method getObject
-	 * @param sKey
-	 * @param nDefault
-	 * @return
-	 */
-	public Object getObject(String sKey, Object nDefault)
-	{
-		try
-		{
-			return mDataStorage.get(sKey);
-		}
-		catch(Exception ex)
-		{
-			mTool.printTrace(ex);
+            return nDefault;
+        }
+    }
 
-			return nDefault;
-		}
-	}
+    /**
+     * Method getBoolean
+     *
+     * @param sKey
+     * @param nDefault
+     * @return
+     */
+    public boolean getBoolean(String sKey, boolean nDefault) {
+        try {
+            return mDataStorage.getBoolean(sKey);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
 
-	/**
-	 * Method getBoolean
-	 * @param sKey
-	 * @param nDefault
-	 * @return
-	 */
-	public boolean getBoolean(String sKey, boolean nDefault)
-	{
-		try
-		{
-			return mDataStorage.getBoolean(sKey);
-		}
-		catch(Exception ex)
-		{
-			mTool.printTrace(ex);
+            return nDefault;
+        }
+    }
 
-			return nDefault;
-		}
-	}
+    /**
+     * Method getInt
+     *
+     * @param sKey
+     * @param nDefault
+     * @return
+     */
+    public int getInt(String sKey, int nDefault) {
+        try {
+            return mDataStorage.getInt(sKey);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
 
-	/**
-	 * Method getInt
-	 * @param sKey
-	 * @param nDefault
-	 * @return
-	 */
-	public int getInt(String sKey, int nDefault)
-	{
-		try
-		{
-			return mDataStorage.getInt(sKey);
-		}
-		catch(Exception ex)
-		{
-			mTool.printTrace(ex);
+            return nDefault;
+        }
+    }
 
-			return nDefault;
-		}
-	}
+    //----------------------------------------------------------------------------------------------
 
-	/**
-	 * Method getDouble
-	 * @param sKey
-	 * @param nDefault
-	 * @return
-	 */
-	public double getDouble(String sKey, double nDefault)
-	{
-		try
-		{
-			return mDataStorage.getDouble(sKey);
-		}
-		catch(Exception ex)
-		{
-			mTool.printTrace(ex);
+    /**
+     * Method getDouble
+     *
+     * @param sKey
+     * @param nDefault
+     * @return
+     */
+    public double getDouble(String sKey, double nDefault) {
+        try {
+            return mDataStorage.getDouble(sKey);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
 
-			return nDefault;
-		}
-	}
+            return nDefault;
+        }
+    }
 
-	/**
-	 * Method getString
-	 * @param sKey
-	 * @param nDefault
-	 * @return
-	 */
-	public String getString(String sKey, String nDefault)
-	{
-		try
-		{
-			return mDataStorage.getString(sKey);
-		}
-		catch(Exception ex)
-		{
-			mTool.printTrace(ex);
+    /**
+     * Method getString
+     *
+     * @param sKey
+     * @param nDefault
+     * @return
+     */
+    public String getString(String sKey, String nDefault) {
+        try {
+            return mDataStorage.getString(sKey);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
 
-			return nDefault;
-		}
-	}
+            return nDefault;
+        }
+    }
 
-	//----------------------------------------------------------------------------------------------
+    /**
+     * Method setObject
+     *
+     * @param sKey
+     * @param nDefault
+     */
+    public void setObject(String sKey, Object nDefault) {
+        try {
+            mDataStorage.put(sKey, nDefault);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
-	/**
-	 * Method setObject
-	 * @param sKey
-	 * @param nDefault
-	 */
-	public void setObject(String sKey, Object nDefault)
-	{
-		try
-		{
-			mDataStorage.put(sKey,nDefault);
-		}
-		catch(Exception ex) { mTool.printTrace(ex); }
-	}
+    /**
+     * Method setBoolean
+     *
+     * @param sKey
+     * @param sValue
+     */
+    public void setBoolean(String sKey, boolean sValue) {
+        try {
+            mDataStorage.put(sKey, sValue);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
-	/**
-	 * Method setBoolean
-	 * @param sKey
-	 * @param sValue
-	 */
-	public void setBoolean(String sKey, boolean sValue)
-	{
-		try
-		{
-			mDataStorage.put(sKey, sValue);
-		}
-		catch(Exception ex) { mTool.printTrace(ex); }
-	}
+    /**
+     * Method setInt
+     *
+     * @param sKey
+     * @param sValue
+     */
+    public void setInt(String sKey, int sValue) {
+        try {
+            mDataStorage.put(sKey, sValue);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
-	/**
-	 * Method setInt
-	 * @param sKey
-	 * @param sValue
-	 */
-	public void setInt(String sKey, int sValue)
-	{
-		try
-		{
-			mDataStorage.put(sKey, sValue);
-		}
-		catch(Exception ex) { mTool.printTrace(ex); }
-	}
+    //----------------------------------------------------------------------------------------------
 
-	/**
-	 * Method setDouble
-	 * @param sKey
-	 * @param sValue
-	 */
-	public void setDouble(String sKey, double sValue)
-	{
-		try
-		{
-			mDataStorage.put(sKey, sValue);
-		}
-		catch(Exception ex) { mTool.printTrace(ex); }
-	}
+    /**
+     * Method setDouble
+     *
+     * @param sKey
+     * @param sValue
+     */
+    public void setDouble(String sKey, double sValue) {
+        try {
+            mDataStorage.put(sKey, sValue);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
-	/**
-	 * Method setString
-	 * @param sKey
-	 * @param sValue
-	 */
-	public void setString(String sKey, String sValue)
-	{
-		try
-		{
-			mDataStorage.put(sKey,sValue);
-		}
-		catch(Exception ex) { mTool.printTrace(ex); }
-	}
+    /**
+     * Method setString
+     *
+     * @param sKey
+     * @param sValue
+     */
+    public void setString(String sKey, String sValue) {
+        try {
+            mDataStorage.put(sKey, sValue);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
-	//----------------------------------------------------------------------------------------------
+    /**
+     * Method getObjectUI
+     *
+     * @param sKey
+     * @param nDefault
+     * @return
+     */
+    public Object getObjectUI(String sKey, Object nDefault) {
+        try {
+            return mDataStorageUI.get(sKey);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
 
-	/**
-	 * Method getObjectUI
-	 * @param sKey
-	 * @param nDefault
-	 * @return
-	 */
-	public Object getObjectUI(String sKey, Object nDefault)
-	{
-		try
-		{
-			return mDataStorageUI.get(sKey);
-		}
-		catch(Exception ex)
-		{
-			mTool.printTrace(ex);
+            return nDefault;
+        }
+    }
 
-			return nDefault;
-		}
-	}
+    /**
+     * Method getBooleanUI
+     *
+     * @param sKey
+     * @param nDefault
+     * @return
+     */
+    public boolean getBooleanUI(String sKey, boolean nDefault) {
+        try {
+            return mDataStorageUI.getBoolean(sKey);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
 
-	/**
-	 * Method getBooleanUI
-	 * @param sKey
-	 * @param nDefault
-	 * @return
-	 */
-	public boolean getBooleanUI(String sKey, boolean nDefault)
-	{
-		try
-		{
-			return mDataStorageUI.getBoolean(sKey);
-		}
-		catch(Exception ex)
-		{
-			mTool.printTrace(ex);
+            return nDefault;
+        }
+    }
 
-			return nDefault;
-		}
-	}
+    /**
+     * Method getIntUI
+     *
+     * @param sKey
+     * @param nDefault
+     * @return
+     */
+    public int getIntUI(String sKey, int nDefault) {
+        try {
+            return mDataStorageUI.getInt(sKey);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
 
-	/**
-	 * Method getIntUI
-	 * @param sKey
-	 * @param nDefault
-	 * @return
-	 */
-	public int getIntUI(String sKey, int nDefault)
-	{
-		try
-		{
-			return mDataStorageUI.getInt(sKey);
-		}
-		catch(Exception ex)
-		{
-			mTool.printTrace(ex);
+            return nDefault;
+        }
+    }
 
-			return nDefault;
-		}
-	}
+    //----------------------------------------------------------------------------------------------
 
-	/**
-	 * Method getDoubleUI
-	 * @param sKey
-	 * @param nDefault
-	 * @return
-	 */
-	public double getDoubleUI(String sKey, double nDefault)
-	{
-		try
-		{
-			return mDataStorageUI.getDouble(sKey);
-		}
-		catch(Exception ex)
-		{
-			mTool.printTrace(ex);
+    /**
+     * Method getDoubleUI
+     *
+     * @param sKey
+     * @param nDefault
+     * @return
+     */
+    public double getDoubleUI(String sKey, double nDefault) {
+        try {
+            return mDataStorageUI.getDouble(sKey);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
 
-			return nDefault;
-		}
-	}
+            return nDefault;
+        }
+    }
 
-	/**
-	 * Method getStringUI
-	 * @param sKey
-	 * @param nDefault
-	 * @return
-	 */
-	public String getStringUI(String sKey, String nDefault)
-	{
-		try
-		{
-			return mDataStorageUI.getString(sKey);
-		}
-		catch(Exception ex)
-		{
-			mTool.printTrace(ex);
+    /**
+     * Method getStringUI
+     *
+     * @param sKey
+     * @param nDefault
+     * @return
+     */
+    public String getStringUI(String sKey, String nDefault) {
+        try {
+            return mDataStorageUI.getString(sKey);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
 
-			return nDefault;
-		}
-	}
+            return nDefault;
+        }
+    }
 
-	//----------------------------------------------------------------------------------------------
+    /**
+     * Method setObjectUI
+     *
+     * @param sKey
+     * @param nDefault
+     */
+    public void setObjectUI(String sKey, Object nDefault) {
+        try {
+            mDataStorageUI.put(sKey, nDefault);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
-	/**
-	 * Method setObjectUI
-	 * @param sKey
-	 * @param nDefault
-	 */
-	public void setObjectUI(String sKey, Object nDefault)
-	{
-		try
-		{
-			mDataStorageUI.put(sKey,nDefault);
-		}
-		catch(Exception ex) { mTool.printTrace(ex); }
-	}
+    /**
+     * Method setBooleanUI
+     *
+     * @param sKey
+     * @param sValue
+     */
+    public void setBooleanUI(String sKey, boolean sValue) {
+        try {
+            mDataStorageUI.put(sKey, sValue);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
-	/**
-	 * Method setBooleanUI
-	 * @param sKey
-	 * @param sValue
-	 */
-	public void setBooleanUI(String sKey, boolean sValue)
-	{
-		try
-		{
-			mDataStorageUI.put(sKey, sValue);
-		}
-		catch(Exception ex) { mTool.printTrace(ex); }
-	}
+    /**
+     * Method setIntUI
+     *
+     * @param sKey
+     * @param sValue
+     */
+    public void setIntUI(String sKey, int sValue) {
+        try {
+            mDataStorageUI.put(sKey, sValue);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
-	/**
-	 * Method setIntUI
-	 * @param sKey
-	 * @param sValue
-	 */
-	public void setIntUI(String sKey, int sValue)
-	{
-		try
-		{
-			mDataStorageUI.put(sKey, sValue);
-		}
-		catch(Exception ex) { mTool.printTrace(ex); }
-	}
+    //----------------------------------------------------------------------------------------------
 
-	/**
-	 * Method setDoubleUI
-	 * @param sKey
-	 * @param sValue
-	 */
-	public void setDoubleUI(String sKey, double sValue)
-	{
-		try
-		{
-			mDataStorageUI.put(sKey, sValue);
-		}
-		catch(Exception ex) { mTool.printTrace(ex); }
-	}
+    /**
+     * Method setDoubleUI
+     *
+     * @param sKey
+     * @param sValue
+     */
+    public void setDoubleUI(String sKey, double sValue) {
+        try {
+            mDataStorageUI.put(sKey, sValue);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
-	/**
-	 * Method setStringUI
-	 * @param sKey
-	 * @param sValue
-	 */
-	public void setStringUI(String sKey, String sValue)
-	{
-		try
-		{
-			mDataStorageUI.put(sKey,sValue);
-		}
-		catch(Exception ex) { mTool.printTrace(ex); }
-	}
+    /**
+     * Method setStringUI
+     *
+     * @param sKey
+     * @param sValue
+     */
+    public void setStringUI(String sKey, String sValue) {
+        try {
+            mDataStorageUI.put(sKey, sValue);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+    }
 
-	//----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
-	/**
-	 * Method addToJSONUI
-	 * @param object
-	 */
-	public void addToJSONUI(JSONObject object)
-	{
-		try
-		{
-			for (Iterator<String> iter = object.keys(); iter.hasNext(); )
-			{
-				String key = iter.next();
-				mDataStorageUI.put(key,object.getString(key));
-			}
-		}
-		catch(Exception ex) {}
-	}
+    /**
+     * Method addToJSONUI
+     *
+     * @param object
+     */
+    public void addToJSONUI(JSONObject object) {
+        try {
+            for (Iterator<String> iter = object.keys(); iter.hasNext(); ) {
+                String key = iter.next();
+                mDataStorageUI.put(key, object.getString(key));
+            }
+        } catch (Exception ex) {
+        }
+    }
 
-	/**
-	 * Method getJSONUI
-	 * @return
-	 */
-	public JSONObject getJSONUI()
-	{
-		return mDataStorageUI;
-	}
+    /**
+     * Method getJSONUI
+     *
+     * @return
+     */
+    public JSONObject getJSONUI() {
+        return mDataStorageUI;
+    }
 
-	//----------------------------------------------------------------------------------------------
+    /**
+     * Method setIPAuto
+     */
+    public void setIPAuto() {
+        if (wsTargets.contains("ipv")) {
+            wsTargets = wsTargets.substring(0, wsTargets.lastIndexOf("-"));
+        }
+        if (wsTargetsRtt.contains("ipv")) {
+            wsTargetsRtt = wsTargetsRtt.substring(0, wsTargetsRtt.lastIndexOf("-"));
+        }
+    }
 
-	/**
-	 * Method addToJSONMeasurement
-	 * @param object
-	 */
-	public static void addToJSONMeasurement(JSONObject object)
-	{
-		try
-		{
-			for (Iterator<String> iter = object.keys(); iter.hasNext(); )
-			{
-				String key = iter.next();
-				mDataStorage.put(key,object.getString(key));
-			}
-		}
-		catch(Exception ex) {}
-	}
+    /**
+     * Method setIPV4
+     */
+    public void setIPV4() {
+        setIPAuto();
 
-	/**
-	 * Method getJSONMeasurement
-	 * @return
-	 */
-	public static JSONObject getJSONMeasurement()
-	{
-		return mDataStorage;
-	}
+        wsTargets = wsTargets + "-ipv4";
+        wsTargetsRtt = wsTargetsRtt + "-ipv4";
+    }
 
-	/**
-	 * Method setIPAuto
-	 */
-	public void setIPAuto()
-	{
-		if(wsTargets.contains("ipv"))
-		{
-			wsTargets = wsTargets.substring(0, wsTargets.lastIndexOf("-"));
-		}
-		if(wsTargetsRtt.contains("ipv"))
-		{
-			wsTargetsRtt = wsTargetsRtt.substring(0, wsTargetsRtt.lastIndexOf("-"));
-		}
-	}
+    /**
+     * Method setIPV6
+     */
+    public void setIPV6() {
+        setIPAuto();
 
-	/**
-	 * Method setIPV4
-	 */
-	public void setIPV4()
-	{
-		setIPAuto();
+        wsTargets = wsTargets + "-ipv6";
+        wsTargetsRtt = wsTargetsRtt + "-ipv6";
+    }
 
-		wsTargets = wsTargets+"-ipv4";
-		wsTargetsRtt = wsTargetsRtt+"-ipv4";
-	}
+    /**
+     * Method setUploadProfileVeryHigh
+     */
+    public void setSingleStreamOff() {
+        wsParallelStreamsDownload = 4;
 
-	/**
-	 * Method setIPV6
-	 */
-	public void setIPV6()
-	{
-		setIPAuto();
+        wsParallelStreamsUpload = 4;
+    }
 
-		wsTargets = wsTargets+"-ipv6";
-		wsTargetsRtt = wsTargetsRtt+"-ipv6";
-	}
+    /**
+     * Method setUploadProfileVeryHigh
+     */
+    public void setSingleStreamOn() {
+        wsParallelStreamsDownload = 1;
+        wsParallelStreamsUpload = 1;
 
-	/**
-	 * Method setUploadProfileVeryHigh
-	 */
-	public void setSingleStreamOff()
-	{
-		wsParallelStreamsDownload = 4;
+    }
 
-		wsParallelStreamsUpload = 4;
-	}
+    /**
+     * Method setUploadProfileVeryHigh
+     */
+    public void setUseEncryption(boolean bUseEncryption) {
+        wsUseEncryption = bUseEncryption;
 
-	/**
-	 * Method setUploadProfileVeryHigh
-	 */
-	public void setSingleStreamOn()
-	{
-		wsParallelStreamsDownload = 1;
-		wsParallelStreamsUpload = 1;
+    }
+    //TestCases ------------------------------------------------------------------------------------
 
-	}
+    /**
+     * Method setTestcaseAll
+     */
+    public void setTestcaseAll() {
+        performRttMeasurement = true;
+        performDownloadMeasuement = true;
+        performUploadMeasurement = true;
+    }
 
-	/**
-	 * Method setUploadProfileVeryHigh
-	 */
-	public void setUseEncryption(boolean bUseEncryption )
-	{
-		wsUseEncryption = bUseEncryption;
+    /**
+     * Method setTestcaseAll
+     */
+    public void setTestcaseRTT() {
+        performRttMeasurement = true;
+        performDownloadMeasuement = false;
+        performUploadMeasurement = false;
+    }
 
-	}
-	//TestCases ------------------------------------------------------------------------------------
+    /**
+     * Method setTestcaseAll
+     */
+    public void setTestcaseDownload() {
+        performRttMeasurement = false;
+        performDownloadMeasuement = true;
+        performUploadMeasurement = false;
+    }
 
-	/**
-	 * Method setTestcaseAll
-	 */
-	public void setTestcaseAll()
-	{
-		performRttMeasurement             = true;
-		performDownloadMeasuement         = true;
-		performUploadMeasurement          = true;
-	}
+    /**
+     * Method setTestcaseAll
+     */
+    public void setTestcaseUpload() {
+        performRttMeasurement = false;
+        performDownloadMeasuement = false;
+        performUploadMeasurement = true;
+    }
 
-	/**
-	 * Method setTestcaseAll
-	 */
-	public void setTestcaseRTT()
-	{
-		performRttMeasurement             = true;
-		performDownloadMeasuement         = false;
-		performUploadMeasurement          = false;
-	}
-
-	/**
-	 * Method setTestcaseAll
-	 */
-	public void setTestcaseDownload()
-	{
-		performRttMeasurement             = false;
-		performDownloadMeasuement         = true;
-		performUploadMeasurement          = false;
-	}
-
-	/**
-	 * Method setTestcaseAll
-	 */
-	public void setTestcaseUpload()
-	{
-		performRttMeasurement             = false;
-		performDownloadMeasuement         = false;
-		performUploadMeasurement          = true;
-	}
-
-	//----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
 //	/**
 //	 * Method saveData
@@ -778,45 +714,43 @@ public final class WSTool
 //        catch (Exception ex) { mTool.printTrace(ex); }
 //	}
 
-	/**
-	 * Method getAppVersion
-	 */
-	public void getAppVersion()
-	{
-		appPref = PreferenceManager.getDefaultSharedPreferences(ctx);
-
-		//--------------------------------------
-
-		Long user = appPref.getLong("user", 0);
-		if(user == 0)
-		{
-			SharedPreferences.Editor editor = appPref.edit();
-			Long uts = System.currentTimeMillis();
-			editor.putLong("user", uts);
-			editor.apply();
-		}
-
-		setInt("measurement_id",appPref.getInt("meas", 1));
+    /**
+     * Method getAppVersion
+     */
+    public void getAppVersion() {
+        appPref = PreferenceManager.getDefaultSharedPreferences(ctx);
 
         //--------------------------------------
 
-		String id = appPref.getString("client_installation_id","-");
-		if( id.equals("-"))
-		{
-			SharedPreferences.Editor editor = appPref.edit();
+        Long user = appPref.getLong("user", 0);
+        if (user == 0) {
+            SharedPreferences.Editor editor = appPref.edit();
+            Long uts = System.currentTimeMillis();
+            editor.putLong("user", uts);
+            editor.apply();
+        }
 
-			String cii = mTool.generateInstallationId();
-			editor.putString("client_installation_id", cii);
-			editor.apply();
-		}
+        setInt("measurement_id", appPref.getInt("meas", 1));
 
-		try {
-			JSONObject jData = new JSONObject();
-			jData.put("client_installation_id", appPref.getString("client_installation_id","-"));
+        //--------------------------------------
 
-			Common.addToJSONMTWSMeasurementAdditional(jData);
-		}
-		catch (Exception ex) { mTool.printTrace(ex); }
+        String id = appPref.getString("client_installation_id", "-");
+        if (id.equals("-")) {
+            SharedPreferences.Editor editor = appPref.edit();
 
-	}
+            String cii = mTool.generateInstallationId();
+            editor.putString("client_installation_id", cii);
+            editor.apply();
+        }
+
+        try {
+            JSONObject jData = new JSONObject();
+            jData.put("client_installation_id", appPref.getString("client_installation_id", "-"));
+
+            Common.addToJSONMTWSMeasurementAdditional(jData);
+        } catch (Exception ex) {
+            mTool.printTrace(ex);
+        }
+
+    }
 }

@@ -28,9 +28,8 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public abstract class Gatherer<T> {
 
-    InformationProvider informationProvider;
-
     final AtomicReference<T> currentValue = new AtomicReference<>();
+    InformationProvider informationProvider;
 
     public InformationProvider getInformationProvider() {
         return informationProvider;

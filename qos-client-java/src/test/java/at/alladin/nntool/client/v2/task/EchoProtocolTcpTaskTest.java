@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -75,24 +75,25 @@ public class EchoProtocolTcpTaskTest {
     @Test
     public void testCorrectTcpEchoResponse(@Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                //return an outputstream we control
+                socket.getOutputStream();
+                result = testOutputStream;
 
-            //return an outputstream we control
-            socket.getOutputStream();
-            result = testOutputStream;
+                //return the sent message
+                socket.getInputStream();
+                result = new ByteArrayInputStream(CORRECT_MESSAGE.getBytes());
 
-            //return the sent message
-            socket.getInputStream();
-            result = new ByteArrayInputStream(CORRECT_MESSAGE.getBytes());
-
-        }};
+            }
+        };
 
         final EchoProtocolTcpTask task = new EchoProtocolTcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
 
         // the server receives the message with a \n at the end, thus the comparison needs be made against a message w/appended \n
         assertEquals("Payload sent to server != " + CORRECT_MESSAGE, CORRECT_MESSAGE + "\n", testOutputStream.toString());
-        assertEquals("Result did not return OK","OK", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
+        assertEquals("Result did not return OK", "OK", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
         assertEquals("Wrong echo service host in result", ECHO_SERVICE_HOST, res.getResultMap().get("echo_protocol_objective_host"));
         assertEquals("Wrong protocol type in result", AbstractEchoProtocolTask.PROTOCOL_TCP, res.getResultMap().get(AbstractEchoProtocolTask.RESULT_PROTOCOL));
         assertEquals("Payload stored in result !=" + CORRECT_MESSAGE, CORRECT_MESSAGE, res.getResultMap().get(AbstractEchoProtocolTask.RESULT));
@@ -100,75 +101,78 @@ public class EchoProtocolTcpTaskTest {
     }
 
     @Test
-    public void testWrongTcpEchoResponse (@Mocked final Socket socket) throws Exception {
+    public void testWrongTcpEchoResponse(@Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                //return an outputstream we control
+                socket.getOutputStream();
+                result = testOutputStream;
 
-            //return an outputstream we control
-            socket.getOutputStream();
-            result = testOutputStream;
+                //return the sent message
+                socket.getInputStream();
+                result = new ByteArrayInputStream(WRONG_MESSAGE.getBytes());
 
-            //return the sent message
-            socket.getInputStream();
-            result = new ByteArrayInputStream(WRONG_MESSAGE.getBytes());
-
-        }};
+            }
+        };
 
         final EchoProtocolTcpTask task = new EchoProtocolTcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
 
         // the server receives the message with a \n at the end, thus the comparison needs be made against a message w/appended \n
         assertEquals("Payload sent to server != " + CORRECT_MESSAGE, CORRECT_MESSAGE + "\n", testOutputStream.toString());
-        assertEquals("Result did not return ERROR","ERROR", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
+        assertEquals("Result did not return ERROR", "ERROR", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
         assertEquals("Wrong echo service host in result", ECHO_SERVICE_HOST, res.getResultMap().get("echo_protocol_objective_host"));
         assertEquals("Wrong protocol type in result", AbstractEchoProtocolTask.PROTOCOL_TCP, res.getResultMap().get(AbstractEchoProtocolTask.RESULT_PROTOCOL));
         assertEquals("Payload stored in result !=" + WRONG_MESSAGE, WRONG_MESSAGE, res.getResultMap().get(AbstractEchoProtocolTask.RESULT));
     }
 
     @Test
-    public void testCorrectTcpEchoResponseWithAdditionalWhiteSpace (@Mocked final Socket socket) throws Exception {
+    public void testCorrectTcpEchoResponseWithAdditionalWhiteSpace(@Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                //return an outputstream we control
+                socket.getOutputStream();
+                result = testOutputStream;
 
-            //return an outputstream we control
-            socket.getOutputStream();
-            result = testOutputStream;
+                //return the sent message
+                socket.getInputStream();
+                result = new ByteArrayInputStream(WRONG_MESSAGE_ADDITIONAL_WHITESPACE.getBytes());
 
-            //return the sent message
-            socket.getInputStream();
-            result = new ByteArrayInputStream(WRONG_MESSAGE_ADDITIONAL_WHITESPACE.getBytes());
-
-        }};
+            }
+        };
 
         final EchoProtocolTcpTask task = new EchoProtocolTcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
 
         // the server receives the message with a \n at the end, thus the comparison needs be made against a message w/appended \n
         assertEquals("Payload sent to server != " + CORRECT_MESSAGE, CORRECT_MESSAGE + "\n", testOutputStream.toString());
-        assertEquals("Result did not return ERROR","ERROR", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
+        assertEquals("Result did not return ERROR", "ERROR", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
         assertEquals("Wrong echo service host in result", ECHO_SERVICE_HOST, res.getResultMap().get("echo_protocol_objective_host"));
         assertEquals("Wrong protocol type in result", AbstractEchoProtocolTask.PROTOCOL_TCP, res.getResultMap().get(AbstractEchoProtocolTask.RESULT_PROTOCOL));
         assertEquals("Payload stored in result !=" + WRONG_MESSAGE_ADDITIONAL_WHITESPACE, WRONG_MESSAGE_ADDITIONAL_WHITESPACE, res.getResultMap().get(AbstractEchoProtocolTask.RESULT));
     }
 
     @Test
-    public void testTcpEchoResponseWithSocketError (@Mocked final Socket socket) throws Exception {
+    public void testTcpEchoResponseWithSocketError(@Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                //return a custom exception (failed connection)
+                socket.getOutputStream();
+                result = new SocketException("Forcefully thrown exception");
 
-            //return a custom exception (failed connection)
-            socket.getOutputStream();
-            result = new SocketException("Forcefully thrown exception");
+                //ignore
+                socket.connect((SocketAddress) any, anyInt);
 
-            //ignore
-            socket.connect((SocketAddress) any, anyInt);
-
-        }};
+            }
+        };
 
         final EchoProtocolTcpTask task = new EchoProtocolTcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
 
-        assertEquals("Result did not return ERROR","ERROR", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
+        assertEquals("Result did not return ERROR", "ERROR", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
         assertEquals("Wrong echo service host in result", ECHO_SERVICE_HOST, res.getResultMap().get("echo_protocol_objective_host"));
         assertEquals("Wrong protocol type in result", AbstractEchoProtocolTask.PROTOCOL_TCP, res.getResultMap().get(AbstractEchoProtocolTask.RESULT_PROTOCOL));
     }
@@ -176,21 +180,22 @@ public class EchoProtocolTcpTaskTest {
     @Test
     public void testTcpEchoResponseWithSocketTimeoutError(@Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                //return an outputstream we control
+                socket.getOutputStream();
+                result = testOutputStream;
 
-            //return an outputstream we control
-            socket.getOutputStream();
-            result = testOutputStream;
+                socket.getInputStream();
+                result = new SocketTimeoutException("Forcefully thrown exception");
 
-            socket.getInputStream();
-            result = new SocketTimeoutException("Forcefully thrown exception");
-
-        }};
+            }
+        };
 
         final EchoProtocolTcpTask task = new EchoProtocolTcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
 
-        assertEquals("Result did not return TIMEOUT","TIMEOUT", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
+        assertEquals("Result did not return TIMEOUT", "TIMEOUT", res.getResultMap().get(AbstractEchoProtocolTask.RESULT_STATUS));
         assertEquals("Wrong echo service host in result", ECHO_SERVICE_HOST, res.getResultMap().get("echo_protocol_objective_host"));
         assertEquals("Wrong protocol type in result", AbstractEchoProtocolTask.PROTOCOL_TCP, res.getResultMap().get(AbstractEchoProtocolTask.RESULT_PROTOCOL));
     }

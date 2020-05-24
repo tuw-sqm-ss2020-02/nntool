@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2017-2019 alladin-IT GmbH
  * Copyright 2016 SPECURE GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,72 +28,64 @@ import at.alladin.nntool.qos.testserver.entity.TestCandidate;
 import at.alladin.nntool.qos.testserver.udp.UdpTestCandidate;
 
 public abstract class AbstractUdpServer<T extends Closeable> implements Runnable, Observable {
-	
-	protected final ConcurrentHashMap<String, UdpTestCandidate> incomingMap = new ConcurrentHashMap<>();
-	
-	protected final Class<?> clazz;
-	
-	public AbstractUdpServer(Class<?> clazz) {
-		this.clazz = clazz;
-	}
-	
-	public Class<?> getClazz() {
-		return clazz;
-	}
 
-	/**
-	 * 
-	 * @param uuid
-	 */
-	public synchronized UdpTestCandidate getClientData(String uuid) {
-		return incomingMap.get(uuid);
-	}
-	
-	/**
-	 * 
-	 * @param uuid
-	 * @return
-	 */
-	public synchronized TestCandidate pollClientData(String uuid) {
-		return incomingMap.remove(uuid);
-	}
+    protected final ConcurrentHashMap<String, UdpTestCandidate> incomingMap = new ConcurrentHashMap<>();
 
-	/**
-	 * 
-	 * @return
-	 */
-	public synchronized ConcurrentHashMap<String, UdpTestCandidate> getIncomingMap() {
-		return incomingMap;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public abstract T getSocket();
-	
-	/**
-	 * 
-	 * @param dp
-	 * @throws IOException 
-	 */
-	public abstract void send(DatagramPacket dp) throws IOException;
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public abstract boolean getIsRunning();
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public abstract InetAddress getAddress();
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public abstract int getLocalPort();	
+    protected final Class<?> clazz;
+
+    public AbstractUdpServer(Class<?> clazz) {
+        this.clazz = clazz;
+    }
+
+    public Class<?> getClazz() {
+        return clazz;
+    }
+
+    /**
+     * @param uuid
+     */
+    public synchronized UdpTestCandidate getClientData(String uuid) {
+        return incomingMap.get(uuid);
+    }
+
+    /**
+     * @param uuid
+     * @return
+     */
+    public synchronized TestCandidate pollClientData(String uuid) {
+        return incomingMap.remove(uuid);
+    }
+
+    /**
+     * @return
+     */
+    public synchronized ConcurrentHashMap<String, UdpTestCandidate> getIncomingMap() {
+        return incomingMap;
+    }
+
+    /**
+     * @return
+     */
+    public abstract T getSocket();
+
+    /**
+     * @param dp
+     * @throws IOException
+     */
+    public abstract void send(DatagramPacket dp) throws IOException;
+
+    /**
+     * @return
+     */
+    public abstract boolean getIsRunning();
+
+    /**
+     * @return
+     */
+    public abstract InetAddress getAddress();
+
+    /**
+     * @return
+     */
+    public abstract int getLocalPort();
 }

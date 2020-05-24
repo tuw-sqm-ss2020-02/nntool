@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,49 +24,49 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Contains all relevant network information of a single point in time (including computed values).
- * @author lb@alladin.at
  *
+ * @author lb@alladin.at
  */
 @JsonClassDescription("Contains all relevant network information of a single point in time (including computed values).")
 public class ComputedNetworkPointInTime extends NetworkPointInTime {
-	
-	/**
-	 * @see NatTypeInfo
-	 */
-	@JsonPropertyDescription("Contains network address translation related information.")
-	@Expose
-	@SerializedName("nat_type_info")
-	@JsonProperty("nat_type_info")
-	NatTypeInfo natTypeInfo;
-	
-	/**
-	 * The computed frequency band of the signal array.
-	 */
-	@JsonPropertyDescription("The computed frequency band of the signal array.")
-	@Expose
-	@SerializedName("frequency")
-	@JsonProperty("frequency")
-	Integer frequency;
 
-	public NatTypeInfo getNatTypeInfo() {
-		return natTypeInfo;
-	}
+    /**
+     * @see NatTypeInfo
+     */
+    @JsonPropertyDescription("Contains network address translation related information.")
+    @Expose
+    @SerializedName("nat_type_info")
+    @JsonProperty("nat_type_info")
+    private NatTypeInfo natTypeInfo;
 
-	public void setNatTypeInfo(NatTypeInfo natTypeInfo) {
-		this.natTypeInfo = natTypeInfo;
-	}
+    /**
+     * The computed frequency band of the signal array.
+     */
+    @JsonPropertyDescription("The computed frequency band of the signal array.")
+    @Expose
+    @SerializedName("frequency")
+    @JsonProperty("frequency")
+    private Integer frequency;
 
-	public Integer getFrequency() {
-		return frequency;
-	}
+    public NatTypeInfo getNatTypeInfo() {
+        return natTypeInfo;
+    }
 
-	public void setFrequency(Integer frequency) {
-		this.frequency = frequency;
-	}
+    public void setNatTypeInfo(NatTypeInfo natTypeInfo) {
+        this.natTypeInfo = natTypeInfo;
+    }
 
-	@Override
-	public String toString() {
-		return "ComputedNetworkPointInTime [natTypeInfo=" + natTypeInfo + ", frequency=" + frequency + "]";
-	}
+    public Integer getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(Integer frequency) {
+        this.frequency = frequency;
+    }
+
+    @Override
+    public String toString() {
+        return "ComputedNetworkPointInTime [natTypeInfo=" + natTypeInfo + ", frequency=" + frequency + "]";
+    }
 
 }

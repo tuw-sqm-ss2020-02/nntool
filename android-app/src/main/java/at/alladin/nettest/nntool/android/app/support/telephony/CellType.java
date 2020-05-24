@@ -36,10 +36,6 @@ public enum CellType {
         this.technologyType = technologyType;
     }
 
-    public TechnologyType getTechnologyType() {
-        return technologyType;
-    }
-
     public static CellType fromTelephonyNetworkTypeId(final int typeId) {
         final NetworkFamilyEnum networkFamily = NetworkFamilyEnum.getFamilyByNetworkId(typeId);
         if (networkFamily != null && networkFamily.getCellType() != null) {
@@ -49,32 +45,36 @@ public enum CellType {
         return null;
     }
 
+    public TechnologyType getTechnologyType() {
+        return technologyType;
+    }
+
     private enum NetworkFamilyEnum {
         LAN("LAN"),
         ETHERNET("ETHERNET"),
         BLUETOOTH("BLUETOOTH"),
         WLAN("WLAN", "WLAN", CellType.WLAN),
-        _1xRTT("1xRTT","2G"),
+        _1xRTT("1xRTT", "2G"),
         _2G3G("2G/3G"),
         _3G4G("3G/4G"),
         _2G4G("2G/4G"),
         _2G3G4G("2G/3G/4G"),
         CLI("CLI"),
-        CELLULAR_ANY("MOBILE","CELLULAR_ANY", MOBILE_ANY),
-        GSM("GSM","2G", MOBILE_GSM),
-        EDGE("EDGE","2G", MOBILE_GSM),
-        UMTS("UMTS","3G", MOBILE_WCDMA),
-        CDMA("CDMA","2G", MOBILE_CDMA),
-        EVDO_0("EVDO_0","2G", MOBILE_CDMA),
-        EVDO_A("EVDO_A","2G", MOBILE_CDMA),
-        HSDPA("HSDPA","3G", MOBILE_WCDMA),
-        HSUPA("HSUPA","3G", MOBILE_WCDMA),
-        HSPA("HSPA","3G", MOBILE_WCDMA),
-        IDEN("IDEN","2G", MOBILE_GSM),
-        EVDO_B("EVDO_B","2G", MOBILE_CDMA),
-        LTE("LTE","4G", MOBILE_LTE),
-        EHRPD("EHRPD","2G", MOBILE_CDMA),
-        HSPA_PLUS("HSPA+","3G", MOBILE_WCDMA),
+        CELLULAR_ANY("MOBILE", "CELLULAR_ANY", MOBILE_ANY),
+        GSM("GSM", "2G", MOBILE_GSM),
+        EDGE("EDGE", "2G", MOBILE_GSM),
+        UMTS("UMTS", "3G", MOBILE_WCDMA),
+        CDMA("CDMA", "2G", MOBILE_CDMA),
+        EVDO_0("EVDO_0", "2G", MOBILE_CDMA),
+        EVDO_A("EVDO_A", "2G", MOBILE_CDMA),
+        HSDPA("HSDPA", "3G", MOBILE_WCDMA),
+        HSUPA("HSUPA", "3G", MOBILE_WCDMA),
+        HSPA("HSPA", "3G", MOBILE_WCDMA),
+        IDEN("IDEN", "2G", MOBILE_GSM),
+        EVDO_B("EVDO_B", "2G", MOBILE_CDMA),
+        LTE("LTE", "4G", MOBILE_LTE),
+        EHRPD("EHRPD", "2G", MOBILE_CDMA),
+        HSPA_PLUS("HSPA+", "3G", MOBILE_WCDMA),
         UNKNOWN("UNKNOWN");
 
         protected final String networkId;
@@ -95,18 +95,6 @@ public enum CellType {
             this(family, family);
         }
 
-        public String getNetworkId() {
-            return networkId;
-        }
-
-        public String getNetworkFamily() {
-            return networkFamily;
-        }
-
-        public CellType getCellType() {
-            return cellType;
-        }
-
         public static NetworkFamilyEnum getFamilyByNetworkId(final int networkId) {
             final String networkTypeName = getNetworkTypeName(networkId);
             return getFamilyByNetworkIdName(networkTypeName);
@@ -122,10 +110,8 @@ public enum CellType {
             return UNKNOWN;
         }
 
-        private static String getNetworkTypeName(final int type)
-        {
-            switch (type)
-            {
+        private static String getNetworkTypeName(final int type) {
+            switch (type) {
                 case 1:
                     return "GSM";
                 case 2:
@@ -167,6 +153,18 @@ public enum CellType {
                 default:
                     return "UNKNOWN";
             }
+        }
+
+        public String getNetworkId() {
+            return networkId;
+        }
+
+        public String getNetworkFamily() {
+            return networkFamily;
+        }
+
+        public CellType getCellType() {
+            return cellType;
         }
     }
 

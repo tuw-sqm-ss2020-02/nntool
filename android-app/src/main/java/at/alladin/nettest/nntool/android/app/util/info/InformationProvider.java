@@ -39,7 +39,7 @@ import at.alladin.nettest.nntool.android.app.util.info.system.SystemInfoGatherer
 
 /**
  * @author Lukasz Budryk (lb@alladin.at)
- *
+ * <p>
  * Information Provder is used to manage gatherer (data/information collectors)
  */
 public class InformationProvider {
@@ -76,6 +76,26 @@ public class InformationProvider {
         this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
 
+    public static InformationProvider createDefault(final Context context) {
+        final InformationProvider informationProvider = new InformationProvider(context);
+        informationProvider.registerGatherer(SignalGatherer.class);
+        informationProvider.registerGatherer(NetworkGatherer.class);
+        informationProvider.registerGatherer(GeoLocationGatherer.class);
+        informationProvider.registerRunnableGatherer(TrafficGatherer.class);
+        informationProvider.registerRunnableGatherer(SystemInfoGatherer.class);
+        return informationProvider;
+    }
+
+    public static InformationProvider createMeasurementDefault(final Context context) {
+        final InformationProvider informationProvider = new InformationProvider(context);
+        informationProvider.registerGatherer(SignalGatherer.class);
+        informationProvider.registerGatherer(NetworkGatherer.class);
+        informationProvider.registerGatherer(GeoLocationGatherer.class);
+        //register TrafficGatherer as simple Gatherer as we do not need intermediate results.
+        informationProvider.registerGatherer(TrafficGatherer.class);
+        return informationProvider;
+    }
+
     public void stop() {
         if (isStopped.getAndSet(true)) {
             Log.e(TAG, "Cannot stop InformationProvider that has already been stopped!");
@@ -93,8 +113,7 @@ public class InformationProvider {
 
         try {
             executorService.shutdownNow();
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
@@ -138,8 +157,7 @@ public class InformationProvider {
         if (isRunning.get()) {
             try {
                 gatherer.onStart();
-            }
-            catch (final Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
@@ -170,8 +188,7 @@ public class InformationProvider {
             try {
                 gatherer.onStart();
                 scheduleRunnableGatherer(gatherer, clazz);
-            }
-            catch (final Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
@@ -209,8 +226,7 @@ public class InformationProvider {
             if (scheduledFuture != null) {
                 try {
                     scheduledFuture.cancel(true);
-                }
-                catch (final Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -241,26 +257,6 @@ public class InformationProvider {
 
     public LocationManager getLocationManager() {
         return locationManager;
-    }
-
-    public static InformationProvider createDefault(final Context context) {
-        final InformationProvider informationProvider = new InformationProvider(context);
-        informationProvider.registerGatherer(SignalGatherer.class);
-        informationProvider.registerGatherer(NetworkGatherer.class);
-        informationProvider.registerGatherer(GeoLocationGatherer.class);
-        informationProvider.registerRunnableGatherer(TrafficGatherer.class);
-        informationProvider.registerRunnableGatherer(SystemInfoGatherer.class);
-        return informationProvider;
-    }
-
-    public static InformationProvider createMeasurementDefault(final Context context) {
-        final InformationProvider informationProvider = new InformationProvider(context);
-        informationProvider.registerGatherer(SignalGatherer.class);
-        informationProvider.registerGatherer(NetworkGatherer.class);
-        informationProvider.registerGatherer(GeoLocationGatherer.class);
-        //register TrafficGatherer as simple Gatherer as we do not need intermediate results.
-        informationProvider.registerGatherer(TrafficGatherer.class);
-        return informationProvider;
     }
 
     private class GathererHolder {

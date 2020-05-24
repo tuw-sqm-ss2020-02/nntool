@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2019 alladin-IT GmbH
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,51 +33,47 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * 
  * @author alladin-IT GmbH (bp@alladin.at)
- *
  */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfiguration {
-	
-	/**
-	 * 
-	 * @return
-	 */
-	@Bean
-    public Docket statisticServiceApiV1() { 
+
+    /**
+     * @return
+     */
+    @Bean
+    public Docket statisticServiceApiV1() {
         return new Docket(DocumentationType.SWAGGER_2)
-        		.groupName("statistic-service_v1")
-        		.apiInfo(statisticApiInfoV1())
-        		.select()
-        			.apis(RequestHandlerSelectors.any())
-        			.paths(regex("/api/v1/.*"))
-        			//.paths(regex("/api/v1/[^g]{1}.*"))
-        			.build()
-        		//.pathMapping("/")
-        		//.forCodeGeneration(true)
-        		.useDefaultResponseMessages(false)
-        		//.ignoredParameterTypes(ApiResponse.class)
-    			.directModelSubstitute(LocalDateTime.class, String.class) // ?
-    			.genericModelSubstitutes(ResponseEntity.class);
+                .groupName("statistic-service_v1")
+                .apiInfo(statisticApiInfoV1())
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(regex("/api/v1/.*"))
+                //.paths(regex("/api/v1/[^g]{1}.*"))
+                .build()
+                //.pathMapping("/")
+                //.forCodeGeneration(true)
+                .useDefaultResponseMessages(false)
+                //.ignoredParameterTypes(ApiResponse.class)
+                .directModelSubstitute(LocalDateTime.class, String.class) // ?
+                .genericModelSubstitutes(ResponseEntity.class);
     }
-	
-	/**
-	 * 
-	 * @return
-	 */
-	private ApiInfo statisticApiInfoV1() {
-		return new ApiInfoBuilder()
-			.title("Statistic Service REST API")
-			.description(
-				"Statistic Service REST API documentation of nntool.eu project."
-			)
-			.license("Apache License 2.0")
-			.licenseUrl("https://www.apache.org/licenses/LICENSE-2.0.html")
-			.termsOfServiceUrl("https://nntool.eu")
-			.contact(new Contact("alladin-IT GmbH", "https://alladin.at", null))
-			.version("v1")
-			.build();
-	}
+
+    /**
+     * @return
+     */
+    private ApiInfo statisticApiInfoV1() {
+        return new ApiInfoBuilder()
+                .title("Statistic Service REST API")
+                .description(
+                        "Statistic Service REST API documentation of nntool.eu project."
+                )
+                .license("Apache License 2.0")
+                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0.html")
+                .termsOfServiceUrl("https://nntool.eu")
+                .contact(new Contact("alladin-IT GmbH", "https://alladin.at", null))
+                .version("v1")
+                .build();
+    }
 }

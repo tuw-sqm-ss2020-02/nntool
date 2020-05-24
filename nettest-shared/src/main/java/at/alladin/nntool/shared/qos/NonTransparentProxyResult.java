@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,75 +20,73 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /**
- * 
  * @author lb
- *
  */
 public class NonTransparentProxyResult extends AbstractResult {
-	
-	@JsonProperty("nontransproxy_objective_request")
-	private String request;
 
-	@JsonProperty("nontransproxy_objective_timeout")
-	private Long timeout;
+    @JsonProperty("nontransproxy_objective_request")
+    private String request;
 
-	@JsonProperty("nontransproxy_result")
-	private String result;
+    @JsonProperty("nontransproxy_objective_timeout")
+    private Long timeout;
 
-	@JsonProperty("nontransproxy_result_response")
-	private String response;
+    @JsonProperty("nontransproxy_result")
+    private String result;
 
-	@JsonProperty("nontransproxy_objective_port")
-	private Integer port;
+    @JsonProperty("nontransproxy_result_response")
+    private String response;
 
-	public NonTransparentProxyResult() {
-		
-	}
-	
-	public String getResponse() {
-		return this.response;
-	}
+    @JsonProperty("nontransproxy_objective_port")
+    private Integer port;
 
-	public void setResponse(String response) {
-		this.response = response;
-	}
+    public NonTransparentProxyResult() {
 
-	public Integer getPort() {
-		return this.port;
-	}
+    }
 
-	public void setPort(Integer port) {
-		this.port = port;
-	}
+    public String getResponse() {
+        return this.response;
+    }
 
-	public String getRequest() {
-		return this.request;
-	}
+    public void setResponse(String response) {
+        this.response = response;
+    }
 
-	public void setRequest(String request) {
-		this.request = request;
-	}
+    public Integer getPort() {
+        return this.port;
+    }
 
-	@Override
-	public String toString() {
-		return "NonTransparentProxyResult [request=" + request + ", timeout="
-				+ timeout + ", result=" + result + ", response=" + response
-				+ ", port=" + port + "]";
-	}
+    public void setPort(Integer port) {
+        this.port = port;
+    }
 
-	public Long getTimeout() {
-		return timeout;
-	}
+    public String getRequest() {
+        return this.request;
+    }
 
-	public void setTimeout(Long timeout) {
-		this.timeout = timeout;
-	}
+    public void setRequest(String request) {
+        this.request = request;
+    }
 
-	public String getResult() {
-		return result;
-	}
+    @Override
+    public String toString() {
+        return "NonTransparentProxyResult [request=" + request + ", timeout="
+                + timeout + ", result=" + result + ", response=" + response
+                + ", port=" + port + "]";
+    }
 
-	public void setResult(String result) {
-		this.result = result;
-	}
+    public Long getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(Long timeout) {
+        this.timeout = timeout;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
 }

@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,32 +21,29 @@ import org.json.JSONObject;
 
 //import at.alladin.nettest.shared.model.request.SpeedtestResultSubmitRequest;
 
-public class SpeedItem
-{
-    public final boolean upload;
-    public final int thread;
-    public final long time;
-    public final long bytes;
-    
-    public SpeedItem(final boolean upload, final int thread, final long time, final long bytes)
-    {
+public class SpeedItem {
+    private final boolean upload;
+    private final int thread;
+    private final long time;
+    private final long bytes;
+
+    public SpeedItem(final boolean upload, final int thread, final long time, final long bytes) {
         this.upload = upload;
         this.thread = thread;
         this.time = time;
         this.bytes = bytes;
     }
 
-//    public SpeedtestResultSubmitRequest.SpeedRawItem toNewSpeedModel() {
-//        final SpeedtestResultSubmitRequest.SpeedRawItem item = new SpeedtestResultSubmitRequest.SpeedRawItem();
-//        item.setDirection(upload ? SpeedtestResultSubmitRequest.SpeedRawItem.SpeedRawItemDirection.UPLOAD : SpeedtestResultSubmitRequest.SpeedRawItem.SpeedRawItemDirection.DOWNLOAD);
-//        item.setBytes(bytes);
-//        item.setTime(time);
-//        item.setThread(thread);
-//        return item;
-//    }
+    /*public SpeedtestResultSubmitRequest.SpeedRawItem toNewSpeedModel() {
+        final SpeedtestResultSubmitRequest.SpeedRawItem item = new SpeedtestResultSubmitRequest.SpeedRawItem();
+        item.setDirection(upload ? SpeedtestResultSubmitRequest.SpeedRawItem.SpeedRawItemDirection.UPLOAD : SpeedtestResultSubmitRequest.SpeedRawItem.SpeedRawItemDirection.DOWNLOAD);
+        item.setBytes(bytes);
+        item.setTime(time);
+        item.setThread(thread);
+        return item;
+    }*/
 
-    public JSONObject toJSON() throws JSONException
-    {
+    public JSONObject toJSON() throws JSONException {
         final JSONObject result = new JSONObject();
         result.put("direction", upload ? "upload" : "download");
         result.put("thread", thread);
@@ -55,9 +52,9 @@ public class SpeedItem
         return result;
     }
 
-	@Override
-	public String toString() {
-		return "SpeedItem [upload=" + upload + ", thread=" + thread + ", time="
-				+ time + ", bytes=" + bytes + "]";
-	}
+    @Override
+    public String toString() {
+        return "SpeedItem [upload=" + upload + ", thread=" + thread + ", time="
+                + time + ", bytes=" + bytes + "]";
+    }
 }

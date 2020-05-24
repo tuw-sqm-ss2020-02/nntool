@@ -31,14 +31,15 @@ public class CurrentInterfaceTraffic {
 
     private Long txBps;
 
-    public CurrentInterfaceTraffic() { }
+    public CurrentInterfaceTraffic() {
+    }
 
     public CurrentInterfaceTraffic(final long rxBytes, final long txBytes, final long durationNs) {
         this.rxBytes = rxBytes;
         this.txBytes = txBytes;
         this.durationNs = durationNs;
-        this.rxBps = (long) (durationNs > 0 ? ((double)rxBytes * 8D) / ((double)durationNs / 1e9D) : 0);
-        this.txBps = (long) (durationNs > 0 ? ((double)txBytes * 8D) / ((double)durationNs / 1e9D) : 0);
+        this.rxBps = (long) (durationNs > 0 ? ((double) rxBytes * 8D) / ((double) durationNs / 1e9D) : 0);
+        this.txBps = (long) (durationNs > 0 ? ((double) txBytes * 8D) / ((double) durationNs / 1e9D) : 0);
     }
 
     public long getDurationNs() {
@@ -67,6 +68,7 @@ public class CurrentInterfaceTraffic {
 
     /**
      * RX bit per sec
+     *
      * @return
      */
     public Long getRxBps() {
@@ -75,6 +77,7 @@ public class CurrentInterfaceTraffic {
 
     /**
      * TX bit per sec
+     *
      * @return
      */
     public Long getTxBps() {

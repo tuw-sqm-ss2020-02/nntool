@@ -39,15 +39,14 @@ public class ResultConnection extends AbstractConnection<ResultService> {
     public ApiResponse<ApiPagination<BriefMeasurementResponse>> requestHistory(final String agentUuid) {
         try {
             return getControllerService().getMeasurementsRequest(agentUuid).execute().body();
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
 
         return null;
     }
 
-    public ApiResponse<DetailMeasurementResponse> requestGroupedDetails (final String agentUuid, final String measurementUuid) {
+    public ApiResponse<DetailMeasurementResponse> requestGroupedDetails(final String agentUuid, final String measurementUuid) {
         try {
             return getControllerService().getGroupedDetailMeasurementRequest(agentUuid, measurementUuid).execute().body();
         } catch (final Exception ex) {
@@ -57,7 +56,7 @@ public class ResultConnection extends AbstractConnection<ResultService> {
         return null;
     }
 
-    public ApiResponse<DisassociateResponse> disassociateMeasurement (final String agentUuid, final String measurementUuid) {
+    public ApiResponse<DisassociateResponse> disassociateMeasurement(final String agentUuid, final String measurementUuid) {
         try {
             return getControllerService().deleteSingleMeasurement(agentUuid, measurementUuid).execute().body();
         } catch (final Exception ex) {
@@ -66,7 +65,7 @@ public class ResultConnection extends AbstractConnection<ResultService> {
         return null;
     }
 
-    public ApiResponse<DisassociateResponse> disassociateAgent (final String agentUuid) {
+    public ApiResponse<DisassociateResponse> disassociateAgent(final String agentUuid) {
         try {
             return getControllerService().deleteAgent(agentUuid).execute().body();
         } catch (final Exception ex) {
@@ -75,7 +74,7 @@ public class ResultConnection extends AbstractConnection<ResultService> {
         return null;
     }
 
-    public ApiResponse<FullMeasurementResponse> requestFullMeasurement (final String agentUuid, final String measurementUuid) {
+    public ApiResponse<FullMeasurementResponse> requestFullMeasurement(final String agentUuid, final String measurementUuid) {
         try {
             return getControllerService().getFullMeasurementRequest(agentUuid, measurementUuid).execute().body();
         } catch (final Exception ex) {

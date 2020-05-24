@@ -85,8 +85,7 @@ public class GeoLocationView extends RelativeLayout implements GeoLocationChange
                         FormatGeoLocationUtil.formatGeoAccuracy(getContext(), loc.getAccuracy(), null)
                 );
             }
-        }
-        else {
+        } else {
             setLocationText("");
             setAccuracyText("");
         }

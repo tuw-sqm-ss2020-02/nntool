@@ -53,21 +53,76 @@ import at.alladin.nntool.client.v2.task.result.QoSResultCollector;
  */
 public class QosFragment extends ActionBarFragment implements ServiceConnection {
     private final static String TAG = "QOS_FRAGMENT";
-
+    final Handler handler = new Handler();
     private MeasurementService measurementService;
-
     private QosProgressView qosProgressView;
-
     private TopProgressBarView topProgressBarView;
-
     private AtomicBoolean sendingResults = new AtomicBoolean(false);
-
+    final Runnable showResultsRunnable = new Runnable() {
+        @Override
+        public void run() {
+            final QoSResultCollector qoSResultCollector = measurementService.getQosMeasurementClient().getQosResult();
+            final SubMeasurementResult subMeasurementResult = SubMeasurementResultParseUtil.parseIntoQosMeasurementResult(qoSResultCollector);
+            subMeasurementResult.setStatus(StatusDto.FINISHED);
+            measurementService.addSubMeasurementResult(subMeasurementResult);
+            final MainActivity activity = (MainActivity) getActivity();
+            if (measurementService.hasFollowUpAction()) {
+                measurementService.executeFollowUpAction(activity);
+            } else {
+                measurementService.sendResults(activity, sendingResults);
+            }
+        }
+    };
     private boolean isSpeedEnabled = true;
+    final Runnable updateUiRunnable = new Runnable() {
+        @Override
+        public void run() {
+            boolean postResultRunnable = false;
+            if (measurementService != null) {
+                final QualityOfServiceTest qosTest = measurementService.getQosMeasurementClient().getQosTest();
+                if (qosTest != null && qosTest.getQosTypeDoneCountMap() != null) {
+                    final Map<QosMeasurementType, Float> testTypeProgress = qosTest.getQosTypeTestProgressMap();
+                    for (final Map.Entry<QosMeasurementType, Integer> e : qosTest.getQosTypeDoneCountMap().entrySet()) {
+                        if (QoSTestEnum.QOS_RUNNING.equals(qosTest.getStatus())) {
+                            float progress = (float) e.getValue() / (float) qosTest.getQosTypeTaskCountMap().get(e.getKey());
+                            //add progress made during single measurement
+                            if (testTypeProgress != null && testTypeProgress.containsKey(e.getKey())) {
+                                progress += testTypeProgress.get(e.getKey()) / (float) qosTest.getQosTypeTaskCountMap().get(e.getKey());
+                            }
+                            qosProgressView.setQosProgress(e.getKey(), progress);
+                            if (progress >= 1f) {
+                                qosProgressView.finishQosType(e.getKey());
+                            }
+                            //the total progress (if QoS is enabled) is only from 0.8 to 1.0
+                            if (isSpeedEnabled) {
+                                topProgressBarView.setLeftText((int) ((qosTest.getTotalProgress() * 0.2 + 0.8) * 100) + "%");
+                            } else {
+                                topProgressBarView.setLeftText((int) (qosTest.getTotalProgress() * 100) + "%");
+                            }
+                            topProgressBarView.setRightText((int) (qosTest.getTotalProgress() * 100) + "%");
+                        } else if (QoSTestEnum.QOS_FINISHED.equals(qosTest.getStatus()) ||
+                                QoSTestEnum.ERROR.equals(qosTest.getStatus())) {
+                            postResultRunnable = true;
+                            qosProgressView.finishQosType(e.getKey());
+                            topProgressBarView.setLeftText("100%");
+                            topProgressBarView.setRightText("100%");
+                        }
+                    }
+                }
+            }
+
+            if (!postResultRunnable) {
+                handler.postDelayed(this, 50);
+            } else {
+                handler.postDelayed(showResultsRunnable, 1000);
+            }
+        }
+    };
 
     public static QosFragment newInstance(final WorkflowParameter parameter) {
         final QosFragment fragment = new QosFragment();
         if (parameter instanceof WorkflowMeasurementParameter) {
-            fragment.setSpeedEnabled(((WorkflowMeasurementParameter)parameter).isSpeedEnabled());
+            fragment.setSpeedEnabled(((WorkflowMeasurementParameter) parameter).isSpeedEnabled());
         }
         return fragment;
     }
@@ -79,19 +134,19 @@ public class QosFragment extends ActionBarFragment implements ServiceConnection 
 
     /**
      * Method onCreateView
+     *
      * @param inflater
      * @param container
      * @param savedInstanceState
      * @return
      */
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_qos, container, false);
         qosProgressView = view.findViewById(R.id.qos_progress_view);
         topProgressBarView = view.findViewById(R.id.top_progress_bar_view);
         if (topProgressBarView != null) {
-            topProgressBarView.setLeftText((int)(isSpeedEnabled ? 0.8 * 100 : 0) + "%");
+            topProgressBarView.setLeftText((int) (isSpeedEnabled ? 0.8 * 100 : 0) + "%");
         }
 
         return view;
@@ -126,71 +181,6 @@ public class QosFragment extends ActionBarFragment implements ServiceConnection 
         getContext().unbindService(this);
         super.onPause();
     }
-
-    final Handler handler = new Handler();
-
-    final Runnable updateUiRunnable = new Runnable() {
-        @Override
-        public void run() {
-            boolean postResultRunnable = false;
-            if (measurementService != null) {
-                final QualityOfServiceTest qosTest = measurementService.getQosMeasurementClient().getQosTest();
-                if (qosTest != null && qosTest.getQosTypeDoneCountMap() != null) {
-                    final Map<QosMeasurementType, Float> testTypeProgress = qosTest.getQosTypeTestProgressMap();
-                    for (final Map.Entry<QosMeasurementType, Integer> e : qosTest.getQosTypeDoneCountMap().entrySet()) {
-                        if (QoSTestEnum.QOS_RUNNING.equals(qosTest.getStatus())) {
-                            float progress = (float) e.getValue() / (float) qosTest.getQosTypeTaskCountMap().get(e.getKey());
-                            //add progress made during single measurement
-                            if (testTypeProgress != null && testTypeProgress.containsKey(e.getKey())) {
-                                progress += testTypeProgress.get(e.getKey()) / (float) qosTest.getQosTypeTaskCountMap().get(e.getKey());
-                            }
-                            qosProgressView.setQosProgress(e.getKey(), progress);
-                            if (progress >= 1f) {
-                                qosProgressView.finishQosType(e.getKey());
-                            }
-                            //the total progress (if QoS is enabled) is only from 0.8 to 1.0
-                            if (isSpeedEnabled) {
-                                topProgressBarView.setLeftText((int)((qosTest.getTotalProgress() * 0.2 + 0.8) * 100) + "%");
-                            } else {
-                                topProgressBarView.setLeftText((int)(qosTest.getTotalProgress() * 100) + "%");
-                            }
-                            topProgressBarView.setRightText((int)(qosTest.getTotalProgress() * 100) + "%");
-                        }
-                        else if (QoSTestEnum.QOS_FINISHED.equals(qosTest.getStatus()) ||
-                                QoSTestEnum.ERROR.equals(qosTest.getStatus())) {
-                            postResultRunnable = true;
-                            qosProgressView.finishQosType(e.getKey());
-                            topProgressBarView.setLeftText("100%");
-                            topProgressBarView.setRightText("100%");
-                        }
-                    }
-                }
-            }
-
-            if (!postResultRunnable) {
-                handler.postDelayed(this, 50);
-            }
-            else {
-                handler.postDelayed(showResultsRunnable, 1000);
-            }
-        }
-    };
-
-    final Runnable showResultsRunnable = new Runnable() {
-        @Override
-        public void run() {
-            final QoSResultCollector qoSResultCollector = measurementService.getQosMeasurementClient().getQosResult();
-            final SubMeasurementResult subMeasurementResult = SubMeasurementResultParseUtil.parseIntoQosMeasurementResult(qoSResultCollector);
-            subMeasurementResult.setStatus(StatusDto.FINISHED);
-            measurementService.addSubMeasurementResult(subMeasurementResult);
-            final MainActivity activity = (MainActivity) getActivity();
-            if (measurementService.hasFollowUpAction()) {
-                measurementService.executeFollowUpAction(activity);
-            } else {
-                measurementService.sendResults(activity, sendingResults);
-            }
-        }
-    };
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {

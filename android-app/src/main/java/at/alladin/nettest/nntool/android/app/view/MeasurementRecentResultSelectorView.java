@@ -46,7 +46,7 @@ public class MeasurementRecentResultSelectorView extends LinearLayout {
 
     private void init() {
         inflate(getContext(), R.layout.measurement_recent_result_view, this);
-        this.setOnClickListener( v -> {
+        this.setOnClickListener(v -> {
             WorkflowResultParameter param = new WorkflowResultParameter();
             param.setMeasurementUuid(measurementUuid);
             ((MainActivity) getContext()).navigateTo(WorkflowTarget.RESULT, param);

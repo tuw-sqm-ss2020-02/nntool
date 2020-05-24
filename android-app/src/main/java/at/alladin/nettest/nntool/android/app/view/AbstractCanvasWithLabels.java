@@ -42,7 +42,7 @@ public abstract class AbstractCanvasWithLabels extends View {
     protected View statusView;
 
     protected int requestedCanvasHeight = 0;
-    protected int requestedCanvasWidth  = 0;
+    protected int requestedCanvasWidth = 0;
 
     protected int defaultHeight = 100;
     protected int defaultWidth = 100;
@@ -77,11 +77,11 @@ public abstract class AbstractCanvasWithLabels extends View {
         super(context, attrs, defStyleAttr);
     }
 
-    public void setSpeedValue (final double speedValue) {
+    public void setSpeedValue(final double speedValue) {
         this.speedValue = speedValue;
     }
 
-    public void setProgressValue (final float progressValue) {
+    public void setProgressValue(final float progressValue) {
         this.progressValue = progressValue;
     }
 
@@ -111,7 +111,7 @@ public abstract class AbstractCanvasWithLabels extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         // extract their requested height and width.
-        int requestedWidth  = MeasureSpec.getSize(widthMeasureSpec);
+        int requestedWidth = MeasureSpec.getSize(widthMeasureSpec);
         int requestedHeight = MeasureSpec.getSize(heightMeasureSpec);
 
         // make sure we're a square by re-writing the requested dimensions, favoring the smaller of the two as the new h & w of square.
@@ -126,11 +126,11 @@ public abstract class AbstractCanvasWithLabels extends View {
 
         // set the local member variables to the newly discovered desired dimensions.
         requestedCanvasHeight = requestedHeight;
-        requestedCanvasWidth  = requestedWidth;
+        requestedCanvasWidth = requestedWidth;
 
         // calculate the origin.
         centerX = requestedCanvasHeight / 2;
-        centerY = requestedCanvasWidth  / 2;
+        centerY = requestedCanvasWidth / 2;
 
         // spit back the requested dimensions as our accepted dimensions. We'll do our best.
         setMeasuredDimension(requestedWidth, requestedHeight);
@@ -153,9 +153,9 @@ public abstract class AbstractCanvasWithLabels extends View {
     protected String getStringWithWhitespace(final String text, final int whiteSpaces) {
         final StringBuilder builder = new StringBuilder();
         final char[] textChars = text.toCharArray();
-        for(int i = 0; i < textChars.length; i++) {
+        for (int i = 0; i < textChars.length; i++) {
             builder.append(textChars[i]);
-            if(i < (textChars.length - 1)) {
+            if (i < (textChars.length - 1)) {
                 for (int j = 0; j < whiteSpaces; j++) {
                     builder.append(" ");
                 }
@@ -165,11 +165,11 @@ public abstract class AbstractCanvasWithLabels extends View {
     }
 
     protected float coordFW(final float x, final float y) {
-        return x / y * (float)requestedCanvasWidth;
+        return x / y * (float) requestedCanvasWidth;
     }
 
     protected float coordFH(final float x, final float y) {
-        return x / y * (float)requestedCanvasHeight;
+        return x / y * (float) requestedCanvasHeight;
     }
 
     protected float coordFW(final int x, final int y) {
@@ -188,10 +188,10 @@ public abstract class AbstractCanvasWithLabels extends View {
         final float strokeWidth;
 
         public RingArc(final int arcCenterX, final int arcCenterY, final float strokeWidth, final float absPosition) {
-            final int gaugeWidth = (int)((float) arcCenterX * absPosition) - BIG_POINTER_SIZE;
-            final int gaugeHeight = (int)((float) arcCenterY * absPosition) - BIG_POINTER_SIZE;
-            bounds = new RectF(arcCenterX - gaugeWidth + strokeWidth/2f, arcCenterY - gaugeHeight + strokeWidth/2f,
-                    arcCenterX + gaugeWidth - strokeWidth/2f, arcCenterY + gaugeHeight - strokeWidth/2f);
+            final int gaugeWidth = (int) ((float) arcCenterX * absPosition) - BIG_POINTER_SIZE;
+            final int gaugeHeight = (int) ((float) arcCenterY * absPosition) - BIG_POINTER_SIZE;
+            bounds = new RectF(arcCenterX - gaugeWidth + strokeWidth / 2f, arcCenterY - gaugeHeight + strokeWidth / 2f,
+                    arcCenterX + gaugeWidth - strokeWidth / 2f, arcCenterY + gaugeHeight - strokeWidth / 2f);
             startX = arcCenterX - gaugeWidth;
             startY = arcCenterY;
             path.addArc(getBounds(), 0, ARC_ANGLE);
