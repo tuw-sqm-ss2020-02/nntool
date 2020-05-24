@@ -34,7 +34,7 @@ import at.alladin.nettest.spring.data.couchdb.core.query.MangoQuery;
  */
 public class MangoBasedCouchDbQuery extends AbstractCouchDbRepositoryQuery {
 
-    private static final Logger logger = LoggerFactory.getLogger(MangoBasedCouchDbQuery.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MangoBasedCouchDbQuery.class);
 
     private final String query;
 
@@ -52,7 +52,7 @@ public class MangoBasedCouchDbQuery extends AbstractCouchDbRepositoryQuery {
 
         // TODO: improve this method, add error handling/validation etc.
 
-        // Mango queries don't support aggregate functions (see https://github.com/apache/couchdb/issues/1254) so it's not 
+        // Mango queries don't support aggregate functions (see https://github.com/apache/couchdb/issues/1254) so it's not
         // possible to execute pagination queries.
         if (method.isPageQuery()) {
             throw new IllegalArgumentException("Pageination queries are currently not possible with Mango queries.");
@@ -62,7 +62,7 @@ public class MangoBasedCouchDbQuery extends AbstractCouchDbRepositoryQuery {
             return null;
         }
 
-        logger.debug("query template: {}", query);
+        LOGGER.debug("query template: {}", query);
 
         final String docType = method.getDocType();
 
@@ -77,7 +77,7 @@ public class MangoBasedCouchDbQuery extends AbstractCouchDbRepositoryQuery {
             currentQuery = currentQuery.replace(p.getPlaceholder(), accessor.getBindableValue(p.getIndex()).toString());
         }
 
-        logger.debug("actual query: {}", currentQuery);
+        LOGGER.debug("actual query: {}", currentQuery);
 
         final CouchDbQueryResult<?> queryResult = operations.query(currentQuery, getQueryMethod().getEntityInformation().getJavaType());
 
@@ -87,9 +87,9 @@ public class MangoBasedCouchDbQuery extends AbstractCouchDbRepositoryQuery {
             return docs;
         } else if (method.isStreamQuery()) {
             return docs.stream();
-        /*} else if (method.isPageQuery()) {
-			return new PageImpl<>(docs, accessor.getPageable(), ...);*/
-		} else if (docs.size() > 0) {
+            /*} else if (method.isPageQuery()) {
+            return new PageImpl<>(docs, accessor.getPageable(), ...);*/
+        } else if (docs.size() > 0) {
             return docs.get(0);
         }
 

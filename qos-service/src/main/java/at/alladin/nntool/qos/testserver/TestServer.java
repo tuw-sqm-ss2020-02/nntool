@@ -31,7 +31,7 @@ import javax.net.ssl.TrustManagerFactory;
 /**
  * @author lb
  */
-public class TestServer {
+public final class TestServer {
     /**
      * major version number
      */
@@ -50,22 +50,22 @@ public class TestServer {
     /**
      * server code name
      * <ul>
-     * 	<li><b>0.01 - 0.61</b> - ANONYMOUS PROXY</li>
-     * 	<li><b>0.61 - 0.91</b> - BANDWIDTH THROTTLING
-     * 		<p>major changes: support for multiple tests with single connection (client and server side)</p>
-     * 	</li>
-     * 	<li><b>1.00 - 1.04</b> - CENSORSHIP'N CONTROL
-     * 		<p>major changes: implement rest services</p>
-     * 	</li>
-     * 	<li><b>2.00 - 2.19</b> - DROPPED PACKET
-     * 		<p>major changes: voip test, rmbtutil</p></li>
-     * 	<li><b>2.20 - 2.30</b> - DROPPED PACKET
-     * 		<p>major changes: non blocking udp server for udp and voip tests</p>
-     * 	</li>
-     * 	<li><b>3.0.0 - x.x.x</b> - ???
-     * 		<p>major changes: syslog support, logging framework: log4j</p>
-     * 		<p>major fixes: udp nio empty array fix</p>
-     * 	</li>
+     * <li><b>0.01 - 0.61</b> - ANONYMOUS PROXY</li>
+     * <li><b>0.61 - 0.91</b> - BANDWIDTH THROTTLING
+     * <p>major changes: support for multiple tests with single connection (client and server side)</p>
+     * </li>
+     * <li><b>1.00 - 1.04</b> - CENSORSHIP'N CONTROL
+     * <p>major changes: implement rest services</p>
+     * </li>
+     * <li><b>2.00 - 2.19</b> - DROPPED PACKET
+     * <p>major changes: voip test, rmbtutil</p></li>
+     * <li><b>2.20 - 2.30</b> - DROPPED PACKET
+     * <p>major changes: non blocking udp server for udp and voip tests</p>
+     * </li>
+     * <li><b>3.0.0 - x.x.x</b> - ???
+     * <p>major changes: syslog support, logging framework: log4j</p>
+     * <p>major fixes: udp nio empty array fix</p>
+     * </li>
      * </ul>
      */
     public final static String TEST_SERVER_CODENAME = "DROPPED PACKET";
@@ -96,6 +96,9 @@ public class TestServer {
     public final static int MAX_THREADS = 200;
 
     private static TestServerImpl instance;
+
+    private TestServer() {
+    }
 
     public static TestServerImpl newInstance() {
         instance = new TestServerImpl();
@@ -139,17 +142,17 @@ public class TestServer {
 
     public static SSLContext getSSLContext(final String keyResource, final String certResource)
             throws NoSuchAlgorithmException, KeyManagementException {
-        X509Certificate _cert = null;
+        X509Certificate xcert = null;
         try {
             if (certResource != null) {
                 final CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                _cert = (X509Certificate) cf.generateCertificate(TestServer.class.getClassLoader().getResourceAsStream(
+                xcert = (X509Certificate) cf.generateCertificate(TestServer.class.getClassLoader().getResourceAsStream(
                         certResource));
             }
         } catch (final Exception e) {
             e.printStackTrace();
         }
-        final X509Certificate cert = _cert;
+        final X509Certificate cert = xcert;
 
         TrustManagerFactory tmf = null;
         try {
@@ -167,9 +170,9 @@ public class TestServer {
 
 
         final TrustManager tm;
-        if (cert == null)
+        if (cert == null) {
             tm = getTrustingManager();
-        else
+        } else {
             tm = new javax.net.ssl.X509TrustManager() {
                 public X509Certificate[] getAcceptedIssuers() {
                     return new X509Certificate[]{cert};
@@ -185,14 +188,16 @@ public class TestServer {
                         throws CertificateException {
                     System.out.println("checkServerTrusted: "
                             + Arrays.toString(certs) + " - " + authType);
-                    if (certs == null)
+                    if (certs == null) {
                         throw new CertificateException();
-                    for (final X509Certificate c : certs)
-                        if (cert.equals(c))
-                            return;
+                    }
+                    for (final X509Certificate c : certs) {
+                        if (cert.equals(c)) return;
+                    }
                     throw new CertificateException();
                 }
             };
+        }
 
         final TrustManager[] trustManagers = new TrustManager[]{tm};
 

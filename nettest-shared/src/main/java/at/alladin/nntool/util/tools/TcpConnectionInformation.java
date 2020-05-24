@@ -48,7 +48,7 @@ public class TcpConnectionInformation extends ConnectionInformation {
             conn.setConnectionState(ConnectionState.values()[Integer.parseInt(token[3], 16)]);
             conn.setProtocolType(addrSize == 16 ? ProtocolType.TCP6 : ProtocolType.TCP);
         } catch (Exception e) {
-            // return null in case of an exception 
+            // return null in case of an exception
             return null;
         }
 

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class LoadApiAllServersReport {
 
     @JsonProperty("report_list")
-    List<LoadApiReport> reportList;
+    private List<LoadApiReport> reportList;
 
     public List<LoadApiReport> getReportList() {
         return reportList;

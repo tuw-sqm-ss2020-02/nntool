@@ -24,8 +24,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import at.alladin.nettest.service.map.domain.model.MapServiceOptions;
-
 public class MapServiceSettings {
 
     @Expose
@@ -130,7 +128,7 @@ public class MapServiceSettings {
         /**
          * @param i
          * @param ps
-         * @return
+         * @return i
          * @throws SQLException
          */
         public int fillParams(final int i, final PreparedStatement ps) throws SQLException {

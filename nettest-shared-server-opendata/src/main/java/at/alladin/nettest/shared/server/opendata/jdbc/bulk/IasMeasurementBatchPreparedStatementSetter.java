@@ -33,10 +33,10 @@ import at.alladin.nettest.shared.server.opendata.jdbc.IasMeasurementPreparedStat
  */
 public class IasMeasurementBatchPreparedStatementSetter implements BatchPreparedStatementSetter {
 
-    private final List<OpenDataFullIasMeasurement> IasMeasurements;
+    private final List<OpenDataFullIasMeasurement> iasMeasurements;
 
     public IasMeasurementBatchPreparedStatementSetter(List<FullMeasurementResponse> measurements) {
-        this.IasMeasurements = measurements.stream()
+        this.iasMeasurements = measurements.stream()
                 .filter(m -> {
                     return m.getMeasurements() != null
                             && m.getMeasurements().get(MeasurementTypeDto.SPEED) != null
@@ -53,14 +53,14 @@ public class IasMeasurementBatchPreparedStatementSetter implements BatchPrepared
 
     @Override
     public void setValues(PreparedStatement ps, int i) throws SQLException {
-        final OpenDataFullIasMeasurement IasMeasurement = IasMeasurements.get(i);
+        final OpenDataFullIasMeasurement iasMeasurement = this.iasMeasurements.get(i);
 
-        new IasMeasurementPreparedStatementSetter(IasMeasurement.getIasMeasurement(), IasMeasurement.getOpenDataUuid()).setValues(ps);
+        new IasMeasurementPreparedStatementSetter(iasMeasurement.getIasMeasurement(), iasMeasurement.getOpenDataUuid()).setValues(ps);
     }
 
     @Override
     public int getBatchSize() {
-        return IasMeasurements.size();
+        return this.iasMeasurements.size();
     }
 
     private static class OpenDataFullIasMeasurement {

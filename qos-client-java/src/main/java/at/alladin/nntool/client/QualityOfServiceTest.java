@@ -75,9 +75,9 @@ public class QualityOfServiceTest implements Callable<QoSResultCollector> {
     public final static String TASK_SIP = "sip";
     public final static String TASK_MKIT_WEB_CONNECTIVITY = "mkit_web_connectivity";
     public final static String TASK_MKIT_DASH = "mkit_dash";
-    final TreeMap<Integer, List<AbstractQoSTask>> concurrentTasks = new TreeMap<>();
-    final TreeMap<QosMeasurementType, List<AbstractQoSTask>> testMap = new TreeMap<>();
-    final TreeMap<String, QoSControlConnection> controlConnectionMap = new TreeMap<>();
+    private final TreeMap<Integer, List<AbstractQoSTask>> concurrentTasks = new TreeMap<>();
+    private final TreeMap<QosMeasurementType, List<AbstractQoSTask>> testMap = new TreeMap<>();
+    private final TreeMap<String, QoSControlConnection> controlConnectionMap = new TreeMap<>();
     private final ClientHolder client;
     private final AtomicInteger progress = new AtomicInteger();
     private final AtomicInteger testCount = new AtomicInteger();
@@ -331,7 +331,7 @@ public class QualityOfServiceTest implements Callable<QoSResultCollector> {
                         }
                         //TODO: write config which types should listen themselves
                         if (type == QosMeasurementType.MKIT_DASH || type == QosMeasurementType.MKIT_WEB_CONNECTIVITY) {
-                            task.setQoSTestProgressListener(new AbstractQoSTask.QoSTestProgressListener() {
+                            task.setListener(new AbstractQoSTask.QoSTestProgressListener() {
                                 @Override
                                 public void onProgress(float currentTestProgress, QosMeasurementType resultType) {
                                     final QosMeasurementType type = QosMeasurementType.fromValue(resultType.toString().toLowerCase());
@@ -628,11 +628,11 @@ public class QualityOfServiceTest implements Callable<QoSResultCollector> {
      * @author lb
      */
     public final class Counter {
-        public QosMeasurementType testType;
-        public int value;
-        public int target;
-        public int firstTest;
-        public int lastTest;
+        private QosMeasurementType testType;
+        private int value;
+        private int target;
+        private int firstTest;
+        private int lastTest;
 
         public Counter(QosMeasurementType testType, int target, int concurrencyGroup) {
             this.testType = testType;

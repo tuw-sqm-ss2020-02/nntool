@@ -34,7 +34,7 @@ import at.alladin.nettest.shared.server.helper.spring.CachingAndReloadingMessage
  */
 public class ElasticsearchMessageSource extends CachingAndReloadingMessageSource<Map<String, Object>> {
 
-    private static final Logger logger = LoggerFactory.getLogger(ElasticsearchMessageSource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ElasticsearchMessageSource.class);
 
     private static final String TRANSLATION_INDEX = "nntool_translation";
 
@@ -51,7 +51,7 @@ public class ElasticsearchMessageSource extends CachingAndReloadingMessageSource
     }
 
     protected Map<String, Object> loadTranslation(final Locale locale) {
-        logger.info("Loading translation for locale {} from Elasticsearch.", locale);
+        LOGGER.info("Loading translation for locale {} from Elasticsearch.", locale);
 
         final GetRequest getRequest = new GetRequest(TRANSLATION_INDEX, locale.getLanguage());
 
@@ -60,7 +60,7 @@ public class ElasticsearchMessageSource extends CachingAndReloadingMessageSource
 
             return getResponse.getSourceAsMap();
         } catch (IOException e) {
-            logger.error("Could not load translation form Elasticsearch.", e);
+            LOGGER.error("Could not load translation form Elasticsearch.", e);
             return null;
         }
     }

@@ -43,7 +43,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class MangoQueryCreator extends AbstractQueryCreator<String, Selector> {
 
-    private static final Logger logger = LoggerFactory.getLogger(MangoQueryCreator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MangoQueryCreator.class);
 
     private final String docType;
 
@@ -72,7 +72,7 @@ public class MangoQueryCreator extends AbstractQueryCreator<String, Selector> {
                 segment = serializedName.value();
             }
         } catch (Exception ex) {
-            logger.error("Error while trying to get custom dotpath segment value from SerializedName annotation", ex);
+            LOGGER.error("Error while trying to get custom dotpath segment value from SerializedName annotation", ex);
         }
 
         if (propertyPath.hasNext()) {
@@ -116,9 +116,9 @@ public class MangoQueryCreator extends AbstractQueryCreator<String, Selector> {
      */
     @Override
     protected Selector and(Part part, Selector base, Iterator<Object> iterator) {
-        //if (base == null) {
-        // 	return create(part, iterator);
-        //}
+        // if (base == null) {
+        // return create(part, iterator);
+        // }
 
         return Operation.and(base, create(part, iterator));
     }
@@ -183,7 +183,7 @@ public class MangoQueryCreator extends AbstractQueryCreator<String, Selector> {
             final PropertyPath sortPath = PropertyPath.from(sortString, resultClass);
             return toCustomDotPath(sortPath);
         } catch (Exception ex) {
-            logger.error("Could not transform sort query (original sort string: {})", sortString, ex);
+            LOGGER.error("Could not transform sort query (original sort string: {})", sortString, ex);
         }
 
         return sortString;

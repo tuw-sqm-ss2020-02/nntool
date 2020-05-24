@@ -68,9 +68,9 @@ public class SimpleCouchDbRepository<T> implements CouchDbRepository<T> {
         return couchDbOperations.saveAll(entities, entityInformation);
 
         /*return Streamable.of(entities)
-					.stream()
-					.map(this::save)
-					.collect(Collectors.toList());*/
+        .stream()
+        .map(this::save)
+        .collect(Collectors.toList());*/
     }
 
     /*

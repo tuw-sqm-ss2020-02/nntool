@@ -33,12 +33,12 @@ import at.alladin.nettest.shared.berec.collector.api.v1.dto.measurement.result.T
 @Service
 public class ResultPreProcessService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ResultPreProcessService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResultPreProcessService.class);
 
-    private final String[] HTTP_HEADER_IP_ADDRESS_FIELDS = {
-            "X-Real-IP",
-            "X-Client-IP",
-            "X-FORWARDED-FOR"
+    private final String[] httpHeaderIPAddressFields = {
+        "X-Real-IP",
+        "X-Client-IP",
+        "X-FORWARDED-FOR"
     };
 
     public void addClientIpToReportDto(final LmapReportDto lmapReportDto, final HttpServletRequest request) {
@@ -63,16 +63,16 @@ public class ResultPreProcessService {
     }
 
     private String getClientIpAddressString(final HttpServletRequest request) {
-        for (String field : HTTP_HEADER_IP_ADDRESS_FIELDS) { // TODO: add correct handling (order) of these values
+        for (String field : httpHeaderIPAddressFields) { // TODO: add correct handling (order) of these values
             final String ipAddress = request.getHeader(field);
 
             if (StringUtils.hasLength(ipAddress) && !"127.0.0.1".equals(ipAddress) && !ipAddress.contains("%")) {
-                logger.debug("Found ip address {} in {} header", ipAddress, field);
+                LOGGER.debug("Found ip address {} in {} header", ipAddress, field);
                 return ipAddress;
             }
         }
 
-        logger.debug("Did not get ip address from headers, using request.getRemoteAddr");
+        LOGGER.debug("Did not get ip address from headers, using request.getRemoteAddr");
 
         // workaround for %1 after ipv6... TODO: fix this properly
         String ipAddress = request.getRemoteAddr();

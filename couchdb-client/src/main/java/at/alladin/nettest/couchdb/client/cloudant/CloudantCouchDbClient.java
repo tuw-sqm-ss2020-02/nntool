@@ -37,7 +37,7 @@ import at.alladin.nettest.couchdb.client.config.CouchDbConnectionProperties;
  */
 public final class CloudantCouchDbClient implements CouchDbClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(CloudantCouchDbClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CloudantCouchDbClient.class);
 
     private final CloudantClient cloudantClient;
 
@@ -66,18 +66,18 @@ public final class CloudantCouchDbClient implements CouchDbClient {
     }
 
     private void logMetaInformation() {
-        logger.debug("--- CouchDB meta information ---");
+        LOGGER.debug("--- CouchDB meta information ---");
 
-        logger.debug("baseUri: {}", cloudantClient.getBaseUri());
-        logger.debug("allDbs: {}", cloudantClient.getAllDbs());
-        logger.debug("serverVersion: {}", cloudantClient.serverVersion());
-        logger.debug("couchDb: {}", cloudantClient.metaInformation().getCouchdb());
-        logger.debug("uuid: {}", cloudantClient.metaInformation().getUuid());
-        logger.debug("version: {}", cloudantClient.metaInformation().getVersion());
-        logger.debug("features: {}", cloudantClient.metaInformation().getFeatures());
-        logger.debug("vendor: {}", cloudantClient.metaInformation().getVendor());
+        LOGGER.debug("baseUri: {}", cloudantClient.getBaseUri());
+        LOGGER.debug("allDbs: {}", cloudantClient.getAllDbs());
+        LOGGER.debug("serverVersion: {}", cloudantClient.serverVersion());
+        LOGGER.debug("couchDb: {}", cloudantClient.metaInformation().getCouchdb());
+        LOGGER.debug("uuid: {}", cloudantClient.metaInformation().getUuid());
+        LOGGER.debug("version: {}", cloudantClient.metaInformation().getVersion());
+        LOGGER.debug("features: {}", cloudantClient.metaInformation().getFeatures());
+        LOGGER.debug("vendor: {}", cloudantClient.metaInformation().getVendor());
 
-        logger.debug("------");
+        LOGGER.debug("------");
     }
 
     /*

@@ -42,7 +42,7 @@ import at.alladin.nettest.spring.data.couchdb.core.query.View;
 
 public class MapReduceBasedCouchDbQuery extends AbstractCouchDbRepositoryQuery {
 
-    private static final Logger logger = LoggerFactory.getLogger(MapReduceBasedCouchDbQuery.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MapReduceBasedCouchDbQuery.class);
 
     public MapReduceBasedCouchDbQuery(CouchDbQueryMethod method, CouchDbOperations operations) {
         super(method, operations);
@@ -75,9 +75,9 @@ public class MapReduceBasedCouchDbQuery extends AbstractCouchDbRepositoryQuery {
                 viewResponse = viewRequest.getResponse();
                 total = Long.parseUnsignedLong(String.valueOf(viewResponse.getValues().get(0)));
 
-                logger.debug("Count response: {}", total);
+                LOGGER.debug("Count response: {}", total);
             } catch (Exception e) {
-                logger.error("Could not get total count, returning empty result", e);
+                LOGGER.error("Could not get total count, returning empty result", e);
                 //e.printStackTrace();
                 return returnEmptyResult(accessor, total); // TODO: throw exception
             }
@@ -91,7 +91,7 @@ public class MapReduceBasedCouchDbQuery extends AbstractCouchDbRepositoryQuery {
         try {
             viewResponse = viewRequest.getResponse();
         } catch (Exception e) {
-            logger.error("error getting view response!!!", e);
+            LOGGER.error("error getting view response!!!", e);
             return returnEmptyResult(accessor, total); // TODO: throw exception
         }
 

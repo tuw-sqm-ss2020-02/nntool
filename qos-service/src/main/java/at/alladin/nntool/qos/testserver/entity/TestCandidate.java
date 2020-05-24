@@ -41,20 +41,21 @@ public class TestCandidate extends AbstractTtlObject {
     }
 
     /**
-     *
+     * @param rTtl
      */
-    public int increaseTestCounter(boolean resetTtl) {
-        if (resetTtl) {
+    public int increaseTestCounter(boolean rTtl) {
+        if (rTtl) {
             resetTtl(this.resetTtl);
         }
         return ++testCounter;
     }
 
     /**
+     * @param rTtl
      * @return
      */
-    public int decreaseTestCounter(boolean resetTtl) {
-        if (resetTtl) {
+    public int decreaseTestCounter(boolean rTtl) {
+        if (rTtl) {
             resetTtl(this.resetTtl);
         }
         return --testCounter;

@@ -73,29 +73,29 @@ public class ServerPreferencesTest {
     @Test
     public void loadPreferencesFromSpecificPath() throws TestServerException, URISyntaxException {
         final ServerPreferences sp = new ServerPreferences(new String[]{
-                "-f", "config.properties"});
+            "-f", "config.properties"});
         assertDefaultSeverPreferences(sp);
     }
 
     public void loadPreferencesWithNonExistingConfigFileAndFallbackToDefaultSettings() throws TestServerException {
         ServerPreferences sp = new ServerPreferences(new String[]{
-                "-f", "nonExisitingConfigFile_r7j94dz0kxt35uihz5guiuih32uqi.properties"});
+            "-f", "nonExisitingConfigFile_r7j94dz0kxt35uihz5guiuih32uqi.properties"});
         assertDefaultSeverPreferences(sp);
     }
 
     @Test
     public void loadPreferencesWithArguments() throws TestServerException {
         ServerPreferences sp = new ServerPreferences(new String[]{
-                "-ip", "0.0.0.0",
-                "-ip", "0.0.0.1",
-                "-p", "8080",
-                "-s",
-                "-v",
-                "-vv",
-                "-k", "SECRET_KEY",
-                "-ic",
-                "-u", "10000", "10010",
-                "-t", "111"});
+            "-ip", "0.0.0.0",
+            "-ip", "0.0.0.1",
+            "-p", "8080",
+            "-s",
+            "-v",
+            "-vv",
+            "-k", "SECRET_KEY",
+            "-ic",
+            "-u", "10000", "10010",
+            "-t", "111"});
         assertNotNull("ServerPreferences != null", sp);
         assertEquals("Amount of interfaces to bind to != 2", 2, sp.getInetAddrBindToSet().size());
         final Iterator<InetAddress> ifSet = sp.getInetAddrBindToSet().iterator();
@@ -134,7 +134,7 @@ public class ServerPreferencesTest {
     @Test(expected = TestServerException.class)
     public void loadPreferencesWithIllegalArgumentsThenThrowTestServerException() throws TestServerException {
         ServerPreferences sp = new ServerPreferences(new String[]{
-                "-illegalArgument1,", "-illegalArgument2"});
+            "-illegalArgument1,", "-illegalArgument2"});
     }
 
     @Test(expected = TestServerException.class)
@@ -145,19 +145,19 @@ public class ServerPreferencesTest {
     @Test(expected = TestServerException.class)
     public void loadIllegalPreferencesWithZeroThreadsSetThenThrowTestServerException() throws TestServerException {
         ServerPreferences sp = new ServerPreferences(new String[]{
-                "-t", "0"});
+            "-t", "0"});
     }
 
     @Test(expected = TestServerException.class)
     public void loadIllegalPreferencesWithMaxUdpPortLowerThanMinUdpPortThenThrowTestServerException() throws TestServerException {
         ServerPreferences sp = new ServerPreferences(new String[]{
-                "-u", "10", "1"});
+            "-u", "10", "1"});
     }
 
     @Test
     public void loadPreferencesWithoutValidInterfaceThenSetDefaultInterface() throws TestServerException {
         ServerPreferences sp = new ServerPreferences(new String[]{
-                "-vv"});
+            "-vv"});
 
         assertNotNull("ServerPreferences != null", sp);
         assertEquals("Amount of interfaces to bind to != 1", 1, sp.getInetAddrBindToSet().size());

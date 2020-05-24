@@ -204,17 +204,17 @@ public class NetworkPointInTime {
 
     @Override
     public String toString() {
-        return "NetworkPointInTime{" +
-                "time=" + time +
-                ", relativeTimeNs=" + relativeTimeNs +
-                ", agentPublicIp='" + agentPublicIp + '\'' +
-                ", agentPrivateIp='" + agentPrivateIp + '\'' +
-                ", agentPublicIpCountryCode='" + agentPublicIpCountryCode + '\'' +
-                ", publicIpRdns='" + publicIpRdns + '\'' +
-                ", networkType=" + networkType +
-                ", providerInfo=" + providerInfo +
-                ", networkWifiInfo=" + networkWifiInfo +
-                ", networkMobileInfo=" + networkMobileInfo +
-                '}';
+        return "NetworkPointInTime{"
+                + "time=" + time
+                + ", relativeTimeNs=" + relativeTimeNs
+                + ", agentPublicIp='" + agentPublicIp + '\''
+                + ", agentPrivateIp='" + agentPrivateIp + '\''
+                + ", agentPublicIpCountryCode='" + agentPublicIpCountryCode + '\''
+                + ", publicIpRdns='" + publicIpRdns + '\''
+                + ", networkType=" + networkType
+                + ", providerInfo=" + providerInfo
+                + ", networkWifiInfo=" + networkWifiInfo
+                + ", networkMobileInfo=" + networkMobileInfo
+                + '}';
     }
 }

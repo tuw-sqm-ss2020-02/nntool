@@ -54,9 +54,9 @@ public class InformationCollectorTool {
     /**
      *
      */
-    final List<CollectorHolder> collectorList = new ArrayList<>();
+    private final List<CollectorHolder> collectorList = new ArrayList<>();
 
-    final TimeUnit deltaTimeUnit;
+    private final TimeUnit deltaTimeUnit;
 
     private final AtomicBoolean running = new AtomicBoolean(false);
 
@@ -213,7 +213,7 @@ public class InformationCollectorTool {
     }
 
     public final class CollectorHolder {
-        final Collector<?, ?> collector;
+        private final Collector<?, ?> collector;
         private long lastUpdate = Long.MIN_VALUE;
 
         public CollectorHolder(final Collector<?, ?> collector) {

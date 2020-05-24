@@ -66,35 +66,34 @@ public interface MeasurementRepository extends CouchDbRepository<Measurement> {
     )
     Page<Measurement> findAllTest123(Pageable pageable);
 
-// spring-data-couchdb Demo:
+    // spring-data-couchdb Demo:
+    // @MangoQuery("{\n" +
+    // "   \"selector\": {\n" +
+    // "      \"docType\": \"?docType\",\n" +
+    // "      \"uuid\": \"?0\"\n" +
+    // "   }\n" +
+    // "}")
+    // Measurement findByUuidWithMangoQueryAnnotation(String uuid);
 
-//	@MangoQuery("{\n" + 
-//	"   \"selector\": {\n" + 
-//	"      \"docType\": \"?docType\",\n" + 
-//	"      \"uuid\": \"?0\"\n" + 
-//	"   }\n" + 
-//	"}")
-//	Measurement findByUuidWithMangoQueryAnnotation(String uuid);
+    // @MangoQuery("{\n" +
+    // "   \"selector\": {\n" +
+    // "      \"docType\": \"?docType\"\n" +
+    // "   }\n" +
+    // "}")
+    // List<Measurement> findAllMangoQuery();
 
-//	@MangoQuery("{\n" + 
-//	"   \"selector\": {\n" + 
-//	"      \"docType\": \"?docType\"\n" +
-//	"   }\n" + 
-//	"}")
-//	List<Measurement> findAllMangoQuery();
+    // @View(designDocument = "Test", viewName = "byUuid", limit = 1, includeDocs = true)
+    // Measurement findByViewSingle(@Key String uuid);
 
-//	@View(designDocument = "Test", viewName = "byUuid", limit = 1, includeDocs = true)
-//	Measurement findByViewSingle(@Key String uuid);
+    // @View(designDocument = "Test", viewName = "byUuid", limit = 1, includeDocs = true)
+    // Optional<Measurement> findByViewSingleOptional(@Key String uuid);
 
-//	@View(designDocument = "Test", viewName = "byUuid", limit = 1, includeDocs = true)
-//	Optional<Measurement> findByViewSingleOptional(@Key String uuid);
+    // @View(designDocument = "Test", viewName = "byUuid", includeDocs = true)
+    // Measurement[] findByViewArray(@Key String uuid);
 
-//	@View(designDocument = "Test", viewName = "byUuid", includeDocs = true)
-//	Measurement[] findByViewArray(@Key String uuid);
+    // @View(designDocument = "Test", viewName = "byUuid", includeDocs = true)
+    // List<Measurement> findByViewList(@Key String uuid);
 
-//	@View(designDocument = "Test", viewName = "byUuid", includeDocs = true)
-//	List<Measurement> findByViewList(@Key String uuid);
-
-//	@View(designDocument = "Test", viewName = "byUuid", includeDocs = true)
-//	Stream<Measurement> findByViewStream(@Key String uuid);
+    // @View(designDocument = "Test", viewName = "byUuid", includeDocs = true)
+    // Stream<Measurement> findByViewStream(@Key String uuid);
 }

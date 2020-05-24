@@ -17,29 +17,27 @@
 package at.alladin.nntool.client;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class TestResult {
     /**
      * Local address of connection
      */
-    public InetAddress ip_local;
+    protected InetAddress ipLocal;
 
     /**
      * External ip of server connection
      */
-    public InetAddress ip_server;
+    protected InetAddress ipServer;
 
     /**
      * External port (server) connected to
      */
-    public int port_remote;
+    protected int portRemote;
 
     /**
      * "Standard name for protocol (Name of cypher suite)"
      */
-    public String encryption = "NONE";
+    protected String encryption = "NONE";
 
 
 }

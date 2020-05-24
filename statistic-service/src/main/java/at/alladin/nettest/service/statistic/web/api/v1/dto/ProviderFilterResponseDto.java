@@ -38,7 +38,7 @@ public class ProviderFilterResponseDto {
     @Expose
     @SerializedName("filters")
     @JsonProperty("filters")
-    List<BasicFilterDto<?>> filters = new ArrayList<>();
+    private List<BasicFilterDto<?>> filters = new ArrayList<>();
 
     public List<BasicFilterDto<?>> getFilters() {
         return filters;

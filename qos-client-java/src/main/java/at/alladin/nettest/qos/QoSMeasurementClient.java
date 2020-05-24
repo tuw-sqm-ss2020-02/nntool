@@ -16,23 +16,23 @@
 
 package at.alladin.nettest.qos;
 
-import static at.alladin.nntool.client.v2.task.AbstractQoSTask.PARAM_QOS_CONCURRENCY_GROUP;
+import at.alladin.nntool.client.ClientHolder;
+import at.alladin.nntool.client.QualityOfServiceTest;
+import at.alladin.nntool.client.helper.TestStatus;
+import at.alladin.nntool.client.v2.task.TaskDesc;
+import at.alladin.nntool.client.v2.task.result.QoSResultCollector;
+import at.alladin.nntool.client.v2.task.service.TestSettings;
+import at.alladin.nntool.shared.qos.QosMeasurementType;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import at.alladin.nntool.shared.qos.QosMeasurementType;
-import at.alladin.nntool.client.QualityOfServiceTest;
-import at.alladin.nntool.client.ClientHolder;
-import at.alladin.nntool.client.helper.TestStatus;
-import at.alladin.nntool.client.v2.task.QoSTestEnum;
-import at.alladin.nntool.client.v2.task.TaskDesc;
-import at.alladin.nntool.client.v2.task.result.QoSResultCollector;
-import at.alladin.nntool.client.v2.task.service.TestSettings;
+import static at.alladin.nntool.client.v2.task.AbstractQoSTask.PARAM_QOS_CONCURRENCY_GROUP;
 
 public class QoSMeasurementClient {
 

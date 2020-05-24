@@ -54,10 +54,10 @@ public class MeasurementServerLoadService {
     private final Logger logger = LoggerFactory.getLogger(MeasurementServerLoadService.class);
 
     @Autowired
-    StorageService storageService;
+    private StorageService storageService;
 
     @Autowired
-    LoadbalancerServiceProperties properties;
+    private LoadbalancerServiceProperties properties;
 
     public void getLoadForMeasurementServer(final DeferredResult<ResponseEntity<?>> deferred, final String identifier) {
         final MeasurementServerDto server = storageService.getSpeedMeasurementServerByPublicIdentifier(identifier);
@@ -78,7 +78,7 @@ public class MeasurementServerLoadService {
 
     public static class LoadCallable implements Callable<LoadApiResponse> {
 
-        final MeasurementServerDto peer;
+        private final MeasurementServerDto peer;
 
         public LoadCallable(final MeasurementServerDto peer) {
             this.peer = peer;

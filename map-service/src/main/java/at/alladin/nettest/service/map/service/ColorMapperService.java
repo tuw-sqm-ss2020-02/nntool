@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2013-2019 alladin-IT GmbH
- * Copyright 2014-2016 SPECURE GmbH 
+ * Copyright 2014-2016 SPECURE GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,8 +59,8 @@ public class ColorMapperService {
     }
 
     /**
-     * @param colors
-     * @param intervals
+     * @param signalGroup
+     * @param classificationType
      * @param value
      * @return
      */
@@ -111,11 +111,8 @@ public class ColorMapperService {
      * closest colours, but simply assigned according to the cutoff logic
      *
      * @param value
-     * @param technology
      * @param signalGroup
      * @param classificationType
-     * @param colors
-     * @param intervals
      * @return
      */
     protected int valueToDiscreteColor(final double value, final MapServiceOptions.SignalGroup signalGroup,

@@ -46,7 +46,7 @@ import org.json.JSONObject;
 
 public class JSONParser {
     // Start filing Errors
-    JSONArray errorList = null;
+    private JSONArray errorList = null;
 
     // constructor
     public JSONParser() {
@@ -55,9 +55,7 @@ public class JSONParser {
     }
 
     /**
-     *
      * @param object
-     * @return
      * @throws JSONException
      */
     public static Map<String, Object> toMap(JSONObject object) throws JSONException {
@@ -72,7 +70,6 @@ public class JSONParser {
 
     /**
      * @param array
-     * @return
      * @throws JSONException
      */
     public static List<Object> toList(JSONArray array) throws JSONException {
@@ -85,7 +82,6 @@ public class JSONParser {
 
     /**
      * @param json
-     * @return
      * @throws JSONException
      */
     private static Object fromJson(Object json) throws JSONException {

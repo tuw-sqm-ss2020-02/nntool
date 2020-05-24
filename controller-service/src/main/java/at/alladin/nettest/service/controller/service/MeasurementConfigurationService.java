@@ -47,7 +47,7 @@ import at.alladin.nettest.shared.server.service.storage.v1.StorageService;
 @Service
 public class MeasurementConfigurationService {
 
-    private static final Logger logger = LoggerFactory.getLogger(MeasurementConfigurationService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeasurementConfigurationService.class);
 
     @Autowired
     private StorageService storageService;
@@ -67,7 +67,7 @@ public class MeasurementConfigurationService {
         ret.setSchedules(getLmapScheduleList(ret.getEvents().get(0).getName(), ret.getTasks()));
 
         try {
-            logger.debug("{}", new ObjectMapper().writeValueAsString(ret));
+            LOGGER.debug("{}", new ObjectMapper().writeValueAsString(ret));
         } catch (JsonProcessingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -138,7 +138,7 @@ public class MeasurementConfigurationService {
             try {
                 type = MeasurementTypeDto.valueOf(capability.getTaskName().toUpperCase());
             } catch (IllegalArgumentException ex) {
-                logger.error(String.format("Unknown measurement type of name %s requested. Ignoring.", capability.getTaskName()));
+                LOGGER.error(String.format("Unknown measurement type of name %s requested. Ignoring.", capability.getTaskName()));
                 continue;
             }
             LmapTaskDto task = getMeasurementTaskConfiguration(type, capability, useIPv6);

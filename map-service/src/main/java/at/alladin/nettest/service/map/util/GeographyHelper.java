@@ -19,7 +19,7 @@ package at.alladin.nettest.service.map.util;
 import at.alladin.nettest.service.map.domain.model.BoundingBox;
 import at.alladin.nntool.shared.map.MapTileParameters;
 
-public class GeographyHelper {
+public final class GeographyHelper {
 
     // see
     // http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/
@@ -29,6 +29,7 @@ public class GeographyHelper {
     }
 
     /**
+     * @param tileSize
      * @param zoom zoomlevel
      * @return resolution in meters per pixel
      */
@@ -61,8 +62,7 @@ public class GeographyHelper {
     }
 
     public static BoundingBox xyToMeters(final MapTileParameters params) {
-        return xyToMeters(TileHelper.getTileSizeLengthAt(TileHelper.getTileSizeIdx(params.getSize()))
-                , params.getX(), params.getY(), params.getZoom());
+        return xyToMeters(TileHelper.getTileSizeLengthAt(TileHelper.getTileSizeIdx(params.getSize())), params.getX(), params.getY(), params.getZoom());
     }
 
     /**

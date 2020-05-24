@@ -44,7 +44,7 @@ import at.alladin.nettest.shared.server.opendata.service.OpenDataMeasurementServ
 @ConditionalOnProperty(name = "opendata-collector.opendata-import.enabled")
 public class OpendataImportSchedulingService {
 
-    private static final Logger logger = LoggerFactory.getLogger(OpendataImportSchedulingService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OpendataImportSchedulingService.class);
     private final Map<String, ScheduledFuture<?>> jobs = new ConcurrentHashMap<>();
     @Autowired
     private OpendataCollectorServiceProperties opendataCollectorServiceProperties;
@@ -74,7 +74,7 @@ public class OpendataImportSchedulingService {
         sources.stream()
                 .filter(Source::isEnabled)
                 .forEach(source -> {
-                    logger.debug("Initializing device import for: {}, using cron: {}", source.getName(), source.getCron());
+                    LOGGER.debug("Initializing device import for: {}, using cron: {}", source.getName(), source.getCron());
 
                     final ScheduledFuture<?> task = taskScheduler.schedule(
                             new OpendataImportWorker(source, opendataImport.getConfig(), restTemplate, openDataMeasurementService),

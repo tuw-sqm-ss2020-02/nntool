@@ -255,8 +255,8 @@ public final class RtpUtil {
      * @author lb
      */
     public final static class RtpControlData {
-        RtpPacket rtpPacket;
-        long receivedNs;
+        private RtpPacket rtpPacket;
+        private long receivedNs;
 
         public RtpControlData(RtpPacket rtpPacket, long receivedNs) {
             this.rtpPacket = rtpPacket;
@@ -265,8 +265,8 @@ public final class RtpUtil {
     }
 
     private final static class RtpSequence implements Comparable<RtpSequence> {
-        long timestampNs;
-        int seq;
+        private long timestampNs;
+        private int seq;
 
         public RtpSequence(long timestampNs, int seq) {
             this.timestampNs = timestampNs;
@@ -282,17 +282,17 @@ public final class RtpUtil {
     }
 
     public final static class RtpQoSResult {
-        final Map<Integer, Float> jitterMap;
-        final int receivedPackets;
-        final long maxJitter;
-        final long meanJitter;
-        final long skew;
-        final long maxDelta;
-        final int outOfOrder;
-        final int minSequential;
-        final int maxSequencial;
-        final int numberOfStalls;
-        final long avgStallTime;
+        private final Map<Integer, Float> jitterMap;
+        private final int receivedPackets;
+        private final long maxJitter;
+        private final long meanJitter;
+        private final long skew;
+        private final long maxDelta;
+        private final int outOfOrder;
+        private final int minSequential;
+        private final int maxSequencial;
+        private final int numberOfStalls;
+        private final long avgStallTime;
 
         public RtpQoSResult(long maxJitter, long meanJitter, long skew, long maxDelta,
                             int outOfOrder, int minSequential, int maxSequential,

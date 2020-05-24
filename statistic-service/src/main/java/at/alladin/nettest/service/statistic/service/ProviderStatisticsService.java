@@ -43,100 +43,100 @@ import at.alladin.nettest.service.statistic.web.api.v1.dto.ProviderStatisticsReq
 @Service
 public class ProviderStatisticsService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProviderStatisticsService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProviderStatisticsService.class);
 
     private final static String WHERE_TIME = " AND m.start_time > (NOW() - cast(? as interval)) ";
 
     private final static String QUERY_WIFI =
-            "select " +
-                    "count(*), " +
-                    "percentile_cont(0.5) within group (order by im.rtt_median_ns asc) as ping, " +
-                    "percentile_cont(0.5) within group (order by im.throughput_avg_download_bps asc) as down, " +
-                    "percentile_cont(0.5) within group (order by im.throughput_avg_upload_bps asc) as up, " +
-                    "percentile_cont(0.5) within group (order by m.wifi_network_rssi_dbm asc) as signal_wifi, " +
-                    "coalesce(provider_name, provider_shortname, provider_public_ip_as_name) as provider_name, " +
-                    "provider_public_ip_asn as provider_asn, " +
-                    "provider_country_asn as provider_country " +
-                    "from measurements m " +
-                    "left join ias_measurements im on im.measurement_open_data_uuid = m.open_data_uuid " +
-                    "where throughput_avg_upload_bps is not null and throughput_avg_download_bps is not null and rtt_median_ns is not null " +
-                    "and m.initial_network_type_id = 99 %%WHERE%% " +
-                    "group by 6,7,8 " +
-                    "offset ? limit ?";
+            "select "
+                    + "count(*), "
+                    + "percentile_cont(0.5) within group (order by im.rtt_median_ns asc) as ping, "
+                    + "percentile_cont(0.5) within group (order by im.throughput_avg_download_bps asc) as down, "
+                    + "percentile_cont(0.5) within group (order by im.throughput_avg_upload_bps asc) as up, "
+                    + "percentile_cont(0.5) within group (order by m.wifi_network_rssi_dbm asc) as signal_wifi, "
+                    + "coalesce(provider_name, provider_shortname, provider_public_ip_as_name) as provider_name, "
+                    + "provider_public_ip_asn as provider_asn, "
+                    + "provider_country_asn as provider_country "
+                    + "from measurements m "
+                    + "left join ias_measurements im on im.measurement_open_data_uuid = m.open_data_uuid "
+                    + "where throughput_avg_upload_bps is not null and throughput_avg_download_bps is not null and rtt_median_ns is not null "
+                    + "and m.initial_network_type_id = 99 %%WHERE%% "
+                    + "group by 6,7,8 "
+                    + "offset ? limit ?";
 
     private final static String QUERY_WIFI_COUNT =
-            "SELECT count(*) FROM (" +
-                    "select " +
-                    "coalesce(provider_name, provider_shortname, provider_public_ip_as_name) as provider_name, " +
-                    "provider_public_ip_asn as provider_asn, " +
-                    "provider_country_asn as provider_country " +
-                    "from measurements m " +
-                    "left join ias_measurements im on im.measurement_open_data_uuid = m.open_data_uuid " +
-                    "where throughput_avg_upload_bps is not null and throughput_avg_download_bps is not null and rtt_median_ns is not null " +
-                    "and m.initial_network_type_id = 99 %%WHERE%% " +
-                    "group by 1,2,3 " +
-                    ") AS count_query";
+            "SELECT count(*) FROM ("
+                    + "select "
+                    + "coalesce(provider_name, provider_shortname, provider_public_ip_as_name) as provider_name, "
+                    + "provider_public_ip_asn as provider_asn, "
+                    + "provider_country_asn as provider_country "
+                    + "from measurements m "
+                    + "left join ias_measurements im on im.measurement_open_data_uuid = m.open_data_uuid "
+                    + "where throughput_avg_upload_bps is not null and throughput_avg_download_bps is not null and rtt_median_ns is not null "
+                    + "and m.initial_network_type_id = 99 %%WHERE%% "
+                    + "group by 1,2,3 "
+                    + ") AS count_query";
 
     private final static String QUERY_BROWSER =
-            "select " +
-                    "count(*), " +
-                    "percentile_cont(0.5) within group (order by im.rtt_median_ns asc) as ping, " +
-                    "percentile_cont(0.5) within group (order by im.throughput_avg_download_bps asc) as down, " +
-                    "percentile_cont(0.5) within group (order by im.throughput_avg_upload_bps asc) as up, " +
-                    "coalesce(provider_name, provider_shortname, provider_public_ip_as_name) as provider_name, " +
-                    "provider_public_ip_asn as provider_asn, " +
-                    "provider_country_asn as provider_country, " +
-                    "null::int as signal " +
-                    "from measurements m " +
-                    "left join ias_measurements im on im.measurement_open_data_uuid = m.open_data_uuid " +
-                    "where throughput_avg_upload_bps is not null and throughput_avg_download_bps is not null and rtt_median_ns is not null " +
-                    "and agent_type = 'BROWSER' %%WHERE%% " +
-                    "group by 5,6,7 " +
-                    "offset ? limit ?";
+            "select "
+                    + "count(*), "
+                    + "percentile_cont(0.5) within group (order by im.rtt_median_ns asc) as ping, "
+                    + "percentile_cont(0.5) within group (order by im.throughput_avg_download_bps asc) as down, "
+                    + "percentile_cont(0.5) within group (order by im.throughput_avg_upload_bps asc) as up, "
+                    + "coalesce(provider_name, provider_shortname, provider_public_ip_as_name) as provider_name, "
+                    + "provider_public_ip_asn as provider_asn, "
+                    + "provider_country_asn as provider_country, "
+                    + "null::int as signal "
+                    + "from measurements m "
+                    + "left join ias_measurements im on im.measurement_open_data_uuid = m.open_data_uuid "
+                    + "where throughput_avg_upload_bps is not null and throughput_avg_download_bps is not null and rtt_median_ns is not null "
+                    + "and agent_type = 'BROWSER' %%WHERE%% "
+                    + "group by 5,6,7 "
+                    + "offset ? limit ?";
 
     private final static String QUERY_BROWSER_COUNT =
-            "SELECT count(*) FROM (" +
-                    "select " +
-                    "coalesce(provider_name, provider_shortname, provider_public_ip_as_name) as provider_name, " +
-                    "provider_public_ip_asn as provider_asn, " +
-                    "provider_country_asn as provider_country " +
-                    "from measurements m  " +
-                    "left join ias_measurements im on im.measurement_open_data_uuid = m.open_data_uuid " +
-                    "where throughput_avg_upload_bps is not null and throughput_avg_download_bps is not null and rtt_median_ns is not null " +
-                    "and agent_type = 'BROWSER' %%WHERE%% " +
-                    "group by 1,2,3 " +
-                    ") AS count_query";
+            "SELECT count(*) FROM ("
+                    + "select "
+                    + "coalesce(provider_name, provider_shortname, provider_public_ip_as_name) as provider_name, "
+                    + "provider_public_ip_asn as provider_asn, "
+                    + "provider_country_asn as provider_country "
+                    + "from measurements m  "
+                    + "left join ias_measurements im on im.measurement_open_data_uuid = m.open_data_uuid "
+                    + "where throughput_avg_upload_bps is not null and throughput_avg_download_bps is not null and rtt_median_ns is not null "
+                    + "and agent_type = 'BROWSER' %%WHERE%% "
+                    + "group by 1,2,3 "
+                    + ") AS count_query";
 
     private final static String QUERY_MOBILE =
-            "select " +
-                    "count(*), " +
-                    "percentile_cont(0.5) within group (order by im.rtt_median_ns asc) as ping, " +
-                    "percentile_cont(0.5) within group (order by im.throughput_avg_download_bps asc) as down, " +
-                    "percentile_cont(0.5) within group (order by im.throughput_avg_upload_bps asc) as up, " +
-                    "coalesce(percentile_cont(0.5) within group (order by m.mobile_network_lte_rsrp_dbm asc), percentile_cont(0.5) within group (order by m.mobile_network_signal_strength_2g3g_dbm asc)) as signal, " +
-                    "coalesce(provider_name, provider_shortname, mobile_sim_operator_name, provider_public_ip_as_name) as provider_name, " +
-                    "provider_public_ip_asn as provider_asn, " +
-                    "mobile_sim_country_code as provider_country, " +
-                    "(mobile_sim_operator_mcc || '-' || mobile_sim_operator_mnc) as provider_mnc " +
-                    "from measurements m " +
-                    "left join ias_measurements im on im.measurement_open_data_uuid = m.open_data_uuid " +
-                    "where throughput_avg_upload_bps is not null and throughput_avg_download_bps is not null and rtt_median_ns is not null " +
-                    "and m.initial_network_type_id not in (97, 98, 99, 106, 107) %%WHERE%% " +
-                    "group by 6,9,7,8 " +
-                    "offset ? limit ?";
+            "select "
+                    + "count(*), "
+                    + "percentile_cont(0.5) within group (order by im.rtt_median_ns asc) as ping, "
+                    + "percentile_cont(0.5) within group (order by im.throughput_avg_download_bps asc) as down, "
+                    + "percentile_cont(0.5) within group (order by im.throughput_avg_upload_bps asc) as up, "
+                    + "coalesce(percentile_cont(0.5) within group (order by m.mobile_network_lte_rsrp_dbm asc), percentile_cont(0.5) within group (order by m.mobile_network_signal_strength_2g3g_dbm asc)) as signal, "
+                    + "coalesce(provider_name, provider_shortname, mobile_sim_operator_name, provider_public_ip_as_name) as provider_name, "
+                    + "provider_public_ip_asn as provider_asn, "
+                    + "mobile_sim_country_code as provider_country, "
+                    + "(mobile_sim_operator_mcc || '-' || mobile_sim_operator_mnc) as provider_mnc "
+                    + "from measurements m "
+                    + "left join ias_measurements im on im.measurement_open_data_uuid = m.open_data_uuid "
+                    + "where throughput_avg_upload_bps is not null and throughput_avg_download_bps is not null and rtt_median_ns is not null "
+                    + "and m.initial_network_type_id not in (97, 98, 99, 106, 107) %%WHERE%% "
+                    + "group by 6,9,7,8 "
+                    + "offset ? limit ?";
 
     private final static String QUERY_MOBILE_COUNT =
-            "SELECT count(*) FROM (" +
-                    "SELECT " +
-                    "COALESCE(provider_name, provider_shortname, mobile_sim_operator_name, provider_public_ip_as_name) AS provider_name, " +
-                    "(mobile_sim_operator_mcc || '-' || mobile_sim_operator_mnc) AS provider_mnc, " +
-                    "mobile_sim_country_code AS provider_country " +
-                    "FROM measurements m  " +
-                    "LEFT JOIN ias_measurements im on im.measurement_open_data_uuid = m.open_data_uuid " +
-                    "WHERE throughput_avg_upload_bps IS NOT NULL AND throughput_avg_download_bps IS NOT NULL AND rtt_median_ns IS NOT NULL " +
-                    "AND m.initial_network_type_id NOT IN (97, 98, 99, 106, 107) %%WHERE%% " +
-                    "GROUP BY 1,2,3 " +
-                    ") AS count_query";
+            "SELECT count(*) FROM ("
+                    + "SELECT "
+                    + "COALESCE(provider_name, provider_shortname, mobile_sim_operator_name, provider_public_ip_as_name) AS provider_name, "
+                    + "(mobile_sim_operator_mcc || '-' || mobile_sim_operator_mnc) AS provider_mnc, "
+                    + "mobile_sim_country_code AS provider_country "
+                    + "FROM measurements m  "
+                    + "LEFT JOIN ias_measurements im on im.measurement_open_data_uuid = m.open_data_uuid "
+                    + "WHERE throughput_avg_upload_bps IS NOT NULL AND throughput_avg_download_bps IS NOT NULL AND rtt_median_ns IS NOT NULL "
+                    + "AND m.initial_network_type_id NOT IN (97, 98, 99, 106, 107) %%WHERE%% "
+                    + "GROUP BY 1,2,3 "
+                    + ") AS count_query";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -168,6 +168,8 @@ public class ProviderStatisticsService {
                         queryCount = QUERY_WIFI_COUNT;
                         isMobile = false;
                         break;
+                    default:
+                        break;
                 }
             }
 
@@ -178,7 +180,7 @@ public class ProviderStatisticsService {
 
         final boolean isMobileFinal = isMobile;
 
-        logger.debug("{}", queryCount.replace("%%WHERE%%", where.toString()));
+        LOGGER.debug("{}", queryCount.replace("%%WHERE%%", where.toString()));
         final Long count = jdbcTemplate.query(queryCount.replace("%%WHERE%%", where.toString()),
                 new PreparedStatementSetterImpl(params, null),
                 new ResultSetExtractor<Long>() {
@@ -191,9 +193,9 @@ public class ProviderStatisticsService {
                         return 0L;
                     }
                 });
-        logger.debug("count: {}", count);
+        LOGGER.debug("count: {}", count);
 
-        logger.debug("{}", query.replace("%%WHERE%%", where.toString()));
+        LOGGER.debug("{}", query.replace("%%WHERE%%", where.toString()));
         final List<ProviderStatisticDto> result = jdbcTemplate.query(query.replace("%%WHERE%%", where.toString()),
                 new PreparedStatementSetterImpl(params, pageable),
                 new RowMapper<ProviderStatisticDto>() {
@@ -224,8 +226,8 @@ public class ProviderStatisticsService {
 
     public static class PreparedStatementSetterImpl implements PreparedStatementSetter {
 
-        final ProviderStatisticsRequestParams params;
-        final Pageable pageable;
+        private final ProviderStatisticsRequestParams params;
+        private final Pageable pageable;
 
         public PreparedStatementSetterImpl(final ProviderStatisticsRequestParams params, final Pageable pageable) {
             this.params = params;

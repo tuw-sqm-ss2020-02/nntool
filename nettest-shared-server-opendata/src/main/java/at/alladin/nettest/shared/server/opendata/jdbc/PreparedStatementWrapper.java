@@ -29,7 +29,7 @@ import org.joda.time.LocalDateTime;
  */
 public class PreparedStatementWrapper {
 
-    final PreparedStatement preparedStatement;
+    private final PreparedStatement preparedStatement;
 
     public PreparedStatementWrapper(PreparedStatement preparedStatement) {
         this.preparedStatement = preparedStatement;

@@ -23,7 +23,10 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class TestTcp {
+public final class TestTcp {
+
+    private TestTcp() {
+    }
 
     public static void main(String[] args) throws IOException {
         try (final ServerSocket serverSocket = new ServerSocket(3000)) {
@@ -40,7 +43,7 @@ public class TestTcp {
 
     public static class TcpHandler {
 
-        final Socket socket;
+        private final Socket socket;
 
         public TcpHandler(final Socket socket) {
             this.socket = socket;

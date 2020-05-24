@@ -48,7 +48,7 @@ public class DataInputStreamMockup extends MockUp<DataInputStream> {
     }
 
     @Mock
-    public int read(byte b[]) throws IOException {
+    public int read(byte[] b) throws IOException {
         if (index.get() >= messages.length) {
             return -1;
         }

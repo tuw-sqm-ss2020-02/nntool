@@ -40,7 +40,7 @@ import at.alladin.nettest.shared.server.config.ElasticSearchProperties;
 @Configuration
 public class ElasticsearchConfiguration {
 
-    private static final Logger logger = LoggerFactory.getLogger(ElasticsearchConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ElasticsearchConfiguration.class);
 
     @Autowired
     private SearchServiceProperties searchServiceProperties;
@@ -67,15 +67,15 @@ public class ElasticsearchConfiguration {
             final boolean indexExists = elasticsearchClient().indices().exists(new GetIndexRequest(index), RequestOptions.DEFAULT);
 
             if (indexExists) {
-                logger.debug("{} index already created", index);
+                LOGGER.debug("{} index already created", index);
             } else {
-                logger.debug("Creating {} index", index);
+                LOGGER.debug("Creating {} index", index);
 
                 final CreateIndexRequest createIndexRequest = new CreateIndexRequest(index);
                 elasticsearchClient().indices().create(createIndexRequest, RequestOptions.DEFAULT);
             }
         } catch (Exception ex) {
-            logger.error("Could not create configured Elasticsearch index named {}", index, ex);
+            LOGGER.error("Could not create configured Elasticsearch index named {}", index, ex);
         }
     }
 }

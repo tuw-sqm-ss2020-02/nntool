@@ -36,9 +36,9 @@ public class QoSControlConnection extends AbstractTest implements Runnable {
 
     public final static Pattern ID_REGEX_PATTERN = Pattern.compile("\\+ID([\\d]*)");
 
-    public final AtomicBoolean isRunning = new AtomicBoolean(true);
+    protected final AtomicBoolean isRunning = new AtomicBoolean(true);
 
-    public final AtomicBoolean couldNotConnect = new AtomicBoolean(false);
+    protected final AtomicBoolean couldNotConnect = new AtomicBoolean(false);
 
     private final ConcurrentHashMap<Integer, ControlConnectionResponseCallbackHolder> requestMap =
             new ConcurrentHashMap<Integer, ControlConnectionResponseCallbackHolder>();
@@ -144,8 +144,8 @@ public class QoSControlConnection extends AbstractTest implements Runnable {
      * @author lb
      */
     protected final class ControlConnectionResponseCallbackHolder {
-        ControlConnectionResponseCallback callback;
-        String reqeust;
+        private ControlConnectionResponseCallback callback;
+        private String reqeust;
 
         public ControlConnectionResponseCallbackHolder(String request, ControlConnectionResponseCallback callback) {
             this.reqeust = request;

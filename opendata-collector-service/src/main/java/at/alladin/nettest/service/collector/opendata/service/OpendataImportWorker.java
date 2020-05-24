@@ -39,7 +39,7 @@ import at.alladin.nettest.shared.server.opendata.service.OpenDataMeasurementServ
  */
 public class OpendataImportWorker implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(OpendataImportWorker.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OpendataImportWorker.class);
 
     private final Source source;
     private final Config config;
@@ -60,11 +60,11 @@ public class OpendataImportWorker implements Runnable {
         final String sourceName = source.getName();
 
         if (config.getBatchRunLimit() < 1) {
-            logger.info("Skipping import for source {} because batch-run-limit must be greater than zero (current value: {}).", sourceName, config.getBatchRunLimit());
+            LOGGER.info("Skipping import for source {} because batch-run-limit must be greater than zero (current value: {}).", sourceName, config.getBatchRunLimit());
             return;
         }
 
-        logger.info("Running opendata import for source: {}, url: {}", sourceName, source.getUrl());
+        LOGGER.info("Running opendata import for source: {}, url: {}", sourceName, source.getUrl());
 
         final String latestStartTime = openDataMeasurementService.getLatestStartTime();
 
@@ -75,7 +75,7 @@ public class OpendataImportWorker implements Runnable {
         do {
             final String urlWithParams = generateCurrentUrl(latestStartTime, page++);
 
-            logger.debug("Requesting measurements from {}.", urlWithParams);
+            LOGGER.debug("Requesting measurements from {}.", urlWithParams);
 
             try {
                 final ResponseEntity<ApiResponse<ApiPagination<Map<String, Object>>>> resultEntity =
@@ -84,18 +84,18 @@ public class OpendataImportWorker implements Runnable {
 
                 currentResult = resultEntity.getBody().getData();
             } catch (Exception ex) {
-                logger.error("Aborting opendata import of source {} due to exception during HTTP request.", sourceName, ex);
+                LOGGER.error("Aborting opendata import of source {} due to exception during HTTP request.", sourceName, ex);
                 return;
             }
 
             final List<Map<String, Object>> measurements = currentResult.getContent();
 
-            logger.debug("Importing {} measurements from page {} (source: {}, url: {}).", measurements.size(), page, sourceName, urlWithParams);
+            LOGGER.debug("Importing {} measurements from page {} (source: {}, url: {}).", measurements.size(), page, sourceName, urlWithParams);
 
             try {
                 openDataMeasurementService.bulkStoreOpenDataMeasurement(measurements);
             } catch (Exception ex) {
-                logger.error("Aborting opendata import of source {} due to exception during database inserts.", sourceName, ex);
+                LOGGER.error("Aborting opendata import of source {} due to exception during database inserts.", sourceName, ex);
                 return;
             }
 
@@ -106,13 +106,13 @@ public class OpendataImportWorker implements Runnable {
             } catch (InterruptedException e) {
             }
         } while (
-                currentResult != null && currentResult.getContent() != null &&
-                        !currentResult.getContent().isEmpty()
+                currentResult != null && currentResult.getContent() != null
+                        && !currentResult.getContent().isEmpty()
                         && page < currentResult.getTotalPages()
                         && page < config.getBatchRunLimit()
         ); // TODO: specify timeout?
 
-        logger.info("Finished opendata import after {} page(s) ({} measurements) for source: {}, url: {}", page, measurementCount, sourceName, source.getUrl()); // (took {} seconds)
+        LOGGER.info("Finished opendata import after {} page(s) ({} measurements) for source: {}, url: {}", page, measurementCount, sourceName, source.getUrl()); // (took {} seconds)
     }
 
     private String generateCurrentUrl(String startTime, long page) {

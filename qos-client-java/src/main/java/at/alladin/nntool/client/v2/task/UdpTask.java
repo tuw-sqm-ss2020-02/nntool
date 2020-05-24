@@ -360,9 +360,7 @@ public class UdpTask extends AbstractQoSTask {
     }
 
     /**
-     *
      * @param packetData
-     * @return
      * @throws Exception
      */
     public DatagramChannel sendUdpPackets(final UdpPacketData packetData) throws Exception {
@@ -371,9 +369,9 @@ public class UdpTask extends AbstractQoSTask {
                 timeout, TimeUnit.NANOSECONDS, false, 10000);
 
         final NioUdpStreamSender udpStreamSender = new NioUdpStreamSender(udpSettings, new UdpStreamCallback() {
-            final TreeSet<Integer> packetsReceived = new TreeSet<Integer>();
-            final TreeSet<Integer> duplicatePackets = new TreeSet<Integer>();
-            final TreeMap<Integer, Long> rttMap = new TreeMap<>();
+            private final TreeSet<Integer> packetsReceived = new TreeSet<Integer>();
+            private final TreeSet<Integer> duplicatePackets = new TreeSet<Integer>();
+            private final TreeMap<Integer, Long> rttMap = new TreeMap<>();
 
             public boolean onSend(DataOutputStream dataOut, int packetNumber, byte[] receivedPayload) throws IOException {
                 System.out.println("UDP OUT Test: sending packet #" + packetNumber);
@@ -435,7 +433,6 @@ public class UdpTask extends AbstractQoSTask {
     }
 
     /**
-     *
      * @param socket
      * @param packets
      * @param packetData
@@ -532,11 +529,11 @@ public class UdpTask extends AbstractQoSTask {
      * @author lb
      */
     public static class UdpPacketData {
-        int remotePort;
-        int numPackets;
-        int dupNumPackets;
-        int rcvServerResponse;
-        TreeMap<Integer, Long> rtts = new TreeMap<>();
+        private int remotePort;
+        private int numPackets;
+        private int dupNumPackets;
+        private int rcvServerResponse;
+        private TreeMap<Integer, Long> rtts = new TreeMap<>();
 
         public UdpPacketData(int remotePort, int numPackets, int dupNumPackets) {
             this.remotePort = remotePort;

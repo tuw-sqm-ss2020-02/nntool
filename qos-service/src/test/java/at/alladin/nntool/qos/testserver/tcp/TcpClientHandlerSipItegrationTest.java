@@ -56,16 +56,16 @@ import mockit.Mocked;
 public class TcpClientHandlerSipItegrationTest {
 
     @Mocked
-    Socket socket;
+    private Socket socket;
 
     @Mocked
-    TcpMultiClientServer tcpServer;
+    private TcpMultiClientServer tcpServer;
 
-    CountDownLatch latch;
+    private CountDownLatch latch;
 
-    SocketWithCountDownLatchMockup slm;
+    private SocketWithCountDownLatchMockup slm;
 
-    TestServerConsoleMockup tscm;
+    private TestServerConsoleMockup tscm;
 
     @Before
     public void init() throws IOException {
@@ -85,11 +85,11 @@ public class TcpClientHandlerSipItegrationTest {
         TestServer.getInstance().serverPreferences = new ServerPreferences();
         final AtomicReference<String[]> results = new AtomicReference<>(new String[2]);
         SocketCommunicationExpectationsUtil.createExpectationWithMultipleResultStrings(socket, fos, results,
-                "INVITE sip:bob@home SIP/2.0\n" +
-                        "Via: SIP/2.0/TCP localhost:5060\n" +
-                        "Max-Forwards: 70\n" +
-                        "From: Alice <sip:alice@home>\n" +
-                        "To: Bob <sip:bob@home>\n\n");
+                "INVITE sip:bob@home SIP/2.0\n"
+                        + "Via: SIP/2.0/TCP localhost:5060\n"
+                        + "Max-Forwards: 70\n"
+                        + "From: Alice <sip:alice@home>\n"
+                        + "To: Bob <sip:bob@home>\n\n");
 
         TcpClientHandler tch = new TcpClientHandler(socket, tcpServer);
 
@@ -134,11 +134,11 @@ public class TcpClientHandlerSipItegrationTest {
         TestServer.getInstance().serverPreferences = new ServerPreferences();
         final AtomicReference<String[]> results = new AtomicReference<>(new String[2]);
         SocketCommunicationExpectationsUtil.createExpectationWithMultipleResultStrings(socket, fos, results,
-                "INVITE sip:bob@home SIP/2.0\n" +
-                        "Via: SIP/2.0/TCP localhost:5060\n" +
-                        "Max-Forwards: 70\n" +
-                        "From: Alice <sip:alice@home>\n" +
-                        "To: Bob <sip:bob@home>\n\n");
+                "INVITE sip:bob@home SIP/2.0\n"
+                        + "Via: SIP/2.0/TCP localhost:5060\n"
+                        + "Max-Forwards: 70\n"
+                        + "From: Alice <sip:alice@home>\n"
+                        + "To: Bob <sip:bob@home>\n\n");
 
         TcpClientHandler tch = new TcpClientHandler(socket, tcpServer);
 
@@ -184,16 +184,16 @@ public class TcpClientHandlerSipItegrationTest {
         TestServer.getInstance().serverPreferences = new ServerPreferences();
         final AtomicReference<String[]> results = new AtomicReference<>(new String[2]);
         SocketCommunicationExpectationsUtil.createExpectationWithMultipleResultStrings(socket, fos, results,
-                "INVITE sip:bob@home SIP/2.0\n" +
-                        "Via: SIP/2.0/TCP localhost:5060\n" +
-                        "Max-Forwards: 70\n" +
-                        "From: Alice <sip:alice@home>\n" +
-                        "To: Bob <sip:bob@home>\n\n",
-                "BYE sip:bob@home SIP/2.0\n" +
-                        "Via: SIP/2.0/TCP localhost:5060\n" +
-                        "Max-Forwards: 70\n" +
-                        "From: Alice <sip:alice@home>\n" +
-                        "To: Bob <sip:bob@home>\n\n");
+                "INVITE sip:bob@home SIP/2.0\n"
+                        + "Via: SIP/2.0/TCP localhost:5060\n"
+                        + "Max-Forwards: 70\n"
+                        + "From: Alice <sip:alice@home>\n"
+                        + "To: Bob <sip:bob@home>\n\n",
+                "BYE sip:bob@home SIP/2.0\n"
+                        + "Via: SIP/2.0/TCP localhost:5060\n"
+                        + "Max-Forwards: 70\n"
+                        + "From: Alice <sip:alice@home>\n"
+                        + "To: Bob <sip:bob@home>\n\n");
 
         TcpClientHandler tch = new TcpClientHandler(socket, tcpServer);
 

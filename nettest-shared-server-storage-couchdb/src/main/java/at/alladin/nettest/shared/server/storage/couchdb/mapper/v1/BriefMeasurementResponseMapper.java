@@ -102,6 +102,8 @@ public interface BriefMeasurementResponseMapper {
                     case SPEED:
                         ret.put(MeasurementTypeDto.SPEED, map((SpeedMeasurement) entry.getValue()));
                         break;
+                    default:
+                        break;
                 }
             }
             return ret;

@@ -39,7 +39,7 @@ import at.alladin.nettest.shared.server.config.ElasticSearchProperties;
 @ConditionalOnProperty(name = "collector.elasticsearch.host")
 public abstract class ElasticsearchConfiguration {
 
-    private static final Logger logger = LoggerFactory.getLogger(ElasticsearchConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ElasticsearchConfiguration.class);
 
     @Bean
     public abstract ElasticSearchProperties elasticSearchProperties();
@@ -53,7 +53,7 @@ public abstract class ElasticsearchConfiguration {
 
         final RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(new HttpHost(e.getHost(), e.getPort(), e.getScheme())));
 
-        logger.info("Created Elasticsearch RestHighLevelClient (to host {} on port {})", e.getHost(), e.getPort());
+        LOGGER.info("Created Elasticsearch RestHighLevelClient (to host {} on port {})", e.getHost(), e.getPort());
 
         return client;
     }
@@ -68,15 +68,15 @@ public abstract class ElasticsearchConfiguration {
             final boolean indexExists = elasticsearchClient().indices().exists(new GetIndexRequest(index), RequestOptions.DEFAULT);
 
             if (indexExists) {
-                logger.debug("{} index already created", index);
+                LOGGER.debug("{} index already created", index);
             } else {
-                logger.debug("Creating {} index", index);
+                LOGGER.debug("Creating {} index", index);
 
                 final CreateIndexRequest createIndexRequest = new CreateIndexRequest(index);
                 elasticsearchClient().indices().create(createIndexRequest, RequestOptions.DEFAULT);
             }
         } catch (Exception ex) {
-            logger.error("Could not create configured Elasticsearch index named {}", index, ex);
+            LOGGER.error("Could not create configured Elasticsearch index named {}", index, ex);
         }
     }
 }

@@ -48,7 +48,7 @@ import springfox.documentation.annotations.ApiIgnore;
 public class MeasurementSearchExportResource {
 
     @SuppressWarnings("unused")
-    private static final Logger logger = LoggerFactory.getLogger(MeasurementSearchExportResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeasurementSearchExportResource.class);
 
     @Autowired
     private ExportService exportService;

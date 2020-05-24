@@ -80,6 +80,8 @@ public class SipCompetence implements Competence {
                             break;
                         case TRYING:
                             break;
+                        default:
+                            break;
                     }
                 } else if (msg instanceof SipRequestMessage) {
                     //we have a SIP request message
@@ -98,6 +100,8 @@ public class SipCompetence implements Competence {
                             resultList.add(new ResponseAction(
                                     new SipResponseMessage(SipResponseType.RINGING, (SipRequestMessage) msg).getData()));
                             resultList.add(new RepeatAction());
+                            break;
+                        default:
                             break;
                     }
                 }

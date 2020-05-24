@@ -62,8 +62,8 @@ public class HttpProxyTask extends AbstractQoSTask {
     public final static String RESULT_RANGE = "http_objective_range";
     public final static String RESULT_TARGET = "http_objective_url";
     public final static String RESULT_HASH = "http_result_hash";
-    public final AtomicBoolean downloadCompleted = new AtomicBoolean(false);
-    public final AtomicBoolean timeOutReached = new AtomicBoolean(false);
+    private final AtomicBoolean downloadCompleted = new AtomicBoolean(false);
+    private final AtomicBoolean timeOutReached = new AtomicBoolean(false);
     private final String target;
     private final String range;
     private final long connectionTimeout;
@@ -121,7 +121,6 @@ public class HttpProxyTask extends AbstractQoSTask {
 
     /**
      * @param input
-     * @return
      * @throws NoSuchAlgorithmException
      */
     public static String generateChecksum(byte[] input) throws NoSuchAlgorithmException {
@@ -133,7 +132,6 @@ public class HttpProxyTask extends AbstractQoSTask {
 
     /**
      * @param file
-     * @return
      * @throws NoSuchAlgorithmException
      * @throws IOException
      */
@@ -143,7 +141,6 @@ public class HttpProxyTask extends AbstractQoSTask {
 
     /**
      * @param inputStream
-     * @return
      * @throws NoSuchAlgorithmException
      * @throws IOException
      */
@@ -359,8 +356,8 @@ public class HttpProxyTask extends AbstractQoSTask {
     }
 
     public static class Md5Result {
-        String md5;
-        long contentLength = 0;
-        long generatingTimeNs = 0;
+        private String md5;
+        private long contentLength = 0;
+        private long generatingTimeNs = 0;
     }
 }

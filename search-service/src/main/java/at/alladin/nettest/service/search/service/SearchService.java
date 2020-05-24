@@ -59,7 +59,7 @@ import at.alladin.nettest.service.search.exception.SearchException;
 @Service
 public class SearchService {
 
-    private static final Logger logger = LoggerFactory.getLogger(SearchService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchService.class);
 
     private static final TimeValue DEFAULT_TIMEOUT = new TimeValue(5, TimeUnit.SECONDS);
 
@@ -88,10 +88,10 @@ public class SearchService {
             String customQueryString = new String(queryString);
 
             // TODO: restrict queryStringQuery
-			
-			/*queryBuilder = QueryBuilders.boolQuery()
-				.must(QueryBuilders.queryStringQuery(customQueryString));*/
-            //queryBuilder = QueryBuilders.queryStringQuery(customQueryString)/*.allowLeadingWildcard(false)*/;
+            //
+            // queryBuilder = QueryBuilders.boolQuery()
+            // .must(QueryBuilders.queryStringQuery(customQueryString));
+            // queryBuilder = QueryBuilders.queryStringQuery(customQueryString)/*.allowLeadingWildcard(false)*/;
 
             // TODO ...
             if (!customQueryString.contains(":")) {
@@ -206,7 +206,7 @@ public class SearchService {
 
             final SearchResult result = new SearchResult(mapList, searchHits.getTotalHits().value);
 
-            logger.debug("Query: {}, result: {}", searchSourceBuilder.query().toString(), result);
+            LOGGER.debug("Query: {}, result: {}", searchSourceBuilder.query().toString(), result);
 
             return result;
         } catch (IOException e) {
@@ -219,8 +219,8 @@ public class SearchService {
      */
     private class SearchResult {
 
-        final List<Map<String, Object>> results;
-        final long totalHits;
+        private final List<Map<String, Object>> results;
+        private final long totalHits;
 
         SearchResult(List<Map<String, Object>> results, long totalHits) {
             this.results = results;

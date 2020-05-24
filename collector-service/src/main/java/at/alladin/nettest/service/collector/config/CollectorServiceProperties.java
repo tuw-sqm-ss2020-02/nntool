@@ -28,7 +28,7 @@ import at.alladin.nettest.shared.server.config.ElasticSearchProperties;
 @ConfigurationProperties(prefix = "collector", ignoreUnknownFields = true)
 public class CollectorServiceProperties {
 
-    final ElasticSearchProperties elasticsearch = new ElasticSearchProperties();
+    private final ElasticSearchProperties elasticsearch = new ElasticSearchProperties();
 
     private String systemUuid;
 

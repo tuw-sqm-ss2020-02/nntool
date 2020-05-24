@@ -40,24 +40,24 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfiguration {
 
     /*@Bean
-	public UiConfiguration swaggerUiConfiguration() {
-		return UiConfigurationBuilder.builder()
-				.deepLinking(true)
-		        .displayOperationId(false)
-		        .defaultModelsExpandDepth(1)
-		        .defaultModelExpandDepth(1)
-		        .defaultModelRendering(ModelRendering.EXAMPLE)
-		        .displayRequestDuration(false)
-		        .docExpansion(DocExpansion.NONE)
-		        .filter(false)
-		        .maxDisplayedTags(null)
-		        .operationsSorter(OperationsSorter.ALPHA)
-		        .showExtensions(false)
-		        .tagsSorter(TagsSorter.ALPHA)
-		        .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
-		        .validatorUrl(null)
-		        .build();
-	}*/
+    public UiConfiguration swaggerUiConfiguration() {
+    return UiConfigurationBuilder.builder()
+    .deepLinking(true)
+    .displayOperationId(false)
+    .defaultModelsExpandDepth(1)
+    .defaultModelExpandDepth(1)
+    .defaultModelRendering(ModelRendering.EXAMPLE)
+    .displayRequestDuration(false)
+    .docExpansion(DocExpansion.NONE)
+    .filter(false)
+    .maxDisplayedTags(null)
+    .operationsSorter(OperationsSorter.ALPHA)
+    .showExtensions(false)
+    .tagsSorter(TagsSorter.ALPHA)
+    .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
+    .validatorUrl(null)
+    .build();
+    }*/
 
     /**
      * @return

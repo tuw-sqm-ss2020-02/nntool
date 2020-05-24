@@ -43,7 +43,7 @@ import at.alladin.nettest.shared.berec.collector.api.v1.dto.ApiResponse;
 public class MeasurementExportResource {
 
     @SuppressWarnings("unused")
-    private static final Logger logger = LoggerFactory.getLogger(MeasurementExportResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeasurementExportResource.class);
 
     private static final String DEFAULT_EXTENSION = "csv";
 
@@ -52,8 +52,10 @@ public class MeasurementExportResource {
 
     /**
      * Exports a single measurement as JSON, CSV or YAML file.
-     *
-     * @return
+     * @param coarse
+     * @param extension
+     * @param openDataUuid
+     * @param response
      * @throws IOException
      */
     @io.swagger.annotations.ApiOperation(value = "Exports a single measurement as JSON, CSV or YAML file.", notes = "Exports a single measurement as JSON, CSV or YAML file.")
@@ -93,6 +95,7 @@ public class MeasurementExportResource {
      * @param year
      * @param month
      * @param response
+     * @param extension
      * @throws IOException
      */
     @io.swagger.annotations.ApiOperation(value = "Export measurements by year and month as a file with custom extension.", notes = "Export measurements by year and month as a file with custom extension. Supported custom extensions are CSV, JSON, YAML.")
@@ -112,6 +115,7 @@ public class MeasurementExportResource {
      * @param year
      * @param month
      * @param response
+     * @param extension
      * @throws IOException
      */
     @io.swagger.annotations.ApiOperation(value = "Export measurements by year and month as ZIP file including a file with custom extension.", notes = "Export measurements by year and month as ZIP file including a file with custom extension. Supported custom extensions are CSV, JSON, YAML.")
@@ -150,6 +154,8 @@ public class MeasurementExportResource {
      * @param year
      * @param month
      * @param response
+     * @param extension
+     * @param day
      * @throws IOException
      */
     @io.swagger.annotations.ApiOperation(value = "Export measurements by year, month and day as a file with custom extension.", notes = "Export measurements by year, month and day as a file with custom extension. Supported custom extensions are CSV, JSON, YAML.")
@@ -169,6 +175,8 @@ public class MeasurementExportResource {
      * @param year
      * @param month
      * @param response
+     * @param extension
+     * @param day
      * @throws IOException
      */
     @io.swagger.annotations.ApiOperation(value = "Export measurements by year, month and day as ZIP file including a file with custom extension.", notes = "Export measurements by year, month and day as ZIP file including a file with custom extension. Supported custom extensions are CSV, JSON, YAML.")

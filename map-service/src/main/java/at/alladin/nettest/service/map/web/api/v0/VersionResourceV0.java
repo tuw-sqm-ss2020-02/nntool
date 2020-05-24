@@ -44,6 +44,7 @@ public class VersionResourceV0 {
     private final Logger logger = LoggerFactory.getLogger(VersionResourceV0.class);
 
     /**
+     * @param locale
      * @return
      */
     @ApiImplicitParams({

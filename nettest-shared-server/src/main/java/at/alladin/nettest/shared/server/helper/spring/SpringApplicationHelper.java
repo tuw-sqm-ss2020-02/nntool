@@ -35,7 +35,7 @@ import at.alladin.nettest.shared.server.config.spring.SpringConstants;
  */
 public final class SpringApplicationHelper {
 
-    static final Logger logger = LoggerFactory.getLogger(SpringApplicationHelper.class);
+    static final Logger LOGGER = LoggerFactory.getLogger(SpringApplicationHelper.class);
 
     /**
      *
@@ -61,7 +61,7 @@ public final class SpringApplicationHelper {
 
         final Environment environment = app.run(args).getEnvironment();
 
-        logger.info("\n----------------------------------------------------------------\n\t"
+        LOGGER.info("\n----------------------------------------------------------------\n\t"
                         + "Application '{}' is running!\n\t\n\t"
                         + "Local: \t\thttp://localhost:{}\n\t"
                         + "External: \thttp://{}:{}\n\t"
@@ -121,11 +121,11 @@ public final class SpringApplicationHelper {
     private static String getWebApplicationProfile() {
         final String profile = System.getProperty(SpringConstants.SPRING_PROFILES_ACTIVE_KEY);
         if (profile != null) {
-            logger.info("Running with Spring profile(s) : {}", profile);
+            LOGGER.info("Running with Spring profile(s) : {}", profile);
             return profile;
         }
 
-        logger.warn("No Spring profile configured, running with default configuration");
+        LOGGER.warn("No Spring profile configured, running with default configuration");
         return SpringConstants.SPRING_PROFILE_DEVELOPMENT;
     }
 }

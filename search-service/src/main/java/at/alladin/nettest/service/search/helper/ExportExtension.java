@@ -41,6 +41,7 @@ public enum ExportExtension {
     }
 
     /**
+     * @param name
      * @return the exportExtension associated w/the given alias, or NULL if none are associated
      */
     public static ExportExtension getByName(final String name) {
@@ -69,6 +70,8 @@ public enum ExportExtension {
                 return "application/json";
             case YAML:
                 return "application/x-yaml";
+            default:
+                break;
         }
 
         return "text/plain";

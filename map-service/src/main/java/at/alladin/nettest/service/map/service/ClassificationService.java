@@ -39,7 +39,7 @@ public class ClassificationService {
     @Autowired
     private ThresholdsPerTechnologyHelperService thresholdsHelperService;
 
-    //	classification thresholds for new classification
+    // classification thresholds for new classification
     private SpeedThresholds thresholdsPerTechnology;
 
     private static String classifyColor(final ColorThresholds colorThresholds, final long value) {

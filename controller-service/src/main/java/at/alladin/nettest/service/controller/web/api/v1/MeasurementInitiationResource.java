@@ -54,7 +54,7 @@ import io.swagger.annotations.ApiParam;
 @RequestMapping("/api/v1/measurements")
 public class MeasurementInitiationResource {
 
-    private static final Logger logger = LoggerFactory.getLogger(MeasurementInitiationResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeasurementInitiationResource.class);
 
     @Autowired
     private StorageService storageService;
@@ -108,7 +108,7 @@ public class MeasurementInitiationResource {
         ////
 
         boolean useIPv6 = IpAddressHelper.extractIpAddressFromHttpServletRequest(request) instanceof Inet6Address;
-        logger.info("Measurement initiation with (useIPv6 = {})", useIPv6);
+        LOGGER.info("Measurement initiation with (useIPv6 = {})", useIPv6);
 
         // TODO: load balancing
         final LmapControlDto lmapControlDto = measurementConfigurationService.getLmapControlDtoForCapabilities(capabilityDto, useIPv6);

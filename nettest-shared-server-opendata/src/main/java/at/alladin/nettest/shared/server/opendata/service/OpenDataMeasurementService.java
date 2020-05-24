@@ -73,7 +73,7 @@ import at.alladin.nettest.shared.server.opendata.jdbc.bulk.QoSMeasurementBatchPr
 @Service
 public class OpenDataMeasurementService {
 
-    private static final Logger logger = LoggerFactory.getLogger(OpenDataMeasurementService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OpenDataMeasurementService.class);
 
     private static final DateTimeFormatter ISO_LOCAL_DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
             .append(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
@@ -143,9 +143,9 @@ public class OpenDataMeasurementService {
         if (elasticSearchClient != null) {
             try {
                 storeMeasurementInElasticsearch(measurementDto);
-                logger.info("Saved result (open_data_uuid: {}) in Elasticsearch", openDataUuid);
+                LOGGER.info("Saved result (open_data_uuid: {}) in Elasticsearch", openDataUuid);
             } catch (Exception ex) {
-                logger.error("Could not save result (open_data_uuid: {}) in Elasticsearch", openDataUuid, ex);
+                LOGGER.error("Could not save result (open_data_uuid: {}) in Elasticsearch", openDataUuid, ex);
             }
         }
 
@@ -153,9 +153,9 @@ public class OpenDataMeasurementService {
         if (jdbcTemplate != null) {
             try {
                 storeMeasurementInPostgresql(measurementDto);
-                logger.info("Saved result (open_data_uuid: {}) in PostgreSQL", openDataUuid);
+                LOGGER.info("Saved result (open_data_uuid: {}) in PostgreSQL", openDataUuid);
             } catch (Exception ex) {
-                logger.error("Could not save result (open_data_uuid: {}) in PostgreSQL", openDataUuid, ex);
+                LOGGER.error("Could not save result (open_data_uuid: {}) in PostgreSQL", openDataUuid, ex);
             }
         }
     }
@@ -168,7 +168,7 @@ public class OpenDataMeasurementService {
         try {
             final IndexResponse indexResponse = elasticSearchClient.index(indexRequest, RequestOptions.DEFAULT);
 
-            logger.debug("IndexRequest response: {}", indexResponse);
+            LOGGER.debug("IndexRequest response: {}", indexResponse);
         } catch (IOException ex) {
             throw ex;
         }
@@ -226,18 +226,18 @@ public class OpenDataMeasurementService {
         if (elasticSearchClient != null) {
             try {
                 bulkStoreMeasurementInElasticsearch(openDataMeasurements);
-                logger.info("Saved {} bulk open-data measurements in Elasticsearch", openDataMeasurements.size());
+                LOGGER.info("Saved {} bulk open-data measurements in Elasticsearch", openDataMeasurements.size());
             } catch (Exception ex) {
-                logger.info("Could not bulk save {} open-data measurements in Elasticsearch", openDataMeasurements.size(), ex);
+                LOGGER.info("Could not bulk save {} open-data measurements in Elasticsearch", openDataMeasurements.size(), ex);
             }
         }
 
         if (jdbcTemplate != null) {
             try {
                 bulkStoreMeasurementInPostgresql(openDataMeasurements);
-                logger.info("Saved {} bulk open-data measurements in PostgreSQL", openDataMeasurements.size());
+                LOGGER.info("Saved {} bulk open-data measurements in PostgreSQL", openDataMeasurements.size());
             } catch (Exception ex) {
-                logger.info("Could not bulk save {} open-data measurements in PostgreSQL", openDataMeasurements.size(), ex);
+                LOGGER.info("Could not bulk save {} open-data measurements in PostgreSQL", openDataMeasurements.size(), ex);
             }
 
         }
@@ -324,7 +324,7 @@ public class OpenDataMeasurementService {
                 }
             }
         } catch (Exception ex) {
-            logger.error("Could not get latest start_time value.", ex);
+            LOGGER.error("Could not get latest start_time value.", ex);
         }
 
         return null;

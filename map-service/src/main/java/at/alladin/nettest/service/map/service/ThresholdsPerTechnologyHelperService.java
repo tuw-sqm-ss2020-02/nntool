@@ -65,9 +65,9 @@ public class ThresholdsPerTechnologyHelperService {
      * @return the ThresholdsPerTechnology object as it is in the postgre DB, or null if the connection failed
      */
     public SpeedThresholds getThresholdsPerTechnology() {
-//		if (thresholdsPerTechnology == null) {
-//			initThresholdsPerTechnologyHelper();
-//		}
+        // if (thresholdsPerTechnology == null) {
+        // initThresholdsPerTechnologyHelper();
+        // }
         return speedThresholds;
     }
 
@@ -76,9 +76,9 @@ public class ThresholdsPerTechnologyHelperService {
      * (Every value is bumped down a notch)
      */
     public SpeedThresholds getSkewedThresholdsPerTechnology() {
-//		if (skewedThresholdsPerTechnology == null) {
-//			initThresholdsPerTechnologyHelper();
-//		}
+        // if (skewedThresholdsPerTechnology == null) {
+        // initThresholdsPerTechnologyHelper();
+        // }
         return skewedSpeedThresholds;
     }
 
@@ -129,7 +129,7 @@ public class ThresholdsPerTechnologyHelperService {
     //TODO: read this from settings somewhere
     private void initGroupNameToReferenceTechnology() {
         final Map<String, Integer> groupNameToRefTechnology = new HashMap<>();
-        //groupNameToRefTechnology.put(null, 3);	//the null key is equivalent to all mobile technologies (the website sends no param if 2G/3G/4G is selected)
+        //groupNameToRefTechnology.put(null, 3); //the null key is equivalent to all mobile technologies (the website sends no param if 2G/3G/4G is selected)
         groupNameToRefTechnology.put("2", 2);
         groupNameToRefTechnology.put("3", 15);
         groupNameToRefTechnology.put("4", 13);

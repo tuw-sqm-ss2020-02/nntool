@@ -92,7 +92,7 @@ public class TileResource {
             throw new IllegalArgumentException("Path does not contain the specfied values");
         }
         parseAndValidateRequest(Integer.parseInt(pathArray[1]), Integer.parseInt(pathArray[2]), Integer.parseInt(pathArray[0]), highlight, highlightUuid, clientUuid, quantile, period, mapOptions, technology, provider, operator, request);
-        return ResponseEntity.ok(pointTileService.generateTileData(request.getParameters()));//request.getParameters()));
+        return ResponseEntity.ok(pointTileService.generateTileData(request.getParameters())); //request.getParameters()));
     }
 
     @GetMapping(value = "/heatmap/{zoom}/{x}/{y}.png", produces = MediaType.IMAGE_PNG_VALUE)

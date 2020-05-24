@@ -42,10 +42,10 @@ import at.alladin.nettest.shared.server.helper.ResponseHelper;
 public class MeasurementServerStatusResource {
 
     @Autowired
-    MeasurementServerLoadService measurementServerLoadService;
+    private MeasurementServerLoadService measurementServerLoadService;
 
     @Autowired
-    MeasurementServerLoadMonitorService loadMonitorService;
+    private MeasurementServerLoadMonitorService loadMonitorService;
 
     //TODO: do we need a resource for real time load?
     /*

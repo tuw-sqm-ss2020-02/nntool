@@ -74,7 +74,7 @@ public abstract class AbstractQoSTask extends AbstractTest implements QoSTask {
     private final long qoSTestObjectiveUid;
     protected QoSControlConnection controlConnection;
     protected QoSTestProgressListener listener;
-    BufferedReader socketBr = null;
+    private BufferedReader socketBr = null;
     private long testStartTimestampNs;
     private long testEndTimestampNs;
     private boolean hasFinished = false;
@@ -92,7 +92,10 @@ public abstract class AbstractQoSTask extends AbstractTest implements QoSTask {
     }
 
     /**
+     * @param nnTest
      * @param taskDesc
+     * @param threadId
+     * @param id
      * @param priority the higher the value, the higher the priority
      */
     public AbstractQoSTask(QualityOfServiceTest nnTest, TaskDesc taskDesc, int threadId, int id, int priority) {
@@ -227,7 +230,6 @@ public abstract class AbstractQoSTask extends AbstractTest implements QoSTask {
 
     /**
      * @param socket
-     * @return
      * @throws IOException
      */
     public String readLine(Socket socket) throws IOException {
@@ -237,7 +239,6 @@ public abstract class AbstractQoSTask extends AbstractTest implements QoSTask {
 
     /**
      * @param socket
-     * @return
      * @throws IOException
      */
     public String readMultiLine(final Socket socket) throws IOException {
@@ -376,7 +377,7 @@ public abstract class AbstractQoSTask extends AbstractTest implements QoSTask {
 
     }
 
-    public void setQoSTestProgressListener(final QoSTestProgressListener listener) {
+    public void setListener(final QoSTestProgressListener listener) {
         this.listener = listener;
     }
 

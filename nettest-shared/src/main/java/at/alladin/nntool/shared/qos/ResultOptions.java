@@ -19,7 +19,7 @@ package at.alladin.nntool.shared.qos;
 import java.util.Locale;
 
 public class ResultOptions {
-    final Locale locale;
+    private final Locale locale;
 
     public ResultOptions(Locale locale) {
         this.locale = locale;

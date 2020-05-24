@@ -35,25 +35,25 @@ public class FilterEntry<T> {
     @Expose
     @SerializedName("label")
     @JsonProperty("label")
-    String label;
+    private String label;
 
     @JsonPropertyDescription("The value of this filter element.")
     @Expose
     @SerializedName("value")
     @JsonProperty("value")
-    T value;
+    private T value;
 
     @JsonPropertyDescription("The min value of this filter element.")
     @Expose
     @SerializedName("min")
     @JsonProperty("min")
-    T min;
+    private T min;
 
     @JsonPropertyDescription("The max value of this filter element.")
     @Expose
     @SerializedName("max")
     @JsonProperty("max")
-    T max;
+    private T max;
 
     public FilterEntry() {
     }

@@ -32,9 +32,10 @@ import org.xbill.DNS.SimpleResolver;
 import org.xbill.DNS.TSIG;
 import org.xbill.DNS.Type;
 
-public class Dig {
-    static Name name = null;
-    static int type = Type.A, dclass = DClass.IN;
+public final class Dig {
+    private static Name name = null;
+    private static int type = Type.A;
+    private static int dclass = DClass.IN;
 
     private Dig() {
     }
@@ -82,11 +83,13 @@ public class Dig {
     public static void run(String[] argv) throws IOException {
         String server = null;
         int arg;
-        Message query, response;
+        Message query;
+        Message response;
         Record rec;
         SimpleResolver res = null;
         boolean printQuery = false;
-        long startTime, endTime;
+        long startTime;
+        long endTime;
 
         if (argv.length < 1) {
             usage();

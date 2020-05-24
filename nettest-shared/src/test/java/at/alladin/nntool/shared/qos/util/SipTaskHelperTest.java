@@ -49,13 +49,12 @@ public class SipTaskHelperTest {
         assertNotNull("Random string == null", rnd);
         assertTrue("Random string len not in range (10-20)", rnd.length() >= 10 && rnd.length() <= 20);
     }
-	
-	/*@Test
-	public void testSipPreProcessAndRandomHeaderGeneration() {
-		final QosMeasurementObjective qos = new QosMeasurementObjective();
-		SipTaskHelper.preProcess(qos.getParams());
-		assertNotNull("SIP Header from == null", qos.getParams().get(SipTaskHelper.PARAM_FROM));
-		assertNotNull("SIP Header via == null", qos.getParams().get(SipTaskHelper.PARAM_VIA));
-		assertNotNull("SIP Header to == null", qos.getParams().get(SipTaskHelper.PARAM_TO));
-	}*/
+    // @Test
+    // public void testSipPreProcessAndRandomHeaderGeneration() {
+    // final QosMeasurementObjective qos = new QosMeasurementObjective();
+    // SipTaskHelper.preProcess(qos.getParams());
+    // assertNotNull("SIP Header from == null", qos.getParams().get(SipTaskHelper.PARAM_FROM));
+    // assertNotNull("SIP Header via == null", qos.getParams().get(SipTaskHelper.PARAM_VIA));
+    // assertNotNull("SIP Header to == null", qos.getParams().get(SipTaskHelper.PARAM_TO));
+    // }
 }

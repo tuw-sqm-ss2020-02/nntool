@@ -27,10 +27,10 @@ import at.alladin.nntool.util.net.udp.StreamSender.UdpStreamCallback;
 
 public class UdpStreamReceiver {
 
-    final AtomicBoolean isRunning = new AtomicBoolean(false);
-    UdpStreamCallback callback;
+    private final AtomicBoolean isRunning = new AtomicBoolean(false);
+    private UdpStreamCallback callback;
 
-    UdpStreamReceiverSettings settings;
+    private UdpStreamReceiverSettings settings;
 
     public UdpStreamReceiver(UdpStreamReceiverSettings settings, UdpStreamCallback callback) {
         this.callback = callback;
@@ -86,10 +86,10 @@ public class UdpStreamReceiver {
      * @author lb
      */
     public static class UdpStreamReceiverSettings {
-        int packets;
-        long delay;
-        boolean sendResponse = false;
-        DatagramSocket socket;
+        private int packets;
+        private long delay;
+        private boolean sendResponse = false;
+        private DatagramSocket socket;
 
         public UdpStreamReceiverSettings(DatagramSocket socket, int packets, boolean sendResponse) {
             this.socket = socket;

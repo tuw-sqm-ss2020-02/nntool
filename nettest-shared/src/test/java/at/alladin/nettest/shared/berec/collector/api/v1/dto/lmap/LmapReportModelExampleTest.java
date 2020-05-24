@@ -225,17 +225,15 @@ public class LmapReportModelExampleTest extends AbstractLmapExampleTest {
         connect.setWebSocketInfoUpload(webSocket);
         speedMeasurementResult.setConnectionInfo(connect);
 
-//		final LmapTableDto<SpeedMeasurementResult> tableSpeed = new LmapTableDto<>();
-//		tableSpeed.setColumns(Arrays.asList("result"));
-//		tableSpeed.setRows(Arrays.asList(new LmapTableRowDto<SpeedMeasurementResult>(Arrays.asList(speedMeasurementResult))));
-//		
-//		speedResultDto.setTable(Arrays.asList(tableSpeed));
+        // final LmapTableDto<SpeedMeasurementResult> tableSpeed = new LmapTableDto<>();
+        // tableSpeed.setColumns(Arrays.asList("result"));
+        // tableSpeed.setRows(Arrays.asList(new LmapTableRowDto<SpeedMeasurementResult>(Arrays.asList(speedMeasurementResult))));
+        // speedResultDto.setTable(Arrays.asList(tableSpeed));
 
         speedResultDto.getResults().add(speedMeasurementResult);
 
         results.add(speedResultDto);
 
-        //
         final LmapResultDto qosResultDto = new LmapResultDto();
 
         qosResultDto.setSchedule("immediate_speed_qos_measurement_schedule");
@@ -262,10 +260,9 @@ public class LmapReportModelExampleTest extends AbstractLmapExampleTest {
         qosMeasurementResult.setReason(ReasonDto.UNABLE_TO_CONNECT);
         qosMeasurementResult.setRelativeStartTimeNs((long) (4.6e10 + 10));
         qosMeasurementResult.setRelativeEndTimeNs((long) (11.7e10 + 10));
-
-//		final LmapTableDto<QoSMeasurementResult> tableQos = new LmapTableDto<>();
-//		tableQos.setColumns(Arrays.asList("result"));
-//		tableQos.setRows(Arrays.asList(new LmapTableRowDto<QoSMeasurementResult>(Arrays.asList(qosMeasurementResult))));
+        // final LmapTableDto<QoSMeasurementResult> tableQos = new LmapTableDto<>();
+        // tableQos.setColumns(Arrays.asList("result"));
+        // tableQos.setRows(Arrays.asList(new LmapTableRowDto<QoSMeasurementResult>(Arrays.asList(qosMeasurementResult))));
 
 
         qosResultDto.getResults().add(qosMeasurementResult);
@@ -274,7 +271,6 @@ public class LmapReportModelExampleTest extends AbstractLmapExampleTest {
 
         lmapReportDto.setResults(results);
 
-        ///
 
         final ApiRequestInfo apiRequestInfo = new ApiRequestInfo();
 

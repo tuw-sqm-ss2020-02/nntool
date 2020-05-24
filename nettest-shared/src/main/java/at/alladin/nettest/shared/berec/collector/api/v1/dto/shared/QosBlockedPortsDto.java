@@ -37,7 +37,7 @@ public class QosBlockedPortsDto {
     @Expose
     @SerializedName("type")
     @JsonProperty("type")
-    QosBlockedPortTypeDto type;
+    private QosBlockedPortTypeDto type;
     /**
      * List of all blocked ports (incoming communication).
      */
@@ -45,7 +45,7 @@ public class QosBlockedPortsDto {
     @Expose
     @SerializedName("in_ports")
     @JsonProperty("in_ports")
-    List<Integer> inPorts;
+    private List<Integer> inPorts;
     /**
      * List of all blocked ports (outgoing communication).
      */
@@ -53,7 +53,7 @@ public class QosBlockedPortsDto {
     @Expose
     @SerializedName("out_ports")
     @JsonProperty("out_ports")
-    List<Integer> outPorts;
+    private List<Integer> outPorts;
     /**
      * The amount of blocked ports (incoming communication).
      */
@@ -61,7 +61,7 @@ public class QosBlockedPortsDto {
     @Expose
     @SerializedName("in_count")
     @JsonProperty("in_count")
-    Integer inCount;
+    private Integer inCount;
     /**
      * The amount of blocked ports (outgoing communication).
      */
@@ -69,7 +69,7 @@ public class QosBlockedPortsDto {
     @Expose
     @SerializedName("out_count")
     @JsonProperty("out_count")
-    Integer outCount;
+    private Integer outCount;
 
     public QosBlockedPortTypeDto getType() {
         return type;

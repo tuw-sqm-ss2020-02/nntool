@@ -24,19 +24,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class LoadApiReport {
 
     @JsonProperty("last_response")
-    LoadApiResponse lastResponse;
+    private LoadApiResponse lastResponse;
 
     @JsonProperty("last_attempt")
-    Long lastAttempt;
+    private Long lastAttempt;
 
     @JsonProperty("last_successful_attempt")
-    Long lastSuccessfulAttempt = -1L;
+    private Long lastSuccessfulAttempt = -1L;
 
     @JsonProperty("fails_since_last_attempt")
-    Integer failesSinceLastAttempt = 0;
+    private Integer failesSinceLastAttempt = 0;
 
     @JsonProperty("measurement_server_identifier")
-    String measurementServerIdentifier;
+    private String measurementServerIdentifier;
 
     public LoadApiResponse getLastResponse() {
         return lastResponse;

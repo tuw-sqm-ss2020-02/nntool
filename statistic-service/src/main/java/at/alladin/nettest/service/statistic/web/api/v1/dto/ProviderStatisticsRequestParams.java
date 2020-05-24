@@ -21,8 +21,8 @@ package at.alladin.nettest.service.statistic.web.api.v1.dto;
  */
 public class ProviderStatisticsRequestParams {
 
-    Long period;
-    MeasurementType measurementType;
+    private Long period;
+    private MeasurementType measurementType;
 
     public Long getPeriod() {
         return period;

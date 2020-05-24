@@ -81,7 +81,7 @@ public abstract class AbstractResult {
     protected Long testDuration;
 
     ///////////////////////////////////////
-    //	Advanced implementations:
+    // Advanced implementations:
     ///////////////////////////////////////
 
     @JsonProperty("success_condition")

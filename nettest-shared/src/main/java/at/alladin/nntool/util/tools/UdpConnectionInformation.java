@@ -42,7 +42,7 @@ public class UdpConnectionInformation extends ConnectionInformation {
             conn.setProtocolType(addrSize == 16 ? ProtocolType.UDP6 : ProtocolType.UDP);
             conn.setUid(Integer.parseInt(token[7]));
         } catch (Exception e) {
-            //return null in case of an exception 
+            //return null in case of an exception
             return null;
         }
 

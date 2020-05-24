@@ -25,76 +25,76 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class VoipResult extends AbstractResult {
 
     @JsonProperty("voip_objective_in_port")
-    Object inPort;
+    private Object inPort;
 
     @JsonProperty("voip_objective_out_port")
-    Object outPort;
+    private Object outPort;
 
     @JsonProperty("voip_objective_call_duration")
-    Object callDuration;
+    private Object callDuration;
 
     @JsonProperty("voip_objective_bits_per_sample")
-    Object bitsPerSample;
+    private Object bitsPerSample;
 
     @JsonProperty("voip_objective_sample_rate")
-    Object sampleRate;
+    private Object sampleRate;
 
     @JsonProperty("voip_objective_delay")
-    Object delay;
+    private Object delay;
 
     @JsonProperty("voip_objective_timeout")
-    Object timeout;
+    private Object timeout;
 
     @JsonProperty("voip_objective_payload")
-    Object payload;
+    private Object payload;
 
     @JsonProperty("voip_result_in_max_jitter")
-    Object maxJitterIn;
+    private Object maxJitterIn;
 
     @JsonProperty("voip_result_in_mean_jitter")
-    Object meanJitterIn;
+    private Object meanJitterIn;
 
     @JsonProperty("voip_result_in_max_delta")
-    Object maxDeltaIn;
+    private Object maxDeltaIn;
 
     @JsonProperty("voip_result_in_num_packets")
-    Object numPacketsIn;
+    private Object numPacketsIn;
 
     @JsonProperty("voip_result_in_skew")
-    Object skewIn;
+    private Object skewIn;
 
     @JsonProperty("voip_result_out_max_jitter")
-    Object maxJitterOut;
+    private Object maxJitterOut;
 
     @JsonProperty("voip_result_out_mean_jitter")
-    Object meanJitterOut; // this variable was called "minJitter", but the json key was "..._mean_jitter", which one is correct? assuming "mean" is correct.
+    private Object meanJitterOut; // this variable was called "minJitter", but the json key was "..._mean_jitter", which one is correct? assuming "mean" is correct.
 
     @JsonProperty("voip_result_out_max_delta")
-    Object maxDeltaOut;
+    private Object maxDeltaOut;
 
     @JsonProperty("voip_result_out_num_packets")
-    Object numPacketsOut;
+    private Object numPacketsOut;
 
     @JsonProperty("voip_result_out_skew")
-    Object skewOut;
+    private Object skewOut;
 
     @JsonProperty("voip_result_in_sequence_error")
-    Object seqErrorsIn;
+    private Object seqErrorsIn;
 
     @JsonProperty("voip_result_out_sequence_error")
-    Object seqErrorsOut;
+    private Object seqErrorsOut;
 
     @JsonProperty("voip_result_in_short_seq")
-    Object shortSequenceIn;
+    private Object shortSequenceIn;
 
     @JsonProperty("voip_result_out_short_seq")
-    Object shortSequenceOut;
+    private Object shortSequenceOut;
 
     @JsonProperty("voip_result_in_long_seq")
-    Object longSequenceIn;
+    private Object longSequenceIn;
 
     @JsonProperty("voip_result_out_long_seq")
-    Object longSequenceOut;
+    private Object longSequenceOut;
 
     @JsonProperty("voip_result_status")
     private String status;

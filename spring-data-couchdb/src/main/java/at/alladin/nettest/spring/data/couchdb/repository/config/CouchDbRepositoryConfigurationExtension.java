@@ -61,26 +61,26 @@ public class CouchDbRepositoryConfigurationExtension extends RepositoryConfigura
         return Collections.singleton(CouchDbRepository.class);
     }
 
-    //	/*
-    //	 * (non-Javadoc)
-    //	 * @see org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport#getIdentifyingAnnotations()
-    //	 */
-    //	@Override
-    //	protected Collection<Class<? extends Annotation>> getIdentifyingAnnotations() {
-    //		return Collections.singleton(); // TODO: Annotation identifying domain model objects, something like @Document or @CouchDbDocument
-    //	}
+    // /*
+    // * (non-Javadoc)
+    // * @see org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport#getIdentifyingAnnotations()
+    // */
+    // @Override
+    // protected Collection<Class<? extends Annotation>> getIdentifyingAnnotations() {
+    // return Collections.singleton(); // TODO: Annotation identifying domain model objects, something like @Document or @CouchDbDocument
+    // }
 
     // we do not support xml configuration...
-    //	/*
-    //	 * (non-Javadoc)
-    //	 * @see org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport#postProcess(org.springframework.beans.factory.support.BeanDefinitionBuilder, org.springframework.data.repository.config.XmlRepositoryConfigurationSource)
-    //	 */
-    //	@Override
-    //	public void postProcess(BeanDefinitionBuilder builder, XmlRepositoryConfigurationSource config) {
-    //		final Element element = config.getElement();
+    // /*
+    // * (non-Javadoc)
+    // * @see org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport#postProcess(org.springframework.beans.factory.support.BeanDefinitionBuilder, org.springframework.data.repository.config.XmlRepositoryConfigurationSource)
+    // */
+    // @Override
+    // public void postProcess(BeanDefinitionBuilder builder, XmlRepositoryConfigurationSource config) {
+    // final Element element = config.getElement();
     //
-    //ParsingUtils.setPropertyReference(builder, element, attribute, ""); // TODO
-    // 	}
+    // ParsingUtils.setPropertyReference(builder, element, attribute, ""); // TODO
+    // }
 
     /*
      * (non-Javadoc)

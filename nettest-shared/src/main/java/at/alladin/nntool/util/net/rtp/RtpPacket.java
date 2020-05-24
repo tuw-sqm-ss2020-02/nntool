@@ -31,9 +31,9 @@ import at.alladin.nntool.util.net.rtp.RealtimeTransportProtocol.RtpVersion;
  * @author lb
  */
 public class RtpPacket {
-    byte[] header;
-    byte[] csrcIdentifier;
-    byte[] payload;
+    private byte[] header;
+    private byte[] csrcIdentifier;
+    private byte[] payload;
 
     public RtpPacket(PayloadType payloadType, int csrcCount, long[] csrc, int seqNumber, long timeStamp, long ssrc) {
         this(payloadType, csrcCount, csrc, seqNumber, timeStamp, ssrc, null);

@@ -79,13 +79,13 @@ public class TestServerImpl {
     /**
      *
      */
-    public final Randomizer randomizer = new Randomizer(8000, 12000, 3);
-    final PrintStream tempErr;
-    final PrintStream tempOut;
+    protected final Randomizer randomizer = new Randomizer(8000, 12000, 3);
+    private final PrintStream tempErr;
+    private final PrintStream tempOut;
     /**
      * is used for all other threads
      */
-    private final ExecutorService COMMON_THREAD_POOL = Executors.newCachedThreadPool();
+    private final ExecutorService commonThreadPool = Executors.newCachedThreadPool();
     /**
      *
      */
@@ -94,7 +94,7 @@ public class TestServerImpl {
      * server socket list (=awaiting client test requests)
      */
     public volatile List<ServerSocket> serverSocketList = new ArrayList<ServerSocket>();
-    public SSLServerSocketFactory sslServerSocketFactory;
+    private SSLServerSocketFactory sslServerSocketFactory;
     public ServerPreferences serverPreferences;
     /**
      * is used for all control connection threads
@@ -126,7 +126,7 @@ public class TestServerImpl {
      * @param port
      * @param isSsl
      * @param inetAddress
-     * @return
+     * @return new server socket
      * @throws IOException
      */
     public ServerSocket createServerSocket(int port, boolean isSsl, InetAddress inetAddress) throws IOException {
@@ -183,17 +183,18 @@ public class TestServerImpl {
     }
 
     /**
+     * @param sPreferences
      * @throws TestServerException
      */
-    public void run(final ServerPreferences serverPreferences) throws Exception {
-        this.serverPreferences = serverPreferences;
+    public void run(final ServerPreferences sPreferences) throws Exception {
+        this.serverPreferences = sPreferences;
         LoggingService.init(this);
 
-        if (!LoggingService.IS_LOGGING_AVAILABLE) {
+        if (!LoggingService.isLoggingAvailable) {
             throw new TestServerException("ERROR: All logging disabled! Cannot start server. Please enable at least one logging target [syslog, console, file]", null);
         }
 
-        TestServerConsole.log("\nStarting QoSTestServer (" + TestServer.TEST_SERVER_VERSION_NAME + ") with settings: \n" + serverPreferences.toString() + "\n\n",
+        TestServerConsole.log("\nStarting QoSTestServer (" + TestServer.TEST_SERVER_VERSION_NAME + ") with settings: \n" + sPreferences.toString() + "\n\n",
                 -1, TestServerServiceEnum.TEST_SERVER);
 
         console.start();
@@ -201,13 +202,13 @@ public class TestServerImpl {
         if (!TestServer.USE_FIXED_THREAD_POOL) {
             mainServerPool = Executors.newCachedThreadPool();
         } else {
-            mainServerPool = Executors.newFixedThreadPool(serverPreferences.getMaxThreads());
+            mainServerPool = Executors.newFixedThreadPool(sPreferences.getMaxThreads());
         }
 
         try {
 
-            if (serverPreferences.useSsl()) {
-                /*******************************
+            if (sPreferences.useSsl()) {
+                /*
                  * initialize SSLContext and SSLServerSocketFactory:
                  */
 
@@ -226,16 +227,16 @@ public class TestServerImpl {
                 sslServerSocketFactory = (SSLServerSocketFactory) sslContext.getServerSocketFactory();
             }
 
-            for (InetAddress addr : serverPreferences.getInetAddrBindToSet()) {
+            for (InetAddress addr : sPreferences.getInetAddrBindToSet()) {
                 ServerSocket serverSocket;
-                if (serverPreferences.useSsl()) {
+                if (sPreferences.useSsl()) {
                     serverSocket = (SSLServerSocket) sslServerSocketFactory.createServerSocket();
                 } else {
                     serverSocket = new ServerSocket();
                 }
 
                 serverSocket.setReuseAddress(true);
-                serverSocket.bind(new InetSocketAddress(addr, serverPreferences.getServerPort()));
+                serverSocket.bind(new InetSocketAddress(addr, sPreferences.getServerPort()));
                 serverSocketList.add(serverSocket);
 
                 this.qosService = new QoSService(mainServerPool, serverSocket, null);
@@ -243,12 +244,12 @@ public class TestServerImpl {
                 mainThread.start();
             }
 
-            Iterator<UdpPort> portIterator = serverPreferences.getUdpPortSet().iterator();
+            Iterator<UdpPort> portIterator = sPreferences.getUdpPortSet().iterator();
 
             while (portIterator.hasNext()) {
                 final List<AbstractUdpServer<?>> udpServerList = new ArrayList<AbstractUdpServer<?>>();
                 final UdpPort udpPort = portIterator.next();
-                for (InetAddress addr : serverPreferences.getInetAddrBindToSet()) {
+                for (InetAddress addr : sPreferences.getInetAddrBindToSet()) {
                     AbstractUdpServer<?> udpServer = null;
                     try {
                         //udpServer = new UdpMultiClientServer(port, addr);
@@ -282,7 +283,7 @@ public class TestServerImpl {
             serviceManager.dispatchEvent(EventType.ON_TEST_SERVER_START);
 
             //finally, start all plugins & services:
-            for (ServiceSetting service : serverPreferences.getPluginMap().values()) {
+            for (ServiceSetting service : sPreferences.getPluginMap().values()) {
                 TestServerConsole.log("Starting plugin '" + service.getName() + "'...", 0, TestServerServiceEnum.TEST_SERVER);
                 service.start();
             }
@@ -360,7 +361,8 @@ public class TestServerImpl {
 
     /**
      * @param port
-     * @return
+     * @param addr
+     * @return created datagram socket
      * @throws Exception
      */
     public DatagramSocket createDatagramSocket(int port, InetAddress addr) throws Exception {
@@ -374,7 +376,6 @@ public class TestServerImpl {
     /**
      * @param port
      * @param addr
-     * @return
      * @throws Exception
      */
     public DatagramChannel createDatagramChannel(int port, InetAddress addr) throws Exception {
@@ -406,7 +407,7 @@ public class TestServerImpl {
 
     /**
      * @param port
-     * @param server
+     * @param socket
      * @throws Exception
      */
     public List<TcpMultiClientServer> registerTcpCandidate(Integer port, Socket socket) throws Exception {
@@ -414,7 +415,8 @@ public class TestServerImpl {
 
         synchronized (tcpServerMap) {
             //if port not mapped create complete tcp server list
-            if ((tcpServerList = tcpServerMap.get(port)) == null) {
+            tcpServerList = tcpServerMap.get(port);
+            if (tcpServerList == null) {
                 tcpServerList = new ArrayList<>();
                 for (InetAddress addr : serverPreferences.getInetAddrBindToSet()) {
                     tcpServerList.add(new TcpMultiClientServer(port, addr));
@@ -483,7 +485,7 @@ public class TestServerImpl {
      * @return
      */
     public ExecutorService getCommonThreadPool() {
-        return COMMON_THREAD_POOL;
+        return commonThreadPool;
     }
 
     public synchronized boolean isShutdownHookEnabled() {

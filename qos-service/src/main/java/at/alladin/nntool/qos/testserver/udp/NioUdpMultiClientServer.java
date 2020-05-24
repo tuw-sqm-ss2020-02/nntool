@@ -46,9 +46,9 @@ public class NioUdpMultiClientServer extends AbstractUdpServer<DatagramChannel> 
 
     public final static int BUFFER_LENGTH = 1024;
     private final static String TAG = NioUdpMultiClientServer.class.getCanonicalName();
-    final DatagramChannel channel;
-    final InetAddress address;
-    final int port;
+    private final DatagramChannel channel;
+    private final InetAddress address;
+    private final int port;
     private final AtomicBoolean isRunning;
     private final String name;
 
@@ -56,7 +56,7 @@ public class NioUdpMultiClientServer extends AbstractUdpServer<DatagramChannel> 
 
     /**
      * @param port
-     * @param timeOut
+     * @param address
      * @throws Exception
      */
     public NioUdpMultiClientServer(int port, InetAddress address) throws Exception {

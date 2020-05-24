@@ -43,7 +43,7 @@ import at.alladin.nntool.qos.testserver.udp.UdpTestCandidate;
 
 public class TestServerConsole extends PrintStream {
 
-    public final static ConcurrentMap<String, ErrorReport> errorReportMap = new ConcurrentHashMap<String, TestServerConsole.ErrorReport>();
+    public final static ConcurrentMap<String, ErrorReport> ERROR_REPORT_MAP = new ConcurrentHashMap<String, TestServerConsole.ErrorReport>();
     public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public final static String HINT_SHOW = "SHOW what? Available options: [tcp] [udp] [info]";
     public final static String COMMAND_EXIT_COMMAND_PROMPT = "exit";
@@ -60,9 +60,9 @@ public class TestServerConsole extends PrintStream {
     public final static String DEBUG_COMMAND_LIST_SERVICES = "dls";
     public final static String DEBUG_COMMAND_FORCE_SERVICE_EVENT = "dfse";
     public final static String PROMPT = "\n\nEnter command:";
-    final Thread keyListener;
+    private final Thread keyListener;
     private final TestServerImpl testServerImpl;
-    public boolean isCommandLine;
+    private boolean isCommandLine;
 
     public TestServerConsole(final TestServerImpl testServerImpl) {
         super(System.out, true);
@@ -251,6 +251,7 @@ public class TestServerConsole extends PrintStream {
     }
 
     /**
+     * @param info
      * @param t
      * @param verboseLevelNeeded
      * @param service
@@ -264,15 +265,16 @@ public class TestServerConsole extends PrintStream {
      * @param t
      * @param verboseLevelNeeded
      * @param service
+     * @param errorReportKey
      */
     public static void errorReport(String errorReportKey, String info, Throwable t, int verboseLevelNeeded, TestServerServiceEnum service) {
         StringWriter stackTrace = new StringWriter();
         t.printStackTrace(new PrintWriter(stackTrace));
-        if (!errorReportMap.containsKey(errorReportKey)) {
-            errorReportMap.putIfAbsent(errorReportKey, new ErrorReport(info + ": [" + t.getClass().getCanonicalName() + " - " + t.getMessage() + "]", new Date()));
+        if (!ERROR_REPORT_MAP.containsKey(errorReportKey)) {
+            ERROR_REPORT_MAP.putIfAbsent(errorReportKey, new ErrorReport(info + ": [" + t.getClass().getCanonicalName() + " - " + t.getMessage() + "]", new Date()));
         }
 
-        ErrorReport er = errorReportMap.get(errorReportKey);
+        ErrorReport er = ERROR_REPORT_MAP.get(errorReportKey);
         er.increaseCounter();
 
         LoggingService.fatal(t, info, service);
@@ -360,10 +362,10 @@ public class TestServerConsole extends PrintStream {
     }
 
     public final static class ErrorReport {
-        Date date;
-        Date lastDate;
-        int counter = 0;
-        String error;
+        private Date date;
+        private Date lastDate;
+        private int counter = 0;
+        private String error;
 
         public ErrorReport(String error, Date date) {
             this.date = date;

@@ -37,7 +37,7 @@ public class ComputedNetworkPointInTime extends NetworkPointInTime {
     @Expose
     @SerializedName("nat_type_info")
     @JsonProperty("nat_type_info")
-    NatTypeInfo natTypeInfo;
+    private NatTypeInfo natTypeInfo;
 
     /**
      * The computed frequency band of the signal array.
@@ -46,7 +46,7 @@ public class ComputedNetworkPointInTime extends NetworkPointInTime {
     @Expose
     @SerializedName("frequency")
     @JsonProperty("frequency")
-    Integer frequency;
+    private Integer frequency;
 
     public NatTypeInfo getNatTypeInfo() {
         return natTypeInfo;

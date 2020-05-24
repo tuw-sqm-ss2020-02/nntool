@@ -24,10 +24,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class LoadApiRates {
 
     @JsonProperty("bps")
-    String bps;
+    private String bps;
 
     @JsonProperty("pps")
-    String pps;
+    private String pps;
 
     public String getBps() {
         return bps;

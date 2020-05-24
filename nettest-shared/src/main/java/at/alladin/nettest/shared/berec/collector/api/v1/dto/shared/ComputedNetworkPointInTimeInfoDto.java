@@ -30,7 +30,7 @@ public class ComputedNetworkPointInTimeInfoDto extends NetworkPointInTimeInfoDto
     @Expose
     @SerializedName("nat_type_info")
     @JsonProperty("nat_type_info")
-    NatTypeInfoDto natTypeInfo;
+    private NatTypeInfoDto natTypeInfo;
 
     /**
      * The computed mobile frequency band of the signal array.
@@ -39,7 +39,7 @@ public class ComputedNetworkPointInTimeInfoDto extends NetworkPointInTimeInfoDto
     @Expose
     @SerializedName("mobile_frequency")
     @JsonProperty("mobile_frequency")
-    Integer mobileFrequency;
+    private Integer mobileFrequency;
 
     public Integer getMobileFrequency() {
         return mobileFrequency;

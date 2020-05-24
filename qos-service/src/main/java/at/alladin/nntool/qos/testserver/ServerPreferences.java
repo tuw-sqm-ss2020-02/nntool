@@ -384,7 +384,7 @@ public class ServerPreferences {
                     }
                 }
             }
-            //	Services/Plugins:
+            // Services/Plugins:
             pluginMap.put("REST", new RestService(prop, this));
 
         } catch (IOException ex) {
@@ -531,7 +531,7 @@ public class ServerPreferences {
     /**
      * @param isLoggingEnabled
      */
-    public void setLoggingEnabled(boolean isLoggingEnabled) {
+    public void setIsLoggingEnabled(boolean isLoggingEnabled) {
         this.isLoggingEnabled = isLoggingEnabled;
     }
 
@@ -582,7 +582,7 @@ public class ServerPreferences {
     /**
      * @param isIpCheck
      */
-    public void setIpCheck(boolean isIpCheck) {
+    public void setIsIpCheck(boolean isIpCheck) {
         this.isIpCheck = isIpCheck;
     }
 
@@ -590,7 +590,7 @@ public class ServerPreferences {
         return isConsoleLog;
     }
 
-    public void setConsoleLog(boolean isConsoleLog) {
+    public void setIsConsoleLog(boolean isConsoleLog) {
         this.isConsoleLog = isConsoleLog;
     }
 
@@ -598,7 +598,7 @@ public class ServerPreferences {
         return isCommandConsoleEnabled;
     }
 
-    public void setCommandConsoleEnabled(boolean isCommandConsoleEnabled) {
+    public void setIsCommandConsoleEnabled(boolean isCommandConsoleEnabled) {
         this.isCommandConsoleEnabled = isCommandConsoleEnabled;
     }
 
@@ -610,7 +610,7 @@ public class ServerPreferences {
         return isSyslogEnabled;
     }
 
-    public void setSyslogEnabled(boolean isSyslogEnabled) {
+    public void setIsSyslogEnabled(boolean isSyslogEnabled) {
         this.isSyslogEnabled = isSyslogEnabled;
     }
 
@@ -691,7 +691,7 @@ public class ServerPreferences {
             return isEnabled;
         }
 
-        public void setEnabled(boolean isEnabled) {
+        public void setIsEnabled(boolean isEnabled) {
             this.isEnabled = isEnabled;
         }
 
@@ -707,8 +707,8 @@ public class ServerPreferences {
     }
 
     public class UdpPort {
-        final boolean isNio;
-        final int port;
+        protected final boolean isNio;
+        protected final int port;
 
         public UdpPort(final boolean isNio, final int port) {
             this.isNio = isNio;
@@ -724,20 +724,21 @@ public class ServerPreferences {
 
     /////////////////////////////////////////////////////////
     //
-    //		Server Services
+    // Server Services
     //
     /////////////////////////////////////////////////////////
 
     public class TcpCompetence {
-        boolean hasSipCompetence;
+        private boolean hasSipCompetence;
 
         public boolean hasSipCompetence() {
             return hasSipCompetence;
         }
 
-        public TcpCompetence setHasSipCompetence(boolean hasSipCompetence) {
-            this.hasSipCompetence = hasSipCompetence;
+        public TcpCompetence setHasSipCompetence(boolean hassipCompetence) {
+            this.hasSipCompetence = hassipCompetence;
             return this;
         }
+
     }
 }

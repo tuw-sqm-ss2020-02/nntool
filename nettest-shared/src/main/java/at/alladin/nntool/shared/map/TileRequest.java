@@ -24,14 +24,14 @@ import at.alladin.nettest.shared.berec.collector.api.v1.dto.BasicRequest;
 public class TileRequest extends BasicRequest {
 
     /*@RequestParam(required=false) String highlight,
-	@RequestParam(name = "highlight_uuid", required = false) String highlightUuid, 
-	@RequestParam(name = "highlight_client_uuid", required=false) String clientUuid, 
-	@RequestParam(name = "statistical_method", required=false) Float quantile,
-	@RequestParam(required=false) Integer period,
-	@RequestParam(name = "map_options", required=false) String mapOptions, 
-	@RequestParam(required=false) Integer technology, 
-	@RequestParam(required=false) String provider,
-	@RequestParam(required=false) String operator);*/
+    @RequestParam(name = "highlight_uuid", required = false) String highlightUuid,
+    @RequestParam(name = "highlight_client_uuid", required=false) String clientUuid,
+    @RequestParam(name = "statistical_method", required=false) Float quantile,
+    @RequestParam(required=false) Integer period,
+    @RequestParam(name = "map_options", required=false) String mapOptions,
+    @RequestParam(required=false) Integer technology,
+    @RequestParam(required=false) String provider,
+    @RequestParam(required=false) String operator);*/
 
     ////
 

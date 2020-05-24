@@ -515,13 +515,13 @@ public class Settings {
 
             @Override
             public String toString() {
-                return "SpeedMeasurementClass{" +
-                        "isDefault=" + isDefault +
-                        ", numStreams=" + numStreams +
-                        ", frameSize=" + frameSize +
-                        ", bounds=" + bounds +
-                        ", framesPerCall=" + framesPerCall +
-                        '}';
+                return "SpeedMeasurementClass{"
+                        + "isDefault=" + isDefault
+                        + ", numStreams=" + numStreams
+                        + ", frameSize=" + frameSize
+                        + ", bounds=" + bounds
+                        + ", framesPerCall=" + framesPerCall
+                        + '}';
             }
 
             /**
@@ -566,10 +566,10 @@ public class Settings {
 
                 @Override
                 public String toString() {
-                    return "Bounds{" +
-                            "lower=" + lower +
-                            ", upper=" + upper +
-                            '}';
+                    return "Bounds{"
+                            + "lower=" + lower
+                            + ", upper=" + upper
+                            + '}';
                 }
             }
         }

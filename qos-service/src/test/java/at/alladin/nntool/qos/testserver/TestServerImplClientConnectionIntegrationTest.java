@@ -47,19 +47,19 @@ import mockit.Mocked;
  */
 public class TestServerImplClientConnectionIntegrationTest {
 
-    CountDownLatch latch;
+    private CountDownLatch latch;
 
-    ServerSocketMockup ssm;
+    private ServerSocketMockup ssm;
 
-    TestServerImpl ts;
-
-    @Mocked
-    Socket socket;
+    private TestServerImpl ts;
 
     @Mocked
-    TestServerConsole console;
+    private Socket socket;
 
-    SocketWithCountDownLatchMockup slm;
+    @Mocked
+    private TestServerConsole console;
+
+    private SocketWithCountDownLatchMockup slm;
 
     @Before
     public void init() throws IOException {
@@ -73,7 +73,7 @@ public class TestServerImplClientConnectionIntegrationTest {
         //fake ServerSocket.accept() method to return only once a Socket instance
         ssm = new ServerSocketMockup(ts) {
 
-            int sockets = 0;
+            private int sockets = 0;
 
             @Mock
             public Socket accept() throws IOException {

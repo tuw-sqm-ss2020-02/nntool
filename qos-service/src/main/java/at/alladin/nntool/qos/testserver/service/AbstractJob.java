@@ -47,10 +47,10 @@ public abstract class AbstractJob<R> implements Runnable {
     /**
      *
      */
-    R result = null;
+    protected R result = null;
 
     /**
-     *
+     * @param service
      */
     public AbstractJob(TestServerServiceEnum service) {
         this.service = service;
@@ -58,8 +58,6 @@ public abstract class AbstractJob<R> implements Runnable {
 
     /**
      * the main execution procedure, a result can be returned
-     *
-     * @return
      * @throws Exception
      */
     public abstract R execute() throws Exception;
@@ -106,9 +104,7 @@ public abstract class AbstractJob<R> implements Runnable {
      * @return
      */
     public synchronized R getResult() {
-        while (isRunning.get()) {
-
-        }
+        while (isRunning.get());
 
         return result;
     }
@@ -178,13 +174,14 @@ public abstract class AbstractJob<R> implements Runnable {
 
     /**
      * @param newState
+     * @param res
      */
-    public void dispatchEvent(JobState newState, R result) {
+    public void dispatchEvent(JobState newState, R res) {
         state.set(newState);
 
         JobCallback callback = callbackMap.get(newState);
         if (callback != null) {
-            callback.onEvent(this, newState, result);
+            callback.onEvent(this, newState, res);
         }
     }
 

@@ -49,26 +49,26 @@ import mockit.Mocked;
  */
 public class ClientHandlerTest {
 
-    public final String TOKEN = "bbd1ee96-0779-4619-b993-bb4bf7089754";
+    private final String token = "bbd1ee96-0779-4619-b993-bb4bf7089754";
 
-    public final String TOKEN_COMMAND = "TOKEN " + TOKEN + "_1528136454_3gr2gw9lVhtVONV0XO62Vamu/uw=";
-
-    @Mocked
-    Socket socket;
+    private final String tokenCommand = "TOKEN " + token + "_1528136454_3gr2gw9lVhtVONV0XO62Vamu/uw=";
 
     @Mocked
-    ServerSocket serverSocket;
+    private Socket socket;
+
+    @Mocked
+    private ServerSocket serverSocket;
 
     //@Mocked TestServerConsole console;
 
     @Mocked
-    BufferedReader reader;
+    private BufferedReader reader;
 
     @Mocked
-    ThreadPoolExecutor executor;
+    private ThreadPoolExecutor executor;
 
     @Mocked
-    DatagramSocket datagramSocket;
+    private DatagramSocket datagramSocket;
 
     @Test
     public void testSendMessage() throws IOException {
@@ -105,15 +105,15 @@ public class ClientHandlerTest {
     public void testCheckTokenWithValidToken() throws NoSuchFieldException, SecurityException, Exception {
         final RecordingFilterOutputStreamMock ros = new RecordingFilterOutputStreamMock();
         final ClientHandler ch = new ClientHandler(serverSocket, socket);
-        final ClientToken token =
+        final ClientToken t =
                 ch.checkToken("TOKEN bbd1ee96-0779-4619-b993-bb4bf7089754_1528136454_3gr2gw9lVhtVONV0XO62Vamu/uw=\n");
 
-        assertNotNull("Token is null", token);
-        assertEquals("token timestamp != 1528136454", 1528136454, token.getTimeStamp());
+        assertNotNull("Token is null", t);
+        assertEquals("token timestamp != 1528136454", 1528136454, t.getTimeStamp());
         assertEquals("token UUID != 'bbd1ee96-0779-4619-b993-bb4bf7089754'",
-                "bbd1ee96-0779-4619-b993-bb4bf7089754", token.getUuid());
+                "bbd1ee96-0779-4619-b993-bb4bf7089754", t.getUuid());
         assertEquals("token Hmac != '3gr2gw9lVhtVONV0XO62Vamu/uw='",
-                "3gr2gw9lVhtVONV0XO62Vamu/uw=", token.getHmac());
+                "3gr2gw9lVhtVONV0XO62Vamu/uw=", t.getHmac());
     }
 
     @Test
@@ -124,7 +124,7 @@ public class ClientHandlerTest {
         new MockUp<ClientHandler>() {
 
             @Mock
-            protected ClientToken checkToken(String token) throws IOException {
+            protected ClientToken checkToken(String t) throws IOException {
                 return new ClientToken(UUID.randomUUID().toString(), System.currentTimeMillis(), "ABC");
             }
 
@@ -134,27 +134,27 @@ public class ClientHandlerTest {
             }
 
             @Mock
-            protected void runIncomingTcpTest(String command, ClientToken token) throws IOException {
+            protected void runIncomingTcpTest(String command, ClientToken clientToken) throws IOException {
                 cmdMap.put(QoSServiceProtocol.CMD_TCP_TEST_IN, command);
             }
 
             @Mock
-            protected void runOutgoingTcpTest(String command, ClientToken token) throws Exception {
+            protected void runOutgoingTcpTest(String command, ClientToken clientToken) throws Exception {
                 cmdMap.put(QoSServiceProtocol.CMD_TCP_TEST_OUT, command);
             }
 
             @Mock
-            protected void runIncomingUdpTest(final String command, final ClientToken token) throws IOException, InterruptedException {
+            protected void runIncomingUdpTest(final String command, final ClientToken clientToken) throws IOException, InterruptedException {
                 cmdMap.put(QoSServiceProtocol.CMD_UDP_TEST_IN, command);
             }
 
             @Mock
-            protected void runOutgoingUdpTest(final String command, final ClientToken token) throws IOException, InterruptedException {
+            protected void runOutgoingUdpTest(final String command, final ClientToken clientToken) throws IOException, InterruptedException {
                 cmdMap.put(QoSServiceProtocol.CMD_UDP_TEST_OUT, command);
             }
 
             @Mock
-            protected void runVoipTest(final String command, final ClientToken token) throws IOException, InterruptedException {
+            protected void runVoipTest(final String command, final ClientToken clientToken) throws IOException, InterruptedException {
                 cmdMap.put(QoSServiceProtocol.CMD_VOIP_TEST, command);
             }
         };
@@ -194,7 +194,7 @@ public class ClientHandlerTest {
         new MockUp<BufferedOutputStream>() {
 
             @Mock
-            public void write(byte b[]) throws IOException {
+            public void write(byte[] b) throws IOException {
                 clientMessages.add(new String(b));
             }
         };
@@ -210,7 +210,7 @@ public class ClientHandlerTest {
         new Expectations() {
             {
                 reader.readLine();
-                returns(TOKEN_COMMAND,
+                returns(tokenCommand,
                         QoSServiceProtocol.CMD_TCP_TEST_IN + " 100 +ID1",
                         QoSServiceProtocol.CMD_TCP_TEST_IN + " 200 +ID2",
                         QoSServiceProtocol.CMD_TCP_TEST_IN + " 300 +ID3",
@@ -237,7 +237,7 @@ public class ClientHandlerTest {
 
             @Mock
             public void write(Invocation invocation, byte[] b) throws IOException {
-                if (TOKEN.equals(new String(b))) {
+                if (token.equals(new String(b))) {
                     invocation.proceed(b);
                 } else {
                     clientMessages.add(b);
@@ -265,7 +265,7 @@ public class ClientHandlerTest {
         new Expectations() {
             {
                 reader.readLine();
-                returns(TOKEN_COMMAND,
+                returns(tokenCommand,
                         QoSServiceProtocol.CMD_UDP_TEST_IN + " 100 1 +ID1",
                         QoSServiceProtocol.CMD_UDP_TEST_IN + " 200 1 +ID2",
                         QoSServiceProtocol.CMD_UDP_TEST_IN + " 300 1 +ID3",

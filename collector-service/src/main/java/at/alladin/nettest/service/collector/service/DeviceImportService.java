@@ -59,25 +59,25 @@ import at.alladin.nettest.shared.server.storage.couchdb.domain.repository.Device
 @Service
 public class DeviceImportService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DeviceImportService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeviceImportService.class);
 
     @Autowired
-    ExternalServicesProperties properties;
+    private ExternalServicesProperties properties;
 
     @Autowired
-    TaskScheduler taskScheduler;
+    private TaskScheduler taskScheduler;
 
     @Autowired
-    DeviceRepository deviceRepository; // TODO: use StorageService or equivalent service instead of using couchdb repository directly.
+    private DeviceRepository deviceRepository; // TODO: use StorageService or equivalent service instead of using couchdb repository directly.
 
-    Map<String, ScheduledFuture<?>> jobs = new HashMap<>();
+    private Map<String, ScheduledFuture<?>> jobs = new HashMap<>();
 
     @PostConstruct
     public void init() {
         if (properties != null && properties.getDeviceImports() != null) {
             for (final DeviceImportSettings settings : properties.getDeviceImports()) {
                 if (settings.isEnabled()) {
-                    logger.debug("Initializing device import for: {}, using cron: {}", settings.getName(), settings.getCron());
+                    LOGGER.debug("Initializing device import for: {}, using cron: {}", settings.getName(), settings.getCron());
                     final ScheduledFuture<?> task = taskScheduler.schedule(new ImportRunnable(settings), new CronTrigger(settings.getCron()));
                     jobs.put(settings.getName(), task);
                 }
@@ -100,7 +100,7 @@ public class DeviceImportService {
         public void run() {
             //bulkDelete();
 
-            logger.debug("Executing device import: {}", settings.getName());
+            LOGGER.debug("Executing device import: {}", settings.getName());
             final Path path = downloadToTempFile(settings.getUrl(), "temp_" + settings.getName());
 
             final Map<String, Device> newDevices = new HashMap<>();
@@ -131,7 +131,7 @@ public class DeviceImportService {
             int inserts = 0;
             int notUpdated = 0;
 
-            logger.debug("Found {} total devices. Starting update process.", newDevices.size());
+            LOGGER.debug("Found {} total devices. Starting update process.", newDevices.size());
 
             while (!isLastPage) {
                 Page<Device> page = deviceRepository.getAllDevices(pageable);
@@ -165,27 +165,24 @@ public class DeviceImportService {
             }
 
 
-            logger.debug("Device import finished. New devices: {}, updated: {}, not updated: {}", inserts, updates, notUpdated);
+            LOGGER.debug("Device import finished. New devices: {}, updated: {}, not updated: {}", inserts, updates, notUpdated);
         }
 
-		/*
-		private void bulkDelete() {
-			Pageable pageable = PageRequest.of(0, 200);
-			boolean isLastPage = false;
-
-			while (!isLastPage) {
-				Page<Device> page = deviceRepository.getAllDevices(pageable);
-				pageable = page.nextPageable();
-
-				if (page.hasContent()) {
-					for (Device d : page.getContent())
-					deviceRepository.delete(d);
-				}
-
-				isLastPage = !page.hasNext();
-			}
-		}
-		*/
+        /*
+        private void bulkDelete() {
+        Pageable pageable = PageRequest.of(0, 200);
+        boolean isLastPage = false;
+        while (!isLastPage) {
+        Page<Device> page = deviceRepository.getAllDevices(pageable);
+        pageable = page.nextPageable();
+        if (page.hasContent()) {
+        for (Device d : page.getContent())
+        deviceRepository.delete(d);
+        }
+        isLastPage = !page.hasNext();
+        }
+        }
+        */
 
         private int bulkUpdate(final List<Device> devices, final int threshold) {
             int i = 0;
@@ -202,12 +199,12 @@ public class DeviceImportService {
             final HttpGet request = new HttpGet(url);
 
             try {
-                logger.info("downloading: {}", url);
+                LOGGER.info("downloading: {}", url);
 
                 final HttpResponse response = httpClient.execute(request);
                 final HttpEntity entity = response.getEntity();
 
-                logger.info("contentType: {}", entity.getContentType().getValue());
+                LOGGER.info("contentType: {}", entity.getContentType().getValue());
 
                 String extension = ".tmp";
 
@@ -242,11 +239,11 @@ public class DeviceImportService {
 
                 Files.copy(entity.getContent(), tmpFilePath, StandardCopyOption.REPLACE_EXISTING);
 
-                logger.info("Download completed: {}", tempFileName);
+                LOGGER.info("Download completed: {}", tempFileName);
 
                 return tmpFilePath;
             } catch (Exception ex) {
-                logger.error("failed to download file from url " + url, ex);
+                LOGGER.error("failed to download file from url " + url, ex);
                 return null;
             }
         }

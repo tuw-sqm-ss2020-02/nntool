@@ -26,7 +26,9 @@ import at.alladin.nntool.qos.testserver.servers.AbstractUdpServer;
 public interface UdpPacketReceivedCallback {
 
     /**
-     * @param data
+     * @param dp
+     * @param uuid
+     * @param udpServer
      * @return
      */
     public boolean onReceive(final DatagramPacket dp, final String uuid, final AbstractUdpServer<?> udpServer);

@@ -22,10 +22,10 @@ import org.json.JSONObject;
 //import at.alladin.nettest.shared.model.request.SpeedtestResultSubmitRequest;
 
 public class SpeedItem {
-    public final boolean upload;
-    public final int thread;
-    public final long time;
-    public final long bytes;
+    private final boolean upload;
+    private final int thread;
+    private final long time;
+    private final long bytes;
 
     public SpeedItem(final boolean upload, final int thread, final long time, final long bytes) {
         this.upload = upload;

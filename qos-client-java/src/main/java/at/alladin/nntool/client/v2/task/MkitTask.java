@@ -42,7 +42,7 @@ public class MkitTask extends AbstractQoSTask {
 
     public final static long DEFAULT_TIMEOUT = 30000000000L;
 
-    public final static Gson gson = GsonBasicHelper.getDateTimeGsonBuilder().create();
+    public final static Gson GSON = GsonBasicHelper.getDateTimeGsonBuilder().create();
     public final static String PARAM_TIMEOUT = "timeout";
     public final static String PARAM_NDT_TEST = "ndt_test";
     public final static String PARAM_INPUT = "input";
@@ -74,12 +74,12 @@ public class MkitTask extends AbstractQoSTask {
         if (inputObj instanceof List) {
             inputArray = (List) inputObj;
         } else if (inputObj instanceof String) {
-            inputArray = gson.fromJson((String) inputObj, ArrayList.class);
+            inputArray = GSON.fromJson((String) inputObj, ArrayList.class);
         } else {
             inputArray = new ArrayList<>();
         }
 
-        flagArray = new JsonArray(); //gson.fromJson((String) taskDesc.getParams().get(PARAM_FLAGS), JsonArray.class);
+        flagArray = new JsonArray(); //GSON.fromJson((String) taskDesc.getParams().get(PARAM_FLAGS), JsonArray.class);
     }
 
     public QoSTestResult call() throws Exception {

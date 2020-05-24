@@ -56,7 +56,7 @@ import at.alladin.nntool.shared.map.info.option.TimePeriodOption;
 @Service
 public class InfoService {
 
-    private static final NumberFormat format = NumberFormat.getNumberInstance();
+    private static final NumberFormat FORMAT = NumberFormat.getNumberInstance();
     private final static String MOBILE_PROVIDER_SQL = "SELECT p.name as name, p.short_name as short_name FROM providers p WHERE " //(potential TODO:) readd filtering by some providers only? "p.map_filter=true"
             + " p.mcc_mnc_mappings IS NOT NULL ORDER BY p.short_name";  // allow mobile networks for wifi/browser
     private final static String GENERAL_PROVIDER_SQL = "SELECT p.name as name," + /*"mcc_mnc," + */ " p.short_name as short_name FROM providers p"
@@ -83,7 +83,7 @@ public class InfoService {
     private JdbcTemplate jdbcTemplate;
 
     /**
-     * @return
+     * @param locale
      * @throws JSONException
      * @throws SQLException
      */
@@ -192,9 +192,9 @@ public class InfoService {
 
                     for (final Long colorKey : keySet) {
                         if (mapOption.getClassificationType() == ClassificationHelper.ClassificationType.PING || mapOption.getClassificationType() == ClassificationHelper.ClassificationType.SIGNAL) {
-                            thresholdEntries.getThresholdValues().add(format.format(colorKey));
+                            thresholdEntries.getThresholdValues().add(FORMAT.format(colorKey));
                         } else {
-                            thresholdEntries.getThresholdValues().add(format.format(colorKey / 1000.0f));
+                            thresholdEntries.getThresholdValues().add(FORMAT.format(colorKey / 1000.0f));
                         }
                         thresholdEntries.getThresholdColors().add(colors.getColorMap().get(colorKey));
                     }
@@ -290,7 +290,6 @@ public class InfoService {
 
     /**
      * @param locale
-     * @return
      * @throws SQLException
      */
     public TechnologyFilter getOperatorFilter(final Locale locale) {

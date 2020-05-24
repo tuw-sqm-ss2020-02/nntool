@@ -21,7 +21,7 @@ import java.util.HashSet;
 /**
  * @author lb
  */
-public class QoSServiceProtocol {
+public final class QoSServiceProtocol {
 
     /**
      *
@@ -129,9 +129,9 @@ public class QoSServiceProtocol {
     public final static String REQUEST_QUIT = "QUIT";
 
 
-    /********************************************
+    /*
      * SERVER RESPONSES:
-     ********************************************/
+     */
 
     /**
      *
@@ -164,9 +164,9 @@ public class QoSServiceProtocol {
     public final static String RESPONSE_ERROR_UNSUPPORTED = "UNSUPP";
 
 
-    /********************************************
+    /*
      * TIMEOUTS:
-     ********************************************/
+     */
 
     /**
      *
@@ -179,9 +179,9 @@ public class QoSServiceProtocol {
     public final static int TIMEOUT_CLIENTHANDLER_CONNECTION_MIN_VALUE = 15000;
 
 
-    /********************************************
+    /*
      * TOKEN LEGAL TIME:
-     ********************************************/
+     */
 
     /**
      * 10 minutes
@@ -189,9 +189,9 @@ public class QoSServiceProtocol {
     public final static int TOKEN_LEGAL_TIME = 600000;
 
 
-    /********************************************
+    /*
      * UDP PACKET DATA
-     ********************************************/
+     */
 
     /**
      * the first byte of an UDP packet, no response
@@ -222,4 +222,6 @@ public class QoSServiceProtocol {
         SUPPORTED_PROTOCOL_VERSION_SET.add(PROTOCOL_VERSION_1);
     }
 
+    private QoSServiceProtocol() {
+    }
 }

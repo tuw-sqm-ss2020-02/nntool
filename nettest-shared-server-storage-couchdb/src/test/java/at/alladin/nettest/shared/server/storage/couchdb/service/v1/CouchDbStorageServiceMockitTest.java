@@ -80,8 +80,7 @@ public class CouchDbStorageServiceMockitTest {
 
     private final static String SYSTEM_UUID = "d51260f5-cbdb-4d62-b32f-825d4238df47";
 
-    private @Tested(fullyInitialized = true)
-    CouchDbStorageService couchDbStorageService;
+    private @Tested(fullyInitialized = true) CouchDbStorageService couchDbStorageService;
 
     @Mocked
     @Injectable
@@ -195,30 +194,32 @@ public class CouchDbStorageServiceMockitTest {
     }
 
     @Test(expected = StorageServiceException.class)
-    public void saveWithInvalidAgentUuidTest_ThrowsStorageServiceException() {
+    public void saveWithInvalidAgentUuidTestThrowsStorageServiceException() {
         lmapReportDto.setAgentId(null);
         couchDbStorageService.save(lmapReportDto);
     }
 
     @Test
-    public void saveValidTest_callsSaveAndReturnsUuids() {
-        new Expectations() {{
-            measurementRepository.save((Measurement) any);
-            times = 1;
-            result = new Delegate<Measurement>() {
-                public void delegate(Measurement measurement) {
-                    measurementUuid = measurement.getUuid();
-                    openDataUuid = measurement.getOpenDataUuid();
-                }
-            };
+    public void saveValidTestCallsSaveAndReturnsUuids() {
+        new Expectations() {
+            {
+                measurementRepository.save((Measurement) any);
+                times = 1;
+                result = new Delegate<Measurement>() {
+                    public void delegate(Measurement meas) {
+                        measurementUuid = meas.getUuid();
+                        openDataUuid = meas.getOpenDataUuid();
+                    }
+                };
 
-            measurementAgentRepository.findByUuid(anyString);
-            result = measurementAgent;
+                measurementAgentRepository.findByUuid(anyString);
+                result = measurementAgent;
 
-            lmapReportModelMapper.map((LmapReportDto) any);
-            result = new Measurement();
+                lmapReportModelMapper.map((LmapReportDto) any);
+                result = new Measurement();
 
-        }};
+            }
+        };
 
         final MeasurementResultResponse response = couchDbStorageService.save(lmapReportDto);
 
@@ -227,24 +228,26 @@ public class CouchDbStorageServiceMockitTest {
     }
 
     @Test
-    public void saveValidTestWithSystemUuid_callsSaveReturnsUuidsAndStoresCorrectSystemUuid() {
-        new Expectations() {{
-            measurementRepository.save((Measurement) any);
-            times = 1;
-            result = new Delegate<Measurement>() {
-                public void delegate(Measurement measurement) {
-                    measurementUuid = measurement.getUuid();
-                    openDataUuid = measurement.getOpenDataUuid();
-                    assertEquals("System uuid not forwarded correctly", SYSTEM_UUID, measurement.getSystemUuid());
-                }
-            };
+    public void saveValidTestWithSystemUuidCallsSaveReturnsUuidsAndStoresCorrectSystemUuid() {
+        new Expectations() {
+            {
+                measurementRepository.save((Measurement) any);
+                times = 1;
+                result = new Delegate<Measurement>() {
+                    public void delegate(Measurement meas) {
+                        measurementUuid = meas.getUuid();
+                        openDataUuid = meas.getOpenDataUuid();
+                        assertEquals("System uuid not forwarded correctly", SYSTEM_UUID, measurement.getSystemUuid());
+                    }
+                };
 
-            measurementAgentRepository.findByUuid(anyString);
-            result = measurementAgent;
+                measurementAgentRepository.findByUuid(anyString);
+                result = measurementAgent;
 
-            lmapReportModelMapper.map((LmapReportDto) any);
-            result = new Measurement();
-        }};
+                lmapReportModelMapper.map((LmapReportDto) any);
+                result = new Measurement();
+            }
+        };
 
         final MeasurementResultResponse response = couchDbStorageService.save(lmapReportDto, SYSTEM_UUID);
 
@@ -257,10 +260,12 @@ public class CouchDbStorageServiceMockitTest {
         final MeasurementAgent agentWithoutTermsAccepted = new MeasurementAgent();
         agentWithoutTermsAccepted.setTermsAndConditionsAccepted(false);
 
-        new Expectations() {{
-            measurementAgentRepository.findByUuid(anyString);
-            returns(null, agentWithoutTermsAccepted, measurementAgent);
-        }};
+        new Expectations() {
+            {
+                measurementAgentRepository.findByUuid(anyString);
+                returns(null, agentWithoutTermsAccepted, measurementAgent);
+            }
+        };
 
         assertFalse("Null agent not invalid", couchDbStorageService.isValidMeasurementAgentUuid(MEASUREMENT_AGENT_UUID));
         assertFalse("Agent without accepted terms not invalid", couchDbStorageService.isValidMeasurementAgentUuid(MEASUREMENT_AGENT_UUID));
@@ -268,24 +273,25 @@ public class CouchDbStorageServiceMockitTest {
     }
 
     @Test
-    public void registerNewMeasurementAgent_shouldReturnValidRegistrationResponse() {
+    public void registerNewMeasurementAgentShouldReturnValidRegistrationResponse() {
         final RegistrationRequest req = new RegistrationRequest();
         req.setTermsAndConditionsAccepted(true);
         req.setTermsAndConditionsAcceptedVersion(1);
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                measurementAgentMapper.map((ApiRequest<RegistrationRequest>) any);
+                result = new MeasurementAgent();
 
-            measurementAgentMapper.map((ApiRequest<RegistrationRequest>) any);
-            result = new MeasurementAgent();
-
-            measurementAgentRepository.save((MeasurementAgent) any);
-            times = 1;
-            result = new Delegate<MeasurementAgent>() {
-                public void delegate(MeasurementAgent agent) {
-                    userAgentUuid = agent.getUuid();
-                }
-            };
-        }};
+                measurementAgentRepository.save((MeasurementAgent) any);
+                times = 1;
+                result = new Delegate<MeasurementAgent>() {
+                    public void delegate(MeasurementAgent agent) {
+                        userAgentUuid = agent.getUuid();
+                    }
+                };
+            }
+        };
 
 
         final RegistrationResponse response = couchDbStorageService.registerMeasurementAgent(new ApiRequest<>(req));
@@ -293,7 +299,7 @@ public class CouchDbStorageServiceMockitTest {
     }
 
     @Test
-    public void updateMeasurementAgent_shouldReturnValidRegistrationResponse() {
+    public void updateMeasurementAgentShouldReturnValidRegistrationResponse() {
         final RegistrationRequest req = new RegistrationRequest();
         req.setTermsAndConditionsAccepted(true);
         req.setTermsAndConditionsAcceptedVersion(5);
@@ -307,30 +313,31 @@ public class CouchDbStorageServiceMockitTest {
         ret.setUuid(MEASUREMENT_AGENT_UUID);
         ret.setTermsAndConditionsAcceptedVersion(5);
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                measurementAgentMapper.map((ApiRequest<RegistrationRequest>) any);
+                result = new Delegate<MeasurementAgent>() {
+                    public MeasurementAgent delegate(ApiRequest<RegistrationRequest> request) {
+                        MeasurementAgent ret = new MeasurementAgent();
+                        ret.setUuid(MEASUREMENT_AGENT_UUID);
+                        ret.setTermsAndConditionsAcceptedVersion(request.getData().getTermsAndConditionsAcceptedVersion());
+                        return ret;
+                    }
+                };
 
-            measurementAgentMapper.map((ApiRequest<RegistrationRequest>) any);
-            result = new Delegate<MeasurementAgent>() {
-                public MeasurementAgent delegate(ApiRequest<RegistrationRequest> request) {
-                    MeasurementAgent ret = new MeasurementAgent();
-                    ret.setUuid(MEASUREMENT_AGENT_UUID);
-                    ret.setTermsAndConditionsAcceptedVersion(request.getData().getTermsAndConditionsAcceptedVersion());
-                    return ret;
-                }
-            };
+                measurementAgentRepository.findByUuid(MEASUREMENT_AGENT_UUID);
+                result = measurementAgent;
 
-            measurementAgentRepository.findByUuid(MEASUREMENT_AGENT_UUID);
-            result = measurementAgent;
-
-            measurementAgentRepository.save((MeasurementAgent) any);
-            times = 1;
-            result = new Delegate<MeasurementAgent>() {
-                public void delegate(MeasurementAgent agent) {
-                    assertEquals("Did not update terms version", 5, agent.getTermsAndConditionsAcceptedVersion());
-                    userAgentUuid = agent.getUuid();
-                }
-            };
-        }};
+                measurementAgentRepository.save((MeasurementAgent) any);
+                times = 1;
+                result = new Delegate<MeasurementAgent>() {
+                    public void delegate(MeasurementAgent agent) {
+                        assertEquals("Did not update terms version", 5, agent.getTermsAndConditionsAcceptedVersion());
+                        userAgentUuid = agent.getUuid();
+                    }
+                };
+            }
+        };
 
 
         final RegistrationResponse response = couchDbStorageService.registerMeasurementAgent(apiRequest);
@@ -338,7 +345,7 @@ public class CouchDbStorageServiceMockitTest {
     }
 
     @Test
-    public void getTaskDtoForSpeedTask_shouldProvideValidValuesForMapper() {
+    public void getTaskDtoForSpeedTaskShouldProvideValidValuesForMapper() {
 
         final Settings settings = new Settings();
         settings.setMeasurements(new HashMap<>());
@@ -352,89 +359,98 @@ public class CouchDbStorageServiceMockitTest {
         server.setName("peer");
         server.setPublicIdentifier("peer_id");
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                settingsRepository.findByUuid(SETTINGS_UUID);
+                result = settings;
 
-            settingsRepository.findByUuid(SETTINGS_UUID);
-            result = settings;
+                measurementServerRepository.findByPublicIdentifier("peer_id");
+                result = server;
 
-            measurementServerRepository.findByPublicIdentifier("peer_id");
-            result = server;
-
-            lmapTaskMapper.map((Settings) any, (MeasurementServer) any, anyString, false);
-            result = new Delegate() {
-                public LmapTaskDto delegate(Settings settings, MeasurementServer server, String type, boolean useIPv6) {
-                    assertEquals("unexpected settings provided to mapper", SETTINGS_UUID, settings.getId());
-                    assertEquals("unexpected server provided to mapper", "peer", server.getName());
-                    assertEquals("unexpected server provided to mapper", "peer_id", server.getPublicIdentifier());
-                    assertEquals("unexpected type provided to mapper", "SPEED", type);
-                    assertEquals("unexpected useIPv6 value provided to mapper", false, useIPv6);
-                    return new LmapTaskDto();
-                }
-            };
-        }};
+                lmapTaskMapper.map((Settings) any, (MeasurementServer) any, anyString, false);
+                result = new Delegate() {
+                    public LmapTaskDto delegate(Settings settings, MeasurementServer server, String type, boolean useIPv6) {
+                        assertEquals("unexpected settings provided to mapper", SETTINGS_UUID, settings.getId());
+                        assertEquals("unexpected server provided to mapper", "peer", server.getName());
+                        assertEquals("unexpected server provided to mapper", "peer_id", server.getPublicIdentifier());
+                        assertEquals("unexpected type provided to mapper", "SPEED", type);
+                        assertEquals("unexpected useIPv6 value provided to mapper", false, useIPv6);
+                        return new LmapTaskDto();
+                    }
+                };
+            }
+        };
 
         assertNotNull("Invalid object returned", couchDbStorageService.getTaskDto(MeasurementTypeDto.SPEED, capability, SETTINGS_UUID, false));
     }
 
     @Test(expected = StorageServiceException.class)
-    public void disassociateMeasurementCallWithInvalidUuid_throwsStorageServiceException() {
+    public void disassociateMeasurementCallWithInvalidUuidThrowsStorageServiceException() {
 
-        new Expectations() {{
-            measurementRepository.findByUuid(MEASUREMENT_UUID);
-            result = new RuntimeException();
-        }};
+        new Expectations() {
+            {
+                measurementRepository.findByUuid(MEASUREMENT_UUID);
+                result = new RuntimeException();
+            }
+        };
 
         couchDbStorageService.disassociateMeasurement(MEASUREMENT_AGENT_UUID, MEASUREMENT_UUID);
     }
 
     @Test(expected = StorageServiceException.class)
-    public void disassociateMeasurementCallWhichIsAlreadyDisassociated_throwsStorageServiceException() {
+    public void disassociateMeasurementCallWhichIsAlreadyDisassociatedThrowsStorageServiceException() {
 
         measurement.getAgentInfo().setUuid(null);
 
-        new Expectations() {{
-            measurementRepository.findByUuid(MEASUREMENT_UUID);
-            result = measurement;
-        }};
+        new Expectations() {
+            {
+                measurementRepository.findByUuid(MEASUREMENT_UUID);
+                result = measurement;
+            }
+        };
 
         couchDbStorageService.disassociateMeasurement(MEASUREMENT_AGENT_UUID, MEASUREMENT_UUID);
     }
 
     @Test(expected = StorageServiceException.class)
-    public void disassociateMeasurementCallWhichIsNotFromTheProvidedUserAgent_throwsStorageServiceException() {
+    public void disassociateMeasurementCallWhichIsNotFromTheProvidedUserAgentThrowsStorageServiceException() {
 
         measurement.getAgentInfo().setUuid("invalid uuid");
 
-        new Expectations() {{
-            measurementRepository.findByUuid(MEASUREMENT_UUID);
-            result = measurement;
-        }};
+        new Expectations() {
+            {
+                measurementRepository.findByUuid(MEASUREMENT_UUID);
+                result = measurement;
+            }
+        };
 
         couchDbStorageService.disassociateMeasurement(MEASUREMENT_AGENT_UUID, MEASUREMENT_UUID);
     }
 
     @Test
-    public void disassociateMeasurementCall_correctedMeasurementIsForwardedToRepo() {
+    public void disassociateMeasurementCallCorrectedMeasurementIsForwardedToRepo() {
 
-        new Expectations() {{
-            measurementRepository.findByUuid(MEASUREMENT_UUID);
-            result = measurement;
+        new Expectations() {
+            {
+                measurementRepository.findByUuid(MEASUREMENT_UUID);
+                result = measurement;
 
-            measurementRepository.save((Measurement) any);
-            result = new Delegate() {
-                public Measurement delegate(Measurement measurement) {
-                    assertNull("Measurement not correctly disassociated", measurement.getAgentInfo().getUuid());
-                    return measurement;
-                }
-            };
-        }};
+                measurementRepository.save((Measurement) any);
+                result = new Delegate() {
+                    public Measurement delegate(Measurement meas) {
+                        assertNull("Measurement not correctly disassociated", meas.getAgentInfo().getUuid());
+                        return meas;
+                    }
+                };
+            }
+        };
 
         final DisassociateResponse response = couchDbStorageService.disassociateMeasurement(MEASUREMENT_AGENT_UUID, MEASUREMENT_UUID);
         assertNotNull("Null response returned from disassociation", response);
     }
 
     @Test
-    public void disassociatedAllMeasurements_correctlyDissassociatesAllMeasurementsOfTheAgent() {
+    public void disassociatedAllMeasurementsCorrectlyDissassociatesAllMeasurementsOfTheAgent() {
         final Measurement secondMeasurement = new Measurement();
         secondMeasurement.setUuid("e9e72f9f-f33b-49fe-a1fa-e8a664235afd");
         secondMeasurement.setSystemUuid(SYSTEM_UUID);
@@ -447,20 +463,22 @@ public class CouchDbStorageServiceMockitTest {
         measurementList.add(measurement);
         measurementList.add(secondMeasurement);
 
-        new Expectations() {{
-            measurementRepository.findByAgentInfoUuid(MEASUREMENT_AGENT_UUID);
-            result = measurementList;
+        new Expectations() {
+            {
+                measurementRepository.findByAgentInfoUuid(MEASUREMENT_AGENT_UUID);
+                result = measurementList;
 
-            measurementRepository.saveAll((List<Measurement>) any);
-            result = new Delegate() {
-                public Iterable<Measurement> delegate(List<Measurement> measurementList) {
-                    assertEquals("Unexpected measurement count during save", 2, measurementList.size());
-                    assertNull("Measurement one not successfully disassociated", measurementList.get(0).getAgentInfo().getUuid());
-                    assertNull("Measurement two not successfully disassociated", measurementList.get(1).getAgentInfo().getUuid());
-                    return null;
-                }
-            };
-        }};
+                measurementRepository.saveAll((List<Measurement>) any);
+                result = new Delegate() {
+                    public Iterable<Measurement> delegate(List<Measurement> measurementList) {
+                        assertEquals("Unexpected measurement count during save", 2, measurementList.size());
+                        assertNull("Measurement one not successfully disassociated", measurementList.get(0).getAgentInfo().getUuid());
+                        assertNull("Measurement two not successfully disassociated", measurementList.get(1).getAgentInfo().getUuid());
+                        return null;
+                    }
+                };
+            }
+        };
 
         couchDbStorageService.disassociateAllMeasurements(MEASUREMENT_AGENT_UUID);
     }

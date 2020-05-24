@@ -445,7 +445,7 @@ public class CouchDbStorageService implements StorageService {
 
         final FullMeasurementResponse ret = fullMeasurementResponseMapper.map(measurement);
 
-        //evaluate the QoS stuff 
+        //evaluate the QoS stuff
         final QoSMeasurement qosMeasurement = (QoSMeasurement) measurement.getMeasurements().get(MeasurementTypeDto.QOS);
         if (qosMeasurement != null) {
             final FullQoSMeasurement fullQosMeasurement = qosEvaluationService.evaluateQoSMeasurement(qosMeasurement, locale);
@@ -460,8 +460,7 @@ public class CouchDbStorageService implements StorageService {
         //TODO: default settings?
         final Settings settings = settingsRepository.findByUuid(settingsUuid); // TODO: cache
 
-        return groupedMeasurementService.groupResult(getFullMeasurementByAgentAndMeasurementUuid(measurementAgentUuid, measurementUuid, locale)
-                , settings.getSpeedtestDetailGroups(),
+        return groupedMeasurementService.groupResult(getFullMeasurementByAgentAndMeasurementUuid(measurementAgentUuid, measurementUuid, locale), settings.getSpeedtestDetailGroups(),
                 locale, 10000);
     }
 
@@ -611,8 +610,8 @@ public class CouchDbStorageService implements StorageService {
                         nmi.setRoaming(!networkMccMnc.equals(simMccMnc));
                         if (nmi.getRoaming()) {
                             nmi.setRoamingType(
-                                    nmi.getNetworkCountry().equals(nmi.getSimCountry()) ?
-                                            RoamingType.NATIONAL : RoamingType.INTERNATIONAL);
+                                    nmi.getNetworkCountry().equals(nmi.getSimCountry())
+                                            ? RoamingType.NATIONAL : RoamingType.INTERNATIONAL);
                         } else {
                             nmi.setRoamingType(RoamingType.NO_ROAMING);
                         }
@@ -641,8 +640,8 @@ public class CouchDbStorageService implements StorageService {
     }
 
     private NatTypeInfo computeNatType(final Measurement measurement, final ComputedNetworkPointInTime cpit) {
-        final NatType natType = cpit != null ?
-                NatType.getNatType(cpit.getAgentPrivateIp(), cpit.getAgentPublicIp()) : NatType.NOT_AVAILABLE;
+        final NatType natType = cpit != null
+                ? NatType.getNatType(cpit.getAgentPrivateIp(), cpit.getAgentPublicIp()) : NatType.NOT_AVAILABLE;
 
         final NatTypeInfo nat = new NatTypeInfo();
         nat.setIpVersion(Helperfunctions.getIpVersion(cpit.getAgentPrivateIp()));

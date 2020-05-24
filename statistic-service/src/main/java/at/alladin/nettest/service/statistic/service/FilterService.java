@@ -41,7 +41,8 @@ public class FilterService {
     private MessageSource messageSource;
 
     /**
-     * @return
+     * @param locale
+     * @param request
      */
     public List<BasicFilterDto<?>> getFiltersForProviderStatistics(final ProviderStatisticsRequestParams request, final Locale locale) {
         final List<BasicFilterDto<?>> filters = new ArrayList<>();

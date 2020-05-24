@@ -23,7 +23,7 @@ import org.junit.runners.model.Statement;
 /**
  * @author Lukasz Budryk (lb@alladin.at)
  */
-public class RepeatRule implements TestRule {
+public final class RepeatRule implements TestRule {
 
     @Override
     public Statement apply(Statement statement, Description description) {
@@ -36,7 +36,7 @@ public class RepeatRule implements TestRule {
         return result;
     }
 
-    private static class RepeatStatement extends Statement {
+    private final static class RepeatStatement extends Statement {
 
         private final int times;
         private final Statement statement;

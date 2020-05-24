@@ -59,11 +59,11 @@ public class MarkerService {
     /**
      *
      */
-    private static int MAX_PROVIDER_LENGTH = 22;
+    private final static int MAX_PROVIDER_LENGTH = 22;
     /**
      *
      */
-    private static int CLICK_RADIUS = 10;
+    private final static int CLICK_RADIUS = 10;
     private final Logger logger = LoggerFactory.getLogger(MarkerService.class);
     @Autowired
     private ClassificationService classificationService;
@@ -138,7 +138,7 @@ public class MarkerService {
                     String optionStr = null;
                     if (request.getOptions() != null && request.getOptions().containsKey("map_options")) {
                         optionStr = request.getOptions().get("map_options");
-                    } else {//if (optionStr == null || optionStr.length() == 0) { // set default
+                    } else { //if (optionStr == null || optionStr.length() == 0) { // set default
                         optionStr = "all/download";
                     }
 
@@ -202,15 +202,15 @@ public class MarkerService {
                                     + ", t.provider_public_ip_as_name as public_ip_as_name"
                                     + ", t.open_data_uuid as open_test_uuid"
                                     + ", t.mobile_roaming_type::int as roaming_type"
-                                    //TODO: there is only one provider name left, right?
-//                                    + ", COALESCE(json->'network_info'->'provider'->>'shortname', json->'network_info'->'provider'->>'name') as provider_text"
-//                                    + ", COALESCE(json->'mobile_network_info'->'mobile_provider'->>'shortname', json->'mobile_network_info'->'mobile_provider'->>'name') as mobile_network_name"
+                                    // TODO: there is only one provider name left, right?
+                                    // + ", COALESCE(json->'network_info'->'provider'->>'shortname', json->'network_info'->'provider'->>'name') as provider_text"
+                                    // + ", COALESCE(json->'mobile_network_info'->'mobile_provider'->>'shortname', json->'mobile_network_info'->'mobile_provider'->>'name') as mobile_network_name"
                                     + ", COALESCE(t.provider_shortname, t.provider_name) as provider_name"
                                     + ", t.mobile_sim_operator_name as mobile_sim_name"
                                     + ", t.initial_network_type_id as network_type_id"
                                     + ", t.network_signal_info as signals"
                                     + ", COALESCE(t.mobile_network_lte_rsrp_dbm, t.mobile_network_signal_strength_2g3g_dbm, wifi_network_rssi_dbm) as signal_dbm"
-//                                    + ", t.uuid as uuid, t.client_uuid as client_uuid"
+                                    // + ", t.uuid as uuid, t.client_uuid as client_uuid"
                                     + ", t.agent_uuid as client_uuid"
                                     + ", t.os_name as os_name"
                                     + ", t.agent_type as agent_type"
@@ -219,7 +219,7 @@ public class MarkerService {
                                     + " WHERE"
                                     //+ ( clientUuid == null ? "" : " t.client_uuid = ?::uuid AND")
                                     + " %s"
-//                                    + " AND location && ST_SetSRID(ST_MakeBox2D(ST_Point(?,?), ST_Point(?,?)), 900913)"
+                                    // + " AND location && ST_SetSRID(ST_MakeBox2D(ST_Point(?,?), ST_Point(?,?)), 900913)"
                                     + " AND t.geo_location_geometry && ST_SetSRID(ST_MakeBox2D(ST_Point(?,?), ST_Point(?,?)), 900913)"
                                     + " ORDER BY"
                                     + (prioritizeUUID == null ? "" : " CASE t.agent_uuid WHEN ?::uuid THEN 1 ELSE 2 END, ")
@@ -232,11 +232,11 @@ public class MarkerService {
 
                     final List<MapMarker> resultObjects = jdbcTemplate.query(sql, ps -> {
                         int i = 1;
-                                /*
-                                if (clientUuid != null) {
-                                    ps.setObject(i++, clientUuid.toString());
-                                }
-                                */
+                        /*
+                        if (clientUuid != null) {
+                            ps.setObject(i++, clientUuid.toString());
+                        }
+                        */
 
                         for (final MapServiceSettings.SQLFilter sf : filters) {
                             i = sf.fillParams(i, ps);
@@ -290,8 +290,8 @@ public class MarkerService {
 
         // RMBTClient Info
 
-        if ((clientUuidString != null && clientUuidString.equals(dbClientUuidString)) ||
-                (highlightUuidString != null && highlightUuidString.equals(dbClientUuidString))) {
+        if ((clientUuidString != null && clientUuidString.equals(dbClientUuidString))
+                || (highlightUuidString != null && highlightUuidString.equals(dbClientUuidString))) {
             // highlight uses both the new highlight_uuid syntax and the old client_uuid syntax
             // TODO: The client_uuid should only return your own measurement markers
             ret.setHighlight(true);
@@ -302,12 +302,12 @@ public class MarkerService {
             ret.setHighlight(false);
         }
 
-        final double res_x = rs.getDouble(1);
-        final double res_y = rs.getDouble(2);
+        final double resX = rs.getDouble(1);
+        final double resY = rs.getDouble(2);
         final String openTestUUID = rs.getString("open_test_uuid");
 
-        ret.setLatitude(res_x);
-        ret.setLongitude(res_y);
+        ret.setLatitude(resX);
+        ret.setLongitude(resY);
 
         ret.setOpenTestUuid("O" + openTestUUID);
         // marker.put("uid", uid);
@@ -378,7 +378,7 @@ public class MarkerService {
             measurementResultList.add(markerItem);
             markerResultList.add(markerItem);
         }
-        
+
         /*
         final String signalField = rs.getString("signal_strength");
         if (signalField != null && signalField.length() != 0) {
@@ -467,13 +467,13 @@ public class MarkerService {
                     mobileNetworkString = String.format("%s (%s)", mobileSimName, simOperator);
                 }
 
-            	/*
-            	if (!Strings.isNullOrEmpty(mobileProviderName)) {
-            		mobileNetworkString = mobileProviderName;
-            	} else {
-            		mobileNetworkString = simOperator;
-            	}
-            	*/
+                /*
+                if (!Strings.isNullOrEmpty(mobileProviderName)) {
+                mobileNetworkString = mobileProviderName;
+                } else {
+                mobileNetworkString = simOperator;
+                }
+                */
 
                 markerItem = generateMeasurementItem(messageSource.getMessage("MARKER_HOME_NETWORK", null, locale), mobileNetworkString);
                 networkResult.add(markerItem);

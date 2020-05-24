@@ -37,6 +37,7 @@ public interface Competence {
      * Read full request
      *
      * @param firstLine
+     * @param br
      * @return
      */
     String readFullRequest(final String firstLine, final BufferedReader br) throws IOException;
@@ -44,7 +45,7 @@ public interface Competence {
     /**
      * Process request and return action(s).
      *
-     * @param tcpClientHandler
+     * @param data
      * @return
      */
     List<Action> processRequest(final String data);

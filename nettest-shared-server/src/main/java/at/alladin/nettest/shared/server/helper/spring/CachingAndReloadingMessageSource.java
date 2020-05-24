@@ -32,7 +32,7 @@ import org.springframework.util.StringUtils;
  */
 public abstract class CachingAndReloadingMessageSource<T> extends AbstractMessageSource {
 
-    private static final Logger logger = LoggerFactory.getLogger(CachingAndReloadingMessageSource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CachingAndReloadingMessageSource.class);
 
     private static final long RELOAD_AFTER_SECONDS = 60;
     private static final Locale FALLBACK_LOCALE = Locale.ENGLISH;
@@ -70,7 +70,7 @@ public abstract class CachingAndReloadingMessageSource<T> extends AbstractMessag
         }
 
         // fallback to English
-        logger.debug("Translation of code '{}' not found for locale '{}', falling back to English", code, locale);
+        LOGGER.debug("Translation of code '{}' not found for locale '{}', falling back to English", code, locale);
 
         load(FALLBACK_LOCALE);
         translationObject = translationMap.get(FALLBACK_LOCALE).translation;
@@ -84,14 +84,14 @@ public abstract class CachingAndReloadingMessageSource<T> extends AbstractMessag
             return;
         }
 
-        logger.info("Loading translation for locale {}.", locale);
+        LOGGER.info("Loading translation for locale {}.", locale);
         final T translation = loadTranslation(locale);
 
         if (translation != null) {
             translationMap.put(locale, new TranslationHolder<T>(translation));
-            logger.info("Successfully loaded translation for locale {}.", locale);
+            LOGGER.info("Successfully loaded translation for locale {}.", locale);
         } else {
-            logger.info("Could not load translation for locale {}, inserting dummy.", locale);
+            LOGGER.info("Could not load translation for locale {}, inserting dummy.", locale);
 
             // Translation for the specified locale could not be found.
             // Insert a dummy translation into the map to prevent a lot of database queries for the same (non-existent) translation.
@@ -110,7 +110,7 @@ public abstract class CachingAndReloadingMessageSource<T> extends AbstractMessag
 
         // Don't skip if the translation needs to be reloaded.
         if (new Date().after(new Date(holder.lastUpdated + RELOAD_AFTER_SECONDS * 1000))) {
-            logger.debug("Reloading translation {} (translation is older than {} seconds)", locale, RELOAD_AFTER_SECONDS);
+            LOGGER.debug("Reloading translation {} (translation is older than {} seconds)", locale, RELOAD_AFTER_SECONDS);
             return false;
         }
 
@@ -118,17 +118,17 @@ public abstract class CachingAndReloadingMessageSource<T> extends AbstractMessag
     }
 
     protected static class TranslationHolder<T> {
-        T translation;
-        long lastUpdated;
+        private T translation;
+        private long lastUpdated;
 
         TranslationHolder(T translation) {
             this.translation = translation;
             this.lastUpdated = new Date().getTime();
         }
-		
-		/*TranslationHolder(T translation, long lastUpdated) {
-			this.translation = translation;
-			this.lastUpdated = lastUpdated;
-		}*/
+
+        /*TranslationHolder(T translation, long lastUpdated) {
+        this.translation = translation;
+        this.lastUpdated = lastUpdated;
+        }*/
     }
 }

@@ -34,7 +34,10 @@ import mockit.Expectations;
 /**
  * @author Lukasz Budryk (lb@alladin.at)
  */
-public class SocketCommunicationExpectationsUtil {
+public final class SocketCommunicationExpectationsUtil {
+
+    private SocketCommunicationExpectationsUtil() {
+    }
 
     public static Expectations createExpectationWithOutputStream(final Socket socket,
                                                                  final OutputStream serverResponseOutputStream,
@@ -92,7 +95,7 @@ public class SocketCommunicationExpectationsUtil {
 
                 fos.write((byte[]) any);
                 result = new Delegate() {
-                    public void delegate(byte b[]) throws IOException {
+                    public void delegate(byte[] b) throws IOException {
                         results.get()[index.getAndAdd(1)] = new String(b);
                     }
                 };
@@ -124,7 +127,7 @@ public class SocketCommunicationExpectationsUtil {
 
                 fos.write((byte[]) any);
                 result = new Delegate() {
-                    public void delegate(byte b[]) throws IOException {
+                    public void delegate(byte[] b) throws IOException {
                         results.get()[index.getAndAdd(1)] = new String(b);
                     }
                 };

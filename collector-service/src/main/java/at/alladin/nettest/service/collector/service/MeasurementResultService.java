@@ -37,7 +37,7 @@ import at.alladin.nettest.shared.server.service.storage.v1.exception.StorageServ
 @Service
 public class MeasurementResultService {
 
-    private static final Logger logger = LoggerFactory.getLogger(MeasurementResultService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeasurementResultService.class);
 
     @Autowired
     private CollectorServiceProperties collectorServiceProperties;
@@ -50,7 +50,7 @@ public class MeasurementResultService {
 
     /**
      * @param lmapReportDto
-     * @return
+     * @return the saved measurement result response
      * @throws StorageServiceException
      */
     public MeasurementResultResponse saveResult(LmapReportDto lmapReportDto) throws StorageServiceException {
@@ -62,7 +62,7 @@ public class MeasurementResultService {
         final String uuid = resultResponse.getUuid();
         final String openDataUuid = resultResponse.getOpenDataUuid();
 
-        logger.info("Saved result (uuid: {}, open_data_uuid: {})", uuid, openDataUuid);
+        LOGGER.info("Saved result (uuid: {}, open_data_uuid: {})", uuid, openDataUuid);
 
         if (openDataMeasurementService.areOpenDataDatabasesAvailable()) {
             final String agentUuid = lmapReportDto.getAgentId();

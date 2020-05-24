@@ -88,9 +88,9 @@ public abstract class AbstractTest {
         s.setSoTimeout(12000);
 
         if (testResult != null) {
-            testResult.ip_local = s.getLocalAddress();
-            testResult.ip_server = s.getInetAddress();
-            testResult.port_remote = s.getPort();
+            testResult.ipLocal = s.getLocalAddress();
+            testResult.ipServer = s.getInetAddress();
+            testResult.portRemote = s.getPort();
         }
 
         if (s instanceof SSLSocket) {

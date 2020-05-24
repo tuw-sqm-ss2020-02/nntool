@@ -170,6 +170,8 @@ public interface FullMeasurementResponseMapper {
                 case QOS:
                     //ret.put(type, this.map((QoSMeasurement) measurementParam.get(type))); // TODO: ?
                     break;
+                default:
+                    break;
             }
 
         }

@@ -201,7 +201,7 @@ public class PointTileService {
                                 + ", initial_network_type_id as network_type_id, to_json(network_signal_info) as signals "
                                 + " FROM measurements t"
                                 + " LEFT JOIN ias_measurements ias on t.open_data_uuid = ias.measurement_open_data_uuid"
-//                        + (hightlightUUID == null ? "" : " LEFT JOIN ha_client c ON (t.client_uuid=c.uuid AND c.uuid=?::uuid)")
+                                // + (hightlightUUID == null ? "" : " LEFT JOIN ha_client c ON (t.client_uuid=c.uuid AND c.uuid=?::uuid)")
                                 + " WHERE "
                                 //+ (hightlightUUID == null ? "" : " t.agent_uuid = ?::uuid AND ")
                                 + " %2$s"
@@ -212,83 +212,78 @@ public class PointTileService {
             }
             logger.info(sql);
 
-            final UUID finalUuid = null;//hightlightUUID; //highlightUuid is temporarily disabled
+            final UUID finalUuid = null; //hightlightUUID; //highlightUuid is temporarily disabled
             final BoundingBox bbox = GeographyHelper.xyToMeters(params);
 
             try {
                 jdbcTemplate.query(sql, ps -> {
+                    int i = 1;
 
-                            int i = 1;
+                    if (finalUuid != null) {
+                        ps.setObject(i++, finalUuid.toString());
+                    }
 
-                            if (finalUuid != null) {
-                                ps.setObject(i++, finalUuid.toString());
-                            }
+                    for (final MapServiceSettings.SQLFilter sf : sqlFilterList) {
+                        i = sf.fillParams(i, ps);
+                    }
 
-                            for (final MapServiceSettings.SQLFilter sf : sqlFilterList) {
-                                i = sf.fillParams(i, ps);
-                            }
+                    final double margin = bbox.getRes() * triangleSide;
+                    ps.setDouble(i++, bbox.getX1() - margin);
+                    ps.setDouble(i++, bbox.getY1() - margin);
+                    ps.setDouble(i++, bbox.getX2() + margin);
+                    ps.setDouble(i++, bbox.getY2() + margin);
 
-                            final double margin = bbox.getRes() * triangleSide;
-                            ps.setDouble(i++, bbox.getX1() - margin);
-                            ps.setDouble(i++, bbox.getY1() - margin);
-                            ps.setDouble(i++, bbox.getX2() + margin);
-                            ps.setDouble(i++, bbox.getY2() + margin);
+                }, (ResultSet rs, int rowNum) -> {
+                        int index = 1;
+                        final double cx = rs.getDouble(index++);
+                        final double cy = rs.getDouble(index++);
 
-                        },
-                        (ResultSet rs, int rowNum) -> {
+                        //if the measurement is a 4G measurement -> use lte_rsrp instead of the normal signal
+                        long lteSignal = 1;
+                        if (options.getClassificationType() == ClassificationHelper.ClassificationType.SIGNAL && options.getSignalGroup() == MapServiceOptions.SignalGroup.MOBILE) {
+                            lteSignal = rs.getLong(index++);
+                        }
 
-                            int index = 1;
-                            final double cx = rs.getDouble(index++);
-                            final double cy = rs.getDouble(index++);
-
-                            //if the measurement is a 4G measurement -> use lte_rsrp instead of the normal signal
-                            long lteSignal = 1;
-                            if (options.getClassificationType() == ClassificationHelper.ClassificationType.SIGNAL && options.getSignalGroup() == MapServiceOptions.SignalGroup.MOBILE) {
-                                lteSignal = rs.getLong(index++);
-                            }
-
-                            long value = rs.getLong(index++);
+                        long value = rs.getLong(index++);
 
 
-                            final boolean highlight;
-                            if (finalUuid != null) {
-                                final Object clientUUID = rs.getObject(index++);
-                                highlight = clientUUID != null;
-                            } else {
-                                highlight = false;
-                            }
+                        final boolean highlight;
+                        if (finalUuid != null) {
+                            final Object clientUUID = rs.getObject(index++);
+                            highlight = clientUUID != null;
+                        } else {
+                            highlight = false;
+                        }
 
-                            //get the first networkType
-                            String signalString = rs.getString("signals");
-                            final JSONArray signalArr;
-                            if (signalString != null) {
-                                signalArr = new JSONArray(rs.getString("signals"));
-                            } else {
-                                signalArr = new JSONArray();
-                            }
+                        //get the first networkType
+                        String signalString = rs.getString("signals");
+                        final JSONArray signalArr;
+                        if (signalString != null) {
+                            signalArr = new JSONArray(rs.getString("signals"));
+                        } else {
+                            signalArr = new JSONArray();
+                        }
 
-                            if (lteSignal < 0) {
-                                value = lteSignal;
-                            }
+                        if (lteSignal < 0) {
+                            value = lteSignal;
+                        }
 
-                            //In the ping case the thresholds are defined as ms, the values as ns => DIVIDE ET IMPERAT!
-                            //Comment the code below in to get the point tiles with colours matching the actual used technology (matching the popup)
-                            final Color color = new Color(colorMapperService.valueToDiscreteColor(options.getClassificationType() == ClassificationHelper.ClassificationType.PING ? value / 1e6 : value,
-                                    options.getSignalGroup(), options.getClassificationType()));
-	                    /*
-	                     //Comment the code below in to get the point tiles with colours matching the chosen legend (values depending on the map filter, not the actual technology)
-	                    try {
-	                        color = Color.decode("#" + item.getClassificationColor());
-	                    } catch (NumberFormatException ex) {
-	                        ex.printStackTrace();
-	                        //default colour set to gray
-	                        color = colorGray;
-	                    }
-	                    */
+                        // In the ping case the thresholds are defined as ms, the values as ns => DIVIDE ET IMPERAT!
+                        // Comment the code below in to get the point tiles with colours matching the actual used technology (matching the popup)
+                        final Color color = new Color(colorMapperService.valueToDiscreteColor(options.getClassificationType() == ClassificationHelper.ClassificationType.PING ? value / 1e6 : value,
+                            options.getSignalGroup(), options.getClassificationType()));
+                        // Comment the code below in to get the point tiles with colours matching the chosen legend (values depending on the map filter, not the actual technology)
+                        // try {
+                        // color = Color.decode("#" + item.getClassificationColor());
+                        // } catch (NumberFormatException ex) {
+                        // ex.printStackTrace();
+                        // default colour set to gray
+                        // color = colorGray;
+                        // }
 
-                            dots.add(new Dot(cx, cy, color, highlight));
-                            return null;
-                        });
+                        dots.add(new Dot(cx, cy, color, highlight));
+                        return null;
+                    });
             } catch (DataAccessException ex) {
                 throw new IllegalArgumentException(ex);
             }

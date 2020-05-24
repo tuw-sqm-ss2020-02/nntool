@@ -68,10 +68,9 @@ public final class ClientHolder {
     //private final ControlServerConnection controlConnection;
     private final AtomicLong downBitPerSec = new AtomicLong(-1);
     private final AtomicLong upBitPerSec = new AtomicLong(-1);
-    
-    
+
     /*------------------------------------
-    	V2 tests
+    V2 tests
     --------------------------------------*/
     /* ping status */
     private final AtomicLong pingTsStart = new AtomicLong(-1);
@@ -131,30 +130,30 @@ public final class ClientHolder {
 
     public static SSLContext getSSLContext(final String caResource, final String certResource)
             throws NoSuchAlgorithmException, KeyManagementException {
-        X509Certificate _ca = null;
+        X509Certificate xca = null;
         try {
             if (caResource != null) {
                 final CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                _ca = (X509Certificate) cf.generateCertificate(ClientHolder.class.getClassLoader().getResourceAsStream(
+                xca = (X509Certificate) cf.generateCertificate(ClientHolder.class.getClassLoader().getResourceAsStream(
                         caResource));
             }
         } catch (final Exception e) {
             e.printStackTrace();
         }
 
-        final X509Certificate ca = _ca;
+        final X509Certificate ca = xca;
 
-        X509Certificate _cert = null;
+        X509Certificate xcert = null;
         try {
             if (certResource != null) {
                 final CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                _cert = (X509Certificate) cf.generateCertificate(ClientHolder.class.getClassLoader().getResourceAsStream(
+                xcert = (X509Certificate) cf.generateCertificate(ClientHolder.class.getClassLoader().getResourceAsStream(
                         certResource));
             }
         } catch (final Exception e) {
             e.printStackTrace();
         }
-        final X509Certificate cert = _cert;
+        final X509Certificate cert = xcert;
 
         // TrustManagerFactory tmf = null;
         // try
@@ -262,8 +261,7 @@ public final class ClientHolder {
     }
 
     /*private*/
-    public SSLSocketFactory createSSLSocketFactory() // is now public and gets called during QoS measurement because QoS is always encrypted
-    {
+    public SSLSocketFactory createSSLSocketFactory() { // is now public and gets called during QoS measurement because QoS is always encrypted
         log("initSSL...");
         try {
             final SSLContext sc = getSSLContext(null, null);

@@ -28,7 +28,7 @@ import mockit.MockUp;
  */
 public class SocketWithCountDownLatchMockup extends MockUp<Socket> {
 
-    final CountDownLatch latch;
+    private final CountDownLatch latch;
 
     public SocketWithCountDownLatchMockup(final CountDownLatch latch) {
         this.latch = latch;

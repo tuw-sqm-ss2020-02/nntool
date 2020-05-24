@@ -49,7 +49,7 @@ import at.alladin.nettest.shared.server.service.storage.v1.StorageService;
 @Service
 public class ConfigurationReplicationService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConfigurationReplicationService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationReplicationService.class);
 
     private static final String SETTINGS_INDEX = "nntool_settings";
     private static final String TRANSLATION_INDEX = "nntool_translation";
@@ -75,13 +75,13 @@ public class ConfigurationReplicationService {
 
     @Scheduled(fixedDelay = 1000 * 60 * 10, initialDelay = 5000) // Every 10 minutes
     public void replicateConfiguration() {
-        logger.info("Replicating configuration. ({}, {})", elasticSearchClient, jdbcTemplate);
+        LOGGER.info("Replicating configuration. ({}, {})", elasticSearchClient, jdbcTemplate);
         initialize();
 
         replicateSettings();
         replicateTranslations();
 
-        logger.info("Replication done.");
+        LOGGER.info("Replication done.");
     }
 
     private void initialize() {
@@ -96,71 +96,68 @@ public class ConfigurationReplicationService {
             final boolean indexExists = elasticSearchClient.indices().exists(new GetIndexRequest(index), RequestOptions.DEFAULT);
 
             if (!indexExists) {
-                logger.debug("Creating {} index", index);
+                LOGGER.debug("Creating {} index", index);
 
                 final CreateIndexRequest createIndexRequest = new CreateIndexRequest(index);
-                createIndexRequest.mapping("{\n" +
-                        "      \"dynamic_templates\": [\n" +
-                        "        {\n" +
-                        "          \"strings\": {\n" +
-                        "            \"match_mapping_type\": \"string\",\n" +
-                        "            \"path_match\": \"*\",\n" +
-                        "            \"mapping\": {\n" +
-                        "              \"type\": \"object\",\n" +
-                        "              \"index\": \"not_analyzed\",\n" +
-                        "              \"enabled\": false\n" +
-                        "            }\n" +
-                        "          }\n" +
-                        "        }\n" +
-                        "      ]\n" +
-                        "    }", XContentType.JSON);
+                createIndexRequest.mapping("{\n"
+                        + "      \"dynamic_templates\": [\n"
+                        + "        {\n"
+                        + "          \"strings\": {\n"
+                        + "            \"match_mapping_type\": \"string\",\n"
+                        + "            \"path_match\": \"*\",\n"
+                        + "            \"mapping\": {\n"
+                        + "              \"type\": \"object\",\n"
+                        + "              \"index\": \"not_analyzed\",\n"
+                        + "              \"enabled\": false\n"
+                        + "            }\n"
+                        + "          }\n"
+                        + "        }\n"
+                        + "      ]\n"
+                        + "    }", XContentType.JSON);
                 elasticSearchClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
             }
         } catch (Exception ex) {
-            logger.error("Could not create Elasticsearch index with name {}", index, ex);
+            LOGGER.error("Could not create Elasticsearch index with name {}", index, ex);
         }
     }
 
     private void replicateSettings() {
-        logger.info("Replicating settings.");
-		
-		/*final SettingsResponse settings = storageService.getSettings(collectorServiceProperties.getSettingsUuid());
+        LOGGER.info("Replicating settings.");
 
-		final String settingsJsonString;
-		try {
-			settingsJsonString = objectMapper.writeValueAsString(settings);
-		} catch (JsonProcessingException e) {
-			logger.error("Could not marshall settings to String.", e);
-			return;
-		}
-		
-		if (elasticSearchClient != null) {
-			final Map<String, Object> map = objectMapper.convertValue(settings, new TypeReference<Map<String, Object>>() {});
-			
-			final IndexRequest indexRequest = new IndexRequest(SETTINGS_INDEX)
-					.id("settings_" + collectorServiceProperties.getSystemUuid())
-					.source(map);
-			
-			try {
-				final IndexResponse indexResponse = elasticSearchClient.index(indexRequest, RequestOptions.DEFAULT);
-				
-				logger.debug("IndexRequest response: {}", indexResponse);
-			} catch (IOException ex) {
-				logger.error("Could update settings in Elasticsearch.", ex);
-			}
-		}
-		
-		if (jdbcTemplate != null) {
-			try {
-				jdbcTemplate.update(SETTINGS_INSERT_SQL, 1, settingsJsonString);
-			} catch (Exception ex) {
-				logger.error("Could update settings in PostgreSQL.", ex);
-			}
-		}*/
+        // final SettingsResponse settings = storageService.getSettings(collectorServiceProperties.getSettingsUuid());
+        //
+        // final String settingsJsonString;
+        // try {
+        // settingsJsonString = objectMapper.writeValueAsString(settings);
+        // } catch (JsonProcessingException e) {
+        // LOGGER.error("Could not marshall settings to String.", e);
+        // return;
+        // }
+        //
+        // if (elasticSearchClient != null) {
+        // final Map<String, Object> map = objectMapper.convertValue(settings, new TypeReference<Map<String, Object>>() {});
+        // final IndexRequest indexRequest = new IndexRequest(SETTINGS_INDEX)
+        // .id("settings_" + collectorServiceProperties.getSystemUuid())
+        // .source(map);
+        //
+        // try {
+        // final IndexResponse indexResponse = elasticSearchClient.index(indexRequest, RequestOptions.DEFAULT);
+        // LOGGER.debug("IndexRequest response: {}", indexResponse);
+        // } catch (IOException ex) {
+        // LOGGER.error("Could update settings in Elasticsearch.", ex);
+        // }
+        // }
+        // if (jdbcTemplate != null) {
+        // try {
+        // jdbcTemplate.update(SETTINGS_INSERT_SQL, 1, settingsJsonString);
+        // } catch (Exception ex) {
+        // LOGGER.error("Could update settings in PostgreSQL.", ex);
+        // }
+        // }
     }
 
     private void replicateTranslations() {
-        logger.info("Replicating translations.");
+        LOGGER.info("Replicating translations.");
 
         final Map<Locale, Map<String, String>> translations = storageService.getTranslations();
 
@@ -181,7 +178,7 @@ public class ConfigurationReplicationService {
                     throw new IllegalArgumentException(bulkResponse.buildFailureMessage());
                 }
             } catch (Exception ex) {
-                logger.error("Could update translations in Elasticsearch.", ex);
+                LOGGER.error("Could update translations in Elasticsearch.", ex);
             }
         }
 
@@ -198,7 +195,7 @@ public class ConfigurationReplicationService {
             try {
                 jdbcTemplate.batchUpdate(TRANSLATION_INSERT_SQL, params);
             } catch (Exception ex) {
-                logger.error("Could update translations in PostgreSQL.", ex);
+                LOGGER.error("Could update translations in PostgreSQL.", ex);
             }
         }
     }

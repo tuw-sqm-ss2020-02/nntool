@@ -33,7 +33,7 @@ import at.alladin.nettest.spring.data.couchdb.core.CouchDbTemplate;
  */
 public class RepositoryOperationsMappingFactoryBean implements FactoryBean<RepositoryOperationsMapping>, InitializingBean {
 
-    private static final Logger logger = LoggerFactory.getLogger(RepositoryOperationsMappingFactoryBean.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RepositoryOperationsMappingFactoryBean.class);
 
     private CouchDbClient couchDbClient;
     private CouchDbDatabaseMapping couchDbDatabaseMapping;
@@ -54,16 +54,16 @@ public class RepositoryOperationsMappingFactoryBean implements FactoryBean<Repos
     public RepositoryOperationsMapping getObject() throws Exception {
         final RepositoryOperationsMapping mapping = new RepositoryOperationsMapping();
 
-        logger.info("Initializing CouchDB operations mapping");
+        LOGGER.info("Initializing CouchDB operations mapping");
 
         couchDbDatabaseMapping.getDatabases().forEach(db -> {
-            logger.info("Initializing CouchDB database (name: {}, createIfNotExists: {})", db.getName(), db.isCreateIfNotExists());
+            LOGGER.info("Initializing CouchDB database (name: {}, createIfNotExists: {})", db.getName(), db.isCreateIfNotExists());
 
             final CouchDbDatabase database = couchDbClient.getDatabase(db.getName(), db.isCreateIfNotExists());
             final CouchDbOperations operations = new CouchDbTemplate(database);
 
             db.getEntities().forEach(e -> {
-                logger.info("Mapping CouchDB entity '{}' to database '{}'", e, db.getName());
+                LOGGER.info("Mapping CouchDB entity '{}' to database '{}'", e, db.getName());
                 mapping.mapEntityName(e, operations);
             });
         });

@@ -194,9 +194,9 @@ public class ClientHandler implements Runnable {
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_NEW_CONNECTION_TIMEOUT)) {
                             requestNewConnectionTimeout(command);
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_PROTOCOL_VERSION)) {
-
+                            quit = quit;
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_PROTOCOL_KEEPALIVE)) {
-
+                            quit = quit;
                         } else {
                             sendCommand(QoSServiceProtocol.RESPONSE_ACCEPT_COMMANDS, command);
                             quit = true;
@@ -229,7 +229,7 @@ public class ClientHandler implements Runnable {
 
     /**
      * @param token
-     * @return
+     * @return in case that the token is valid the client token will be returned
      * @throws IOException
      */
     protected ClientToken checkToken(String token) throws IOException {
@@ -308,9 +308,9 @@ public class ClientHandler implements Runnable {
                 Socket testSocket = null;
                 try {
                     testSocket = new Socket(socket.getInetAddress(), port);
-                    BufferedOutputStream out = new BufferedOutputStream(testSocket.getOutputStream());
-                    out.write(getBytesWithNewline("HELLO TO " + port));
-                    out.flush();
+                    BufferedOutputStream bufOut = new BufferedOutputStream(testSocket.getOutputStream());
+                    bufOut.write(getBytesWithNewline("HELLO TO " + port));
+                    bufOut.flush();
                     testSocket.close();
                 } catch (Exception e) {
                     TestServerConsole.error(name, e, 2, TestServerServiceEnum.TCP_SERVICE);
@@ -354,10 +354,10 @@ public class ClientHandler implements Runnable {
         } catch (Exception e) {
             TestServerConsole.error(name + (command == null
                     ? " [No command submitted]" : " [Command: " + command + "]"), e, 1, TestServerServiceEnum.TCP_SERVICE);
-        } finally {
-            //is beeing done inside TcpServer now:
-            //tcpServer.removeCandidate(socket.getInetAddress());
-        }
+        } //finally {
+        // is beeing done inside TcpServer now:
+        // tcpServer.removeCandidate(socket.getInetAddress());
+        //}
     }
 
     /**
@@ -386,10 +386,10 @@ public class ClientHandler implements Runnable {
         } catch (Exception e) {
             TestServerConsole.error(name + (command == null
                     ? " [No command submitted]" : " [Command: " + command + "]"), e, 1, TestServerServiceEnum.TCP_SERVICE);
-        } finally {
-            //is beeing done inside TcpServer now:
-            //tcpServer.removeCandidate(socket.getInetAddress());
-        }
+        } //finally {
+        //is beeing done inside TcpServer now:
+        //tcpServer.removeCandidate(socket.getInetAddress());
+        //}
     }
 
     /**
@@ -483,11 +483,11 @@ public class ClientHandler implements Runnable {
                 udpPayload.setTimestamp(System.nanoTime());
 
                 /*
-	    		dataOut.writeByte(QoSServiceProtocol.UDP_TEST_AWAIT_RESPONSE_IDENTIFIER);
-	    		dataOut.writeByte(i);
-    			dataOut.write(token.getUuid().getBytes());
-    			dataOut.write(Long.toString(System.currentTimeMillis()).getBytes());
-    			*/
+                dataOut.writeByte(QoSServiceProtocol.UDP_TEST_AWAIT_RESPONSE_IDENTIFIER);
+                dataOut.writeByte(i);
+                dataOut.write(token.getUuid().getBytes());
+                dataOut.write(Long.toString(System.currentTimeMillis()).getBytes());
+                */
                 dataOut.write(UdpPayloadUtil.toBytes(udpPayload));
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
@@ -504,7 +504,7 @@ public class ClientHandler implements Runnable {
 
                 if (awaitResponse) {
                     try {
-                        byte buffer[] = new byte[1024];
+                        byte[] buffer = new byte[1024];
 
                         DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
                         sock.receive(dp);
@@ -700,15 +700,15 @@ public class ClientHandler implements Runnable {
     protected void runVoipTest(final String command, final ClientToken token) throws IOException, InterruptedException {
         /*
          * syntax: VOIPTEST 0 1 2 3 4 5 6 7
-         * 	0 = outgoing port (server port)
-         * 	1 = incoming port (client port)
-         *  2 = sample rate (in Hz)
-         * 	3 = bits per sample
-         * 	4 = packet delay in ms
-         * 	5 = call duration (test duration) in ms
-         * 	6 = starting sequence number (see rfc3550, rtp header: sequence number)
-         *  7 = payload type
-         *  8 = buffer in ns
+         * 0 = outgoing port (server port)
+         * 1 = incoming port (client port)
+         * 2 = sample rate (in Hz)
+         * 3 = bits per sample
+         * 4 = packet delay in ms
+         * 5 = call duration (test duration) in ms
+         * 6 = starting sequence number (see rfc3550, rtp header: sequence number)
+         * 7 = payload type
+         * 8 = buffer in ns
          */
         final Pattern p = Pattern.compile(QoSServiceProtocol.CMD_VOIP_TEST + " ([\\d]*) ([\\w]*) ([\\d]*) ([\\d]*) ([\\d]*) ([\\d]*) ([\\d]*) ([\\d]*) ([\\d]*)");
         final Matcher m = p.matcher(command);
@@ -908,10 +908,10 @@ public class ClientHandler implements Runnable {
             TestServerConsole.log("NTP: sendind OK. waiting for request...", 1, TestServerServiceEnum.TCP_SERVICE);
         } catch (Exception e) {
             TestServerConsole.error(name, e, 1, TestServerServiceEnum.TCP_SERVICE);
-        } finally {
-            //is beeing done inside TcpServer now:
-            //tcpServer.removeCandidate(socket.getInetAddress());
-        }
+        } //finally {
+        // is beeing done inside TcpServer now:
+        // tcpServer.removeCandidate(socket.getInetAddress());
+        // }
     }
 
     /**

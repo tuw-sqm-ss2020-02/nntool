@@ -41,16 +41,16 @@ public class UdpMultiClientServer extends AbstractUdpServer<DatagramSocket> impl
     public final static int BUFFER_LENGTH = 1024;
     private final static String TAG = UdpMultiClientServer.class.getCanonicalName();
     protected final DatagramSocket socket;
-    final InetAddress address;
+    private final InetAddress address;
 
-    final int port;
+    private final int port;
     private final AtomicBoolean isRunning;
     private final String name;
     private long lastClientTime = 0;
 
     /**
      * @param port
-     * @param timeOut
+     * @param address
      * @throws Exception
      */
     public UdpMultiClientServer(int port, InetAddress address) throws Exception {

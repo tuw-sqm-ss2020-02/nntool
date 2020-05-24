@@ -52,9 +52,9 @@ import at.alladin.nntool.util.net.udp.StreamSender.UdpStreamCallback;
  * <p>
  * he default VoIP test will be:
  * <ul>
- * 	<li>sampling rate: 8000 Hz</li>
- * 	<li>size: 8bit per sample</li>
- * 	<li>time/packet: 20ms</li>
+ * <li>sampling rate: 8000 Hz</li>
+ * <li>size: 8bit per sample</li>
+ * <li>time/packet: 20ms</li>
  * </ul>
  * This is similar to the G722 audio codec (ITU-T Recommendation G.722).<br>
  * The G722 codec's actual sampling rate is 16kHz but because it was erroneously assigned in RFC 1890 with 8kHz
@@ -240,15 +240,15 @@ public class VoipTask extends AbstractQoSTask {
 
             /*
              * syntax: VOIPTEST 0 1 2 3 4 5 6 7 8
-             * 	0 = outgoing port (server port)
-             * 	1 = incoming port (client port)
-             *  2 = sample rate (in Hz)
-             * 	3 = bits per sample
-             * 	4 = packet delay in ms
-             * 	5 = call duration (test duration) in ms
-             * 	6 = starting sequence number (see rfc3550, rtp header: sequence number)
-             *  7 = payload type
-             * 	8 = buffer (ns)
+             * 0 = outgoing port (server port)
+             * 1 = incoming port (client port)
+             * 2 = sample rate (in Hz)
+             * 3 = bits per sample
+             * 4 = packet delay in ms
+             * 5 = call duration (test duration) in ms
+             * 6 = starting sequence number (see rfc3550, rtp header: sequence number)
+             * 7 = payload type
+             * 8 = buffer (ns)
              */
             sendCommand("VOIPTEST " + outgoingPort + " " + incomingPort + " " + sampleRate + " " + bitsPerSample + " "
                     + TimeUnit.MILLISECONDS.convert(delay, TimeUnit.NANOSECONDS) + " "
@@ -258,12 +258,10 @@ public class VoipTask extends AbstractQoSTask {
             //wait for countdownlatch or timeout:
             latch.await(timeout, TimeUnit.NANOSECONDS);
 
-            //if rtpreceivestream did not finish cancel the task
-            /*
-			if (!rtpInTimeoutTask.isDone()) {
-				rtpInTimeoutTask.cancel(true);
-			}
-			*/
+            // if rtpreceivestream did not finish cancel the task
+            // if (!rtpInTimeoutTask.isDone()) {
+            // rtpInTimeoutTask.cancel(true);
+            // }
 
             final CountDownLatch resultLatch = new CountDownLatch(1);
 

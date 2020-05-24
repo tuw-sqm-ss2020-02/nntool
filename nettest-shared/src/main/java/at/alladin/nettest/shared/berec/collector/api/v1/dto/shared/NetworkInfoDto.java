@@ -42,7 +42,7 @@ public class NetworkInfoDto {
     @Expose
     @SerializedName("network_point_in_time_info")
     @JsonProperty(required = true, value = "network_point_in_time_info")
-    List<NetworkPointInTimeInfoDto> networkPointInTimeInfo;
+    private List<NetworkPointInTimeInfoDto> networkPointInTimeInfo;
 
     // _ SignalInfo
 

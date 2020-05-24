@@ -26,25 +26,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class LoadApiResponse {
 
     @JsonProperty("cpu_avg")
-    Map<String, String> cpuLoad;
+    private Map<String, String> cpuLoad;
 
     @JsonProperty("mem_bytes")
-    LoadApiMem memLoad;
+    private LoadApiMem memLoad;
 
     @JsonProperty("rx_rates")
-    LoadApiRates rxRates;
+    private LoadApiRates rxRates;
 
     @JsonProperty("tx_rates")
-    LoadApiRates txRates;
+    private LoadApiRates txRates;
 
     @JsonProperty("overloaded")
-    Boolean isOverloaded;
+    private Boolean isOverloaded;
 
     @JsonProperty("timestamp")
-    String timestamp;
+    private String timestamp;
 
     @JsonProperty("timezone")
-    String timezone;
+    private String timezone;
 
     public Map<String, String> getCpuLoad() {
         return cpuLoad;

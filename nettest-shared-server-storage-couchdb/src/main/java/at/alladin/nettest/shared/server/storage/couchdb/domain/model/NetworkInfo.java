@@ -39,7 +39,7 @@ public class NetworkInfo {
     @Expose
     @SerializedName("network_points_in_time")
     @JsonProperty("network_points_in_time")
-    List<NetworkPointInTime> networkPointsInTime;
+    private List<NetworkPointInTime> networkPointsInTime;
 
     /**
      * @see ComputedNetworkPointInTime
@@ -48,7 +48,7 @@ public class NetworkInfo {
     @Expose
     @SerializedName("computed_network_info")
     @JsonProperty("computed_network_info")
-    ComputedNetworkPointInTime computedNetworkInfo;
+    private ComputedNetworkPointInTime computedNetworkInfo;
 
     /**
      * @see SignalInfo

@@ -30,7 +30,7 @@ public class BasicDropdownFilterDto<T> extends BasicFilterDto<T> {
     @Expose
     @SerializedName("options")
     @JsonProperty("options")
-    List<FilterEntry<T>> options = new ArrayList<>();
+    private List<FilterEntry<T>> options = new ArrayList<>();
 
     public BasicDropdownFilterDto() {
         this(null, null);

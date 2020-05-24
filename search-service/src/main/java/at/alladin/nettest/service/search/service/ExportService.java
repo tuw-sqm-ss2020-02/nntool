@@ -61,7 +61,7 @@ import at.alladin.nettest.service.search.helper.ExportExtension;
 @Service
 public class ExportService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExportService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExportService.class);
 
     @Autowired
     private ExportProperties exportProperties;
@@ -293,17 +293,17 @@ public class ExportService {
                         .filter(f -> {
                             return StringUtils.hasLength(f.getTitle()) && StringUtils.hasLength(f.getLocation());
                         }).forEach(f -> {
-                    try {
-                        final File file = ResourceUtils.getFile(f.getLocation());
+                            try {
+                                final File file = ResourceUtils.getFile(f.getLocation());
 
-                        final ZipEntry zeLicense = new ZipEntry(f.getTitle());
-                        zipOutputStream.putNextEntry(zeLicense);
+                                final ZipEntry zeLicense = new ZipEntry(f.getTitle());
+                                zipOutputStream.putNextEntry(zeLicense);
 
-                        Files.copy(file, zipOutputStream);
-                    } catch (Exception ex) {
-                        logger.error("Could not add file (title: {}, location: {}) to zip file.", f.getTitle(), f.getLocation(), ex);
-                    }
-                });
+                                Files.copy(file, zipOutputStream);
+                            } catch (Exception ex) {
+                                LOGGER.error("Could not add file (title: {}, location: {}) to zip file.", f.getTitle(), f.getLocation(), ex);
+                            }
+                        });
             }
         }
 

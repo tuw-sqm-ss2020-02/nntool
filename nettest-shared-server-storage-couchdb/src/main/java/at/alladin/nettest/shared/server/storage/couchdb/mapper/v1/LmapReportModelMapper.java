@@ -78,8 +78,8 @@ public interface LmapReportModelMapper {
             //@Mapping(source = "groupId", target = "groupId"),
             //@Mapping(source = "measurementPoint", target = "measurementPoint"),
 
-//		@JsonProperty(required = true, value = "result")
-//		private List<LmapResultDto<?>> results = new ArrayList<>();
+            // @JsonProperty(required = true, value = "result")
+            // private List<LmapResultDto<?>> results = new ArrayList<>();
 
             // uuid -> generate
             // openDataUuid -> generate
@@ -123,9 +123,9 @@ public interface LmapReportModelMapper {
 
             @Mapping(source = "timeBasedResult.geoLocations", target = "geoLocationInfo.geoLocations"),
             @Mapping(expression = "java(parseDistanceMoved(timeBasedResultDto.getGeoLocations()))", target = "geoLocationInfo.distanceMovedMetres"),
-//		//@Mapping(source = "timeBasedResult.cpuUsage", target = "deviceInfo.osInfo.cpuUsage"),
-//		//@Mapping(source = "timeBasedResult.memUsage", target = "deviceInfo.osInfo.memUsage"),
-//		//@Mapping(source = "timeBasedResult.networkPointsInTime", target = "networkPointsInTime"),
+            // @Mapping(source = "timeBasedResult.cpuUsage", target = "deviceInfo.osInfo.cpuUsage"),
+            // @Mapping(source = "timeBasedResult.memUsage", target = "deviceInfo.osInfo.memUsage"),
+            // @Mapping(source = "timeBasedResult.networkPointsInTime", target = "networkPointsInTime"),
             @Mapping(source = "timeBasedResult.networkPointsInTime", target = "networkInfo.networkPointsInTime"),
 
             @Mapping(source = "timeBasedResult.signals", target = "networkInfo.signalInfo.signals"),
@@ -212,12 +212,12 @@ public interface LmapReportModelMapper {
             for (SubMeasurementResult res : resList.getResults()) {
                 if (res instanceof SpeedMeasurementResult) {
                     ret.put(MeasurementTypeDto.SPEED, this.map((SpeedMeasurementResult) res,
-                            lmapReportDto.getTimeBasedResult() == null ?
-                                    null : lmapReportDto.getTimeBasedResult().getStartTime()));
+                            lmapReportDto.getTimeBasedResult() == null
+                                    ? null : lmapReportDto.getTimeBasedResult().getStartTime()));
                 } else if (res instanceof QoSMeasurementResult) {
                     ret.put(MeasurementTypeDto.QOS, this.map((QoSMeasurementResult) res,
-                            lmapReportDto.getTimeBasedResult() == null ?
-                                    null : lmapReportDto.getTimeBasedResult().getStartTime()));
+                            lmapReportDto.getTimeBasedResult() == null
+                                    ? null : lmapReportDto.getTimeBasedResult().getStartTime()));
                 }
             }
         }

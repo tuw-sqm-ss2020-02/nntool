@@ -28,13 +28,13 @@ public interface MeasurementPeerRepository extends CouchDbRepository<Measurement
 
     MeasurementServer findByPublicIdentifier(String publicIdentifier);
 
-    @MangoQuery("{\n" +
-            "   \"selector\": {\n" +
-            "      \"docType\": \"MeasurementServer\",\n" +
-            "      \"type\": \"SPEED\",\n" +
-            "      \"enabled\": true\n" +
-            "   }\n" +
-            "}")
+    @MangoQuery("{\n"
+            + "   \"selector\": {\n"
+            + "      \"docType\": \"MeasurementServer\",\n"
+            + "      \"type\": \"SPEED\",\n"
+            + "      \"enabled\": true\n"
+            + "   }\n"
+            + "}")
     List<MeasurementServer> getAvailableSpeedMeasurementPeers();
 
 }

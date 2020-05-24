@@ -25,11 +25,11 @@ import java.net.InetSocketAddress;
  */
 public abstract class ConnectionInformation {
 
-    InetSocketAddress localAddr;
-    InetSocketAddress remoteAddr;
-    ConnectionState connectionState;
-    ProtocolType protocolType;
-    int uid;
+    private InetSocketAddress localAddr;
+    private InetSocketAddress remoteAddr;
+    private ConnectionState connectionState;
+    private ProtocolType protocolType;
+    private int uid;
 
     public ConnectionInformation() {
 

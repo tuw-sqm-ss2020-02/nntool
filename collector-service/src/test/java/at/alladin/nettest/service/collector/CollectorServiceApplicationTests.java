@@ -17,7 +17,7 @@
 package at.alladin.nettest.service.collector;
 
 ///**
-// * 
+// *
 // * @author alladin-IT GmbH (bp@alladin.at)
 // *
 // */
@@ -26,11 +26,11 @@ package at.alladin.nettest.service.collector;
 //@ActiveProfiles("dev")
 //public class CollectorServiceApplicationTests {
 //
-//	/**
-//	 * 
-//	 */
-//	@Test
-//	public void contextLoads() {
-//		
-//	}
-//}
+// /**
+// *
+// */
+// @Test
+// public void contextLoads() {
+//
+// }
+// }

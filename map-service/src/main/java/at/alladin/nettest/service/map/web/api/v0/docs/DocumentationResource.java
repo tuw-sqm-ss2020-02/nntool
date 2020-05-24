@@ -63,7 +63,7 @@ public class DocumentationResource extends AbstractDocumentationResource {
                 ApiResponse.class,
                 ApiError.class,
                 BasicResponse.class
-                // TODO
+        // TODO
         );
     }
 

@@ -52,9 +52,9 @@ public class LmapControlModelExampleTest extends AbstractLmapExampleTest {
     public void produceLmapMeasurementInitiationRequest() {
         final LmapControlDto dto = new LmapControlDto();
         final LmapAgentDto agent = new LmapAgentDto();
-//		agent.setReportAgentId(true);
+        // agent.setReportAgentId(true);
         agent.setAgentId("add895c3-9a69-472b-ae38-045266df52fd");
-//		agent.setReportGroupId(true);
+        // agent.setReportGroupId(true);
         agent.setGroupId("berec_reference_system");
         agent.setLastStarted(new LocalDateTime(2011, 2, 6, 22, 42, 14));
         dto.setAgent(agent);
@@ -82,22 +82,22 @@ public class LmapControlModelExampleTest extends AbstractLmapExampleTest {
 
         dto.setCapabilities(capa);
 
-//		final List<TaskDto> taskList = new ArrayList<>();
-//		
-//		TaskDto taskDto = new TaskDto();
-//		taskDto.setTaskName(MeasurementType.SPEED.name());
-//		taskList.add(taskDto);
-//		
-//		taskDto = new TaskDto();
-//		taskDto.setTaskName(MeasurementType.QOS.name());
-//		OptionDto option = new OptionDto();
-//		option.setId("TCP_QOS_ID");
-//		taskDto.getOptions().add(option);
-//		option = new OptionDto();
-//		option.setId("DNS_QOS_ID");
-//		taskDto.getOptions().add(option);
-//		taskList.add(taskDto);
-//		dto.setTasks(taskList);
+        // final List<TaskDto> taskList = new ArrayList<>();
+        //
+        // TaskDto taskDto = new TaskDto();
+        // taskDto.setTaskName(MeasurementType.SPEED.name());
+        // taskList.add(taskDto);
+        //
+        // taskDto = new TaskDto();
+        // taskDto.setTaskName(MeasurementType.QOS.name());
+        // OptionDto option = new OptionDto();
+        // option.setId("TCP_QOS_ID");
+        // taskDto.getOptions().add(option);
+        // option = new OptionDto();
+        // option.setId("DNS_QOS_ID");
+        // taskDto.getOptions().add(option);
+        // taskList.add(taskDto);
+        // dto.setTasks(taskList);
 
         final ApiRequestInfo apiRequestInfo = new ApiRequestInfo();
 
@@ -115,17 +115,17 @@ public class LmapControlModelExampleTest extends AbstractLmapExampleTest {
 
         dto.setAdditionalRequestInfo(apiRequestInfo);
 
-//		String res = objectToJson(dto);
-//		System.out.println(res);
+        // String res = objectToJson(dto);
+        // System.out.println(res);
     }
 
     @Test
     public void produceLmapMeasurementInitiationResponse() {
         final LmapControlDto dto = new LmapControlDto();
         final LmapAgentDto agent = new LmapAgentDto();
-//		agent.setReportAgentId(true);
+        // agent.setReportAgentId(true);
         agent.setAgentId("add895c3-9a69-472b-ae38-045266df52fd");
-//		agent.setReportGroupId(true);
+        // agent.setReportGroupId(true);
         agent.setGroupId("berec_reference_system");
         agent.setLastStarted(new LocalDateTime(2011, 2, 6, 22, 42, 14));
         dto.setAgent(agent);
@@ -176,22 +176,22 @@ public class LmapControlModelExampleTest extends AbstractLmapExampleTest {
 
         dto.setCapabilities(capa);
 
-//		final List<TaskDto> taskList = new ArrayList<>();
-//		
-//		TaskDto taskDto = new TaskDto();
-//		taskDto.setTaskName(MeasurementType.SPEED.name());
-//		taskList.add(taskDto);
-//		
-//		taskDto = new TaskDto();
-//		taskDto.setTaskName(MeasurementType.QOS.name());
-//		OptionDto option = new OptionDto();
-//		option.setId("TCP_QOS_ID");
-//		taskDto.getOptions().add(option);
-//		option = new OptionDto();
-//		option.setId("DNS_QOS_ID");
-//		taskDto.getOptions().add(option);
-//		taskList.add(taskDto);
-//		dto.setTasks(taskList);
+        //final List<TaskDto> taskList = new ArrayList<>();
+        //
+        // TaskDto taskDto = new TaskDto();
+        // taskDto.setTaskName(MeasurementType.SPEED.name());
+        // taskList.add(taskDto);
+        //
+        // taskDto = new TaskDto();
+        // taskDto.setTaskName(MeasurementType.QOS.name());
+        // OptionDto option = new OptionDto();
+        // option.setId("TCP_QOS_ID");
+        // taskDto.getOptions().add(option);
+        // option = new OptionDto();
+        // option.setId("DNS_QOS_ID");
+        // taskDto.getOptions().add(option);
+        // taskList.add(taskDto);
+        // dto.setTasks(taskList);
 
         final QoSMeasurementTypeParameters qosParams = new QoSMeasurementTypeParameters();
         final Map<QoSMeasurementTypeDto, List<Map<String, Object>>> objectives = new HashMap<>();

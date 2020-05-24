@@ -24,10 +24,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class LoadApiRequest {
 
     @JsonProperty("cmd")
-    final String cmd = "load";
+    private final String cmd = "load";
 
     @JsonProperty("secret")
-    String secret;
+    private String secret;
 
     public String getSecret() {
         return secret;

@@ -75,17 +75,18 @@ public class EchoProtocolTcpTaskTest {
     @Test
     public void testCorrectTcpEchoResponse(@Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                //return an outputstream we control
+                socket.getOutputStream();
+                result = testOutputStream;
 
-            //return an outputstream we control
-            socket.getOutputStream();
-            result = testOutputStream;
+                //return the sent message
+                socket.getInputStream();
+                result = new ByteArrayInputStream(CORRECT_MESSAGE.getBytes());
 
-            //return the sent message
-            socket.getInputStream();
-            result = new ByteArrayInputStream(CORRECT_MESSAGE.getBytes());
-
-        }};
+            }
+        };
 
         final EchoProtocolTcpTask task = new EchoProtocolTcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
@@ -102,17 +103,18 @@ public class EchoProtocolTcpTaskTest {
     @Test
     public void testWrongTcpEchoResponse(@Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                //return an outputstream we control
+                socket.getOutputStream();
+                result = testOutputStream;
 
-            //return an outputstream we control
-            socket.getOutputStream();
-            result = testOutputStream;
+                //return the sent message
+                socket.getInputStream();
+                result = new ByteArrayInputStream(WRONG_MESSAGE.getBytes());
 
-            //return the sent message
-            socket.getInputStream();
-            result = new ByteArrayInputStream(WRONG_MESSAGE.getBytes());
-
-        }};
+            }
+        };
 
         final EchoProtocolTcpTask task = new EchoProtocolTcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
@@ -128,17 +130,18 @@ public class EchoProtocolTcpTaskTest {
     @Test
     public void testCorrectTcpEchoResponseWithAdditionalWhiteSpace(@Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                //return an outputstream we control
+                socket.getOutputStream();
+                result = testOutputStream;
 
-            //return an outputstream we control
-            socket.getOutputStream();
-            result = testOutputStream;
+                //return the sent message
+                socket.getInputStream();
+                result = new ByteArrayInputStream(WRONG_MESSAGE_ADDITIONAL_WHITESPACE.getBytes());
 
-            //return the sent message
-            socket.getInputStream();
-            result = new ByteArrayInputStream(WRONG_MESSAGE_ADDITIONAL_WHITESPACE.getBytes());
-
-        }};
+            }
+        };
 
         final EchoProtocolTcpTask task = new EchoProtocolTcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
@@ -154,16 +157,17 @@ public class EchoProtocolTcpTaskTest {
     @Test
     public void testTcpEchoResponseWithSocketError(@Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                //return a custom exception (failed connection)
+                socket.getOutputStream();
+                result = new SocketException("Forcefully thrown exception");
 
-            //return a custom exception (failed connection)
-            socket.getOutputStream();
-            result = new SocketException("Forcefully thrown exception");
+                //ignore
+                socket.connect((SocketAddress) any, anyInt);
 
-            //ignore
-            socket.connect((SocketAddress) any, anyInt);
-
-        }};
+            }
+        };
 
         final EchoProtocolTcpTask task = new EchoProtocolTcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();
@@ -176,16 +180,17 @@ public class EchoProtocolTcpTaskTest {
     @Test
     public void testTcpEchoResponseWithSocketTimeoutError(@Mocked final Socket socket) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                //return an outputstream we control
+                socket.getOutputStream();
+                result = testOutputStream;
 
-            //return an outputstream we control
-            socket.getOutputStream();
-            result = testOutputStream;
+                socket.getInputStream();
+                result = new SocketTimeoutException("Forcefully thrown exception");
 
-            socket.getInputStream();
-            result = new SocketTimeoutException("Forcefully thrown exception");
-
-        }};
+            }
+        };
 
         final EchoProtocolTcpTask task = new EchoProtocolTcpTask(qosTest, clientHolder.getTaskDescList().get(0), 0);
         final QoSTestResult res = task.call();

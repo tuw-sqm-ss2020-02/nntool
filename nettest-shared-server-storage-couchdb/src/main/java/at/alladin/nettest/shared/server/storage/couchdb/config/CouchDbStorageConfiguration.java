@@ -109,6 +109,8 @@ public class CouchDbStorageConfiguration extends CouchDbConfiguration {
                         case SPEED:
                             subMeasurementClass = Settings.SpeedMeasurementSettings.class;
                             break;
+                        default:
+                            break;
                     }
 
                     ret.getMeasurements().put(type, gson.fromJson(entry.getValue(), subMeasurementClass));
@@ -151,6 +153,8 @@ public class CouchDbStorageConfiguration extends CouchDbConfiguration {
                             break;
                         case SPEED:
                             subMeasurementClass = SpeedMeasurement.class;
+                            break;
+                        default:
                             break;
                     }
 

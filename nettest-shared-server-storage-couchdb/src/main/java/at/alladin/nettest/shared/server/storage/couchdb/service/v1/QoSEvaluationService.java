@@ -67,7 +67,7 @@ public class QoSEvaluationService {
     private final static String TRANSLATION_ICON_FONT_SUFFIX = "_icon";
 
     @Autowired
-    public QoSMeasurementObjectiveRepository qosMeasurementObjectiveRepository;
+    private QoSMeasurementObjectiveRepository qosMeasurementObjectiveRepository;
 
     @Autowired
     private FullMeasurementResponseMapper fullMeasurementResponseMapper;
@@ -162,15 +162,15 @@ public class QoSEvaluationService {
 
     private Map<String, String> getKeyToTranslationMapForKeys(final Set<String> resultTranslationKeys, final Locale locale) {
         return resultTranslationKeys
-                .stream()
-                .collect(
-                        Collectors.toMap(
-                                Function.identity(),
-                                key -> {
-                                    return messageSource.getMessage(key, null, locale);
-                                }
-                        )
-                );
+            .stream()
+            .collect(
+                Collectors.toMap(
+                    Function.identity(),
+                    key -> {
+                        return messageSource.getMessage(key, null, locale);
+                    }
+                )
+            );
     }
 
     private Map<QoSMeasurementTypeDto, QoSTypeDescription> getQosMeasurementDecriptionMap(final Locale locale) {
@@ -206,7 +206,7 @@ public class QoSEvaluationService {
         qosResult.setObjectiveId(null);
 
         //final String json = objectMapper.writeValueAsString(qosResult.getResults());
-        //result = objectMapper.readValue(json, resultClass);	// == testResult
+        //result = objectMapper.readValue(json, resultClass); // == testResult
         AbstractResult result = objectMapper.convertValue(qosResult.getResults(), resultClass);
         result.setResultMap(qosResult.getResults()); //and add the map (needed for evaluations (e.g. %EVAL xxxxx%))
 
@@ -378,8 +378,8 @@ public class QoSEvaluationService {
     }
 
     public static class EvaluatedQoSResultHolder {
-        final EvaluatedQoSResult evalResult;
-        final AbstractResult abstractResult;
+        private final EvaluatedQoSResult evalResult;
+        private final AbstractResult abstractResult;
 
         public EvaluatedQoSResultHolder(final EvaluatedQoSResult evalResult, final AbstractResult abstractResult) {
             this.evalResult = evalResult;
@@ -396,8 +396,8 @@ public class QoSEvaluationService {
     }
 
     public static class ResultHolder {
-        final QoSResultOutcome resultKeyType;
-        final String event;
+        private final QoSResultOutcome resultKeyType;
+        private final String event;
 
         public ResultHolder(final QoSResultOutcome resultKeyType, final String event) {
             this.resultKeyType = resultKeyType;

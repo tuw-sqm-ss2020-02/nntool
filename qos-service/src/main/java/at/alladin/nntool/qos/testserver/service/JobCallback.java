@@ -25,7 +25,9 @@ import at.alladin.nntool.qos.testserver.service.AbstractJob.JobState;
 public interface JobCallback {
 
     /**
-     * @param newState
+     * @param service
+     * @param state
+     * @param newResult
      * @return
      */
     public boolean onEvent(AbstractJob<?> service, JobState state, Object newResult);

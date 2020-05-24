@@ -22,9 +22,9 @@ import org.springframework.data.repository.core.EntityInformation;
  * @param <T>
  * @author alladin-IT GmbH (bp@alladin.at)
  */
-public interface CouchDbEntityInformation<T, ID> extends EntityInformation<T, ID> {
+public interface CouchDbEntityInformation<T, I> extends EntityInformation<T, I> {
 
-    void setId(T entity, ID id);
+    void setId(T entity, I id);
 
     default boolean hasRev(T entity) {
         return getRev(entity) != null;

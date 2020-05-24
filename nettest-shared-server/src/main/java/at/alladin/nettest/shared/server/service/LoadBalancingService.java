@@ -48,9 +48,9 @@ public class LoadBalancingService {
     private final Logger logger = LoggerFactory.getLogger(LoadBalancingService.class);
 
     @Autowired
-    StorageService storageService;
+    private StorageService storageService;
 
-    LoadBalancingSettingsDto settings;
+    private LoadBalancingSettingsDto settings;
 
     /**
      * @param settingsUuid

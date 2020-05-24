@@ -33,9 +33,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class UdpStreamSender implements StreamSender<DatagramSocket> {
 
-    final AtomicBoolean isRunning = new AtomicBoolean(false);
-    UdpStreamSenderSettings<DatagramSocket> settings;
-    UdpStreamCallback callback;
+    private final AtomicBoolean isRunning = new AtomicBoolean(false);
+    private UdpStreamSenderSettings<DatagramSocket> settings;
+    private UdpStreamCallback callback;
 
     public UdpStreamSender(UdpStreamSenderSettings<DatagramSocket> settings, UdpStreamCallback callback) {
         this.settings = settings;

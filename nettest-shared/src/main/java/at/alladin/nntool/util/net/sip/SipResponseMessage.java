@@ -58,7 +58,7 @@ public class SipResponseMessage extends SipMessage {
         RINGING(180),
         OK(200);
 
-        final int code;
+        private final int code;
 
         private SipResponseType(final int code) {
             this.code = code;

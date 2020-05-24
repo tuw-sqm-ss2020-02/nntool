@@ -99,8 +99,7 @@ public class QoSService implements Runnable {
 
     /**
      * use this methods for mocking Sockets
-     *
-     * @return
+     * @return accepted socket
      * @throws IOException
      */
     protected Socket getSocket() throws IOException {

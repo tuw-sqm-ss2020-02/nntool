@@ -183,7 +183,7 @@ public class MapOptionsService {
                         if (Strings.isNullOrEmpty(input)) return null;
                         if (input.equals("other")) {
                             return new MapServiceSettings.SQLFilter("t.mobile_sim_operator_name IS NULL");
-                        }else {
+                        } else {
                             return new MapServiceSettings.SQLFilter("t.mobile_sim_operator_name=?") {
                                 @Override
                                 public int fillParams(int i, final PreparedStatement ps) throws SQLException {
@@ -198,8 +198,7 @@ public class MapOptionsService {
                 put("provider", new MapServiceSettings.MapFilter() {
                     @Override
                     public MapServiceSettings.SQLFilter getFilter(final String input) {
-                        if (Strings.isNullOrEmpty(input))
-                            return null;
+                        if (Strings.isNullOrEmpty(input)) return null;
                         return new MapServiceSettings.SQLFilter("t.provider_name=?") {
                             @Override
                             public int fillParams(int i, final PreparedStatement ps) throws SQLException {
@@ -221,9 +220,9 @@ public class MapOptionsService {
                                 return new MapServiceSettings.SQLFilter("(t.initial_network_type_id)::int in (1,2,4,5,6,7,11,12,14)");
                             } else if (technology == 3) { // 3G
                                 return new MapServiceSettings.SQLFilter("(t.initial_network_type_id)::int in (3,8,9,10,15)");
-                            } else if (technology == 4) {// 4G
+                            } else if (technology == 4) { // 4G
                                 return new MapServiceSettings.SQLFilter("(t.initial_network_type_id)::int = 13");
-                            } else if (technology == 34) {// 3G or 4G
+                            } else if (technology == 34) { // 3G or 4G
                                 return new MapServiceSettings.SQLFilter("(t.initial_network_type_id)::int in (3,8,9,10,13,15)");
                             } else {
                                 return null;
@@ -273,14 +272,13 @@ public class MapOptionsService {
         final ServerSettings settings = sqlSettingsRepository.getSettings();
         final Map<String, MapServiceOptions> mapOptionList = new LinkedHashMap<String, MapServiceOptions>();
         mapServiceConfig.getMapServiceOptions().forEach(opt -> {
-                    try {
-                        mapOptionList.put(opt.getGroupKey() + "/" + opt.getTypeKey(), fillMapServiceOption(settings, opt));
-                    } catch (IllegalArgumentException | SQLException e) {
-                        logger.error("Invalid argument from config. Is skipped.");
-                        e.printStackTrace();
-                    }
-                }
-        );
+            try {
+                mapOptionList.put(opt.getGroupKey() + "/" + opt.getTypeKey(), fillMapServiceOption(settings, opt));
+            } catch (IllegalArgumentException | SQLException e) {
+                logger.error("Invalid argument from config. Is skipped.");
+                e.printStackTrace();
+            }
+        });
 
         this.mapServiceSettings.setMapServiceOptions(mapOptionList);
     }

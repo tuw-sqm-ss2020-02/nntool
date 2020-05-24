@@ -63,18 +63,18 @@ public interface StreamSender<T> {
      * @author lb
      */
     public static class UdpStreamSenderSettings<T> {
-        int packets;
-        long delay;
-        TimeUnit timeUnit;
-        InetAddress targetHost;
-        int targetPort;
-        Integer incomingPort = null;
-        long responseSoTimeout = 0;
-        long timeout = 0;
-        T socket;
-        boolean isNonblocking = false;
-        boolean writeOnly = false;
-        boolean closeOnFinish = false;
+        protected int packets;
+        protected long delay;
+        protected TimeUnit timeUnit;
+        protected InetAddress targetHost;
+        protected int targetPort;
+        protected Integer incomingPort = null;
+        protected long responseSoTimeout = 0;
+        protected long timeout = 0;
+        protected T socket;
+        protected boolean isNonblocking = false;
+        protected boolean writeOnly = false;
+        protected boolean closeOnFinish = false;
 
         public UdpStreamSenderSettings(final T socket, final boolean closeOnFinish, final InetAddress targetHost,
                                        final int targetPort, final int packets, final long delay, final long timeout, final TimeUnit timeUnit,

@@ -285,13 +285,13 @@ public final class ResultComparer {
                 final Long l2 = Long.valueOf(s2);
 
                 return Long.compare(l1, l2);
-            } catch (NumberFormatException e1) {
+            } catch (NumberFormatException e) {
                 try {
                     final Double d1 = Double.valueOf(s1);
                     final Double d2 = Double.valueOf(s2);
 
                     return Double.compare(d1, d2);
-                } catch (NumberFormatException e2) {
+                } catch (NumberFormatException ex) {
                     return s1.compareTo(s2);
                 }
             }

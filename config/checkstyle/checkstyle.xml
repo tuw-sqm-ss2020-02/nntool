@@ -59,7 +59,6 @@
 
   <!-- Checks for Size Violations.                    -->
   <!-- See https://checkstyle.org/config_sizes.html -->
-  <module name="FileLength"/>
   <module name="LineLength">
     <property name="fileExtensions" value="java"/>
     <property name="ignorePattern" value="//|\@|\*"/>
@@ -119,10 +118,6 @@
     <module name="RedundantImport"/>
     <module name="UnusedImports"/>
 
-    <!-- Checks for Size Violations.                    -->
-    <!-- See https://checkstyle.org/config_sizes.html -->
-    <module name="MethodLength"/>
-
     <!-- Checks for whitespace                               -->
     <!-- See https://checkstyle.org/config_whitespace.html -->
     <module name="GenericWhitespace"/>
@@ -161,9 +156,7 @@
 
     <!-- Checks for common coding problems               -->
     <!-- See https://checkstyle.org/config_coding.html -->
-    <module name="AvoidDoubleBraceInitialization"/>
     <module name="DefaultComesLast"/>
-    <module name="EmptyStatement"/>
     <module name="EqualsHashCode"/>
     <module name="FallThrough"/>
     <module name="HiddenField">
@@ -183,12 +176,6 @@
     <module name="SimplifyBooleanExpression"/>
     <module name="StringLiteralEquality"/>
 
-    <!-- Checks for metrics                         -->
-    <!-- See https://checkstyle.sourceforge.io/config_metrics.html -->
-    <module name="CyclomaticComplexity">
-      <property name="switchBlockAsSingleDecisionPoint" value="true"/>
-    </module>
-
     <!-- Checks for class design                         -->
     <!-- See https://checkstyle.org/config_design.html -->
     <!--<module name="DesignForExtension"/>-->
@@ -200,7 +187,10 @@
     <module name="ThrowsCount">
       <property name="ignorePrivateMethods" value="false"/>
     </module>
-    <module name="VisibilityModifier"/>
+    <module name="VisibilityModifier">
+      <property name="protectedAllowed" value="true"/>
+      <property name="publicMemberPattern" value="^udpServerMap$|^tcpServerMap$|^serviceManager$|^clientHandlerSet$|^serverSocketList$|^serverPreferences|^isLoggingAvailable$$"/>
+    </module>
 
     <!-- Miscellaneous other checks.                   -->
     <!-- See https://checkstyle.org/config_misc.html -->

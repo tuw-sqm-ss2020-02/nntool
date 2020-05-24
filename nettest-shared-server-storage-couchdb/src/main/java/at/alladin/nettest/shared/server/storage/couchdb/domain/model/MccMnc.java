@@ -75,23 +75,21 @@ public class MccMnc {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         MccMnc other = (MccMnc) obj;
         if (mcc == null) {
-            if (other.mcc != null)
-                return false;
-        } else if (!mcc.equals(other.mcc))
+            if (other.mcc != null) return false;
+        } else if (!mcc.equals(other.mcc)) {
             return false;
+        }
         if (mnc == null) {
-            if (other.mnc != null)
-                return false;
-        } else if (!mnc.equals(other.mnc))
+            if (other.mnc != null) return false;
+        } else if (!mnc.equals(other.mnc)) {
             return false;
+        }
+
         return true;
     }
 

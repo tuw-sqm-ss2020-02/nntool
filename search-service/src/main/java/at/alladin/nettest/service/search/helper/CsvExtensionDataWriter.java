@@ -42,7 +42,7 @@ import at.alladin.nettest.service.search.config.ExportProperties.CsvExtension.Cs
  */
 public class CsvExtensionDataWriter implements ExtensionDataWriter {
 
-    private static final Logger logger = LoggerFactory.getLogger(CsvExtensionDataWriter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CsvExtensionDataWriter.class);
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -88,7 +88,7 @@ public class CsvExtensionDataWriter implements ExtensionDataWriter {
 
                     csvGenerator.writeObjectField(field.getTitle(), jn);
                 } catch (Exception e) {
-                    logger.warn("Could not set field {} (pointer: {}).", field.getTitle(), field.getPointer(), e);
+                    LOGGER.warn("Could not set field {} (pointer: {}).", field.getTitle(), field.getPointer(), e);
                 }
             });
 

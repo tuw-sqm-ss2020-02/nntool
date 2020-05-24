@@ -47,11 +47,11 @@ public class RestService extends ServiceSetting {
     public final static String QOS_KEY_FILE_ABSOLUTE = "src/at/alladin/rmbt/qos/testserver/" + TestServer.QOS_KEY_FILE;
 
     public final static String DEFAULT_REST_SERVICE_IP = "127.0.0.1";
-    final ServerPreferences serverPreferences;
-    AtomicBoolean isRunning = new AtomicBoolean(false);
-    int port = 0;
-    boolean isSsl = false;
-    String ip;
+    private final ServerPreferences serverPreferences;
+    private AtomicBoolean isRunning = new AtomicBoolean(false);
+    private int port = 0;
+    private boolean isSsl = false;
+    private String ip;
 
     public RestService(Properties prop, ServerPreferences serverPreferences) {
         this(false, serverPreferences);
@@ -66,7 +66,7 @@ public class RestService extends ServiceSetting {
     /**
      * @param json
      * @param error
-     * @return
+     * @return errors as json object
      * @throws JSONException
      */
     public static JSONObject addError(JSONObject json, String error) throws JSONException {
@@ -82,8 +82,8 @@ public class RestService extends ServiceSetting {
     @Override
     public void start() throws UnknownHostException {
         if (isEnabled) {
-            final boolean isRunning = this.isRunning.getAndSet(true);
-            if (!isRunning) {
+            final boolean isrunning = this.isRunning.getAndSet(true);
+            if (!isrunning) {
                 if (isEnabled && port <= 0) {
                     this.isEnabled = false;
                     TestServerConsole.log("Could not start RestService. Parameter missing: 'server.service.rest.port'", 1, TestServerServiceEnum.TEST_SERVER);
@@ -125,7 +125,7 @@ public class RestService extends ServiceSetting {
     public void setParam(Properties properties) {
         String param = properties.getProperty(PARAM_REST);
         if (param != null) {
-            setEnabled(Boolean.parseBoolean(param.trim()));
+            setIsEnabled(Boolean.parseBoolean(param.trim()));
         }
 
         param = properties.getProperty(PARAM_REST_SSL);

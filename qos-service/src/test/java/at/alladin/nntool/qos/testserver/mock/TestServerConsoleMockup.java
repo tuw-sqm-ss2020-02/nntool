@@ -29,8 +29,8 @@ import mockit.MockUp;
  */
 public class TestServerConsoleMockup extends MockUp<TestServerConsole> {
 
-    public final List<ConsoleLog> logList = new ArrayList<>();
-    public final List<ConsoleLog> errorList = new ArrayList<>();
+    private final List<ConsoleLog> logList = new ArrayList<>();
+    private final List<ConsoleLog> errorList = new ArrayList<>();
 
     @Mock
     public void log(String msg, int verboseLevelNeeded, TestServerServiceEnum service) {
@@ -51,11 +51,11 @@ public class TestServerConsoleMockup extends MockUp<TestServerConsole> {
     }
 
     public static class ConsoleLog {
-        final String msg;
-        final int verboseLevel;
-        final TestServerServiceEnum service;
-        final long timeMs = System.currentTimeMillis();
-        final Throwable t;
+        private final String msg;
+        private final int verboseLevel;
+        private final TestServerServiceEnum service;
+        private final long timeMs = System.currentTimeMillis();
+        private final Throwable t;
 
         public ConsoleLog(final String msg, final int verboseLevel, final TestServerServiceEnum service) {
             this(msg, null, verboseLevel, service);

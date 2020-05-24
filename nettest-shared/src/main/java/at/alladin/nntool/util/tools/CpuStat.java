@@ -205,14 +205,14 @@ public abstract class CpuStat {
         }
 
         public static class CoreUsage {
-            int coreNumber;
-            int user;
-            int nice;
-            int system;
-            long idle;
-            int iowait;
-            int irq;
-            int softirq;
+            private int coreNumber;
+            private int user;
+            private int nice;
+            private int system;
+            private long idle;
+            private int iowait;
+            private int irq;
+            private int softirq;
 
             public CoreUsage(int coreNumber, int user, int nice, int system, long idle, int iowait, int irq, int softirq) {
                 this.coreNumber = coreNumber;

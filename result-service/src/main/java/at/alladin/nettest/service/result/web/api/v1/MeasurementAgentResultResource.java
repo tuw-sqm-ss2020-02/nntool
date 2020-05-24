@@ -68,7 +68,7 @@ public class MeasurementAgentResultResource {
     /**
      * Retrieve a (paginated) list of measurements made by this measurement agent.
      * This resource returns brief information of each measurement from the requesting measurement agent.
-     *
+     * @param pageable
      * @param agentUuid
      * @return
      */
@@ -99,6 +99,7 @@ public class MeasurementAgentResultResource {
      * @param agentUuid
      * @param uuid
      * @param includedMeasurementTypes
+     * @param locale
      * @return
      */
     @io.swagger.annotations.ApiOperation(value = "Returns a measurement.", notes = "Returns a measurement by uuid with either all or a custom selection of measurement types.")
@@ -129,6 +130,8 @@ public class MeasurementAgentResultResource {
      *
      * @param agentUuid
      * @param uuid
+     * @param locale
+     * @param grouped
      * @return
      */
     @io.swagger.annotations.ApiOperation(value = "Get details of a measurement.", notes = "Returns the measurement details, either in grouped or plain form.")

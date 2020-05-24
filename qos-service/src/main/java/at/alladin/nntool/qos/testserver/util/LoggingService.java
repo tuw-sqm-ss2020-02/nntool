@@ -37,7 +37,7 @@ import at.alladin.nntool.qos.testserver.TestServerImpl;
  *
  * @author lb
  */
-public class LoggingService {
+public final class LoggingService {
 
     /**
      * all available loggers
@@ -47,7 +47,10 @@ public class LoggingService {
     /**
      * tells if any logging [syslog, file, console] has been enabled
      */
-    public static boolean IS_LOGGING_AVAILABLE = false;
+    public static boolean isLoggingAvailable = false;
+
+    private LoggingService() {
+    }
 
     /**
      * @param testServerImpl
@@ -62,7 +65,7 @@ public class LoggingService {
      * @param testServerImpl
      */
     public static synchronized void init(final TestServerImpl testServerImpl) {
-        IS_LOGGING_AVAILABLE = isLoggingAvailable(testServerImpl);
+        isLoggingAvailable = isLoggingAvailable(testServerImpl);
 
         LogManager.getRootLogger().removeAllAppenders();
 
@@ -109,7 +112,7 @@ public class LoggingService {
      * @param service
      */
     public static void fatal(Throwable t, String message, TestServerServiceEnum service) {
-        if (IS_LOGGING_AVAILABLE) {
+        if (isLoggingAvailable) {
             if (t != null) {
                 LOGGER_MAP.get(service).fatal("[" + t.getClass().getCanonicalName() + ": " + t.getLocalizedMessage() + "] " + message, t);
             } else {
@@ -126,7 +129,7 @@ public class LoggingService {
      * @param service
      */
     public static void error(Throwable t, String message, TestServerServiceEnum service) {
-        if (IS_LOGGING_AVAILABLE) {
+        if (isLoggingAvailable) {
             if (t != null) {
                 LOGGER_MAP.get(service).error("[" + t.getClass().getCanonicalName() + ": " + t.getLocalizedMessage() + "] " + message, t);
             } else {
@@ -142,7 +145,7 @@ public class LoggingService {
      * @param service
      */
     public static void warn(String message, TestServerServiceEnum service) {
-        if (IS_LOGGING_AVAILABLE) {
+        if (isLoggingAvailable) {
             LOGGER_MAP.get(service).warn(message);
         }
     }
@@ -154,7 +157,7 @@ public class LoggingService {
      * @param service
      */
     public static void info(String message, TestServerServiceEnum service) {
-        if (IS_LOGGING_AVAILABLE) {
+        if (isLoggingAvailable) {
             LOGGER_MAP.get(service).info(message);
         }
     }
@@ -166,7 +169,7 @@ public class LoggingService {
      * @param service
      */
     public static void debug(String message, TestServerServiceEnum service) {
-        if (IS_LOGGING_AVAILABLE) {
+        if (isLoggingAvailable) {
             LOGGER_MAP.get(service).debug(message);
         }
     }

@@ -47,17 +47,17 @@ public class MeasurementServerLoadMonitorService {
     private final Logger logger = LoggerFactory.getLogger(MeasurementServerLoadMonitorService.class);
 
     @Autowired
-    TaskScheduler taskScheduler;
+    private TaskScheduler taskScheduler;
 
     @Autowired
-    StorageService storageService;
+    private StorageService storageService;
 
     @Autowired
-    LoadbalancerServiceProperties properties;
+    private LoadbalancerServiceProperties properties;
 
-    Map<String, ScheduledFuture<?>> jobs = new HashMap<>();
+    private Map<String, ScheduledFuture<?>> jobs = new HashMap<>();
 
-    Map<String, LoadApiReport> reports = new HashMap<>();
+    private Map<String, LoadApiReport> reports = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -134,7 +134,7 @@ public class MeasurementServerLoadMonitorService {
 
     private final class LoadRunnable implements Runnable {
 
-        final LoadCallable loadCallable;
+        private final LoadCallable loadCallable;
 
         public LoadRunnable(final MeasurementServerDto peer) {
             this.loadCallable = new LoadCallable(peer);

@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
 
-public interface Collector<T, JSONTYPE> {
+public interface Collector<T, J> {
 
     /**
      * @param delta time diff since last call
@@ -41,7 +41,7 @@ public interface Collector<T, JSONTYPE> {
      * @return returns a Json object representing the result of the collector
      * @throws JSONException
      */
-    public JSONTYPE getJsonResult(boolean clean) throws JSONException;
+    public J getJsonResult(boolean clean) throws JSONException;
 
     /**
      * returns a Json object representing the result of the collector.<br>
@@ -53,7 +53,7 @@ public interface Collector<T, JSONTYPE> {
      * @return result as json
      * @throws JSONException
      */
-    public JSONTYPE getJsonResult(boolean clean, long relTimeStamp, TimeUnit timeUnit) throws JSONException;
+    public J getJsonResult(boolean clean, long relTimeStamp, TimeUnit timeUnit) throws JSONException;
 
     /**
      * returns the json key string for this collector
@@ -63,8 +63,8 @@ public interface Collector<T, JSONTYPE> {
     public String getJsonKey();
 
     public static class CollectorData<T> {
-        T value;
-        long timeStampNs;
+        private T value;
+        private long timeStampNs;
 
         public CollectorData(T value) {
             this(value, System.nanoTime());

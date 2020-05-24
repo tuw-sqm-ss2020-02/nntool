@@ -450,24 +450,24 @@ public class QoSServerResultCollection implements Serializable {
             }
         }
 
-        public void setCategoryCounter(QosMeasurementType key, int successCounter, int failureCounter) {
-            this.resultCounter.put(key, new QoSResultStats(successCounter, failureCounter));
+        public void setCategoryCounter(QosMeasurementType key, int sucCounter, int failCounter) {
+            this.resultCounter.put(key, new QoSResultStats(sucCounter, failCounter));
         }
 
-        public void addCategoryCounter(QosMeasurementType key, int successCounter, int failureCounter) {
+        public void addCategoryCounter(QosMeasurementType key, int sucCounter, int failCounter) {
             QoSResultStats stat = resultCounter.get(key);
             if (stat == null) {
-                stat = new QoSResultStats(successCounter, failureCounter);
+                stat = new QoSResultStats(sucCounter, failCounter);
                 this.resultCounter.put(key, stat);
             }
-            stat.incSuccessCounter(successCounter);
-            stat.incFailureCounter(failureCounter);
-            stat.incFailedTestsCounter(failureCounter > 0 ? 1 : 0);
+            stat.incSuccessCounter(sucCounter);
+            stat.incFailureCounter(failCounter);
+            stat.incFailedTestsCounter(failCounter > 0 ? 1 : 0);
             stat.incTestCounter(1);
 
-            this.incSuccessCounter(successCounter);
-            this.incFailureCounter(failureCounter);
-            this.incFailedTestsCounter(failureCounter > 0 ? 1 : 0);
+            this.incSuccessCounter(sucCounter);
+            this.incFailureCounter(failCounter);
+            this.incFailedTestsCounter(failCounter > 0 ? 1 : 0);
             this.incTestCounter(1);
         }
 

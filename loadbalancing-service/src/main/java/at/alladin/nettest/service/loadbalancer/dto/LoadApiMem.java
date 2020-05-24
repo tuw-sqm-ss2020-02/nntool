@@ -24,16 +24,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class LoadApiMem {
 
     @JsonProperty("buffers")
-    String buffers;
+    private String buffers;
 
     @JsonProperty("cached")
-    String cached;
+    private String cached;
 
     @JsonProperty("free")
-    String free;
+    private String free;
 
     @JsonProperty("total")
-    String total;
+    private String total;
 
     public String getBuffers() {
         return buffers;

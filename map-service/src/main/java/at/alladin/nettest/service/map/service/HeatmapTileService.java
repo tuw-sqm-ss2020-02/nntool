@@ -56,28 +56,28 @@ import at.alladin.nntool.shared.map.MapTileType;
 public class HeatmapTileService {
 
     private final static int[] ZOOM_TO_PART_FACTOR = new int[]{
-            // factor | zoomlevel
-            0, // 0
-            0, // 1
-            0, // 2
-            0, // 3
-            0, // 4
-            0, // 5
-            0, // 6
-            1, // 7
-            1, // 8
-            2, // 9
-            2, // 10
-            3, // 11
-            3, // 12
-            4, // 13
-            4, // 14
-            5, // 15
-            5, // 16
-            6, // 17
-            6, // 18
-            7, // 19
-            7, // 20
+        // factor | zoomlevel
+        0, // 0
+        0, // 1
+        0, // 2
+        0, // 3
+        0, // 4
+        0, // 5
+        0, // 6
+        1, // 7
+        1, // 8
+        2, // 9
+        2, // 10
+        3, // 11
+        3, // 12
+        4, // 13
+        4, // 14
+        5, // 15
+        5, // 16
+        6, // 17
+        6, // 18
+        7, // 19
+        7 // 20
     };
     private final static double ALPHA_TOP = 0.5;
     private final static int ALPHA_MAX = 1;
@@ -142,8 +142,6 @@ public class HeatmapTileService {
                 protected int[] initialValue() {
                     return new int[tileSize * tileSize];
                 }
-
-                ;
             };
         }
         //TODO: possibly fix tileImages appearing thrice
@@ -269,24 +267,24 @@ public class HeatmapTileService {
                 ps.setDouble(p++, bbox.getY2() + margin);
 
             }, (ResultSet rs, int rowNum) -> {
-                int count = rs.getInt(1);
-                final double val = rs.getDouble(2);
-                final double gx = rs.getDouble(3);
-                final double gy = rs.getDouble(4);
-                final int mx = (int) Math.round((gx - origX) / partSize);
-                final int my = (int) Math.round((gy - origY) / partSize);
+                    int count = rs.getInt(1);
+                    final double val = rs.getDouble(2);
+                    final double gx = rs.getDouble(3);
+                    final double gy = rs.getDouble(4);
+                    final int mx = (int) Math.round((gx - origX) / partSize);
+                    final int my = (int) Math.round((gy - origY) / partSize);
 
-                if (mx >= 0 && mx < fetchPartsX && my >= 0 && my < fetchPartsY) {
-                    final int idx = mx + fetchPartsX * (fetchPartsY - 1 - my);
-                    values[idx] = val;//val;
-                    // countsReal[idx] = count;
-                    if (count > ALPHA_MAX) {
-                        count = ALPHA_MAX;
+                    if (mx >= 0 && mx < fetchPartsX && my >= 0 && my < fetchPartsY) {
+                        final int idx = mx + fetchPartsX * (fetchPartsY - 1 - my);
+                        values[idx] = val; //val;
+                        // countsReal[idx] = count;
+                        if (count > ALPHA_MAX) {
+                            count = ALPHA_MAX;
+                        }
+                        countsRel[idx] = count;
                     }
-                    countsRel[idx] = count;
-                }
-                return rowNum;
-            });
+                    return rowNum;
+                });
 
             if (intList.size() == 0) {
                 logger.info("Requested heatmap tile contains no measurements. Returning empty image");

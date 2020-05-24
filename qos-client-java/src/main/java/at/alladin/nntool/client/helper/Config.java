@@ -19,13 +19,11 @@ package at.alladin.nntool.client.helper;
 /**
  * The system defaults.
  */
-public class Config {
+public final class Config {
 
-    /*********************
-     *
-     * Default Preferences
-     *
-     *********************/
+    /*
+    * Default Preferences
+    */
 
     public static final String CLIENT_NAME = "NNTool";
     public static final String VERSION_NUMBER = "0.3";

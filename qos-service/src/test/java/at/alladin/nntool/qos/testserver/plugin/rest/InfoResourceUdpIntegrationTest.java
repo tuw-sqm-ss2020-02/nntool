@@ -50,28 +50,28 @@ import mockit.Mocked;
  */
 public class InfoResourceUdpIntegrationTest {
 
-    InfoResource ir;
+    private InfoResource ir;
 
     @Mocked
-    ServerSocket serverSocket;
+    private ServerSocket serverSocket;
 
     @Mocked
-    DatagramChannel datagramChannel;
+    private DatagramChannel datagramChannel;
 
     @Mocked
-    DatagramSocket datagramSocket;
+    private DatagramSocket datagramSocket;
 
     @Mocked
-    DatagramPacket datagramPacket;
+    private DatagramPacket datagramPacket;
 
     @Mocked
-    Socket socket;
+    private Socket socket;
 
     @Mocked
-    ExecutorService executorService;
+    private ExecutorService executorService;
 
     @Mocked
-    ClientHandler clientHandler;
+    private ClientHandler clientHandler;
 
     //@Mocked TestServerConsole console;
 

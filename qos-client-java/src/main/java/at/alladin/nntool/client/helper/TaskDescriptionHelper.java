@@ -27,7 +27,7 @@ import at.alladin.nntool.client.v2.task.TaskDesc;
 /**
  * @author Felix Kendlbacher (alladin-IT GmbH)
  */
-public class TaskDescriptionHelper {
+public final class TaskDescriptionHelper {
 
     private TaskDescriptionHelper() {
     }

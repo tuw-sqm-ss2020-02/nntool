@@ -22,7 +22,6 @@ package at.alladin.nettest.spring.data.couchdb.config;
 public class CouchDbConfigurationSupport {
 
     // typeKey
-	/*public String docTypeKey() {
-		
-	}*/
+    /*public String docTypeKey() {
+    }*/
 }

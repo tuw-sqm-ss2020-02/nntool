@@ -271,7 +271,7 @@ public abstract class Helperfunctions {
      * @param inetAddress
      * @return
      */
-    public static String IpType(InetAddress inetAddress) {
+    public static String ipType(InetAddress inetAddress) {
         if (inetAddress == null) {
             return null;
         }

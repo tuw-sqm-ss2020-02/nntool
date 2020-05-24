@@ -29,9 +29,9 @@ import org.springframework.context.NoSuchMessageException;
  */
 public class CodeInsteadOfExceptionMessageSource implements MessageSource {
 
-    private static final Logger logger = LoggerFactory.getLogger(CodeInsteadOfExceptionMessageSource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CodeInsteadOfExceptionMessageSource.class);
 
-    final MessageSource messageSource;
+    private final MessageSource messageSource;
 
     public CodeInsteadOfExceptionMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
@@ -47,7 +47,7 @@ public class CodeInsteadOfExceptionMessageSource implements MessageSource {
         try {
             return messageSource.getMessage(code, args, locale);
         } catch (NoSuchMessageException ex) {
-            logger.warn(ex.getMessage());
+            LOGGER.warn(ex.getMessage());
 
             return code;
         }
@@ -58,7 +58,7 @@ public class CodeInsteadOfExceptionMessageSource implements MessageSource {
         try {
             return messageSource.getMessage(resolvable, locale);
         } catch (NoSuchMessageException ex) {
-            logger.warn(ex.getMessage());
+            LOGGER.warn(ex.getMessage());
 
             return String.join(",", resolvable.getCodes());
         }

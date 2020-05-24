@@ -160,6 +160,7 @@ public abstract class AbstractServer<T extends AutoCloseable, H extends TestCand
 
     /**
      * @param candidateInetAddress
+     * @param resetTtl
      * @throws IllegalAccessException
      * @throws InstantiationException
      */

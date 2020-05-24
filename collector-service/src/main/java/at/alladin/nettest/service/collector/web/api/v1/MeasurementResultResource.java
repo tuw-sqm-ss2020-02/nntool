@@ -46,7 +46,7 @@ import io.swagger.annotations.ApiParam;
 public class MeasurementResultResource {
 
     @SuppressWarnings("unused")
-    private static final Logger logger = LoggerFactory.getLogger(MeasurementResultResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeasurementResultResource.class);
 
     @Autowired
     private MeasurementResultService measurementResultService;
@@ -58,7 +58,8 @@ public class MeasurementResultResource {
      * Store measurement result.
      * This resource retrieves finished measurements and stores them.
      *
-     * @param measurementResultRequest
+     * @param lmapReportDto
+     * @param request
      * @return
      */
     @io.swagger.annotations.ApiOperation(value = "Store measurement result.", notes = "This resource retrieves finished measurements and stores them.")

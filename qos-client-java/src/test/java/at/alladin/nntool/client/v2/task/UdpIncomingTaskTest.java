@@ -124,39 +124,43 @@ public class UdpIncomingTaskTest {
 
     /**
      * Incoming udp
+     * @param controlConnection
+     * @param dataOutputStream
+     * @param socket
      */
 
     @Test
     public void testUdpIncomingSingleWorking(@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
                                              @Mocked final DataOutputStream dataOutputStream) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
+                times = 1;
+                result = new Delegate() {
+                    public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        taskCmd = cmd;
+                    }
+                };
 
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
-            times = 1;
-            result = new Delegate() {
-                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    taskCmd = cmd;
-                }
-            };
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
+                result = new Delegate() {
+                    public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        callback.onResponse("RCV 1 1", cmd);
+                    }
+                };
 
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
-            result = new Delegate() {
-                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    callback.onResponse("RCV 1 1", cmd);
-                }
-            };
+                socket.receive((DatagramPacket) any);
+                result = new Delegate() {
+                    public void delegate(DatagramPacket packet) {
+                        packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
+                        packet.setPort(80);
+                        packet.setAddress(loopback);
+                    }
+                };
 
-            socket.receive((DatagramPacket) any);
-            result = new Delegate() {
-                public void delegate(DatagramPacket packet) {
-                    packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
-                    packet.setPort(80);
-                    packet.setAddress(loopback);
-                }
-            };
-
-        }};
+            }
+        };
 
         final UdpTask udpTask = new UdpTask(qosTest, incomingTaskDesc, 1);
         udpTask.setControlConnection(controlConnection);
@@ -172,59 +176,58 @@ public class UdpIncomingTaskTest {
     public void testUdpIncomingMultipleRandomOrderWorking(@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
                                                           @Mocked final DataOutputStream dataOutputStream) throws Exception {
 
-        new Expectations() {{
-
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
-            times = 1;
-            result = new Delegate() {
-                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    taskCmd = cmd;
-                }
-            };
-
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
-            result = new Delegate() {
-                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    callback.onResponse("RCV 4 2", cmd);
-                }
-            };
-
-            // send packets 0, 1, 1, 2 in order (the duplicate shall be registered as such)
-            socket.receive((DatagramPacket) any);
-            returns(
-                    new Delegate() {
-                        public void delegate(DatagramPacket packet) {
-                            packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
-                            packet.setPort(80);
-                            packet.setAddress(loopback);
-                        }
+        new Expectations() {
+            {
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
+                times = 1;
+                result = new Delegate() {
+                    public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        taskCmd = cmd;
                     }
-                    ,
-                    new Delegate() {
-                        public void delegate(DatagramPacket packet) {
-                            packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(3)));
-                            packet.setPort(80);
-                            packet.setAddress(loopback);
-                        }
-                    }
-                    ,
-                    new Delegate() {
-                        public void delegate(DatagramPacket packet) {
-                            packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(1)));
-                            packet.setPort(80);
-                            packet.setAddress(loopback);
-                        }
-                    }
-            );
-            result = new Delegate() {
-                public void delegate(DatagramPacket packet) {
-                    packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(2)));
-                    packet.setPort(80);
-                    packet.setAddress(loopback);
-                }
-            };
+                };
 
-        }};
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
+                result = new Delegate() {
+                    public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        callback.onResponse("RCV 4 2", cmd);
+                    }
+                };
+
+                // send packets 0, 1, 1, 2 in order (the duplicate shall be registered as such)
+                socket.receive((DatagramPacket) any);
+                returns(
+                        new Delegate() {
+                            public void delegate(DatagramPacket packet) {
+                                packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
+                                packet.setPort(80);
+                                packet.setAddress(loopback);
+                            }
+                        },
+                        new Delegate() {
+                            public void delegate(DatagramPacket packet) {
+                                packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(3)));
+                                packet.setPort(80);
+                                packet.setAddress(loopback);
+                            }
+                        },
+                        new Delegate() {
+                            public void delegate(DatagramPacket packet) {
+                                packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(1)));
+                                packet.setPort(80);
+                                packet.setAddress(loopback);
+                            }
+                        }
+                );
+                result = new Delegate() {
+                    public void delegate(DatagramPacket packet) {
+                        packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(2)));
+                        packet.setPort(80);
+                        packet.setAddress(loopback);
+                    }
+                };
+
+            }
+        };
 
         incomingTaskDesc.getParams().put(UdpTask.PARAM_NUM_PACKETS_INCOMING, "4");
 
@@ -244,34 +247,40 @@ public class UdpIncomingTaskTest {
     public void testUdpIncomingMultipleDuplicatesWorking(@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
                                                          @Mocked final DataOutputStream dataOutputStream) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
+                times = 1;
+                result = new Delegate() {
+                    public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        taskCmd = cmd;
+                    }
+                };
 
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
-            times = 1;
-            result = new Delegate() {
-                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    taskCmd = cmd;
-                }
-            };
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
+                result = new Delegate() {
+                    public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        callback.onResponse("RCV 2 2", cmd);
+                        }
+                };
 
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
-            result = new Delegate() {
-                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    callback.onResponse("RCV 2 2", cmd);
-                }
-            };
-
-            // send packets 0, 1, 1, 2 in order (the duplicate shall be registered as such)
-            socket.receive((DatagramPacket) any);
-            returns(
+                // send packets 0, 1, 1, 2 in order (the duplicate shall be registered as such)
+                socket.receive((DatagramPacket) any);
+                returns(
                     new Delegate() {
                         public void delegate(DatagramPacket packet) {
                             packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
                             packet.setPort(80);
                             packet.setAddress(loopback);
                         }
-                    }
-                    ,
+                    },
+                    new Delegate() {
+                        public void delegate(DatagramPacket packet) {
+                            packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(3)));
+                            packet.setPort(80);
+                            packet.setAddress(loopback);
+                        }
+                    },
                     new Delegate() {
                         public void delegate(DatagramPacket packet) {
                             packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(3)));
@@ -279,24 +288,17 @@ public class UdpIncomingTaskTest {
                             packet.setAddress(loopback);
                         }
                     }
-                    ,
-                    new Delegate() {
-                        public void delegate(DatagramPacket packet) {
-                            packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(3)));
-                            packet.setPort(80);
-                            packet.setAddress(loopback);
-                        }
+                );
+                result = new Delegate() {
+                    public void delegate(DatagramPacket packet) {
+                        packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
+                        packet.setPort(80);
+                        packet.setAddress(loopback);
                     }
-            );
-            result = new Delegate() {
-                public void delegate(DatagramPacket packet) {
-                    packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
-                    packet.setPort(80);
-                    packet.setAddress(loopback);
-                }
-            };
+                };
 
-        }};
+            }
+        };
 
         incomingTaskDesc.getParams().put(UdpTask.PARAM_NUM_PACKETS_INCOMING, "4");
 
@@ -315,35 +317,36 @@ public class UdpIncomingTaskTest {
     public void testUdpIncomingWithSocketException(@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
                                                    @Mocked final DataOutputStream dataOutputStream) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
+                times = 1;
+                result = new Delegate() {
+                    public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        taskCmd = cmd;
+                    }
+                };
 
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
-            times = 1;
-            result = new Delegate() {
-                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    taskCmd = cmd;
-                }
-            };
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
+                result = new Delegate() {
+                    public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        callback.onResponse("RCV 1 2", cmd);
+                    }
+                };
 
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
-            result = new Delegate() {
-                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    callback.onResponse("RCV 1 2", cmd);
-                }
-            };
+                // send packets 0, 1, 1, 2 in order (the duplicate shall be registered as such)
+                socket.receive((DatagramPacket) any);
+                result = new Delegate() {
+                    public void delegate(DatagramPacket packet) {
+                        packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
+                        packet.setPort(80);
+                        packet.setAddress(loopback);
+                    }
+                };
+                result = new SocketException("Forcefully thrown exception");
 
-            // send packets 0, 1, 1, 2 in order (the duplicate shall be registered as such)
-            socket.receive((DatagramPacket) any);
-            result = new Delegate() {
-                public void delegate(DatagramPacket packet) {
-                    packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
-                    packet.setPort(80);
-                    packet.setAddress(loopback);
-                }
-            };
-            result = new SocketException("Forcefully thrown exception");
-
-        }};
+            }
+        };
 
         incomingTaskDesc.getParams().put(UdpTask.PARAM_NUM_PACKETS_INCOMING, "2");
 
@@ -362,34 +365,35 @@ public class UdpIncomingTaskTest {
     public void testUdpIncomingWithControlConnectException(@Mocked final QoSControlConnection controlConnection, @Mocked final DatagramSocket socket,
                                                            @Mocked final DataOutputStream dataOutputStream) throws Exception {
 
-        new Expectations() {{
+        new Expectations() {
+            {
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
+                times = 1;
+                result = new Delegate() {
+                    public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        taskCmd = cmd;
+                    }
+                };
 
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, withPrefix("UDPTEST IN"), (ControlConnectionResponseCallback) any);
-            times = 1;
-            result = new Delegate() {
-                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    taskCmd = cmd;
-                }
-            };
+                controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
+                times = 1;
+                result = new Delegate() {
+                    public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
+                        callback.onResponse("NEW RCV 2 1", cmd);
+                    }
+                };
 
-            controlConnection.sendTaskCommand((AbstractQoSTask) any, "GET UDPRESULT IN 80", (ControlConnectionResponseCallback) any);
-            times = 1;
-            result = new Delegate() {
-                public void delegate(AbstractQoSTask qoSTask, String cmd, ControlConnectionResponseCallback callback) {
-                    callback.onResponse("NEW RCV 2 1", cmd);
-                }
-            };
+                socket.receive((DatagramPacket) any);
+                result = new Delegate() {
+                    public void delegate(DatagramPacket packet) {
+                        packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
+                        packet.setPort(80);
+                        packet.setAddress(loopback);
+                    }
+                };
 
-            socket.receive((DatagramPacket) any);
-            result = new Delegate() {
-                public void delegate(DatagramPacket packet) {
-                    packet.setData(UdpPayloadUtil.toBytes(udpPayloadList.get(0)));
-                    packet.setPort(80);
-                    packet.setAddress(loopback);
-                }
-            };
-
-        }};
+            }
+        };
 
         final UdpTask udpTask = new UdpTask(qosTest, incomingTaskDesc, 1);
         udpTask.setControlConnection(controlConnection);

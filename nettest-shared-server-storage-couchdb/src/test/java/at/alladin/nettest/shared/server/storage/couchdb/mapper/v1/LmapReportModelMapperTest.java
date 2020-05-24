@@ -175,7 +175,7 @@ public class LmapReportModelMapperTest {
     }
 
     @Test
-    public void testGeoLocationDistanceParsingWithInsufficientValues_producesNoDistanceMoved() {
+    public void testGeoLocationDistanceParsingWithInsufficientValuesProducesNoDistanceMoved() {
         final LmapReportDto reportDto = new LmapReportDto();
         final TimeBasedResultDto timeBasedResult = new TimeBasedResultDto();
         reportDto.setTimeBasedResult(timeBasedResult);

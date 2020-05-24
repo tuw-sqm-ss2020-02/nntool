@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.imageio.ImageIO;
 
-public class TileHelper {
+public final class TileHelper {
 
     //TODO: throw this into settings
     private static final int[] TILE_SIZES = new int[]{256, 512, 768};
@@ -35,7 +35,7 @@ public class TileHelper {
      */
     private static final byte[][] EMPTY_IMAGES = new byte[TILE_SIZES.length][];
 
-    private static final AtomicBoolean emptyImagesInitialized = new AtomicBoolean(false);
+    private static final AtomicBoolean EMPTYIMAGESINITIALIZED = new AtomicBoolean(false);
 
     /**
      *
@@ -76,7 +76,7 @@ public class TileHelper {
     }
 
     public static byte[] getEmptyImage(final int size) {
-        if (!emptyImagesInitialized.getAndSet(true)) {
+        if (!EMPTYIMAGESINITIALIZED.getAndSet(true)) {
             initializeEmptyImages();
         }
         return EMPTY_IMAGES[getTileSizeIdx(size)];

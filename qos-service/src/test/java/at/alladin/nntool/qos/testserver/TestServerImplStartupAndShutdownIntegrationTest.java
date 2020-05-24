@@ -67,7 +67,7 @@ public class TestServerImplStartupAndShutdownIntegrationTest {
      */
     public class ServerSocketAcceptCounterMockup extends ServerSocketMockup {
 
-        public long acceptCounter = 0;
+        private long acceptCounter = 0;
 
         public ServerSocketAcceptCounterMockup(final TestServerImpl ts) throws IOException {
             super(ts);

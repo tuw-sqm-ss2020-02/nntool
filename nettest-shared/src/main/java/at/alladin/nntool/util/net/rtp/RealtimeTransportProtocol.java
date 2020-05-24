@@ -190,7 +190,7 @@ public final class RealtimeTransportProtocol {
         VER2(2),
         UNKNOWN(-1);
 
-        final int version;
+        private final int version;
 
         RtpVersion(int version) {
             this.version = version;

@@ -38,7 +38,7 @@ import static at.alladin.nettest.shared.berec.collector.api.v1.dto.shared.Measur
 @Service
 public class MeasurementDeviceInformationService {
 
-    private static final Logger logger = LoggerFactory.getLogger(MeasurementDeviceInformationService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeasurementDeviceInformationService.class);
 
     private static Parser userAgentParser;
 
@@ -56,7 +56,7 @@ public class MeasurementDeviceInformationService {
             final String ua = request.getHeader("user-agent");
             if (ua != null) {
                 final Client client = userAgentParser.parse(ua);
-                logger.debug("Parsed info from ua: {}", client.toString());
+                LOGGER.debug("Parsed info from ua: {}", client.toString());
                 if (client.os != null && apiRequestInfo.getOsVersion() == null) {
                     final StringBuilder vers = new StringBuilder();
                     if (client.os.family != null) {

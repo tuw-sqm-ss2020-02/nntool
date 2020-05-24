@@ -128,11 +128,11 @@ public class TracerouteResult extends AbstractResult {
     public final static class PathElement {
         @JsonProperty("time")
         @SerializedName("time")
-        long time;
+        private long time;
 
         @JsonProperty("host")
         @SerializedName("host")
-        String host;
+        private String host;
 
         public PathElement() {
 

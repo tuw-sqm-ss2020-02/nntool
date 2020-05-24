@@ -57,10 +57,10 @@ public class CouchDbRepositoryFactory extends RepositoryFactorySupport {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T, ID> CouchDbEntityInformation<T, ID> getEntityInformation(Class<T> domainClass) {
+    public <T, I> CouchDbEntityInformation<T, I> getEntityInformation(Class<T> domainClass) {
         //final CouchDbPersistentEntity<?> entity = null; // TODO //mappingContext.getRequiredPersistentEntity(domainClass);
         //return new MappingCouchDbEntityInformation<>(/*(CouchDbPersistentEntity<T>) entity*/);
-        return (CouchDbEntityInformation<T, ID>) new SimpleCouchDbEntityInformation<>(domainClass);
+        return (CouchDbEntityInformation<T, I>) new SimpleCouchDbEntityInformation<>(domainClass);
     }
 
     /*

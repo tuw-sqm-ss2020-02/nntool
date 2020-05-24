@@ -64,21 +64,21 @@ public class RuntimeGuardService extends EventJob<String> {
     protected Properties prop = new Properties();
 
     /**
-     * @param service
+     *
      */
     public RuntimeGuardService() {
         super(TestServerServiceEnum.RUNTIME_GUARD_SERVICE);
         getLaunchEventSet().add(EventType.ON_TEST_SERVER_START);
         getLaunchEventSet().add(EventType.ON_TEST_SERVER_STOP);
 
-        Properties prop = new Properties();
+        Properties properties = new Properties();
         try {
-            prop.load(new FileInputStream(GUARD_FILE));
+            properties.load(new FileInputStream(GUARD_FILE));
         } catch (FileNotFoundException e) {
             log("I/O Error: Guard file '" + GUARD_FILE + "' not found! Creating new guard file...", 0);
             try {
                 savePropertyFile(true);
-            } catch (IOException e1) {
+            } catch (IOException ex) {
                 log("I/O Error: Guard file '" + GUARD_FILE + "' could not be created!", 0);
             }
         } catch (IOException e) {

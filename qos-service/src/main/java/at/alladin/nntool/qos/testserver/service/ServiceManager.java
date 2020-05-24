@@ -94,6 +94,7 @@ public class ServiceManager {
     }
 
     /**
+     * @param mayInterruptIfRunning
      * attempts to stop all running services and returns all results with their service names
      */
     public Map<String, Object> shutdownAll(boolean mayInterruptIfRunning) {

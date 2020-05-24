@@ -39,9 +39,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class NioUdpStreamSender implements StreamSender<DatagramChannel> {
 
-    final AtomicBoolean isRunning = new AtomicBoolean(false);
-    UdpStreamSenderSettings<DatagramChannel> settings;
-    UdpStreamCallback callback;
+    private final AtomicBoolean isRunning = new AtomicBoolean(false);
+    private UdpStreamSenderSettings<DatagramChannel> settings;
+    private UdpStreamCallback callback;
 
     public NioUdpStreamSender(UdpStreamSenderSettings<DatagramChannel> settings, UdpStreamCallback udpStreamCallback) {
         this.settings = settings;

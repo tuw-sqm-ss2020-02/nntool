@@ -27,7 +27,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "external-services", ignoreUnknownFields = true)
 public class ExternalServicesProperties {
 
-    List<DeviceImportSettings> deviceImports = new ArrayList<>();
+    private List<DeviceImportSettings> deviceImports = new ArrayList<>();
 
     public List<DeviceImportSettings> getDeviceImports() {
         return deviceImports;

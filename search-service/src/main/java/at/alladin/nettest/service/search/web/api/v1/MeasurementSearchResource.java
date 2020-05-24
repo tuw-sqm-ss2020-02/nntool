@@ -61,7 +61,7 @@ import springfox.documentation.annotations.ApiIgnore;
 public class MeasurementSearchResource {
 
     @SuppressWarnings("unused")
-    private static final Logger logger = LoggerFactory.getLogger(MeasurementSearchResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeasurementSearchResource.class);
 
     @Autowired
     private SearchService searchService;
@@ -75,8 +75,7 @@ public class MeasurementSearchResource {
     /**
      * Retrieve a paginated and searched list of open-data measurements.
      * This resource returns brief information of each queried open-data measurement.
-     *
-     * @param @SortDefault
+     * @param queryString
      * @param pageable
      * @return
      */
@@ -101,7 +100,7 @@ public class MeasurementSearchResource {
      * Returns a measurement by open-data UUID with either all or a custom selection of measurement types.
      *
      * @param openDataUuid
-     * @param includedMeasurementTypes
+     * @param coarse
      * @return
      */
     @io.swagger.annotations.ApiOperation(value = "Returns an open-data measurement.", notes = "Returns a measurement by open-data UUID with either all or a custom selection of measurement types.")
@@ -130,8 +129,8 @@ public class MeasurementSearchResource {
      * Get details of an open-data measurement.
      * Returns the measurement details, either in grouped or plain form.
      *
-     * @param agentUuid
-     * @param uuid
+     * @param locale
+     * @param openDataUuid
      * @return
      */
     @io.swagger.annotations.ApiOperation(value = "Get details of an open-data measurement.", notes = "Returns the measurement details, either in grouped or plain form.")
@@ -143,246 +142,246 @@ public class MeasurementSearchResource {
     public ResponseEntity<ApiResponse<DetailMeasurementResponse>> getMeasurementDetails(@ApiParam(value = "The open-data UUID", required = true) @PathVariable String openDataUuid, Locale locale) {
 
         // TODO: hardcoded until we have settings in Elasticsearch
-        final String groupSettings = "[\n" +
-                "    {\n" +
-                "      \"key\": \"group_overview\",\n" +
-                "      \"icon\": \"b\",\n" +
-                "      \"values\": [\n" +
-                "        {\n" +
-                "          \"key\": \"speed.throughputAvgDownloadBps\",\n" +
-                "          \"unit\": \"RESULT_WIFI_LINK_SPEED_UNIT\",\n" +
-                "          \"format\": \"DIV_1E6\",\n" +
-                "          \"translation_key\": \"RESULT_DOWNLOAD\",\n" +
-                "          \"share_text\": \"RESULT_SHARE_DOWNLOAD\",\n" +
-                "          \"share_priority\": 1\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.throughputAvgUploadBps\",\n" +
-                "          \"unit\": \"RESULT_WIFI_LINK_SPEED_UNIT\",\n" +
-                "          \"format\": \"DIV_1E6\",\n" +
-                "          \"translation_key\": \"RESULT_UPLOAD\",\n" +
-                "          \"share_text\": \"RESULT_SHARE_UPLOAD\",\n" +
-                "          \"share_priority\": 2\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.rttInfo.averageNs\",\n" +
-                "          \"format\": \"DIV_1E6\",\n" +
-                "          \"unit\": \"RESULT_MS_UNIT\",\n" +
-                "          \"translation_key\": \"RESULT_PING\",\n" +
-                "          \"share_text\": \"RESULT_SHARE_PING\",\n" +
-                "          \"share_priority\": 3\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"openDataUuid\",\n" +
-                "          \"translation_key\": \"key_open_test_uuid\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"systemUuid\",\n" +
-                "          \"translation_key\": \"result.system_uuid\",\n" +
-                "          \"share_text\": \"RESULT_SHARE_SYSTEM_UUID\",\n" +
-                "          \"share_priority\": 5\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"key\": \"group_network\",\n" +
-                "      \"icon\": \"d\",\n" +
-                "      \"values\": [\n" +
-                "        {\n" +
-                "          \"key\": \"networkInfo.networkPointInTimeInfo.agentPublicIp\",\n" +
-                "          \"translation_key\": \"key_client_public_ip\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"networkInfo.networkPointInTimeInfo.agentPrivateIp\",\n" +
-                "          \"translation_key\": \"key_client_local_ip\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"networkInfo.networkPointInTimeInfo.agentPublicIpCountryCode\",\n" +
-                "          \"translation_key\": \"key_country_geoip\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"networkInfo.networkPointInTimeInfo.networkTypeName\",\n" +
-                "          \"translation_key\": \"RESULT_NETWORK_TYPE\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"networkInfo.networkPointInTimeInfo.networkTypeGroupName\",\n" +
-                "          \"translation_key\": \"result.network.network_group_name\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"networkInfo.networkPointInTimeInfo.providerShortName\",\n" +
-                "          \"translation_key\": \"key_provider\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"networkInfo.networkPointInTimeInfo.ssid\",\n" +
-                "          \"translation_key\": \"key_wifi_ssid\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"networkInfo.networkPointInTimeInfo.bssid\",\n" +
-                "          \"translation_key\": \"key_wifi_bssid\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"networkInfo.networkPointInTimeInfo.networkOperatorMccMnc\",\n" +
-                "          \"translation_key\": \"result.network.provider_mcc_mnc\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"networkInfo.networkPointInTimeInfo.networkOperatorName\",\n" +
-                "          \"translation_key\": \"key_network_operator_name\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"networkInfo.networkPointInTimeInfo.simOperatorName\",\n" +
-                "          \"translation_key\": \"key_network_sim_operator_name\"\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"key\": \"group_device\",\n" +
-                "      \"icon\": \"g\",\n" +
-                "      \"values\": [\n" +
-                "        {\n" +
-                "          \"key\": \"deviceInfo.osInfo.name\",\n" +
-                "          \"translation_key\": \"result.os\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"deviceInfo.osInfo.version\",\n" +
-                "          \"translation_key\": \"key_os_version\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"deviceInfo.codeName\",\n" +
-                "          \"translation_key\": \"result.device.codename\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"deviceInfo.model\",\n" +
-                "          \"translation_key\": \"key_model\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"agentInfo.timezone\",\n" +
-                "          \"translation_key\": \"key_timezone\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"geoLocationInfo.distanceMovedMetres\",\n" +
-                "          \"translation_key\": \"result.moved_distance\",\n" +
-                "          \"unit\": \"result.moved_distance.unit\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"agentInfo.appVersionName\",\n" +
-                "          \"translation_key\": \"key_client_software_version\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"agentInfo.timezone\",\n" +
-                "          \"translation_key\": \"key_timezone\"\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"key\": \"speed_parameter_group\",\n" +
-                "      \"icon\": \"B\",\n" +
-                "      \"values\": [\n" +
-                "        {\n" +
-                "          \"key\": \"speed.throughputAvgDownloadBps\",\n" +
-                "          \"unit\": \"RESULT_WIFI_LINK_SPEED_UNIT\",\n" +
-                "          \"format\": \"DIV_1E6\",\n" +
-                "          \"translation_key\": \"RESULT_DOWNLOAD\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.bytesDownload\",\n" +
-                "          \"format\": \"DIV_1E6\",\n" +
-                "          \"unit\": \"RESULT_TOTAL_BYTES_UNIT\",\n" +
-                "          \"translation_key\": \"key_speed_download_bytes\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.durationDownloadNs\",\n" +
-                "          \"unit\": \"RESULT_DURATION_UNIT\",\n" +
-                "          \"format\": \"DIV_1E9\",\n" +
-                "          \"translation_key\": \"key_duration_dl\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.throughputAvgUploadBps\",\n" +
-                "          \"unit\": \"RESULT_WIFI_LINK_SPEED_UNIT\",\n" +
-                "          \"format\": \"DIV_1E6\",\n" +
-                "          \"translation_key\": \"RESULT_UPLOAD\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.bytesUpload\",\n" +
-                "          \"format\": \"DIV_1E6\",\n" +
-                "          \"unit\": \"RESULT_TOTAL_BYTES_UNIT\",\n" +
-                "          \"translation_key\": \"key_speed_upload_bytes\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.durationUploadNs\",\n" +
-                "          \"unit\": \"RESULT_DURATION_UNIT\",\n" +
-                "          \"format\": \"DIV_1E9\",\n" +
-                "          \"translation_key\": \"key_duration_ul\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.rttInfo.averageNs\",\n" +
-                "          \"format\": \"DIV_1E6\",\n" +
-                "          \"unit\": \"RESULT_MS_UNIT\",\n" +
-                "          \"translation_key\": \"key_ping_average\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.rttInfo.medianNs\",\n" +
-                "          \"format\": \"DIV_1E6\",\n" +
-                "          \"unit\": \"RESULT_MS_UNIT\",\n" +
-                "          \"translation_key\": \"key_ping_median\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.rttInfo.minNs\",\n" +
-                "          \"format\": \"DIV_1E6\",\n" +
-                "          \"unit\": \"RESULT_MS_UNIT\",\n" +
-                "          \"translation_key\": \"key_ping_min\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.rttInfo.maxNs\",\n" +
-                "          \"format\": \"DIV_1E6\",\n" +
-                "          \"unit\": \"RESULT_MS_UNIT\",\n" +
-                "          \"translation_key\": \"key_ping_max\"\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"key\": \"group_connectivity\",\n" +
-                "      \"icon\": \"q\",\n" +
-                "      \"values\": [\n" +
-                "        {\n" +
-                "          \"key\": \"speed.connectionInfo.address\",\n" +
-                "          \"translation_key\": \"key_server_address\",\n" +
-                "          \"share_text\": \"RESULT_SHARE_MEASUREMENT_SERVER_ADDRESS\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.connectionInfo.ipAddress\",\n" +
-                "          \"translation_key\": \"key_server_ip\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.connectionInfo.port\",\n" +
-                "          \"translation_key\": \"key_port\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.connectionInfo.encrypted\",\n" +
-                "          \"translation_key\": \"key_encryption\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.connectionInfo.agentInterfaceTotalTraffic.bytesRx\",\n" +
-                "          \"translation_key\": \"result.connection.total_bytes_received\",\n" +
-                "          \"unit\": \"RESULT_TOTAL_BYTES_UNIT\",\n" +
-                "          \"format\": \"DIV_1E6\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.connectionInfo.agentInterfaceTotalTraffic.bytesTx\",\n" +
-                "          \"translation_key\": \"result.connection.total_bytes_transmitted\",\n" +
-                "          \"unit\": \"RESULT_TOTAL_BYTES_UNIT\",\n" +
-                "          \"format\": \"DIV_1E6\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.connectionInfo.actualNumStreamsDownload\",\n" +
-                "          \"translation_key\": \"key_num_threads\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"key\": \"speed.connectionInfo.actualNumStreamsUpload\",\n" +
-                "          \"translation_key\": \"key_num_threads_ul\"\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    }\n" +
-                "  ]";
+        final String groupSettings = "[\n"
+                + "    {\n"
+                + "      \"key\": \"group_overview\",\n"
+                + "      \"icon\": \"b\",\n"
+                + "      \"values\": [\n"
+                + "        {\n"
+                + "          \"key\": \"speed.throughputAvgDownloadBps\",\n"
+                + "          \"unit\": \"RESULT_WIFI_LINK_SPEED_UNIT\",\n"
+                + "          \"format\": \"DIV_1E6\",\n"
+                + "          \"translation_key\": \"RESULT_DOWNLOAD\",\n"
+                + "          \"share_text\": \"RESULT_SHARE_DOWNLOAD\",\n"
+                + "          \"share_priority\": 1\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.throughputAvgUploadBps\",\n"
+                + "          \"unit\": \"RESULT_WIFI_LINK_SPEED_UNIT\",\n"
+                + "          \"format\": \"DIV_1E6\",\n"
+                + "          \"translation_key\": \"RESULT_UPLOAD\",\n"
+                + "          \"share_text\": \"RESULT_SHARE_UPLOAD\",\n"
+                + "          \"share_priority\": 2\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.rttInfo.averageNs\",\n"
+                + "          \"format\": \"DIV_1E6\",\n"
+                + "          \"unit\": \"RESULT_MS_UNIT\",\n"
+                + "          \"translation_key\": \"RESULT_PING\",\n"
+                + "          \"share_text\": \"RESULT_SHARE_PING\",\n"
+                + "          \"share_priority\": 3\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"openDataUuid\",\n"
+                + "          \"translation_key\": \"key_open_test_uuid\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"systemUuid\",\n"
+                + "          \"translation_key\": \"result.system_uuid\",\n"
+                + "          \"share_text\": \"RESULT_SHARE_SYSTEM_UUID\",\n"
+                + "          \"share_priority\": 5\n"
+                + "        }\n"
+                + "      ]\n"
+                + "    },\n"
+                + "    {\n"
+                + "      \"key\": \"group_network\",\n"
+                + "      \"icon\": \"d\",\n"
+                + "      \"values\": [\n"
+                + "        {\n"
+                + "          \"key\": \"networkInfo.networkPointInTimeInfo.agentPublicIp\",\n"
+                + "          \"translation_key\": \"key_client_public_ip\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"networkInfo.networkPointInTimeInfo.agentPrivateIp\",\n"
+                + "          \"translation_key\": \"key_client_local_ip\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"networkInfo.networkPointInTimeInfo.agentPublicIpCountryCode\",\n"
+                + "          \"translation_key\": \"key_country_geoip\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"networkInfo.networkPointInTimeInfo.networkTypeName\",\n"
+                + "          \"translation_key\": \"RESULT_NETWORK_TYPE\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"networkInfo.networkPointInTimeInfo.networkTypeGroupName\",\n"
+                + "          \"translation_key\": \"result.network.network_group_name\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"networkInfo.networkPointInTimeInfo.providerShortName\",\n"
+                + "          \"translation_key\": \"key_provider\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"networkInfo.networkPointInTimeInfo.ssid\",\n"
+                + "          \"translation_key\": \"key_wifi_ssid\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"networkInfo.networkPointInTimeInfo.bssid\",\n"
+                + "          \"translation_key\": \"key_wifi_bssid\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"networkInfo.networkPointInTimeInfo.networkOperatorMccMnc\",\n"
+                + "          \"translation_key\": \"result.network.provider_mcc_mnc\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"networkInfo.networkPointInTimeInfo.networkOperatorName\",\n"
+                + "          \"translation_key\": \"key_network_operator_name\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"networkInfo.networkPointInTimeInfo.simOperatorName\",\n"
+                + "          \"translation_key\": \"key_network_sim_operator_name\"\n"
+                + "        }\n"
+                + "      ]\n"
+                + "    },\n"
+                + "    {\n"
+                + "      \"key\": \"group_device\",\n"
+                + "      \"icon\": \"g\",\n"
+                + "      \"values\": [\n"
+                + "        {\n"
+                + "          \"key\": \"deviceInfo.osInfo.name\",\n"
+                + "          \"translation_key\": \"result.os\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"deviceInfo.osInfo.version\",\n"
+                + "          \"translation_key\": \"key_os_version\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"deviceInfo.codeName\",\n"
+                + "          \"translation_key\": \"result.device.codename\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"deviceInfo.model\",\n"
+                + "          \"translation_key\": \"key_model\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"agentInfo.timezone\",\n"
+                + "          \"translation_key\": \"key_timezone\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"geoLocationInfo.distanceMovedMetres\",\n"
+                + "          \"translation_key\": \"result.moved_distance\",\n"
+                + "          \"unit\": \"result.moved_distance.unit\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"agentInfo.appVersionName\",\n"
+                + "          \"translation_key\": \"key_client_software_version\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"agentInfo.timezone\",\n"
+                + "          \"translation_key\": \"key_timezone\"\n"
+                + "        }\n"
+                + "      ]\n"
+                + "    },\n"
+                + "    {\n"
+                + "      \"key\": \"speed_parameter_group\",\n"
+                + "      \"icon\": \"B\",\n"
+                + "      \"values\": [\n"
+                + "        {\n"
+                + "          \"key\": \"speed.throughputAvgDownloadBps\",\n"
+                + "          \"unit\": \"RESULT_WIFI_LINK_SPEED_UNIT\",\n"
+                + "          \"format\": \"DIV_1E6\",\n"
+                + "          \"translation_key\": \"RESULT_DOWNLOAD\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.bytesDownload\",\n"
+                + "          \"format\": \"DIV_1E6\",\n"
+                + "          \"unit\": \"RESULT_TOTAL_BYTES_UNIT\",\n"
+                + "          \"translation_key\": \"key_speed_download_bytes\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.durationDownloadNs\",\n"
+                + "          \"unit\": \"RESULT_DURATION_UNIT\",\n"
+                + "          \"format\": \"DIV_1E9\",\n"
+                + "          \"translation_key\": \"key_duration_dl\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.throughputAvgUploadBps\",\n"
+                + "          \"unit\": \"RESULT_WIFI_LINK_SPEED_UNIT\",\n"
+                + "          \"format\": \"DIV_1E6\",\n"
+                + "          \"translation_key\": \"RESULT_UPLOAD\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.bytesUpload\",\n"
+                + "          \"format\": \"DIV_1E6\",\n"
+                + "          \"unit\": \"RESULT_TOTAL_BYTES_UNIT\",\n"
+                + "          \"translation_key\": \"key_speed_upload_bytes\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.durationUploadNs\",\n"
+                + "          \"unit\": \"RESULT_DURATION_UNIT\",\n"
+                + "          \"format\": \"DIV_1E9\",\n"
+                + "          \"translation_key\": \"key_duration_ul\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.rttInfo.averageNs\",\n"
+                + "          \"format\": \"DIV_1E6\",\n"
+                + "          \"unit\": \"RESULT_MS_UNIT\",\n"
+                + "          \"translation_key\": \"key_ping_average\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.rttInfo.medianNs\",\n"
+                + "          \"format\": \"DIV_1E6\",\n"
+                + "          \"unit\": \"RESULT_MS_UNIT\",\n"
+                + "          \"translation_key\": \"key_ping_median\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.rttInfo.minNs\",\n"
+                + "          \"format\": \"DIV_1E6\",\n"
+                + "          \"unit\": \"RESULT_MS_UNIT\",\n"
+                + "          \"translation_key\": \"key_ping_min\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.rttInfo.maxNs\",\n"
+                + "          \"format\": \"DIV_1E6\",\n"
+                + "          \"unit\": \"RESULT_MS_UNIT\",\n"
+                + "          \"translation_key\": \"key_ping_max\"\n"
+                + "        }\n"
+                + "      ]\n"
+                + "    },\n"
+                + "    {\n"
+                + "      \"key\": \"group_connectivity\",\n"
+                + "      \"icon\": \"q\",\n"
+                + "      \"values\": [\n"
+                + "        {\n"
+                + "          \"key\": \"speed.connectionInfo.address\",\n"
+                + "          \"translation_key\": \"key_server_address\",\n"
+                + "          \"share_text\": \"RESULT_SHARE_MEASUREMENT_SERVER_ADDRESS\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.connectionInfo.ipAddress\",\n"
+                + "          \"translation_key\": \"key_server_ip\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.connectionInfo.port\",\n"
+                + "          \"translation_key\": \"key_port\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.connectionInfo.encrypted\",\n"
+                + "          \"translation_key\": \"key_encryption\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.connectionInfo.agentInterfaceTotalTraffic.bytesRx\",\n"
+                + "          \"translation_key\": \"result.connection.total_bytes_received\",\n"
+                + "          \"unit\": \"RESULT_TOTAL_BYTES_UNIT\",\n"
+                + "          \"format\": \"DIV_1E6\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.connectionInfo.agentInterfaceTotalTraffic.bytesTx\",\n"
+                + "          \"translation_key\": \"result.connection.total_bytes_transmitted\",\n"
+                + "          \"unit\": \"RESULT_TOTAL_BYTES_UNIT\",\n"
+                + "          \"format\": \"DIV_1E6\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.connectionInfo.actualNumStreamsDownload\",\n"
+                + "          \"translation_key\": \"key_num_threads\"\n"
+                + "        },\n"
+                + "        {\n"
+                + "          \"key\": \"speed.connectionInfo.actualNumStreamsUpload\",\n"
+                + "          \"translation_key\": \"key_num_threads_ul\"\n"
+                + "        }\n"
+                + "      ]\n"
+                + "    }\n"
+                + "  ]";
 
         List<SpeedtestDetailGroup> groupStructure = null;
 

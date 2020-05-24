@@ -131,11 +131,11 @@ public class GroupedMeasurementService {
         final List<DetailMeasurementGroup> responseGroupList = new ArrayList<>();
         ret.setGroups(responseGroupList);
 
-        //final Format tzFormat = new DecimalFormat("+0.##;-0.##", new DecimalFormatSymbols(locale));
+        // final Format tzFormat = new DecimalFormat("+0.##;-0.##", new DecimalFormatSymbols(locale));
 
-        //for(int i = 0; i < groupedResultsJson.size(); i++){
-        //	groups.add(gson.fromJson(groupedResultsJson.get(i), SpeedtestDetailGroup.class));
-        //}
+        // for(int i = 0; i < groupedResultsJson.size(); i++){
+        // groups.add(gson.fromJson(groupedResultsJson.get(i), SpeedtestDetailGroup.class));
+        // }
 
         final Map<MeasurementTypeDto, FullSubMeasurement> subMeasurements = measurement.getMeasurements();
 
@@ -311,7 +311,7 @@ public class GroupedMeasurementService {
         final Double altitude = location.getAltitude();
 
         if (location != null && latitude != null && longitude != null && accuracy != null) {
-            if (accuracy < geoAccuracyDetailLimit) { //	settings.getRmbt().getGeoAccuracyDetailLimit()) {
+            if (accuracy < geoAccuracyDetailLimit) { // settings.getRmbt().getGeoAccuracyDetailLimit()) {
 
                 final StringBuilder geoString = new StringBuilder(Helperfunctions.geoToString(latitude, longitude));
                 geoString.append(" (");

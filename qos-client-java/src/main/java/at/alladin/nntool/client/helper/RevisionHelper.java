@@ -20,59 +20,59 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public final class RevisionHelper {
-    public static final String describe;
-    public static final String revision;
-    public static final String gitId;
-    public static final String branch;
-    public static final long buildTime;
-    public static final boolean dirty;
+    public static final String DESCRIBE;
+    public static final String REVISION;
+    public static final String GITID;
+    public static final String BRANCH;
+    public static final long BUILDTIME;
+    public static final boolean DIRTY;
 
     private RevisionHelper() {
     }
 
     static {
-        String _describe = null;
-        String _revision = null;
-        String _gitId = null;
-        String _branch = null;
-        Long _buildTime = null;
-        boolean _dirty = false;
+        String describe = null;
+        String revision = null;
+        String gitId = null;
+        String branch = null;
+        Long buildTime = null;
+        boolean dirty = false;
         final InputStream svnIS = RevisionHelper.class.getClassLoader().getResourceAsStream("revision.properties");
         final Properties properties = new Properties();
         if (svnIS != null) {
             try {
                 properties.load(svnIS);
-                _describe = properties.getProperty("git.describe");
-                _gitId = properties.getProperty("git.id");
-                _branch = properties.getProperty("git.branch");
+                describe = properties.getProperty("git.describe");
+                gitId = properties.getProperty("git.id");
+                branch = properties.getProperty("git.branch");
                 final String dirtyString = properties.getProperty("git.dirty");
-                _dirty = dirtyString != null && dirtyString.equals("true");
-                _revision = properties.getProperty("git.revision");
-                if (_dirty) {
-                    _revision = _revision + "M";
-                    _gitId = _gitId + "M";
+                dirty = dirtyString != null && dirtyString.equals("true");
+                revision = properties.getProperty("git.revision");
+                if (dirty) {
+                    revision = revision + "M";
+                    gitId = gitId + "M";
                 }
-                _buildTime = Long.parseLong(properties.getProperty("build.time"));
+                buildTime = Long.parseLong(properties.getProperty("build.time"));
             } catch (final Exception e) { // there isn't much we can do here about it..
             }
         }
-        describe = _describe == null ? "?" : _describe;
-        revision = _revision == null ? "?" : _revision;
-        gitId = _gitId == null ? "?" : _gitId;
-        branch = _branch == null ? "?" : _branch;
-        dirty = _dirty;
-        buildTime = _buildTime == null ? 0 : _buildTime;
+        DESCRIBE = describe == null ? "?" : describe;
+        REVISION = revision == null ? "?" : revision;
+        GITID = gitId == null ? "?" : gitId;
+        BRANCH = branch == null ? "?" : branch;
+        DIRTY = dirty;
+        BUILDTIME = buildTime == null ? 0 : buildTime;
     }
 
     public static String getVerboseRevision() {
-        return String.format("%s_%s", branch, describe);
+        return String.format("%s_%s", BRANCH, DESCRIBE);
     }
 
     public static long getVeboseTimestamp() {
-        return buildTime;
+        return BUILDTIME;
     }
 
     public static String getServerVersion() {
-        return gitId;
+        return GITID;
     }
 }

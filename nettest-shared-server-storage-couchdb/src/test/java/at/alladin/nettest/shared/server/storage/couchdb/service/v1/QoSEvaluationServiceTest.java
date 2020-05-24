@@ -121,13 +121,15 @@ public class QoSEvaluationServiceTest {
         evaluationMap.put("on_success", "tcp.success");
         evaluationList.add(evaluationMap);
 
-        new Expectations() {{
-            objectiveRepo.findAllByEnabled(anyBoolean);
-            result = objectiveList;
+        new Expectations() {
+            {
+                objectiveRepo.findAllByEnabled(anyBoolean);
+                result = objectiveList;
 
-            fullMeasurementResponseMapper.map((QoSMeasurement) any);
-            result = new FullQoSMeasurement();
-        }};
+                fullMeasurementResponseMapper.map((QoSMeasurement) any);
+                result = new FullQoSMeasurement();
+            }
+        };
 
         final FullQoSMeasurement res = evaluationService.evaluateQoSMeasurement(qosMeasurement, locale);
         final List<EvaluatedQoSResult> evalList = res.getResults();
@@ -175,13 +177,15 @@ public class QoSEvaluationServiceTest {
         evaluationMap.put("on_success", "tcp.success");
         evaluationList.add(evaluationMap);
 
-        new Expectations() {{
-            objectiveRepo.findAllByEnabled(anyBoolean);
-            result = objectiveList;
+        new Expectations() {
+            {
+                objectiveRepo.findAllByEnabled(anyBoolean);
+                result = objectiveList;
 
-            fullMeasurementResponseMapper.map((QoSMeasurement) any);
-            result = new FullQoSMeasurement();
-        }};
+                fullMeasurementResponseMapper.map((QoSMeasurement) any);
+                result = new FullQoSMeasurement();
+            }
+        };
 
         final FullQoSMeasurement res = evaluationService.evaluateQoSMeasurement(qosMeasurement, locale);
         final List<EvaluatedQoSResult> evalList = res.getResults();
@@ -219,7 +223,7 @@ public class QoSEvaluationServiceTest {
         resMap.put("voip_result_out_num_packets", 100);
         resMap.put("voip_result_out_long_seq", 100);
         resMap.put("voip_objective_bits_per_sample", 8);
-        resMap.put("duration_ns", 2429313000l);
+        resMap.put("duration_ns", 2429313000L);
         resMap.put("voip_result_out_max_jitter", 5752866);
         resMap.put("voip_result_out_mean_jitter", 2655557);
         resMap.put("voip_result_status", "OK");
@@ -230,7 +234,7 @@ public class QoSEvaluationServiceTest {
         resMap.put("voip_result_out_max_delta", 39931068);
         resMap.put("voip_objective_call_duration", 2000000000);
         resMap.put("voip_result_in_short_seq", 100);
-        resMap.put("start_time_ns", 18772068000l);
+        resMap.put("start_time_ns", 18772068000L);
         resMap.put("voip_result_in_max_delta", 19748000);
         resMap.put("voip_objective_payload", 8);
         resMap.put("voip_objective_out_port", 5060);
@@ -281,13 +285,15 @@ public class QoSEvaluationServiceTest {
         evaluationMap.put("evaluate", "%EVAL if(voip_result_status=='TIMEOUT') result={type:  'failure', key: 'voip.timeout'}%");
         evaluationList.add(evaluationMap);
 
-        new Expectations() {{
-            objectiveRepo.findAllByEnabled(anyBoolean);
-            result = objectiveList;
+        new Expectations() {
+            {
+                objectiveRepo.findAllByEnabled(anyBoolean);
+                result = objectiveList;
 
-            fullMeasurementResponseMapper.map((QoSMeasurement) any);
-            result = new FullQoSMeasurement();
-        }};
+                fullMeasurementResponseMapper.map((QoSMeasurement) any);
+                result = new FullQoSMeasurement();
+            }
+        };
 
         final FullQoSMeasurement fullMeasurement = evaluationService.evaluateQoSMeasurement(qosMeasurement, locale);
         final List<EvaluatedQoSResult> evalList = fullMeasurement.getResults();
@@ -318,5 +324,4 @@ public class QoSEvaluationServiceTest {
         assertFalse("wrong message found in evaluation", evalRes.getResultKeyMap().containsKey("voip.outgoing.packet.failure"));
         assertEquals("wrong message found in evaluation", EvaluatedQoSResult.QoSResultOutcome.OK, evalRes.getResultKeyMap().get("voip.outgoing.packet.success"));
     }
-
 }

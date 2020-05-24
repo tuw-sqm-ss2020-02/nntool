@@ -116,7 +116,7 @@ public class VersionResponse extends BasicResponse {
     @Expose
     @SerializedName("loadbalancer_service_version")
     @JsonProperty("loadbalancer_service_version")
-    private String LoadbalancerServiceVersion;
+    private String loadbalancerServiceVersion;
 
     /**
      * @return
@@ -220,13 +220,13 @@ public class VersionResponse extends BasicResponse {
      * @return
      */
     public String getLoadbalancerServiceVersion() {
-        return LoadbalancerServiceVersion;
+        return this.loadbalancerServiceVersion;
     }
 
     /**
      * @param loadbalancerServiceVersion
      */
     public void setLoadbalancerServiceVersion(String loadbalancerServiceVersion) {
-        LoadbalancerServiceVersion = loadbalancerServiceVersion;
+        this.loadbalancerServiceVersion = loadbalancerServiceVersion;
     }
 }

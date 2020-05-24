@@ -41,18 +41,20 @@ public class UdpSingleClientServer implements Callable<Integer> {
      ********************************************/
 
     public final static byte UDP_IN_TEST_IDENTIFIER = 1;
-    final DatagramSocket socket;
+    private final DatagramSocket socket;
 
-    final ClientToken token;
+    private final ClientToken token;
 
-    final int numPackets;
+    private final int numPackets;
     private final AtomicBoolean isRunning;
     private int receivedPackets = 0;
 
 
     /**
      * @param port
+     * @param numPackets
      * @param timeOut
+     * @param token
      * @throws SocketException
      */
     public UdpSingleClientServer(int port, int numPackets, int timeOut, ClientToken token) throws SocketException {

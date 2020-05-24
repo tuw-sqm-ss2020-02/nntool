@@ -40,11 +40,11 @@ public class StatusResource extends ServerResource {
         json.put("starttime", TestServer.getInstance().serverPreferences.getStartTimestamp());
         json.put("version", TestServer.TEST_SERVER_VERSION_MAJOR + "." + TestServer.TEST_SERVER_VERSION_MINOR + "." + TestServer.TEST_SERVER_VERSION_PATCH);
 
-        if (TestServerConsole.errorReportMap.size() > 0) {
+        if (TestServerConsole.ERROR_REPORT_MAP.size() > 0) {
             setStatus(Status.SERVER_ERROR_INTERNAL);
 
             JSONArray errors = new JSONArray();
-            for (ErrorReport er : TestServerConsole.errorReportMap.values()) {
+            for (ErrorReport er : TestServerConsole.ERROR_REPORT_MAP.values()) {
                 errors.put(er.toJson());
             }
 

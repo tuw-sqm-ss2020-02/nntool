@@ -76,8 +76,8 @@ public final class UdpPayloadUtil {
         TOKEN(2, 36),
         TIMESTAMP(38, 8);
 
-        int length;
-        int position;
+        private int length;
+        private int position;
 
         UdpPayloadEntry(final int position, final int length) {
             this.position = position;

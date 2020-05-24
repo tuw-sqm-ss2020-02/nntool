@@ -30,9 +30,9 @@ import mockit.MockUp;
  */
 public class ServerSocketMockup extends MockUp<ServerSocket> {
 
-    public final TestServerImpl testServer;
+    protected final TestServerImpl testServer;
 
-    public SocketAddress endpoint;
+    private SocketAddress endpoint;
 
     public ServerSocketMockup(final TestServerImpl ts) throws IOException {
         this.testServer = ts;
@@ -44,8 +44,8 @@ public class ServerSocketMockup extends MockUp<ServerSocket> {
     }
 
     @Mock
-    public void bind(SocketAddress endpoint) throws IOException {
-        this.endpoint = endpoint;
+    public void bind(SocketAddress endPoint) throws IOException {
+        this.endpoint = endPoint;
     }
 
     @Mock

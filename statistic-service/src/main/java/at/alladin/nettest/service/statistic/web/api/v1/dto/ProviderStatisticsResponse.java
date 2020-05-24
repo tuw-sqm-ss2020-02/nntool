@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class ProviderStatisticsResponse {
 
-    List<ProviderStatisticDto> providerStatistics = new ArrayList<>();
+    private List<ProviderStatisticDto> providerStatistics = new ArrayList<>();
 
     public List<ProviderStatisticDto> getProviderStatistics() {
         return providerStatistics;

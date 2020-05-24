@@ -189,9 +189,9 @@ public class TracerouteServiceImpl implements TracerouteService {
             if (pingPacket.find()) {
                 transmitted = Integer.parseInt(pingPacket.group(1));
                 received = Integer.parseInt(pingPacket.group(2));
-                String errors = pingPacket.group(4);
-                if (errors != null) {
-                    this.errors = Integer.parseInt(errors);
+                String error = pingPacket.group(4);
+                if (error != null) {
+                    this.errors = Integer.parseInt(error);
                 } else {
                     this.errors = 0;
                 }

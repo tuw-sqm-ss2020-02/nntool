@@ -16,19 +16,16 @@
 
 package at.alladin.nettest.spring.data.couchdb.core;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.data.util.Streamable;
-import org.springframework.util.StringUtils;
-
-import com.cloudant.client.api.query.Expression;
-import com.cloudant.client.api.query.QueryBuilder;
-
 import at.alladin.nettest.couchdb.client.CouchDbDatabase;
 import at.alladin.nettest.couchdb.client.CouchDbQueryResult;
 import at.alladin.nettest.couchdb.client.CouchDbResponse;
 import at.alladin.nettest.spring.data.couchdb.repository.query.CouchDbEntityInformation;
+import com.cloudant.client.api.query.Expression;
+import com.cloudant.client.api.query.QueryBuilder;
+import org.springframework.data.util.Streamable;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author alladin-IT GmbH (bp@alladin.at)
@@ -69,11 +66,11 @@ public class CouchDbTemplate implements CouchDbOperations {
     }
 
     //@Override
-    //public <T, S extends T> S insert(S entity, CouchDbEntityInformation<T, String> entityInformation) {
-    //	final CouchDbResponse response = database.save(entity);
-    //	handleCouchDbResponse(response, entityInformation, entity);
-    //	return entity;
-    //}
+    // public <T, S extends T> S insert(S entity, CouchDbEntityInformation<T, String> entityInformation) {
+    // final CouchDbResponse response = database.save(entity);
+    // handleCouchDbResponse(response, entityInformation, entity);
+    // return entity;
+    // }
 
     @Override
     public <T, S extends T> S update(S entity, CouchDbEntityInformation<T, String> entityInformation) {

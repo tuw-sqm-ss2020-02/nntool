@@ -32,13 +32,13 @@ public class SipUtilTest {
 
     @Test
     public void testSipRequestParsing() {
-        SipRequestMessage msg = SipUtil.parseRequestData("INVITE sip:bob@home SIP/2.0\n" +
-                "Via: SIP/2.0/TCP localhost:5060\n" +
-                "Max-Forwards: 70\n" +
-                "From: Alice <sip:alice@home>\n" +
-                "To: Bob <sip:bob@home>\n" +
-                "Call-ID: 1234@home\n" +
-                "Contact: <sip:alice@home>\n\n");
+        SipRequestMessage msg = SipUtil.parseRequestData("INVITE sip:bob@home SIP/2.0\n"
+                + "Via: SIP/2.0/TCP localhost:5060\n"
+                + "Max-Forwards: 70\n"
+                + "From: Alice <sip:alice@home>\n"
+                + "To: Bob <sip:bob@home>\n"
+                + "Call-ID: 1234@home\n"
+                + "Contact: <sip:alice@home>\n\n");
 
         assertNotNull("msg != null", msg);
         assertEquals("TO != Bob <sip:bob@home>", "Bob <sip:bob@home>", msg.getTo());
@@ -59,13 +59,13 @@ public class SipUtilTest {
 
     @Test
     public void testSipResponseParsing() {
-        SipResponseMessage msg = SipUtil.parseResponseData("SIP/2.0 180 Ringing\n" +
-                "Via: SIP/2.0/TCP localhost:5060\n" +
-                "Max-Forwards: 70\n" +
-                "From: Alice <sip:alice@home>\n" +
-                "To: Bob <sip:bob@home>\n" +
-                "Call-ID: 1234@home\n" +
-                "Contact: <sip:alice@home>\n\n");
+        SipResponseMessage msg = SipUtil.parseResponseData("SIP/2.0 180 Ringing\n"
+                + "Via: SIP/2.0/TCP localhost:5060\n"
+                + "Max-Forwards: 70\n"
+                + "From: Alice <sip:alice@home>\n"
+                + "To: Bob <sip:bob@home>\n"
+                + "Call-ID: 1234@home\n"
+                + "Contact: <sip:alice@home>\n\n");
 
         assertNotNull("msg != null", msg);
         assertEquals("TO != Bob <sip:bob@home>", "Bob <sip:bob@home>", msg.getTo());

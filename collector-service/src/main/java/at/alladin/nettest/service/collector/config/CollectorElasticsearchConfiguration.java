@@ -33,7 +33,7 @@ import at.alladin.nettest.shared.server.opendata.config.ElasticsearchConfigurati
 @ConditionalOnProperty(name = "collector.elasticsearch.host")
 public class CollectorElasticsearchConfiguration extends ElasticsearchConfiguration {
 
-    private static final Logger logger = LoggerFactory.getLogger(CollectorElasticsearchConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CollectorElasticsearchConfiguration.class);
 
     @Autowired
     private CollectorServiceProperties collectorServiceProperties;

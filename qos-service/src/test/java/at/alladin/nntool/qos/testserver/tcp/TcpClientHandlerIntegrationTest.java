@@ -62,14 +62,14 @@ import mockit.Mocked;
 public class TcpClientHandlerIntegrationTest {
 
     @Mocked
-    Socket socket;
+    private Socket socket;
 
     @Mocked
-    TcpMultiClientServer tcpServer;
+    private TcpMultiClientServer tcpServer;
 
-    CountDownLatch latch;
+    private CountDownLatch latch;
 
-    SocketWithCountDownLatchMockup slm;
+    private SocketWithCountDownLatchMockup slm;
 
     @Before
     public void init() throws IOException {
@@ -101,8 +101,6 @@ public class TcpClientHandlerIntegrationTest {
                     }
                 };
             }
-
-            ;
         };
 
         tch.run();
@@ -237,7 +235,7 @@ public class TcpClientHandlerIntegrationTest {
     @Test
     public void testClientHandlerWithIpCheckEnabledAndClientSocketContainingValidSocketAddress() throws Exception {
         TestServer.getInstance().serverPreferences = new ServerPreferences();
-        TestServer.getInstance().serverPreferences.setIpCheck(true);
+        TestServer.getInstance().serverPreferences.setIsIpCheck(true);
 
         new Expectations() {
             {
@@ -276,7 +274,7 @@ public class TcpClientHandlerIntegrationTest {
     @Test
     public void testClientHandlerWithIpCheckEnabledAndClientSocketContainingUnknownSocketAddress() throws Exception {
         TestServer.getInstance().serverPreferences = new ServerPreferences();
-        TestServer.getInstance().serverPreferences.setIpCheck(true);
+        TestServer.getInstance().serverPreferences.setIsIpCheck(true);
 
         List<String> logList = new ArrayList<>();
 

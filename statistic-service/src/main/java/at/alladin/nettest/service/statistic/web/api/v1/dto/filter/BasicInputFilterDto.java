@@ -27,7 +27,7 @@ public class BasicInputFilterDto<T> extends BasicFilterDto<T> {
     @Expose
     @SerializedName("option")
     @JsonProperty("option")
-    FilterEntry<T> option;
+    private FilterEntry<T> option;
 
     public BasicInputFilterDto() {
         this(null, null, InputFilterType.TEXT);
@@ -40,6 +40,8 @@ public class BasicInputFilterDto<T> extends BasicFilterDto<T> {
                 break;
             case TEXT:
                 setFilterType(FilterTypeDto.INPUT_TEXT);
+                break;
+            default:
                 break;
         }
         setDefaultValue(defaultValue);

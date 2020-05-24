@@ -31,7 +31,7 @@ import at.alladin.nettest.shared.server.storage.couchdb.domain.repository.Transl
  */
 public class CouchDbMessageSource extends CachingAndReloadingMessageSource<Translation> {
 
-    private static final Logger logger = LoggerFactory.getLogger(CouchDbMessageSource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CouchDbMessageSource.class);
 
     private final TranslationRepository translationRepository;
 
@@ -50,7 +50,7 @@ public class CouchDbMessageSource extends CachingAndReloadingMessageSource<Trans
     }
 
     protected Translation loadTranslation(final Locale locale) {
-        logger.info("Loading translation for locale {} from CouchDB.", locale);
+        LOGGER.info("Loading translation for locale {} from CouchDB.", locale);
         final Optional<Translation> optionalTranslation = translationRepository.findByLanguage(locale.getLanguage());
 
         return optionalTranslation.orElse(null);

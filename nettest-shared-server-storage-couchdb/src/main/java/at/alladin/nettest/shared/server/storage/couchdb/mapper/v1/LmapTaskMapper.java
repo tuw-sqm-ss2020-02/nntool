@@ -60,8 +60,8 @@ public interface LmapTaskMapper {
     LmapTaskDto map(Settings settings, MeasurementServer measurementServer, String name, boolean useIPv6);
 
     @Mappings({
-//		@Mapping(target="uploadClassList", source="uploadClassList"),
-//		@Mapping(target="downloadClassList", source="downloadClassList")
+        // @Mapping(target="uploadClassList", source="uploadClassList"),
+        // @Mapping(target="downloadClassList", source="downloadClassList")
     })
     SpeedMeasurementConfiguration map(SpeedMeasurementSettings speedSettings);
 

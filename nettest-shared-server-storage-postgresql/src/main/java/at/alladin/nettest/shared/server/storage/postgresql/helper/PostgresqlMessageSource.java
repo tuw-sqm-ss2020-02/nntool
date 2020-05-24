@@ -37,7 +37,7 @@ import at.alladin.nettest.shared.server.helper.spring.CachingAndReloadingMessage
  */
 public class PostgresqlMessageSource extends CachingAndReloadingMessageSource<Map<String, String>> {
 
-    private static final Logger logger = LoggerFactory.getLogger(PostgresqlMessageSource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PostgresqlMessageSource.class);
 
     private static final String TRANSLATION_SQL_QUERY = "SELECT json::text FROM translations WHERE language_code = ?";
 
@@ -73,7 +73,7 @@ public class PostgresqlMessageSource extends CachingAndReloadingMessageSource<Ma
                                 });
                                 return translationObject;
                             } catch (Exception e) {
-                                logger.error("Could not parse translation from PostgreSQL.", e);
+                                LOGGER.error("Could not parse translation from PostgreSQL.", e);
                             }
 
                             return null;

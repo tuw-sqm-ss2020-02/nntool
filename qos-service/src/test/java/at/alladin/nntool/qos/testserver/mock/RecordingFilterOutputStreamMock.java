@@ -28,14 +28,14 @@ import mockit.MockUp;
  */
 public class RecordingFilterOutputStreamMock extends MockUp<FilterOutputStream> {
 
-    final ByteArrayOutputStream baos;
+    private final ByteArrayOutputStream baos;
 
     public RecordingFilterOutputStreamMock() {
         this.baos = new ByteArrayOutputStream();
     }
 
     @Mock
-    public void write(byte b[]) throws IOException {
+    public void write(byte[] b) throws IOException {
         baos.write(b);
     }
 

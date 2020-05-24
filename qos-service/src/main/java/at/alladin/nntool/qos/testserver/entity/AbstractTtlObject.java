@@ -43,9 +43,9 @@ public class AbstractTtlObject {
     }
 
     /**
-     *
+     * @param rttl
      */
-    public void resetTtl(long ttl) {
-        setTtl(System.currentTimeMillis() + ttl);
+    public void resetTtl(long rttl) {
+        setTtl(System.currentTimeMillis() + rttl);
     }
 }
