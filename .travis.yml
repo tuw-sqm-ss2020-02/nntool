@@ -26,14 +26,15 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew --no-daemon --no-parallel -Dskip-android -Dinclude-jacoco-code-coverage -Dinclude-code-coverage -Dinclude-checkstyle-quality-check clean build jacocoTestReport cloverGenerateReport cloverAggregateReports sonarqube
+  - ./gradlew --no-daemon -Dskip-android -Dinclude-jacoco-code-coverage -Dinclude-checkstyle-quality-check clean build jacocoTestReport sonarqube
+  #- ./gradlew --no-daemon -Dskip-android -Dinclude-code-coverage clean build cloverGenerateReport cloverAggregateReports
 
-deploy:
-  provider: pages
-  skip_cleanup: true
-  repo: tuw-sqm-ss2020-02/nntool-ci-report
-  github_token: $GITHUB_TOKEN
-  local_dir: build
-  #target_branch: gh-pages
-  on:
-    branch: master
+#deploy:
+#  provider: pages
+#  skip_cleanup: true
+#  repo: tuw-sqm-ss2020-02/nntool-ci-report
+#  github_token: $GITHUB_TOKEN
+#  local_dir: build
+#  #target_branch: gh-pages
+#  on:
+#    branch: master
