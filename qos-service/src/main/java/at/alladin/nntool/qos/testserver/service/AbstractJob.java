@@ -112,7 +112,7 @@ public abstract class AbstractJob<R> implements Runnable {
     /**
      * @param result
      */
-    public void setResult(R result) {
+    public synchronized void setResult(R result) {
         this.result = result;
     }
 

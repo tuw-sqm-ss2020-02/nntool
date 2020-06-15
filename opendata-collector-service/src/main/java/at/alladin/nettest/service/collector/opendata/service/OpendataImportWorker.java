@@ -104,6 +104,7 @@ public class OpendataImportWorker implements Runnable {
             try {
                 Thread.sleep(config.getTimeBetweenRequests());
             } catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
             }
         } while (
                 currentResult != null && currentResult.getContent() != null

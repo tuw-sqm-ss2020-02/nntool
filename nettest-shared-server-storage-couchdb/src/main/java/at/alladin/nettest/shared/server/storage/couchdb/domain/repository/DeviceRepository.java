@@ -21,9 +21,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
 import at.alladin.nettest.shared.server.storage.couchdb.domain.model.Device;
+import at.alladin.nettest.spring.data.couchdb.core.query.Key;
 import at.alladin.nettest.spring.data.couchdb.core.query.View;
 import at.alladin.nettest.spring.data.couchdb.repository.CouchDbRepository;
-import at.alladin.nettest.spring.data.couchdb.core.query.Key;
 
 /**
  * @author lb@alladin.at

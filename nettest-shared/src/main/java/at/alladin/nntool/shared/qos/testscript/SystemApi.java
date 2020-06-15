@@ -48,6 +48,11 @@ public class SystemApi {
      */
     private static final DecimalFormat DEFAULT_PERCENT_FORMAT = new DecimalFormat("0.#");
 
+	/**
+	 *
+	 */
+	private static final Random RND = new Random();
+
     static {
         DEFAULT_DECIMAL_FORMAT.setMaximumFractionDigits(2);
     }
@@ -59,14 +64,14 @@ public class SystemApi {
      * @return
      */
     public static String getRandomUrl(String prefix, String suffix, int length) {
-        final Random rnd = new Random();
+        final Random RND = new Random();
         char[] digits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
         final StringBuilder randomUrl = new StringBuilder();
         randomUrl.append(prefix);
 
         for (int i = 0; i < length; i++) {
-            randomUrl.append(digits[rnd.nextInt(16)]);
+            randomUrl.append(digits[RND.nextInt(16)]);
         }
 
         randomUrl.append(suffix);

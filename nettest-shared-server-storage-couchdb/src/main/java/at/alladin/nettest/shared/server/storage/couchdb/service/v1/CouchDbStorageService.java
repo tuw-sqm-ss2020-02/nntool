@@ -644,7 +644,9 @@ public class CouchDbStorageService implements StorageService {
                 ? NatType.getNatType(cpit.getAgentPrivateIp(), cpit.getAgentPublicIp()) : NatType.NOT_AVAILABLE;
 
         final NatTypeInfo nat = new NatTypeInfo();
-        nat.setIpVersion(Helperfunctions.getIpVersion(cpit.getAgentPrivateIp()));
+		if (cpit != null) {
+			nat.setIpVersion(Helperfunctions.getIpVersion(cpit.getAgentPrivateIp()));
+		}
         nat.setNatType(natType);
         nat.setIsBehindNat(natType != null
                 && !natType.equals(NatType.NOT_AVAILABLE)

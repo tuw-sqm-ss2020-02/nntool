@@ -44,6 +44,7 @@ public final class RtpUtil {
 
     private RtpUtil() {
     }
+	private static final Random RANDOM = new Random();
 
     public static <T extends Closeable> T runVoipStream(T socket, final boolean closeOnFinish, InetAddress targetHost, int targetPort, int sampleRate,
                                                         int bps, RealtimeTransportProtocol.PayloadType payloadType, long sequenceNumber, int ssrc,
@@ -83,7 +84,6 @@ public final class RtpUtil {
                                                         long callDuration, final long delay, final long timeout, final boolean useNio, final UdpStreamCallback receiveCallback) throws InterruptedException, TimeoutException, IOException {
 
         final int payloadSize = (int) (sampleRate / (1000 / delay) * (bps / 8));
-        final Random r = new Random();
         final int payloadTimestamp = (int) (sampleRate / (1000 / delay));
         final RtpPacket initialRtpPacket = new RtpPacket(payloadType, 0, new long[]{}, (int) sequenceNumber, 0, ssrc);
         final int numPackets = (int) (callDuration / delay);
@@ -110,7 +110,7 @@ public final class RtpUtil {
                 }
 
                 final byte[] payload = new byte[payloadSize];
-                r.nextBytes(payload);
+                RANDOM.nextBytes(payload);
                 initialRtpPacket.setPayload(payload);
 
                 final byte[] data = initialRtpPacket.getBytes();

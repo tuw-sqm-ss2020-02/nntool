@@ -36,6 +36,7 @@ import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
@@ -100,12 +101,11 @@ public class JSONParser {
         JSONObject jObj = null;
         String responseBody;
 
-        try {
-            final HttpParams params = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(params, 20000);
-            HttpConnectionParams.setSoTimeout(params, 20000);
-            final HttpClient client = new DefaultHttpClient(params);
+        final HttpParams params = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(params, 20000);
+        HttpConnectionParams.setSoTimeout(params, 20000);
 
+        try (CloseableHttpClient client = new DefaultHttpClient(params)) {
             final HttpGet httpget = new HttpGet(uri);
 
             final ResponseHandler<String> responseHandler = new BasicResponseHandler();

@@ -51,7 +51,7 @@ public final class GeographyHelper {
         final long powZoom = 1 << zoom;
         result.setRes(MAX_EXTENT * 2 / tileSize / powZoom);
         final double w = MAX_EXTENT / powZoom * 2;
-        final double myY = powZoom - 1 - y;
+        final double myY = powZoom - 1.0d - y;
 
         result.setX1(x * w - MAX_EXTENT);
         result.setY1(myY * w - MAX_EXTENT);

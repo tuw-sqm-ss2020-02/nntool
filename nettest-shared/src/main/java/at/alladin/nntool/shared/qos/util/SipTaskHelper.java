@@ -23,8 +23,10 @@ import com.google.common.base.Strings;
 
 public final class SipTaskHelper {
 
-    //default timeout = 5s
-    public final static long DEFAULT_TIMEOUT = 5000000000L;
+	private static final Random RND = new Random();
+
+	//default timeout = 5s
+	public final static long DEFAULT_TIMEOUT = 5000000000L;
 
     //default count = 3s
     public final static long DEFAULT_COUNT = 3;
@@ -111,10 +113,9 @@ public final class SipTaskHelper {
     }
 
     public static String generateRandomString(final int minLength, final int maxLength) {
-        final Random rnd = new Random();
-        final byte[] buffer = new byte[rnd.nextInt(maxLength - minLength + 1) + minLength];
+        final byte[] buffer = new byte[RND.nextInt(maxLength - minLength + 1) + minLength];
         for (int i = 0; i < buffer.length; i++) {
-            buffer[i] = (byte) ((rnd.nextFloat() * (122 - 97)) + 97);
+            buffer[i] = (byte) ((RND.nextFloat() * (122 - 97)) + 97);
         }
         return new String(buffer);
     }

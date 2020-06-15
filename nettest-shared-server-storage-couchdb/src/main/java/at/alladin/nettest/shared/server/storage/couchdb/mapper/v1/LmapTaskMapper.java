@@ -102,7 +102,7 @@ public interface LmapTaskMapper {
 
         addMeasurementServerOptionsToList(ret, measurementServer, useIPv6);
 
-        if (settings.getMeasurements() != null) {
+        if (settings != null && settings.getMeasurements() != null) {
             final SpeedMeasurementSettings speedSettings = (SpeedMeasurementSettings) settings.getMeasurements().get(MeasurementTypeDto.SPEED);
             if (speedSettings != null) {
                 final LmapOptionDto paramDto = new LmapOptionDto();
