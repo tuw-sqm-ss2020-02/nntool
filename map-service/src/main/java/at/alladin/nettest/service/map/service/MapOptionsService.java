@@ -275,8 +275,7 @@ public class MapOptionsService {
             try {
                 mapOptionList.put(opt.getGroupKey() + "/" + opt.getTypeKey(), fillMapServiceOption(settings, opt));
             } catch (IllegalArgumentException | SQLException e) {
-                logger.error("Invalid argument from config. Is skipped.");
-                e.printStackTrace();
+                logger.error("Invalid argument from config. Is skipped.", e);
             }
         });
 

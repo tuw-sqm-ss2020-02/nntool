@@ -258,7 +258,6 @@ public class SystemApi {
             BigDecimal number = new BigDecimal(String.valueOf(ratio));
             return DEFAULT_PERCENT_FORMAT.format(number.multiply(new BigDecimal(100)).doubleValue());
         } catch (final Exception e) {
-            e.printStackTrace();
         }
 
         return String.valueOf(ratio);

@@ -25,7 +25,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.imageio.ImageIO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public final class TileHelper {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TileHelper.class);
 
     //TODO: throw this into settings
     private static final int[] TILE_SIZES = new int[]{256, 512, 768};
@@ -94,7 +99,7 @@ public final class TileHelper {
             try {
                 ImageIO.write(img, "png", baos);
             } catch (final IOException e) {
-                e.printStackTrace();
+                LOGGER.error("Could not write empty image", e);
             }
 
             EMPTY_IMAGES[i] = baos.toByteArray();

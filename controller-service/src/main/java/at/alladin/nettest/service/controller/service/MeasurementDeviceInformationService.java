@@ -46,7 +46,7 @@ public class MeasurementDeviceInformationService {
         try {
             userAgentParser = new Parser(MeasurementDeviceInformationService.class.getResourceAsStream("/config/ua_regexes.yaml"));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Could not parse user agent parser config yaml", e);
         }
     }
 

@@ -22,24 +22,26 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Iterator;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.script.Bindings;
-import javax.script.SimpleBindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import javax.script.SimpleBindings;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.alladin.nettest.shared.nntool.Helperfunctions;
 import at.alladin.nntool.shared.qos.AbstractResult;
@@ -47,6 +49,9 @@ import at.alladin.nntool.shared.qos.ResultOptions;
 import at.alladin.nntool.shared.qos.testscript.TestScriptInterpreter.EvalResult.EvalResultType;
 
 public final class TestScriptInterpreter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestScriptInterpreter.class);
+
     /**
      *
      */
@@ -126,7 +131,7 @@ public final class TestScriptInterpreter {
                 command = command.replace(mc.group(0), (toReplace != null ? toReplace.trim() : ""));
             }
         } catch (final ScriptException e) {
-            e.printStackTrace();
+            LOGGER.error("Error during interpreting command {}", command, e);
             return null;
         }
 
@@ -183,7 +188,7 @@ public final class TestScriptInterpreter {
                 return command;
             }
         } catch (ScriptException e) {
-            e.printStackTrace();
+            LOGGER.error("Error during interpreting commands", e);
             return null;
         }
     }
@@ -294,7 +299,6 @@ public final class TestScriptInterpreter {
 
             return evalResult == null ? (result == null ? "" : result) : evalResult;
         } catch (Exception e) {
-            e.printStackTrace();
             throw new ScriptException(e.getMessage() + " " + args[0]);
         }
     }

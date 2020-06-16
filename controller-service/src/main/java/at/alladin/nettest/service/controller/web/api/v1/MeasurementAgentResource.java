@@ -95,7 +95,7 @@ public class MeasurementAgentResource {
             registrationResponse.setSettings(storageService.getSettings(controllerServiceProperties.getSettingsUuid()));
         } catch (StorageServiceException ex) {
             //we let them register even if the settings have issues
-            ex.printStackTrace();
+            logger.trace("Could not get settings", ex);
         }
 
         logger.debug("returned response: " + registrationResponse.toString());

@@ -323,7 +323,6 @@ public abstract class Helperfunctions {
             }
 
         } catch (final Exception e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -351,7 +350,6 @@ public abstract class Helperfunctions {
 
             return result;
         } catch (final Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -409,7 +407,6 @@ public abstract class Helperfunctions {
                 }
             }
         } catch (final Exception e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -531,7 +528,6 @@ public abstract class Helperfunctions {
                 }
             }
         } catch (final Exception e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -567,7 +563,6 @@ public abstract class Helperfunctions {
                 }
             }
         } catch (final Exception e) {
-            e.printStackTrace();
         }
 
         return null;

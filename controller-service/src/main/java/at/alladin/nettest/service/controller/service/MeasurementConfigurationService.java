@@ -58,6 +58,9 @@ public class MeasurementConfigurationService {
     @Autowired
     private LoadBalancingService loadBalancingService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     public LmapControlDto getLmapControlDtoForCapabilities(final LmapCapabilityDto capabilities, boolean useIPv6) {
         final LmapControlDto ret = new LmapControlDto();
 
@@ -67,10 +70,9 @@ public class MeasurementConfigurationService {
         ret.setSchedules(getLmapScheduleList(ret.getEvents().get(0).getName(), ret.getTasks()));
 
         try {
-            LOGGER.debug("{}", new ObjectMapper().writeValueAsString(ret));
+            LOGGER.debug("{}", objectMapper.writeValueAsString(ret));
         } catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.trace("Couldn't debug print LmapControlDto", e);
         }
 
         if (loadBalancingService != null) {

@@ -68,8 +68,6 @@ public class MeasurementServerLoadService {
                     final LoadApiResponse response = runnable.call();
                     deferred.setResult(ResponseHelper.ok(response));
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
                     deferred.setErrorResult(e);
                 }
             });

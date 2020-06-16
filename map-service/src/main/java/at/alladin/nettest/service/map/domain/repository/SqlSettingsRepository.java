@@ -105,8 +105,7 @@ public class SqlSettingsRepository {
             final ServerSettings settings = jdbcTemplate.query(GET_SETTINGS_SQL, settingsExtractor);
             cachedSettings = settings;
         } catch (Exception ex) {
-            ex.printStackTrace();
-            // TODO
+            logger.error("Could not fetch settings", ex);
         }
 
         return cachedSettings;

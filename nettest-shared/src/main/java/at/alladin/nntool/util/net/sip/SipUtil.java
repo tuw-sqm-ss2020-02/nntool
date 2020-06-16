@@ -116,7 +116,7 @@ public final class SipUtil {
                     try {
                         msg.addHeader(parts[i].substring(0, pos).toUpperCase(Locale.US), parts[i].substring(pos + 1).trim());
                     } catch (final Exception e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                 }
             }
@@ -174,7 +174,7 @@ public final class SipUtil {
                     try {
                         msg.addHeader(parts[i].substring(0, pos).toUpperCase(Locale.US), parts[i].substring(pos + 1).trim());
                     } catch (final Exception e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                 }
             }
