@@ -125,7 +125,7 @@ public class InformationCollectorTool {
                         }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-						Thread.currentThread().interrupt();
+                        Thread.currentThread().interrupt();
                     }
 
                     running.set(false);

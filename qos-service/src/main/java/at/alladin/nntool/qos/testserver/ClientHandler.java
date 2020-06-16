@@ -93,7 +93,7 @@ public class ClientHandler implements Runnable {
     protected String clientProtocolVersion = QoSServiceProtocol.PROTOCOL_VERSION_1;
 
     protected Random rand = new Random();
-    
+
     /**
      * @param serverSocket
      * @param socket
@@ -197,8 +197,10 @@ public class ClientHandler implements Runnable {
                             requestNewConnectionTimeout(command);
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_PROTOCOL_VERSION)) {
                             //quit = quit;
+                            break;
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_PROTOCOL_KEEPALIVE)) {
                             //quit = quit;
+                            break;
                         } else {
                             sendCommand(QoSServiceProtocol.RESPONSE_ACCEPT_COMMANDS, command);
                             quit = true;
@@ -426,7 +428,7 @@ public class ClientHandler implements Runnable {
             latch.await(timeout, TimeUnit.MILLISECONDS);
             sendRcvResult(clientData, port, command);
         }
-        
+
         sock.close();
     }
 
@@ -487,7 +489,7 @@ public class ClientHandler implements Runnable {
                 sock.close();
                 return clientData;
             } catch (InterruptedException e) {
-            	e.printStackTrace();
+                e.printStackTrace();
                 sock.close();
                 Thread.currentThread().interrupt();
                 return clientData;

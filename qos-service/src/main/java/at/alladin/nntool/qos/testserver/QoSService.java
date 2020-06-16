@@ -83,7 +83,7 @@ public class QoSService implements Runnable {
             }
         } catch (InterruptedException e) {
             TestServerConsole.log(name + "Interrupted! Shutting down!", 0, TestServerServiceEnum.TEST_SERVER);
-			Thread.currentThread().interrupt();
+            Thread.currentThread().interrupt();
         } catch (Exception e) {
             TestServerConsole.error(name + "Exception. Shutting down.", e, 0, TestServerServiceEnum.TEST_SERVER);
         } finally {

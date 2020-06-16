@@ -154,7 +154,7 @@ public class ServiceManager {
                 service.getService().stop();
                 return service.future.get();
             } catch (ExecutionException e) {
-            	e.printStackTrace();
+                e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 Thread.currentThread().interrupt();

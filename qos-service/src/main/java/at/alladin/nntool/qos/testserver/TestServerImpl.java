@@ -344,7 +344,7 @@ public class TestServerImpl {
             mainServerPool.awaitTermination(4L, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             //e.printStackTrace();
-        	Thread.currentThread().interrupt();
+            Thread.currentThread().interrupt();
         } finally {
             System.setErr(tempErr);
             System.setOut(tempOut);

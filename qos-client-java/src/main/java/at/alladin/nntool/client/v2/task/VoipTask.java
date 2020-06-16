@@ -113,7 +113,7 @@ public class VoipTask extends AbstractQoSTask {
     private final long buffer;
     private Integer incomingPort;
 
-	private final Random random = new Random();
+    private final Random random = new Random();
 
     /**
      * @param nnTest
@@ -180,7 +180,7 @@ public class VoipTask extends AbstractQoSTask {
                     if (response != null && response.startsWith("OK")) {
                         final Matcher m = VOIP_OK_PATTERN.matcher(response);
                         if (m.find()) {
-							try (DatagramSocket dgsock = new DatagramSocket()) {
+                            try (DatagramSocket dgsock = new DatagramSocket()) {
                                 ssrc.set(Integer.parseInt(m.group(1)));
 
                                 final UdpStreamCallback receiveCallback = new UdpStreamCallback() {
@@ -217,7 +217,7 @@ public class VoipTask extends AbstractQoSTask {
                             } catch (InterruptedException e) {
                                 result.getResultMap().put(RESULT_STATUS, "TIMEOUT");
                                 e.printStackTrace();
-								Thread.currentThread().interrupt();
+                                Thread.currentThread().interrupt();
                             } catch (TimeoutException e) {
                                 result.getResultMap().put(RESULT_STATUS, "TIMEOUT");
                                 e.printStackTrace();

@@ -114,9 +114,9 @@ public class HeatmapTileService {
             for (int i = 0; i < FACTORS[f].length; i += HORIZON_SIZE) {
                 final double qPi = Math.PI / 4;
 
-				final double horizonSize = (double) HORIZON_SIZE;
-				final double x = qPi * (i / horizonSize % partSize) / partSize;
-				final double y = qPi * (i / horizonSize / partSize) / partSize;
+                final double horizonSize = (double) HORIZON_SIZE;
+                final double x = qPi * (i / horizonSize % partSize) / partSize;
+                final double y = qPi * (i / horizonSize / partSize) / partSize;
 
                 // double sum = 0;
                 for (int j = 0; j < HORIZON; j++) {

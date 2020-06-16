@@ -91,25 +91,25 @@ public class NonTransparentProxyTask extends AbstractQoSTask {
                             //reset response string:
                             //open test socket
                             InetSocketAddress socketAddr = new InetSocketAddress(InetAddress.getByName(getTestServerAddr()), port);
-							try (Socket testSocket = new Socket()) {
-								testSocket.connect(socketAddr, (int) (timeout / 1000000));
-								testSocket.setSoTimeout((int) (timeout / 1000000));
+                            try (Socket testSocket = new Socket()) {
+                                testSocket.connect(socketAddr, (int) (timeout / 1000000));
+                                testSocket.setSoTimeout((int) (timeout / 1000000));
 
-								//send request to echo service
-								sendMessage(testSocket, testRequest);
+                                //send request to echo service
+                                sendMessage(testSocket, testRequest);
 
-								//read response from echo service
-								String testResponse = readLine(testSocket);
-								System.out.println("NON_TRANSPARENT_PROXY response: " + testResponse);
-								if (testResponse != null) {
-									testResponse = String.format(Locale.US, "%s", testResponse);
-									result.getResultMap().put(RESULT_RESPONSE, (testResponse != null ? testResponse.trim() : ""));
-								} else {
-									throw new IOException();
-								}
+                                //read response from echo service
+                                String testResponse = readLine(testSocket);
+                                System.out.println("NON_TRANSPARENT_PROXY response: " + testResponse);
+                                if (testResponse != null) {
+                                    testResponse = String.format(Locale.US, "%s", testResponse);
+                                    result.getResultMap().put(RESULT_RESPONSE, (testResponse != null ? testResponse.trim() : ""));
+                                } else {
+                                    throw new IOException();
+                                }
 
-								result.getResultMap().put(RESULT_STATUS, "OK");
-							}
+                                result.getResultMap().put(RESULT_STATUS, "OK");
+                            }
                         } else {
                             result.getResultMap().put(RESULT_STATUS, "ERROR");
                         }

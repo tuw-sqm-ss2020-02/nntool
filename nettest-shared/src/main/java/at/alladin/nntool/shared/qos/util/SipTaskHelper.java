@@ -23,10 +23,10 @@ import com.google.common.base.Strings;
 
 public final class SipTaskHelper {
 
-	private static final Random RND = new Random();
+    private static final Random RND = new Random();
 
-	//default timeout = 5s
-	public final static long DEFAULT_TIMEOUT = 5000000000L;
+    //default timeout = 5s
+    public final static long DEFAULT_TIMEOUT = 5000000000L;
 
     //default count = 3s
     public final static long DEFAULT_COUNT = 3;

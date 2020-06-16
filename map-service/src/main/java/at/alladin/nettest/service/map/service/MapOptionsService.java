@@ -163,13 +163,13 @@ public class MapOptionsService {
 
     private void setDefaultMapFilter() {
         //TODO: read default and accuracy filters from DB
-		mapServiceSettings.setDefaultMapFilters(
-			Collections.unmodifiableList(
-				Arrays.asList(
-					new MapServiceSettings.SQLFilter("(ias.implausible)::boolean = false AND ias.status = 'FINISHED'")
-				)
-			)
-		);
+        mapServiceSettings.setDefaultMapFilters(
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new MapServiceSettings.SQLFilter("(ias.implausible)::boolean = false AND ias.status = 'FINISHED'")
+                )
+            )
+        );
     }
 
     private void setAccuracyMapFilter() {
@@ -178,112 +178,112 @@ public class MapOptionsService {
 
     private void setMapFilterMap() {
         //TODO: read mapFilterMap from DB
-		HashMap<String, MapServiceSettings.MapFilter> filterMap = new LinkedHashMap<String, MapServiceSettings.MapFilter>();
+        HashMap<String, MapServiceSettings.MapFilter> filterMap = new LinkedHashMap<String, MapServiceSettings.MapFilter>();
 
-		filterMap.put("operator", new MapServiceSettings.MapFilter() {
-			@Override
-			public MapServiceSettings.SQLFilter getFilter(final String input) {
-				if (Strings.isNullOrEmpty(input)) {
-					return null;
-				}
-				if (input.equals("other")) {
-					return new MapServiceSettings.SQLFilter("t.mobile_sim_operator_name IS NULL");
-				} else {
-					return new MapServiceSettings.SQLFilter("t.mobile_sim_operator_name=?") {
-						@Override
-						public int fillParams(int i, final PreparedStatement ps) throws SQLException {
-							ps.setString(i++, input);
-							return i;
-						}
-					};
-				}
-			}
-		});
+        filterMap.put("operator", new MapServiceSettings.MapFilter() {
+            @Override
+            public MapServiceSettings.SQLFilter getFilter(final String input) {
+                if (Strings.isNullOrEmpty(input)) {
+                    return null;
+                }
+                if (input.equals("other")) {
+                    return new MapServiceSettings.SQLFilter("t.mobile_sim_operator_name IS NULL");
+                } else {
+                    return new MapServiceSettings.SQLFilter("t.mobile_sim_operator_name=?") {
+                        @Override
+                        public int fillParams(int i, final PreparedStatement ps) throws SQLException {
+                            ps.setString(i++, input);
+                            return i;
+                        }
+                    };
+                }
+            }
+        });
 
-		filterMap.put("provider", new MapServiceSettings.MapFilter() {
-			@Override
-			public MapServiceSettings.SQLFilter getFilter(final String input) {
-				if (Strings.isNullOrEmpty(input)) {
-					return null;
-				}
+        filterMap.put("provider", new MapServiceSettings.MapFilter() {
+            @Override
+            public MapServiceSettings.SQLFilter getFilter(final String input) {
+                if (Strings.isNullOrEmpty(input)) {
+                    return null;
+                }
 
-				return new MapServiceSettings.SQLFilter("t.provider_name=?") {
-					@Override
-					public int fillParams(int i, final PreparedStatement ps) throws SQLException {
-						ps.setString(i++, input);
-						return i;
-					}
-				};
-			}
-		});
+                return new MapServiceSettings.SQLFilter("t.provider_name=?") {
+                    @Override
+                    public int fillParams(int i, final PreparedStatement ps) throws SQLException {
+                        ps.setString(i++, input);
+                        return i;
+                    }
+                };
+            }
+        });
 
-		filterMap.put("technology", new MapServiceSettings.MapFilter() {
-			@Override
-			public MapServiceSettings.SQLFilter getFilter(final String input) {
-				if (Strings.isNullOrEmpty(input)) { // do not filter if empty
-					return null;
-				}
+        filterMap.put("technology", new MapServiceSettings.MapFilter() {
+            @Override
+            public MapServiceSettings.SQLFilter getFilter(final String input) {
+                if (Strings.isNullOrEmpty(input)) { // do not filter if empty
+                    return null;
+                }
 
-				try {
-					final int technology = Integer.parseInt(input);
-					// use old numeric network type (replicate network_type_table here)
-					if (technology == 2) {     // 2G
-						return new MapServiceSettings.SQLFilter("(t.initial_network_type_id)::int in (1,2,4,5,6,7,11,12,14)");
-					} else if (technology == 3) { // 3G
-						return new MapServiceSettings.SQLFilter("(t.initial_network_type_id)::int in (3,8,9,10,15)");
-					} else if (technology == 4) {// 4G
-						return new MapServiceSettings.SQLFilter("(t.initial_network_type_id)::int = 13");
-					} else if (technology == 34) {// 3G or 4G
-						return new MapServiceSettings.SQLFilter("(t.initial_network_type_id)::int in (3,8,9,10,13,15)");
-					} else {
-						return null;
-					}
+                try {
+                    final int technology = Integer.parseInt(input);
+                    // use old numeric network type (replicate network_type_table here)
+                    if (technology == 2) {     // 2G
+                        return new MapServiceSettings.SQLFilter("(t.initial_network_type_id)::int in (1,2,4,5,6,7,11,12,14)");
+                    } else if (technology == 3) { // 3G
+                        return new MapServiceSettings.SQLFilter("(t.initial_network_type_id)::int in (3,8,9,10,15)");
+                    } else if (technology == 4) { // 4G
+                        return new MapServiceSettings.SQLFilter("(t.initial_network_type_id)::int = 13");
+                    } else if (technology == 34) { // 3G or 4G
+                        return new MapServiceSettings.SQLFilter("(t.initial_network_type_id)::int in (3,8,9,10,13,15)");
+                    } else {
+                        return null;
+                    }
 
-					/* //alternative: use network_group_name
-					return new SQLFilter("network_group_name=?")
-					{
-						@Override
-						int fillParams(int i, final PreparedStatement ps) throws SQLException
-						{ // convert 2 => '2G'
-							ps.setString(i++, String.format("%dG", technology));
-							return i;
-						}
-					};
-					*/
-				} catch (NumberFormatException e) {
-					return null;
-				}
-			}
-		});
+                    /* //alternative: use network_group_name
+                    return new SQLFilter("network_group_name=?")
+                    {
+                        @Override
+                        int fillParams(int i, final PreparedStatement ps) throws SQLException
+                        { // convert 2 => '2G'
+                            ps.setString(i++, String.format("%dG", technology));
+                            return i;
+                        }
+                    };
+                    */
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+            }
+        });
 
-		filterMap.put("period", new MapServiceSettings.MapFilter() {
-			@Override
-			public MapServiceSettings.SQLFilter getFilter(final String input) {
-				if (Strings.isNullOrEmpty(input)) {
-					return null;
-				}
+        filterMap.put("period", new MapServiceSettings.MapFilter() {
+            @Override
+            public MapServiceSettings.SQLFilter getFilter(final String input) {
+                if (Strings.isNullOrEmpty(input)) {
+                    return null;
+                }
 
-				try {
-					final int period = Integer.parseInt(input);
-					if (period <= 0 || period > 730) {
-						return null;
-					}
+                try {
+                    final int period = Integer.parseInt(input);
+                    if (period <= 0 || period > 730) {
+                        return null;
+                    }
 
-					return new MapServiceSettings.SQLFilter("(t.start_time)::timestamp > NOW() - CAST(? AS INTERVAL)") {
-						@Override
-						public int fillParams(int i, final PreparedStatement ps) throws SQLException {
-							ps.setString(i++, String.format("%d days", period));
-							return i;
-						}
-					};
-				} catch (NumberFormatException e) {
-					return null;
-				}
-			}
-		});
+                    return new MapServiceSettings.SQLFilter("(t.start_time)::timestamp > NOW() - CAST(? AS INTERVAL)") {
+                        @Override
+                        public int fillParams(int i, final PreparedStatement ps) throws SQLException {
+                            ps.setString(i++, String.format("%d days", period));
+                            return i;
+                        }
+                    };
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+            }
+        });
 
-		mapServiceSettings.setMapFilterMap(Collections.unmodifiableMap(filterMap));
-	}
+        mapServiceSettings.setMapFilterMap(Collections.unmodifiableMap(filterMap));
+    }
 
     private void generateMapFilterSettings() {
         final ServerSettings settings = sqlSettingsRepository.getSettings();

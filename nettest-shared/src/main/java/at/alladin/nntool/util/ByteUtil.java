@@ -114,9 +114,9 @@ public final class ByteUtil {
      */
     public static byte setBit(byte b, int bit, boolean value) {
         if (value) {
-        	return (byte) (b & 0xff | (1 << bit));
+            return (byte) (b & 0xff | (1 << bit));
         } else {
-        	return (byte) ((b & 0xff | (1 << bit)) ^ (1 << bit));
+            return (byte) ((b & 0xff | (1 << bit)) ^ (1 << bit));
         }
     }
 

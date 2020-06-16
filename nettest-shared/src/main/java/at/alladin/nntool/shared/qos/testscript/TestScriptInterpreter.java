@@ -75,7 +75,7 @@ public final class TestScriptInterpreter {
     private static Method jsEngineNativeObjectGetter;
     private static boolean alredayLookedForGetter = false;
 
-	private static final Random RAND = new Random();
+    private static final Random RAND = new Random();
 
     private TestScriptInterpreter() {
     }

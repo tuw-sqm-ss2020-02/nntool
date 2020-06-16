@@ -239,7 +239,7 @@ public class HttpProxyTask extends AbstractQoSTask {
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-						Thread.currentThread().interrupt();
+                        Thread.currentThread().interrupt();
                     }
 
                 }
