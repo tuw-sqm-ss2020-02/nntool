@@ -85,7 +85,7 @@ public class MeasurementServerLoadMonitorService {
     }
 
     public List<LoadApiReport> getReportList() {
-        return new ArrayList<LoadApiReport>(reports.values());
+        return new ArrayList<>(reports.values());
     }
 
     public LoadApiReport getReportForMeasurementServer(final String identifier) {
@@ -96,13 +96,11 @@ public class MeasurementServerLoadMonitorService {
         String id = null;
         if (preferredIdentifier != null) {
             final LoadApiReport report = reports.get(preferredIdentifier);
-            if (report != null) {
-                if (report.getFailesSinceLastAttempt() <= properties.getFailsAllowed()
+            if (report != null && report.getFailesSinceLastAttempt() <= properties.getFailsAllowed()
                         && report.getLastResponse() != null) {
-                    final LoadApiResponse response = report.getLastResponse();
-                    if (!response.getIsOverloaded()) {
-                        id = preferredIdentifier;
-                    }
+                final LoadApiResponse response = report.getLastResponse();
+                if (!response.getIsOverloaded()) {
+                    id = preferredIdentifier;
                 }
             }
         }
@@ -111,14 +109,12 @@ public class MeasurementServerLoadMonitorService {
             //we are still missing a valid measurement server
             for (final Entry<String, LoadApiReport> e : reports.entrySet()) {
                 final LoadApiReport report = e.getValue();
-                if (report != null) {
-                    if (report.getFailesSinceLastAttempt() <= properties.getFailsAllowed()
+                if (report != null && report.getFailesSinceLastAttempt() <= properties.getFailsAllowed()
                             && report.getLastResponse() != null) {
-                        final LoadApiResponse response = report.getLastResponse();
-                        if (!response.getIsOverloaded()) {
-                            id = e.getKey();
-                            break;
-                        }
+                    final LoadApiResponse response = report.getLastResponse();
+                    if (!response.getIsOverloaded()) {
+                        id = e.getKey();
+                        break;
                     }
                 }
             }

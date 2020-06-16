@@ -274,7 +274,7 @@ public class MapOptionsService {
         mapServiceConfig.getMapServiceOptions().forEach(opt -> {
             try {
                 mapOptionList.put(opt.getGroupKey() + "/" + opt.getTypeKey(), fillMapServiceOption(settings, opt));
-            } catch (IllegalArgumentException | SQLException e) {
+            } catch (IllegalArgumentException e) {
                 logger.error("Invalid argument from config. Is skipped.");
                 e.printStackTrace();
             }
@@ -283,7 +283,7 @@ public class MapOptionsService {
         this.mapServiceSettings.setMapServiceOptions(mapOptionList);
     }
 
-    private MapServiceOptions fillMapServiceOption(final ServerSettings settings, final MapServiceOptions mapServiceOption) throws NumberFormatException, IllegalArgumentException, SQLException {
+    private MapServiceOptions fillMapServiceOption(final ServerSettings settings, final MapServiceOptions mapServiceOption) {
         mapServiceOption.setClassificationType(ClassificationType.valueOf(mapServiceOption.getTypeKey().toUpperCase()));
         mapServiceOption.setSignalGroup(SignalGroup.valueOf(mapServiceOption.getGroupKey().toUpperCase()));
         return mapServiceOption;

@@ -37,6 +37,10 @@ import com.cloudant.client.api.Database;
 @EnableConfigurationProperties(CouchDbProperties.class)
 public class CouchDbAutoConfiguration {
 
+    public CouchDbAutoConfiguration() {
+
+    }
+
     @Configuration
     @ConditionalOnMissingBean(value = CouchDbConfiguration.class, type = "at.alladin.nettest.spring.data.couchdb.config.CouchDbConfigurer")
     @Import(CouchDbConfiguration.class)

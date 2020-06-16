@@ -40,7 +40,6 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import at.alladin.nettest.service.collector.config.CollectorServiceProperties;
 import at.alladin.nettest.shared.server.service.storage.v1.StorageService;
 
 /**
@@ -54,14 +53,10 @@ public class ConfigurationReplicationService {
     private static final String SETTINGS_INDEX = "nntool_settings";
     private static final String TRANSLATION_INDEX = "nntool_translation";
 
-    private static final String SETTINGS_INSERT_SQL = "INSERT INTO settings (id, json) VALUES (?, ?::jsonb) ON CONFLICT (id) DO UPDATE SET json = EXCLUDED.json;";
     private static final String TRANSLATION_INSERT_SQL = "INSERT INTO translations (language_code, json) VALUES (?, ?::jsonb) ON CONFLICT (language_code) DO UPDATE SET json = EXCLUDED.json;";
 
     @Autowired
     private StorageService storageService;
-
-    @Autowired
-    private CollectorServiceProperties collectorServiceProperties;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -78,7 +73,6 @@ public class ConfigurationReplicationService {
         LOGGER.info("Replicating configuration. ({}, {})", elasticSearchClient, jdbcTemplate);
         initialize();
 
-        replicateSettings();
         replicateTranslations();
 
         LOGGER.info("Replication done.");
@@ -121,41 +115,6 @@ public class ConfigurationReplicationService {
         }
     }
 
-    private void replicateSettings() {
-        LOGGER.info("Replicating settings.");
-
-        // final SettingsResponse settings = storageService.getSettings(collectorServiceProperties.getSettingsUuid());
-        //
-        // final String settingsJsonString;
-        // try {
-        // settingsJsonString = objectMapper.writeValueAsString(settings);
-        // } catch (JsonProcessingException e) {
-        // LOGGER.error("Could not marshall settings to String.", e);
-        // return;
-        // }
-        //
-        // if (elasticSearchClient != null) {
-        // final Map<String, Object> map = objectMapper.convertValue(settings, new TypeReference<Map<String, Object>>() {});
-        // final IndexRequest indexRequest = new IndexRequest(SETTINGS_INDEX)
-        // .id("settings_" + collectorServiceProperties.getSystemUuid())
-        // .source(map);
-        //
-        // try {
-        // final IndexResponse indexResponse = elasticSearchClient.index(indexRequest, RequestOptions.DEFAULT);
-        // LOGGER.debug("IndexRequest response: {}", indexResponse);
-        // } catch (IOException ex) {
-        // LOGGER.error("Could update settings in Elasticsearch.", ex);
-        // }
-        // }
-        // if (jdbcTemplate != null) {
-        // try {
-        // jdbcTemplate.update(SETTINGS_INSERT_SQL, 1, settingsJsonString);
-        // } catch (Exception ex) {
-        // LOGGER.error("Could update settings in PostgreSQL.", ex);
-        // }
-        // }
-    }
-
     private void replicateTranslations() {
         LOGGER.info("Replicating translations.");
 
@@ -164,13 +123,13 @@ public class ConfigurationReplicationService {
         if (elasticSearchClient != null) {
             final BulkRequest bulkRequest = new BulkRequest();
 
-            translations.forEach((k, v) -> {
+            translations.forEach((k, v) ->
                 bulkRequest.add(
                         new IndexRequest(TRANSLATION_INDEX)
                                 .id(k.getLanguage())
                                 .source(v)
-                );
-            });
+                )
+            );
 
             try {
                 final BulkResponse bulkResponse = elasticSearchClient.bulk(bulkRequest, RequestOptions.DEFAULT);
@@ -189,6 +148,7 @@ public class ConfigurationReplicationService {
                 try {
                     params.add(new Object[]{k.getLanguage(), objectMapper.writeValueAsString(v)});
                 } catch (JsonProcessingException e) {
+                    LOGGER.trace("Could not add paramter", e);
                 }
             });
 

@@ -53,7 +53,7 @@ public class MeasurementResultService {
      * @return the saved measurement result response
      * @throws StorageServiceException
      */
-    public MeasurementResultResponse saveResult(LmapReportDto lmapReportDto) throws StorageServiceException {
+    public MeasurementResultResponse saveResult(LmapReportDto lmapReportDto) {
         final String systemUuid = collectorServiceProperties.getSystemUuid();
 
         // Store measurement result into CouchDB

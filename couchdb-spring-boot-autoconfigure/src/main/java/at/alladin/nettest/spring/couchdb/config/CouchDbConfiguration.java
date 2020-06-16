@@ -30,7 +30,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
@@ -62,14 +61,8 @@ public class CouchDbConfiguration {
     public GsonBuilder couchDbGsonBuilder() {
         final GsonBuilder gsonBuilder = new GsonBuilder();
 
-        //gsonBuilder.setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'");
-
         // gson needs custom Jdk8 LocalDateTime converter so store it as ISO-8601 string...
         gsonBuilder.registerTypeAdapter(LocalDateTime.class, new Jdk8LocalDateTimeConverter());
-
-        //Converters.registerAll(gsonBuilder);
-        //Converters.registerLocalDateTime(gsonBuilder);
-        //Converters.registerDateTime(gsonBuilder);
 
         return gsonBuilder;
     }
@@ -86,9 +79,9 @@ public class CouchDbConfiguration {
     public CouchDbDatabaseMapping couchDbDatabaseMapping() {
         final CouchDbDatabaseMapping databaseMapping = new CouchDbDatabaseMapping();
 
-        couchDbProperties.getDatabases().forEach(db -> {
-            databaseMapping.getDatabases().add(db);
-        });
+        couchDbProperties.getDatabases().forEach(db ->
+            databaseMapping.getDatabases().add(db)
+        );
 
         return databaseMapping;
     }
@@ -98,7 +91,7 @@ public class CouchDbConfiguration {
     public static class Jdk8LocalDateTimeConverter implements JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {
 
         @Override
-        public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
             return LocalDateTime.parse(json.getAsString());
         }
 
