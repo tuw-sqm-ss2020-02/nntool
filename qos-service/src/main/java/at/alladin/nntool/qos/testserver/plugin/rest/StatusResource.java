@@ -17,6 +17,8 @@
 
 package at.alladin.nntool.qos.testserver.plugin.rest;
 
+import java.util.Collection;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,14 +39,15 @@ public class StatusResource extends ServerResource {
     public String request() throws JSONException {
         JSONObject json = new JSONObject();
 
-        json.put("starttime", TestServer.getInstance().serverPreferences.getStartTimestamp());
+        json.put("starttime", TestServer.getInstance().getServerPreferences().getStartTimestamp());
         json.put("version", TestServer.TEST_SERVER_VERSION_MAJOR + "." + TestServer.TEST_SERVER_VERSION_MINOR + "." + TestServer.TEST_SERVER_VERSION_PATCH);
 
-        if (TestServerConsole.ERROR_REPORT_MAP.size() > 0) {
+        final Collection<ErrorReport> errorValues = TestServerConsole.getErrorValues();
+        if (errorValues.size() > 0) {
             setStatus(Status.SERVER_ERROR_INTERNAL);
 
             JSONArray errors = new JSONArray();
-            for (ErrorReport er : TestServerConsole.ERROR_REPORT_MAP.values()) {
+            for (ErrorReport er : errorValues) {
                 errors.put(er.toJson());
             }
 

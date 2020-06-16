@@ -93,9 +93,9 @@ public class TestServerImpl {
     /**
      * server socket list (=awaiting client test requests)
      */
-    public volatile List<ServerSocket> serverSocketList = new ArrayList<ServerSocket>();
+    private volatile List<ServerSocket> serverSocketList = new ArrayList<ServerSocket>();
     private SSLServerSocketFactory sslServerSocketFactory;
-    public ServerPreferences serverPreferences;
+    private ServerPreferences serverPreferences;
     /**
      * is used for all control connection threads
      */
@@ -120,6 +120,18 @@ public class TestServerImpl {
 
         System.setErr(console);
         System.setOut(console);
+    }
+
+    public List<ServerSocket> getServerSocketList() {
+        return serverSocketList;
+    }
+
+    public ServerPreferences getServerPreferences() {
+        return serverPreferences;
+    }
+
+    public void setServerPreferences(ServerPreferences serverPreferences) {
+        this.serverPreferences = serverPreferences;
     }
 
     /**

@@ -256,7 +256,10 @@ public class VoipTask extends AbstractQoSTask {
                     + initialSequenceNumber + " " + payloadType.getValue() + " " + buffer, callback);
 
             //wait for countdownlatch or timeout:
-            latch.await(timeout, TimeUnit.NANOSECONDS);
+            boolean noTimeout = latch.await(timeout, TimeUnit.NANOSECONDS);
+            if (!noTimeout) {
+                System.out.println("Timeout during 'VOIPTEST'");
+            }
 
             // if rtpreceivestream did not finish cancel the task
             // if (!rtpInTimeoutTask.isDone()) {
@@ -294,7 +297,10 @@ public class VoipTask extends AbstractQoSTask {
             //request server results:
             if (ssrc.get() >= 0) {
                 sendCommand("GET VOIPRESULT " + ssrc.get(), incomingResultRequestCallback);
-                resultLatch.await(CONTROL_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS);
+                noTimeout = resultLatch.await(CONTROL_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS);
+                if (!noTimeout) {
+                    System.out.println("Timeout during 'GET VOIPRESULT'");
+                }
             }
 
             final RtpQoSResult rtpResults = rtpControlDataList.size() > 0

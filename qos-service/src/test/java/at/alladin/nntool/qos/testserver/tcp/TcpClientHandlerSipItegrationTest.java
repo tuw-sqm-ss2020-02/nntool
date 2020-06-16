@@ -82,7 +82,7 @@ public class TcpClientHandlerSipItegrationTest {
     @Test
     public void testClientHandlerWithSimpleSipWorkflowAndMockedCompetencesIncludingInviteAndTrying(
             @Mocked FilterOutputStream fos) throws Exception {
-        TestServer.getInstance().serverPreferences = new ServerPreferences();
+        TestServer.getInstance().setServerPreferences(new ServerPreferences());
         final AtomicReference<String[]> results = new AtomicReference<>(new String[2]);
         SocketCommunicationExpectationsUtil.createExpectationWithMultipleResultStrings(socket, fos, results,
                 "INVITE sip:bob@home SIP/2.0\n"
@@ -131,7 +131,7 @@ public class TcpClientHandlerSipItegrationTest {
     @Test
     public void testClientHandlerWithSimpleSipWorkflowAndMockedCompetencesIncludingInviteAndTryingAndCheckDelayBetweenPackets(
             @Mocked FilterOutputStream fos) throws Exception {
-        TestServer.getInstance().serverPreferences = new ServerPreferences();
+        TestServer.getInstance().setServerPreferences(new ServerPreferences());
         final AtomicReference<String[]> results = new AtomicReference<>(new String[2]);
         SocketCommunicationExpectationsUtil.createExpectationWithMultipleResultStrings(socket, fos, results,
                 "INVITE sip:bob@home SIP/2.0\n"
@@ -181,7 +181,7 @@ public class TcpClientHandlerSipItegrationTest {
     @Test
     public void testClientHandlerWithSimpleSipWorkflowIncludingInviteAndTryingAndCheckDelayBetweenPackets(
             @Mocked FilterOutputStream fos) throws Exception {
-        TestServer.getInstance().serverPreferences = new ServerPreferences();
+        TestServer.getInstance().setServerPreferences(new ServerPreferences());
         final AtomicReference<String[]> results = new AtomicReference<>(new String[2]);
         SocketCommunicationExpectationsUtil.createExpectationWithMultipleResultStrings(socket, fos, results,
                 "INVITE sip:bob@home SIP/2.0\n"

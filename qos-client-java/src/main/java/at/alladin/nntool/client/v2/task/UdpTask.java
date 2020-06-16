@@ -138,7 +138,6 @@ public class UdpTask extends AbstractQoSTask {
 
                 //run UDP OUT test:
                 if (this.packetCountOutgoing != null) {
-
                     ControlConnectionResponseCallback outgoingRequestCallback = new ControlConnectionResponseCallback() {
                         public void onResponse(final String response, final String request) {
                             try {
@@ -205,8 +204,10 @@ public class UdpTask extends AbstractQoSTask {
                     };
 
                     sendCommand("GET UDPRESULT OUT " + outgoingPort, outgoingResultRequestCallback);
-                    outgoingResultLatch.await(CONTROL_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS);
-
+                    boolean noTimeout = outgoingResultLatch.await(CONTROL_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS);
+                    if (!noTimeout) {
+                        System.out.println("Timeout during 'GET UDPRESULT OUT'");
+                    }
                 }
 
                 //run UDP IN test:
@@ -264,7 +265,10 @@ public class UdpTask extends AbstractQoSTask {
                     Thread.sleep(150);
                     //request server results:
                     sendCommand("GET UDPRESULT IN " + incomingPort, incomingResultRequestCallback);
-                    incomingLatch.await(CONTROL_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS);
+                    boolean noTimeout = incomingLatch.await(CONTROL_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS);
+                    if (!noTimeout) {
+                        System.out.println("Timeout during 'GET UDPRESULT IN'");
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();

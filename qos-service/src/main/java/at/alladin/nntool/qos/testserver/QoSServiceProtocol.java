@@ -215,7 +215,7 @@ public final class QoSServiceProtocol {
 
     public final static String PROTOCOL_VERSION_1 = "1";
 
-    public final static HashSet<String> SUPPORTED_PROTOCOL_VERSION_SET;
+    protected final static HashSet<String> SUPPORTED_PROTOCOL_VERSION_SET;
 
     static {
         SUPPORTED_PROTOCOL_VERSION_SET = new HashSet<>();

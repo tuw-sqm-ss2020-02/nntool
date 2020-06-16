@@ -24,6 +24,7 @@ import java.time.Instant;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,8 @@ import at.alladin.nettest.service.search.helper.ExportExtension;
 public class ExportService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExportService.class);
+
+    public static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("csv", "json", "yaml", "yml");
 
     @Autowired
     private ExportProperties exportProperties;
@@ -150,6 +153,10 @@ public class ExportService {
     }
 
     ////
+
+    public void verifyExportExtension(String extension) {
+        getExportExtension(extension); // Will throw if invalid
+    }
 
     private ExportExtension getExportExtension(String extension) {
         if (StringUtils.isEmpty(extension)) {
