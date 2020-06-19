@@ -261,7 +261,7 @@ public final class ResultComparer {
                 }
             }
         } catch (Throwable t) {
-            LOGGER.trace("Field {}, {}: {}", Arrays.asList(f.toString(), t.getClass().getCanonicalName(), t.getLocalizedMessage()));
+            LOGGER.trace("Field {}, {}: {}", new Object[] { f.toString(), t.getClass().getCanonicalName(), t.getLocalizedMessage() });
             return ResultComparer.RESULT_COULD_NOT_COMPARE;
         }
 
