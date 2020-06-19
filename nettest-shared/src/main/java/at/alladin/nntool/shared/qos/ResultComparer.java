@@ -18,7 +18,6 @@
 package at.alladin.nntool.shared.qos;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -261,7 +260,7 @@ public final class ResultComparer {
                 }
             }
         } catch (Throwable t) {
-            LOGGER.trace("Field {}, {}: {}", new Object[] { f.toString(), t.getClass().getCanonicalName(), t.getLocalizedMessage() });
+            LOGGER.trace("Field {}, {}: {}", new Object[] {f.toString(), t.getClass().getCanonicalName(), t.getLocalizedMessage()});
             return ResultComparer.RESULT_COULD_NOT_COMPARE;
         }
 
