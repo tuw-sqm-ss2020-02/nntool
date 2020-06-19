@@ -51,7 +51,7 @@ public class CsvExtensionDataWriter implements ExtensionDataWriter {
         final List<CsvField> fields = exportProperties.getExtensions().getCsv().getFields();
 
         if (isCoarseResult) {
-            fields.removeIf((field) -> field.getIncludeInCoarse() == null || !field.getIncludeInCoarse());
+            fields.removeIf((field) -> !field.getIncludeInCoarse());
         }
 
         if (fields.size() == 0) {

@@ -69,7 +69,7 @@ public class ColorMapperService {
         final ColorThresholds colorThresholds = thresholdsHelperService.getByClassificationType(skewedThresholdsPerClassificationType, classificationType);
 
         if (colorThresholds == null) {
-            throw new RuntimeException("Color mapper not initialized correctly");
+            throw new InitializationException("Color mapper not initialized correctly");
         }
 
         //select colours the new way
@@ -120,7 +120,7 @@ public class ColorMapperService {
         final ColorThresholds colorThresholds = thresholdsHelperService.getByClassificationType(thresholdsPerClassificationType, classificationType);
 
         if (colorThresholds == null) {
-            throw new RuntimeException("Color mapper not initialized correctly");
+            throw new InitializationException("Color mapper not initialized correctly");
         }
 
         final Long ceilingKey = colorThresholds.getColorMap().ceilingKey((long) value);
@@ -133,4 +133,9 @@ public class ColorMapperService {
 
     }
 
+    public static class InitializationException extends RuntimeException {
+        public InitializationException(String s) {
+            super(s);
+        }
+    }
 }

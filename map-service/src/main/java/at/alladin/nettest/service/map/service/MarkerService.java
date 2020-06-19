@@ -253,7 +253,7 @@ public class MarkerService {
 
                     }, (ResultSet rs, int rowNum) -> parseResultSet(rs, finalClientUuidString, finalHighlightUuidString, locale));
 
-                    logger.info("Fetching marker info. #Results: " + (resultObjects == null ? 0 : resultObjects.size()));
+                    logger.info("Fetching marker info. #Results: {}", (resultObjects == null ? 0 : resultObjects.size()));
 
                     answer.setMapMarkers(resultObjects);
                 }
@@ -261,7 +261,7 @@ public class MarkerService {
                 logger.error("Expected request is missing.");
             }
         } catch (final JSONException e) {
-            logger.error("Error parsing JSON Data " + e.toString());
+            logger.error("Error parsing JSON Data", e);
         }
 
         return answer;

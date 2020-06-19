@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.zafaco.common.listener;
+package com.zafaco.common.informationcollector;
 
 import android.Manifest;
 import android.content.Context;
@@ -43,23 +43,23 @@ import org.json.JSONObject;
 /**
  * Class ListenerGeoLocation
  */
-public class ListenerGeoLocation {
+public class GeoLocationCollector {
     /**************************** Variables ****************************/
 
     private Context ctx;
 
     //Module Objects
-    private Tool mTool;
+    private Tool tool;
     private ModulesInterface interfaceCallback;
     private JSONObject jData;
 
-    private FusedLocationProviderClient mFusedLocationClient = null;
+    private FusedLocationProviderClient fusedLocationClient = null;
 
     private boolean mtGeoService = false;
 
-    private int min_time;
-    private int min_distance;
-    private int min_prio;
+    private int minTime;
+    private int minDistance;
+    private int minPrio;
 
     private Location lastLocation;
 
@@ -67,7 +67,7 @@ public class ListenerGeoLocation {
     /**
      * Handler mLocationCallback
      */
-    private LocationCallback mLocationCallback = new LocationCallback() {
+    private LocationCallback locationCallback = new LocationCallback() {
         /**
          * Method onLocationResult
          * @param locationResult
@@ -85,12 +85,12 @@ public class ListenerGeoLocation {
      * @param ctx
      * @param intCall
      */
-    public ListenerGeoLocation(Context ctx, ModulesInterface intCall) {
+    public GeoLocationCollector(Context ctx, ModulesInterface intCall) {
         this.ctx = ctx;
 
         this.interfaceCallback = intCall;
 
-        mTool = new Tool();
+        tool = new Tool();
 
         jData = new JSONObject();
     }
@@ -110,34 +110,34 @@ public class ListenerGeoLocation {
      * @param min_prio
      */
     public void getPosition(int min_time, int min_distance, int min_prio) {
-        this.min_time = min_time;
-        this.min_distance = min_distance;
-        this.min_prio = min_prio;
+        this.minTime = min_time;
+        this.minDistance = min_distance;
+        this.minPrio = min_prio;
 
         if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(ctx);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(ctx);
 
         // Create the location request to start receiving updates
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setPriority(this.min_prio);
-        mLocationRequest.setInterval(this.min_time);
-        mLocationRequest.setFastestInterval(this.min_time);
-        mLocationRequest.setSmallestDisplacement(this.min_distance);
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setPriority(this.minPrio);
+        locationRequest.setInterval(this.minTime);
+        locationRequest.setFastestInterval(this.minTime);
+        locationRequest.setSmallestDisplacement(this.minDistance);
 
-        getLastLocation(mFusedLocationClient);
+        getLastLocation(fusedLocationClient);
 
-        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
 
     /**
      * Method stopUpdates
      */
     public void stopUpdates() {
-        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
     /**
@@ -174,7 +174,7 @@ public class ListenerGeoLocation {
                                 //Callback
                                 interfaceCallback.receiveData(jData);
                             } catch (Exception ex) {
-                                mTool.printTrace(ex);
+                                tool.printTrace(ex);
                             }
                         }
                     }
@@ -221,7 +221,7 @@ public class ListenerGeoLocation {
                 //Callback
                 interfaceCallback.receiveData(jData);
             } catch (Exception ex) {
-                mTool.printTrace(ex);
+                tool.printTrace(ex);
             }
 
             lastLocation = location;

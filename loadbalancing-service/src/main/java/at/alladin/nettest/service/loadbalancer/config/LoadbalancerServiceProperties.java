@@ -28,33 +28,33 @@ public class LoadbalancerServiceProperties {
 
     private final static long DEFAULT_DELAY = 10000; //10s
 
-    private Boolean enabled = false;
+    private boolean enabled;
 
-    private Long delay = DEFAULT_DELAY;
+    private long delay = DEFAULT_DELAY;
 
-    private Integer failsAllowed = 0;
+    private int failsAllowed;
 
-    public Boolean getEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-    public Long getDelay() {
+    public long getDelay() {
         return delay;
     }
 
-    public void setDelay(Long delay) {
+    public void setDelay(long delay) {
         this.delay = delay;
     }
 
-    public Integer getFailsAllowed() {
+    public int getFailsAllowed() {
         return failsAllowed;
     }
 
-    public void setFailsAllowed(Integer failsAllowed) {
+    public void setFailsAllowed(int failsAllowed) {
         this.failsAllowed = failsAllowed;
     }
 }

@@ -69,8 +69,7 @@ public class MeasurementConfigurationService {
         try {
             LOGGER.debug("{}", new ObjectMapper().writeValueAsString(ret));
         } catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.debug("Exception during debug logging", e);
         }
 
         if (loadBalancingService != null) {
@@ -181,7 +180,6 @@ public class MeasurementConfigurationService {
             action.setTaskName(task.getName());
             actionList.add(action);
         }
-
 
         return ret;
     }
