@@ -79,13 +79,13 @@ public class HeatmapTileService {
         7, // 19
         7 // 20
     };
-    private final static double ALPHA_TOP = 0.5;
-    private final static int ALPHA_MAX = 1;
-    private final static boolean DEBUG_LINES = false;
-    private final static int HORIZON_OFFSET = 1;
-    private final static int HORIZON = HORIZON_OFFSET * 2 + 2;
-    private final static int HORIZON_SIZE = HORIZON * HORIZON;
-    private final static double[][] FACTORS = new double[8][]; // lookup table for speedup
+    private static final double ALPHA_TOP = 0.5;
+    private static final int ALPHA_MAX = 1;
+    private static final boolean DEBUG_LINES = false;
+    private static final int HORIZON_OFFSET = 1;
+    private static final int HORIZON = HORIZON_OFFSET * 2 + 2;
+    private static final int HORIZON_SIZE = HORIZON * HORIZON;
+    private static final double[][] FACTORS = new double[8][]; // lookup table for speedup
     private final Logger logger = LoggerFactory.getLogger(HeatmapTileService.class);
     @Autowired
     private MapCacheConfig mapCacheConfig;
@@ -132,45 +132,26 @@ public class HeatmapTileService {
 
         for (int i = 0; i < TileHelper.getTileSizeLength(); i++) {
             final int tileSize = TileHelper.getTileSizeLengthAt(i);
-            pixelBuffers[i] = new ThreadLocal<int[]>() {
-
-                /*
-                 * (non-Javadoc)
-                 *
-                 * @see java.lang.ThreadLocal#initialValue()
-                 */
-                @Override
-                protected int[] initialValue() {
-                    return new int[tileSize * tileSize];
-                }
-            };
+            pixelBuffers[i] = ThreadLocal.withInitial(() -> new int[tileSize * tileSize]);
         }
         //TODO: possibly fix tileImages appearing thrice
         tileImages = new ThreadLocal[TileHelper.getTileSizeLength()];
         for (int i = 0; i < TileHelper.getTileSizeLength(); i++) {
             final int tileSize = TileHelper.getTileSizeLengthAt(i);
-            tileImages[i] = new ThreadLocal<TileImage>() {
+            tileImages[i] = ThreadLocal.withInitial(() -> {
+                final TileImage image = new TileImage();
 
-                /*
-                 * (non-Javadoc)
-                 * @see java.lang.ThreadLocal#initialValue()
-                 */
-                @Override
-                protected TileImage initialValue() {
-                    final TileImage image = new TileImage();
+                image.setBufferedImage(new BufferedImage(tileSize, tileSize, BufferedImage.TYPE_INT_ARGB));
+                image.setGraphics2D(image.getBufferedImage().createGraphics());
+                image.getGraphics2D().setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                image.getGraphics2D().setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+                image.getGraphics2D().setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                image.getGraphics2D().setStroke(new BasicStroke(1f));
+                image.setWidth(image.getBufferedImage().getWidth());
+                image.setHeight(image.getBufferedImage().getHeight());
 
-                    image.setBufferedImage(new BufferedImage(tileSize, tileSize, BufferedImage.TYPE_INT_ARGB));
-                    image.setGraphics2D(image.getBufferedImage().createGraphics());
-                    image.getGraphics2D().setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    image.getGraphics2D().setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
-                    image.getGraphics2D().setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-                    image.getGraphics2D().setStroke(new BasicStroke(1f));
-                    image.setWidth(image.getBufferedImage().getWidth());
-                    image.setHeight(image.getBufferedImage().getHeight());
-
-                    return image;
-                }
-            };
+                return image;
+            });
         }
     }
 
@@ -287,7 +268,7 @@ public class HeatmapTileService {
                     return rowNum;
                 });
 
-            if (intList.size() == 0) {
+            if (intList.isEmpty()) {
                 logger.info("Requested heatmap tile contains no measurements. Returning empty image");
                 return null;
             }

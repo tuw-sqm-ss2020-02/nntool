@@ -126,7 +126,7 @@ public class DeviceImportService {
                 e.printStackTrace();
             }
 
-            List<Device> updatedDevices = new ArrayList<Device>();
+            List<Device> updatedDevices = new ArrayList<>();
             Pageable pageable = PageRequest.of(0, 200);
             boolean isLastPage = false;
 
@@ -153,7 +153,7 @@ public class DeviceImportService {
                     }
                 }
 
-                if (updatedDevices.size() > 0) {
+                if (!updatedDevices.isEmpty()) {
                     deviceRepository.saveAll(updatedDevices);
                     updates += updatedDevices.size();
                     updatedDevices.clear();
@@ -170,22 +170,6 @@ public class DeviceImportService {
 
             LOGGER.debug("Device import finished. New devices: {}, updated: {}, not updated: {}", inserts, updates, notUpdated);
         }
-
-        /*
-        private void bulkDelete() {
-        Pageable pageable = PageRequest.of(0, 200);
-        boolean isLastPage = false;
-        while (!isLastPage) {
-        Page<Device> page = deviceRepository.getAllDevices(pageable);
-        pageable = page.nextPageable();
-        if (page.hasContent()) {
-        for (Device d : page.getContent())
-        deviceRepository.delete(d);
-        }
-        isLastPage = !page.hasNext();
-        }
-        }
-        */
 
         private int bulkUpdate(final List<Device> devices, final int threshold) {
             int i = 0;
@@ -246,7 +230,7 @@ public class DeviceImportService {
 
                 return tmpFilePath;
             } catch (Exception ex) {
-                LOGGER.error("failed to download file from url " + url, ex);
+                LOGGER.error("failed to download file from url {}", url, ex);
                 return null;
             }
         }

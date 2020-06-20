@@ -66,11 +66,12 @@ public class MeasurementConfigurationService {
         ret.setEvents(getImmediateEventList());
         ret.setSchedules(getLmapScheduleList(ret.getEvents().get(0).getName(), ret.getTasks()));
 
-        try {
-            LOGGER.debug("{}", new ObjectMapper().writeValueAsString(ret));
-        } catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (LOGGER.isDebugEnabled()) {
+            try {
+                LOGGER.debug("{}", new ObjectMapper().writeValueAsString(ret));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         }
 
         if (loadBalancingService != null) {
@@ -192,7 +193,7 @@ public class MeasurementConfigurationService {
         }
 
         final LmapTaskDto ret = storageService.getTaskDto(name, capability, controllerServiceProperties.getSettingsUuid(), useIPv6);
-        final List<String> tagList = new ArrayList<String>();
+        final List<String> tagList = new ArrayList<>();
         //tagList.add(version);
 
         if (ret != null) {

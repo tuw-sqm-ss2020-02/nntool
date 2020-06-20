@@ -58,7 +58,7 @@ public final class CloudantCouchDbClient implements CouchDbClient {
                 .password(properties.getPassword())
                 .gsonBuilder(gsonBuilder);
 
-        properties.getMaxConnections().ifPresent(v -> clientBuilder.maxConnections(v));
+        properties.getMaxConnections().ifPresent(clientBuilder::maxConnections);
         properties.getConnectionTimeout().ifPresent(v -> clientBuilder.connectTimeout(v, TimeUnit.SECONDS));
         properties.getReadTimeout().ifPresent(v -> clientBuilder.readTimeout(v, TimeUnit.SECONDS));
 
@@ -66,18 +66,20 @@ public final class CloudantCouchDbClient implements CouchDbClient {
     }
 
     private void logMetaInformation() {
-        LOGGER.debug("--- CouchDB meta information ---");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("--- CouchDB meta information ---");
 
-        LOGGER.debug("baseUri: {}", cloudantClient.getBaseUri());
-        LOGGER.debug("allDbs: {}", cloudantClient.getAllDbs());
-        LOGGER.debug("serverVersion: {}", cloudantClient.serverVersion());
-        LOGGER.debug("couchDb: {}", cloudantClient.metaInformation().getCouchdb());
-        LOGGER.debug("uuid: {}", cloudantClient.metaInformation().getUuid());
-        LOGGER.debug("version: {}", cloudantClient.metaInformation().getVersion());
-        LOGGER.debug("features: {}", cloudantClient.metaInformation().getFeatures());
-        LOGGER.debug("vendor: {}", cloudantClient.metaInformation().getVendor());
+            LOGGER.debug("baseUri: {}", cloudantClient.getBaseUri());
+            LOGGER.debug("allDbs: {}", cloudantClient.getAllDbs());
+            LOGGER.debug("serverVersion: {}", cloudantClient.serverVersion());
+            LOGGER.debug("couchDb: {}", cloudantClient.metaInformation().getCouchdb());
+            LOGGER.debug("uuid: {}", cloudantClient.metaInformation().getUuid());
+            LOGGER.debug("version: {}", cloudantClient.metaInformation().getVersion());
+            LOGGER.debug("features: {}", cloudantClient.metaInformation().getFeatures());
+            LOGGER.debug("vendor: {}", cloudantClient.metaInformation().getVendor());
 
-        LOGGER.debug("------");
+            LOGGER.debug("------");
+        }
     }
 
     /*

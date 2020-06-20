@@ -23,8 +23,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class LoadApiRequest {
 
+    // This is static because it's the only command supported currently.
     @JsonProperty("cmd")
-    private final String cmd = "load";
+    private static final String CMD = "load";
 
     @JsonProperty("secret")
     private String secret;
@@ -38,11 +39,11 @@ public class LoadApiRequest {
     }
 
     public String getCmd() {
-        return cmd;
+        return CMD;
     }
 
     @Override
     public String toString() {
-        return "LoadApiRequest [cmd=" + cmd + ", secret=" + secret + "]";
+        return "LoadApiRequest [cmd=" + CMD + ", secret=" + secret + "]";
     }
 }
