@@ -86,7 +86,7 @@ public class ColorMapperService {
 
         double factor = 0;
 
-        if (ceilingKey == floorKey) {
+        if (ceilingKey.equals(floorKey)) {
             factor = 1;
         } else {
             factor = (value - floorKey) / (ceilingKey - floorKey);

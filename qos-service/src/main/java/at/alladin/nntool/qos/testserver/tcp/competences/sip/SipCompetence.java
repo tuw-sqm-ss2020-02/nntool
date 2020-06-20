@@ -71,7 +71,7 @@ public class SipCompetence implements Competence {
             }
 
             if (msg != null) {
-                if (msg instanceof SipResponseMessage) {
+                /*if (msg instanceof SipResponseMessage) {
                     //we have a SIP response message
                     switch (((SipResponseMessage) msg).getType()) {
                         case OK:
@@ -83,7 +83,7 @@ public class SipCompetence implements Competence {
                         default:
                             break;
                     }
-                } else if (msg instanceof SipRequestMessage) {
+                } else*/ if (msg instanceof SipRequestMessage) {
                     //we have a SIP request message
                     switch (((SipRequestMessage) msg).getType()) {
                         case ACK:

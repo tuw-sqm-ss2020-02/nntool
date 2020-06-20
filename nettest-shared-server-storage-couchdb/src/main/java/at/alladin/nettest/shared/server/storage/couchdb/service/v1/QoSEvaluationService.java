@@ -44,7 +44,6 @@ import at.alladin.nettest.shared.berec.collector.api.v1.dto.measurement.full.Eva
 import at.alladin.nettest.shared.berec.collector.api.v1.dto.measurement.full.FullQoSMeasurement;
 import at.alladin.nettest.shared.berec.collector.api.v1.dto.measurement.full.QoSTypeDescription;
 import at.alladin.nettest.shared.berec.collector.api.v1.dto.shared.QoSMeasurementTypeDto;
-import at.alladin.nntool.shared.qos.QosMeasurementType;
 import at.alladin.nettest.shared.server.storage.couchdb.domain.model.QoSMeasurement;
 import at.alladin.nettest.shared.server.storage.couchdb.domain.model.QoSMeasurementObjective;
 import at.alladin.nettest.shared.server.storage.couchdb.domain.model.QoSMeasurementType;
@@ -52,6 +51,7 @@ import at.alladin.nettest.shared.server.storage.couchdb.domain.model.QoSResult;
 import at.alladin.nettest.shared.server.storage.couchdb.domain.repository.QoSMeasurementObjectiveRepository;
 import at.alladin.nettest.shared.server.storage.couchdb.mapper.v1.FullMeasurementResponseMapper;
 import at.alladin.nntool.shared.qos.AbstractResult;
+import at.alladin.nntool.shared.qos.QosMeasurementType;
 import at.alladin.nntool.shared.qos.ResultComparer;
 import at.alladin.nntool.shared.qos.ResultDesc;
 import at.alladin.nntool.shared.qos.ResultOptions;

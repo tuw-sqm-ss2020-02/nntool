@@ -114,8 +114,9 @@ public class HeatmapTileService {
             for (int i = 0; i < FACTORS[f].length; i += HORIZON_SIZE) {
                 final double qPi = Math.PI / 4;
 
-                final double x = qPi * (i / HORIZON_SIZE % partSize) / partSize;
-                final double y = qPi * (i / HORIZON_SIZE / partSize) / partSize;
+                final double horizonSize = (double) HORIZON_SIZE;
+                final double x = qPi * (i / horizonSize % partSize) / partSize;
+                final double y = qPi * (i / horizonSize / partSize) / partSize;
 
                 // double sum = 0;
                 for (int j = 0; j < HORIZON; j++) {
@@ -241,8 +242,8 @@ public class HeatmapTileService {
         final BoundingBox bbox = GeographyHelper.xyToMeters(params);
 
         final double partSize = bbox.getRes() * partSizePixels;
-        final double origX = bbox.getX1() - bbox.getRes() * (partSizePixels / 2) - partSize * (HORIZON_OFFSET + 1);
-        final double origY = bbox.getY1() - bbox.getRes() * (partSizePixels / 2) - partSize * (HORIZON_OFFSET + 1);
+        final double origX = bbox.getX1() - bbox.getRes() * (partSizePixels / 2.0d) - partSize * (HORIZON_OFFSET + 1);
+        final double origY = bbox.getY1() - bbox.getRes() * (partSizePixels / 2.0d) - partSize * (HORIZON_OFFSET + 1);
 
         try {
             List<Integer> intList = jdbcTemplate.query(sql, ps -> {

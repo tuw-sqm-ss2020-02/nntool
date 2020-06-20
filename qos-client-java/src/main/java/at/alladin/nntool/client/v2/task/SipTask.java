@@ -140,59 +140,60 @@ public class SipTask extends AbstractQoSTask {
                         //open test socket
                         InetSocketAddress socketAddr = new InetSocketAddress(InetAddress.getByName(getTestServerAddr()), port);
                         System.out.println("SIP Connecting to: " + socketAddr.toString());
-                        Socket testSocket = new Socket();
-                        testSocket.connect(socketAddr, (int) (timeout / 1000000));
-                        testSocket.setSoTimeout((int) (timeout / 1000000));
+                        try (Socket testSocket = new Socket()) {
+                            testSocket.connect(socketAddr, (int) (timeout / 1000000));
+                            testSocket.setSoTimeout((int) (timeout / 1000000));
 
-                        System.out.println("SIP is connected: " + testSocket.isConnected());
+                            System.out.println("SIP is connected: " + testSocket.isConnected());
 
-                        resetSocketBufferedReader(testSocket);
+                            resetSocketBufferedReader(testSocket);
 
-                        //send INVITE request to qos service
-                        final SipRequestMessage msgInvite = SipUtil.generateInviteMessage(from, to, via);
-                        sendMessage(testSocket, msgInvite.getDataAsString());
+                            //send INVITE request to qos service
+                            final SipRequestMessage msgInvite = SipUtil.generateInviteMessage(from, to, via);
+                            sendMessage(testSocket, msgInvite.getDataAsString());
 
-                        //wait for TRYING response:
-                        String response = readMultiLine(testSocket);
-                        final SipResponseMessage responseTrying = SipUtil.parseResponseData(response);
-                        System.out.println("SIP response #1: " + responseTrying);
+                            //wait for TRYING response:
+                            String response = readMultiLine(testSocket);
+                            final SipResponseMessage responseTrying = SipUtil.parseResponseData(response);
+                            System.out.println("SIP response #1: " + responseTrying);
 
-                        if (!SipResponseMessage.SipResponseType.TRYING.equals(responseTrying.getType())) {
-                            return;
+                            if (!SipResponseMessage.SipResponseType.TRYING.equals(responseTrying.getType())) {
+                                return;
+                            }
+
+                            //wait for RINGING response:
+                            response = readMultiLine(testSocket);
+                            final SipResponseMessage responseRinging = SipUtil.parseResponseData(response);
+                            System.out.println("SIP response #2: " + responseRinging);
+
+                            if (!SipResponseMessage.SipResponseType.RINGING.equals(responseRinging.getType())) {
+                                return;
+                            }
+
+                            //increase call setup success rate
+                            callSetupSuccessRate++;
+
+                            //simulate call by waiting for the duration of the call
+                            Thread.sleep((int) (callDuration / 1000000));
+
+                            //send BYE request to qos service
+                            final SipRequestMessage msgBye = SipUtil.generateByeMessage(from, to, via);
+                            sendMessage(testSocket, msgBye.getDataAsString());
+
+                            //wait for OK response:
+                            response = readMultiLine(testSocket);
+                            final SipResponseMessage responseOk = SipUtil.parseResponseData(response);
+                            System.out.println("SIP response #3: " + responseOk);
+
+                            if (!SipResponseMessage.SipResponseType.OK.equals(responseOk.getType())) {
+                                return;
+                            }
+
+                            //increase call completion success rate
+                            callCompletionSuccessRate++;
+
+                            result.put(SipTaskHelper.PARAM_RESULT, "OK");
                         }
-
-                        //wait for RINGING response:
-                        response = readMultiLine(testSocket);
-                        final SipResponseMessage responseRinging = SipUtil.parseResponseData(response);
-                        System.out.println("SIP response #2: " + responseRinging);
-
-                        if (!SipResponseMessage.SipResponseType.RINGING.equals(responseRinging.getType())) {
-                            return;
-                        }
-
-                        //increase call setup success rate
-                        callSetupSuccessRate++;
-
-                        //simulate call by waiting for the duration of the call
-                        Thread.sleep((int) (callDuration / 1000000));
-
-                        //send BYE request to qos service
-                        final SipRequestMessage msgBye = SipUtil.generateByeMessage(from, to, via);
-                        sendMessage(testSocket, msgBye.getDataAsString());
-
-                        //wait for OK response:
-                        response = readMultiLine(testSocket);
-                        final SipResponseMessage responseOk = SipUtil.parseResponseData(response);
-                        System.out.println("SIP response #3: " + responseOk);
-
-                        if (!SipResponseMessage.SipResponseType.OK.equals(responseOk.getType())) {
-                            return;
-                        }
-
-                        //increase call completion success rate
-                        callCompletionSuccessRate++;
-
-                        result.put(SipTaskHelper.PARAM_RESULT, "OK");
                     } else {
                         result.put(SipTaskHelper.PARAM_RESULT, "ERROR");
                     }

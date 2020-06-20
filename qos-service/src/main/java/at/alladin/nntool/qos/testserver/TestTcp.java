@@ -31,7 +31,7 @@ public final class TestTcp {
     public static void main(String[] args) throws IOException {
         try (final ServerSocket serverSocket = new ServerSocket(3000)) {
             System.out.println("Listening on TCP 3000...");
-            while (true) {
+            while (!Thread.interrupted()) {
                 final Socket s = serverSocket.accept();
                 //new TcpHandler(s).runDis();
                 new TcpHandler(s).runBr();
@@ -52,7 +52,7 @@ public final class TestTcp {
         public void runBr() {
             try (final BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
                 long nulls = 0;
-                while (true) {
+                while (!Thread.interrupted()) {
                     final String line = br.readLine();
                     if (line == null) {
                         nulls++;
@@ -68,7 +68,7 @@ public final class TestTcp {
         public void runDis() {
             try (final DataInputStream dis = new DataInputStream(socket.getInputStream())) {
                 long nulls = 0;
-                while (true) {
+                while (!Thread.interrupted()) {
                     final byte[] buffer = new byte[1024];
                     if (dis.read(buffer) > -1) {
                         System.out.println("TS: " + System.currentTimeMillis() + ", LINE: " + new String(buffer) + " (NULLS: " + nulls + ")");
@@ -78,6 +78,5 @@ public final class TestTcp {
                 e.printStackTrace();
             }
         }
-
     }
 }
