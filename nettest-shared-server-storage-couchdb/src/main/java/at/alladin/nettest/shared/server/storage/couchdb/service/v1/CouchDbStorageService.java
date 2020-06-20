@@ -248,10 +248,11 @@ public class CouchDbStorageService implements StorageService {
                     if (result.getConnectionInfo() == null) {
                         result.setConnectionInfo(new ConnectionInfo());
                     }
+                    final ConnectionInfo connInfo = result.getConnectionInfo();
                     final MeasurementServer server = measurementPeerRepository.findByPublicIdentifier(lmapResult.getConnectionInfo().getIdentifier());
                     if (server != null) {
-                        result.getConnectionInfo().setIpAddress(server.getAddressIpv4());
-                        result.getConnectionInfo().setPort(server.getPortTls() != null ? server.getPortTls() : server.getPort());
+                        connInfo.setIpAddress(server.getAddressIpv4());
+                        connInfo.setPort(server.getPortTls() != null ? server.getPortTls() : server.getPort());
                     }
                 }
             }

@@ -183,10 +183,11 @@ public class QualityOfServiceTest implements Callable<QoSResultCollector> {
                 if (test.needsQoSControlConnection()) {
 
                     if (!controlConnectionMap.containsKey(test.getTestServerAddr())) {
+                        final TaskDesc td = test.getTaskDesc();
                         TestParameter params = new TestParameter(test.getTestServerAddr(), test.getTestServerPort(),
-                                nnTestSettings.isUseSsl(), test.getTaskDesc().getToken(),
-                                test.getTaskDesc().getDuration(), test.getTaskDesc().getNumThreads(),
-                                test.getTaskDesc().getNumPings(), test.getTaskDesc().getStartTime());
+                                nnTestSettings.isUseSsl(), td.getToken(),
+                                td.getDuration(), td.getNumThreads(),
+                                td.getNumPings(), td.getStartTime());
                         controlConnectionMap.put(test.getTestServerAddr(), new QoSControlConnection(getRMBTClient(), params));
                     }
 

@@ -24,17 +24,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class LoadApiRates {
 
     @JsonProperty("bps")
-    private String bps;
+    private String bitsPerSecond;
 
     @JsonProperty("pps")
-    private String pps;
+    private String pps; // Not clear what pps means
 
-    public String getBps() {
-        return bps;
+    public String getBitsPerSecond() {
+        return bitsPerSecond;
     }
 
-    public void setBps(String bps) {
-        this.bps = bps;
+    public void setBitsPerSecond(String bitsPerSecond) {
+        this.bitsPerSecond = bitsPerSecond;
     }
 
     public String getPps() {

@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.zafaco.common.listener;
+package com.zafaco.common.informationcollector;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -31,13 +31,13 @@ import com.zafaco.common.interfaces.ModulesInterface;
 
 import org.json.JSONObject;
 
-public class ListenerWireless extends BroadcastReceiver {
+public class WirelessCollector extends BroadcastReceiver {
     /**************************** Variables ****************************/
 
     Context ctx;
 
     //Module Objects
-    private Tool mTool;
+    private Tool tool;
     private ModulesInterface interfaceCallback;
     private WifiManager wm;
     private Thread pThread;
@@ -52,11 +52,11 @@ public class ListenerWireless extends BroadcastReceiver {
     /**
      * Constructor
      */
-    public ListenerWireless(Context ctx, ModulesInterface intCall) {
+    public WirelessCollector(Context ctx, ModulesInterface intCall) {
         this.ctx = ctx;
         this.interfaceCallback = intCall;
 
-        mTool = new Tool();
+        tool = new Tool();
 
         wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
@@ -100,14 +100,14 @@ public class ListenerWireless extends BroadcastReceiver {
 
             //---------------------------------------------
 
-            jData.put("app_mode", mTool.isWifi(ctx) ? "WIFI" : "WWAN");
+            jData.put("app_mode", tool.isWifi(ctx) ? "WIFI" : "WWAN");
 
             //----------------------------------------------
 
             //Callback
             interfaceCallback.receiveData(jData);
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
     }
 
@@ -120,7 +120,7 @@ public class ListenerWireless extends BroadcastReceiver {
                     //Every 10 Seconds
                     Thread.sleep(10000);
                 } catch (InterruptedException ex) {
-                    mTool.printTrace(ex);
+                    tool.printTrace(ex);
                 }
             }
         }

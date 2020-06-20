@@ -21,63 +21,63 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "map-cache")
 public class MapCacheConfig {
 
-    private Boolean usePointTileCache;
+    private boolean usePointTileCache;
 
-    private Boolean useHeatmapTileCache;
+    private boolean useHeatmapTileCache;
 
-    private Boolean useShapeTileCache;
+    private boolean useShapeTileCache;
 
-    private Integer cacheIgnoreZoomLevel;
+    private int cacheIgnoreZoomLevel;
 
-    private Integer cacheStaleSeconds;
+    private int cacheStaleSeconds;
 
-    private Integer cacheExpireSeconds;
+    private int cacheExpireSeconds;
 
-    public Boolean getUsePointTileCache() {
+    public boolean getUsePointTileCache() {
         return usePointTileCache;
     }
 
-    public void setUsePointTileCache(Boolean usePointTileCache) {
+    public void setUsePointTileCache(boolean usePointTileCache) {
         this.usePointTileCache = usePointTileCache;
     }
 
-    public Boolean getUseHeatmapTileCache() {
+    public boolean getUseHeatmapTileCache() {
         return useHeatmapTileCache;
     }
 
-    public void setUseHeatmapTileCache(Boolean useHeatmapTileCache) {
+    public void setUseHeatmapTileCache(boolean useHeatmapTileCache) {
         this.useHeatmapTileCache = useHeatmapTileCache;
     }
 
-    public Boolean getUseShapeTileCache() {
+    public boolean getUseShapeTileCache() {
         return useShapeTileCache;
     }
 
-    public void setUseShapeTileCache(Boolean useShapeTileCache) {
+    public void setUseShapeTileCache(boolean useShapeTileCache) {
         this.useShapeTileCache = useShapeTileCache;
     }
 
-    public Integer getCacheIgnoreZoomLevel() {
+    public int getCacheIgnoreZoomLevel() {
         return cacheIgnoreZoomLevel;
     }
 
-    public void setCacheIgnoreZoomLevel(Integer cacheIgnoreZoomLevel) {
+    public void setCacheIgnoreZoomLevel(int cacheIgnoreZoomLevel) {
         this.cacheIgnoreZoomLevel = cacheIgnoreZoomLevel;
     }
 
-    public Integer getCacheStaleSeconds() {
+    public int getCacheStaleSeconds() {
         return cacheStaleSeconds;
     }
 
-    public void setCacheStaleSeconds(Integer cacheStaleSeconds) {
+    public void setCacheStaleSeconds(int cacheStaleSeconds) {
         this.cacheStaleSeconds = cacheStaleSeconds;
     }
 
-    public Integer getCacheExpireSeconds() {
+    public int getCacheExpireSeconds() {
         return cacheExpireSeconds;
     }
 
-    public void setCacheExpireSeconds(Integer cacheExpireSeconds) {
+    public void setCacheExpireSeconds(int cacheExpireSeconds) {
         this.cacheExpireSeconds = cacheExpireSeconds;
     }
 

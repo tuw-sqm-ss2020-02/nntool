@@ -87,14 +87,14 @@ public class MeasurementAgentResource {
             registrationResponse = storageService.registerMeasurementAgent(registrationApiRequest);
         } catch (StorageServiceException ex) {
             //TODO: talk about handling that differently
-            throw new MeasurementAgentRegistrationTermsAndConditionsNotAcceptedException("Client has unknown uuid in registration request");
+            throw new MeasurementAgentRegistrationTermsAndConditionsNotAcceptedException("Client has unknown uuid in registration request", ex);
         }
 
         try {
             registrationResponse.setSettings(storageService.getSettings(controllerServiceProperties.getSettingsUuid()));
         } catch (StorageServiceException ex) {
             //we let them register even if the settings have issues
-            logger.trace("Could not get settings", ex);
+            logger.warn("Settings could not be fetched from the database", ex);
         }
 
         logger.debug("returned response: {}", registrationResponse);

@@ -669,24 +669,24 @@ public class Tool {
         return object;
     }
 
-    public String tokb(String value, String type) {
+    public long toKilobytes(String value, String type) {
         try {
             switch (type) {
                 case "kB":
-                    return "" + (int) Double.parseDouble(value);
+                    return (long) Double.parseDouble(value);
                 case "MB":
-                    return "" + (int) (Double.parseDouble(value) * 1000);
+                    return (long) (Double.parseDouble(value) * 1000);
                 case "GB":
-                    return "" + (int) (Double.parseDouble(value) * 1000000);
+                    return (long) (Double.parseDouble(value) * 1000000);
 
                 case "Mbit/s":
-                    return "" + Integer.parseInt(value) * 1000;
+                    return Long.parseLong(value) * 1000;
             }
         } catch (NumberFormatException nfe) {
-            return "-1";
+            return 0;
         }
 
-        return "-1";
+        return 0;
     }
 
     /**
@@ -733,7 +733,7 @@ public class Tool {
         }
     }
 
-    public String formatStringToGUI(String value, int factor) {
+    public String formatNumericValue(String value, int factor) {
         DecimalFormat df = new DecimalFormat("#0.00");
 
         Double d = Double.parseDouble(value) / factor;
@@ -741,7 +741,7 @@ public class Tool {
         return "" + df.format(d);
     }
 
-    public String formatStringToGUI(String value, int factor, String unit) {
+    public String formatNumericValue(String value, int factor, String unit) {
         DecimalFormat df = new DecimalFormat("#0.00");
 
         Double d = Double.parseDouble(value) / factor;
@@ -749,7 +749,7 @@ public class Tool {
         return "" + df.format(d) + " " + unit;
     }
 
-    public String formatStringToGUI(Double value, int factor, String unit) {
+    public String formatNumericValue(Double value, int factor, String unit) {
         DecimalFormat df = new DecimalFormat("#0.00");
 
         Double d = value / factor;
@@ -763,7 +763,7 @@ public class Tool {
         return gson.fromJson(s, cls);
     }
 
-    public String saveObject(Object o) {
+    public String toJson(Object o) {
         Gson gson = new Gson();
 
         return gson.toJson(o);

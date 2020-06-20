@@ -47,8 +47,8 @@ public class Database extends SQLiteOpenHelper {
 
     Context ctx;
     //Module Objects
-    private Tool mTool;
-    private SQLiteDatabase mDatabase;
+    private Tool tool;
+    private SQLiteDatabase database;
     private boolean attachFlag = false;
 
     /*******************************************************************/
@@ -65,14 +65,14 @@ public class Database extends SQLiteOpenHelper {
 
         ctx = context;
 
-        mTool = new Tool();
+        tool = new Tool();
 
         TABLE_NAME = table_name;
 
         LinkedHashMap<String, String> keys = new LinkedHashMap<>();
         keys.put("timestamp", "");
 
-        createDB(keys);
+        createTable(keys);
     }
 
     @Override
@@ -87,16 +87,16 @@ public class Database extends SQLiteOpenHelper {
             onCreate(db);
         } catch (Exception ex) {
             Log.e("DBHelper", "### Exception in onUpgrade() ###");
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
     }
 
     public void attachDB(String attDB, String attTable) {
         try {
-            mDatabase = getWritableDatabase();
-            mDatabase.execSQL("ATTACH DATABASE '" + ctx.getDatabasePath(attDB).toString() + "' AS " + attDB);
+            database = getWritableDatabase();
+            database.execSQL("ATTACH DATABASE '" + ctx.getDatabasePath(attDB).toString() + "' AS " + attDB);
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
 
         TABLE_NAME = TABLE_NAME + "," + attDB + "." + attTable;
@@ -110,17 +110,17 @@ public class Database extends SQLiteOpenHelper {
             return;
 
         try {
-            mDatabase = getWritableDatabase();
-            mDatabase.execSQL("DETACH DATABASE " + attDB);
+            database = getWritableDatabase();
+            database.execSQL("DETACH DATABASE " + attDB);
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
 
         TABLE_NAME = attTable;
     }
 
-    public void createDB(LinkedHashMap<String, String> keys) {
-        mDatabase = getWritableDatabase();
+    public void createTable(LinkedHashMap<String, String> keys) {
+        database = getWritableDatabase();
 
         try {
             String createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (";
@@ -138,18 +138,18 @@ public class Database extends SQLiteOpenHelper {
             //DEBUG
             //mTool.printOutput(createTable);
 
-            mDatabase.execSQL(createTable);
+            database.execSQL(createTable);
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
 
-        checkColumns(keys);
+        updateSchema(keys);
 
-        mDatabase.close();
+        database.close();
     }
 
-    public void createDB(JSONObject keys) {
-        mDatabase = getWritableDatabase();
+    public void createTable(JSONObject keys) {
+        database = getWritableDatabase();
 
         try {
             String createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (";
@@ -167,26 +167,26 @@ public class Database extends SQLiteOpenHelper {
             //DEBUG
             //mTool.printOutput(createTable);
 
-            mDatabase.execSQL(createTable);
+            database.execSQL(createTable);
         } catch (Exception ex) {
-            mTool.printOutput("### Exception in createDB() ###");
-            mTool.printTrace(ex);
+            tool.printOutput("### Exception in createDB() ###");
+            tool.printTrace(ex);
         }
 
-        checkColumns(keys);
+        updateSchema(keys);
 
-        mDatabase.close();
+        database.close();
     }
 
-    private void checkColumns(LinkedHashMap<String, String> keys) {
-        mDatabase = getWritableDatabase();
+    private void updateSchema(LinkedHashMap<String, String> keys) {
+        database = getWritableDatabase();
 
         try {
             ArrayList<String> tmp = new ArrayList<>();
 
             String pragmaTable = "PRAGMA table_info(" + TABLE_NAME + ")";
 
-            Cursor result = mDatabase.rawQuery(pragmaTable, null);
+            Cursor result = database.rawQuery(pragmaTable, null);
 
             while (result.moveToNext()) {
                 tmp.add(result.getString(1));
@@ -199,27 +199,27 @@ public class Database extends SQLiteOpenHelper {
                 if (tmp.indexOf(entry.getKey()) == -1) {
                     String alterTable = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + entry.getKey() + " TEXT ";
 
-                    mTool.printOutput("Alter Query: " + alterTable);
+                    tool.printOutput("Alter Query: " + alterTable);
 
-                    mDatabase.execSQL(alterTable);
+                    database.execSQL(alterTable);
                 }
             }
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
 
-        mDatabase.close();
+        database.close();
     }
 
-    private void checkColumns(JSONObject keys) {
-        mDatabase = getWritableDatabase();
+    private void updateSchema(JSONObject keys) {
+        database = getWritableDatabase();
 
         try {
             ArrayList<String> tmp = new ArrayList<>();
 
             String pragmaTable = "PRAGMA table_info(" + TABLE_NAME + ")";
 
-            Cursor result = mDatabase.rawQuery(pragmaTable, null);
+            Cursor result = database.rawQuery(pragmaTable, null);
 
             while (result.moveToNext()) {
                 tmp.add(result.getString(1));
@@ -234,16 +234,16 @@ public class Database extends SQLiteOpenHelper {
                 if (tmp.indexOf(key) == -1) {
                     String alterTable = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + key + " TEXT ";
 
-                    mTool.printOutput("Alter Query: " + alterTable);
+                    tool.printOutput("Alter Query: " + alterTable);
 
-                    mDatabase.execSQL(alterTable);
+                    database.execSQL(alterTable);
                 }
             }
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
 
-        mDatabase.close();
+        database.close();
     }
 
     public void insert(LinkedHashMap<String, String> aData) {
@@ -259,7 +259,7 @@ public class Database extends SQLiteOpenHelper {
                 keys += entry.getKey() + ",";
                 values += "?,";
             } catch (Exception ex) {
-                mTool.printTrace(ex);
+                tool.printTrace(ex);
             }
         }
 
@@ -270,9 +270,9 @@ public class Database extends SQLiteOpenHelper {
         //DEBUG
         //mTool.printOutput(sql);
 
-        mDatabase = getWritableDatabase();
-        mDatabase.beginTransaction();
-        SQLiteStatement stmt = mDatabase.compileStatement(sql);
+        database = getWritableDatabase();
+        database.beginTransaction();
+        SQLiteStatement stmt = database.compileStatement(sql);
 
         int i = 1;
         for (Map.Entry<String, String> entry : aData.entrySet()) {
@@ -287,17 +287,17 @@ public class Database extends SQLiteOpenHelper {
                 //Attention: on the "bind-function, the index starts at 1, not 0"
                 stmt.bindString(i++, tmp);
             } catch (Exception ex) {
-                mTool.printTrace(ex);
+                tool.printTrace(ex);
             }
         }
 
         stmt.executeInsert();
         stmt.clearBindings();
 
-        mDatabase.setTransactionSuccessful();
-        mDatabase.endTransaction();
+        database.setTransactionSuccessful();
+        database.endTransaction();
 
-        mDatabase.close();
+        database.close();
     }
 
     public void insert(JSONObject aData) {
@@ -319,9 +319,9 @@ public class Database extends SQLiteOpenHelper {
         //DEBUG
         //mTool.printOutput(sql);
 
-        mDatabase = getWritableDatabase();
-        mDatabase.beginTransaction();
-        SQLiteStatement stmt = mDatabase.compileStatement(sql);
+        database = getWritableDatabase();
+        database.beginTransaction();
+        SQLiteStatement stmt = database.compileStatement(sql);
 
         int i = 1;
         for (Iterator<String> iter = aData.keys(); iter.hasNext(); ) {
@@ -338,28 +338,28 @@ public class Database extends SQLiteOpenHelper {
                 //Attention: on the "bind-function, the index starts at 1, not 0"
                 stmt.bindString(i++, tmp);
             } catch (Exception ex) {
-                mTool.printTrace(ex);
+                tool.printTrace(ex);
             }
         }
 
         stmt.executeInsert();
         stmt.clearBindings();
 
-        mDatabase.setTransactionSuccessful();
-        mDatabase.endTransaction();
+        database.setTransactionSuccessful();
+        database.endTransaction();
 
-        mDatabase.close();
+        database.close();
     }
 
     public int update(ContentValues cValues, int nId) {
         int retCode = 0;
 
-        mDatabase = this.getWritableDatabase();
+        database = this.getWritableDatabase();
 
-        if (mDatabase != null) {
-            retCode = mDatabase.update(TABLE_NAME, cValues, "id=" + String.valueOf(nId), null);
+        if (database != null) {
+            retCode = database.update(TABLE_NAME, cValues, "id=" + String.valueOf(nId), null);
 
-            mDatabase.close();
+            database.close();
         }
 
         return retCode;
@@ -368,13 +368,13 @@ public class Database extends SQLiteOpenHelper {
     public int deleteID(String column, String value) {
         int retCode = 0;
 
-        mDatabase = this.getWritableDatabase();
+        database = this.getWritableDatabase();
 
-        if (mDatabase != null && !value.equals("0") && !value.equals("")) {
+        if (database != null && !value.equals("0") && !value.equals("")) {
             String[] args = {value};
-            retCode = mDatabase.delete(TABLE_NAME, column + "=?", args);
+            retCode = database.delete(TABLE_NAME, column + "=?", args);
 
-            mDatabase.close();
+            database.close();
         }
 
         return retCode;
@@ -393,9 +393,9 @@ public class Database extends SQLiteOpenHelper {
 
             //Log.e("SQL-Query",query);
 
-            mDatabase = this.getWritableDatabase();
+            database = this.getWritableDatabase();
 
-            Cursor result = mDatabase.rawQuery(query, null);
+            Cursor result = database.rawQuery(query, null);
 
             while (result.moveToNext()) {
                 LinkedHashMap<String, String> columns = new LinkedHashMap<>();
@@ -409,9 +409,9 @@ public class Database extends SQLiteOpenHelper {
 
             result.close();
 
-            mDatabase.close();
+            database.close();
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
 
         return rows;
@@ -430,9 +430,9 @@ public class Database extends SQLiteOpenHelper {
 
             //Log.e("SQL-Query",query);
 
-            mDatabase = this.getWritableDatabase();
+            database = this.getWritableDatabase();
 
-            Cursor result = mDatabase.rawQuery(query, null);
+            Cursor result = database.rawQuery(query, null);
 
             while (result.moveToNext()) {
                 LinkedHashMap<String, String> columns = new LinkedHashMap<>();
@@ -446,9 +446,9 @@ public class Database extends SQLiteOpenHelper {
 
             result.close();
 
-            mDatabase.close();
+            database.close();
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
 
         return rows;
@@ -463,9 +463,9 @@ public class Database extends SQLiteOpenHelper {
         String ascDesc = ((asc == 1) ? "ASC" : "DESC");
         String query = "SELECT *,id as _id FROM " + TABLE_NAME + " WHERE 1 ORDER BY " + order + " " + ascDesc;
 
-        mDatabase = this.getWritableDatabase();
+        database = this.getWritableDatabase();
 
-        Cursor cDatabaseCursor = mDatabase.rawQuery(query, null);
+        Cursor cDatabaseCursor = database.rawQuery(query, null);
 
         return cDatabaseCursor;
     }
@@ -485,9 +485,9 @@ public class Database extends SQLiteOpenHelper {
 
             //mTool.printOutput("SQL-Query: " +query);
 
-            mDatabase = getWritableDatabase();
+            database = getWritableDatabase();
 
-            Cursor result = mDatabase.rawQuery(query, null);
+            Cursor result = database.rawQuery(query, null);
 
             result.moveToFirst();
 
@@ -495,9 +495,9 @@ public class Database extends SQLiteOpenHelper {
 
             result.close();
 
-            mDatabase.close();
+            database.close();
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
 
         return nLastID;
@@ -510,9 +510,9 @@ public class Database extends SQLiteOpenHelper {
 
             //mTool.printOutput("SQL-Query: " +query);
 
-            mDatabase = getWritableDatabase();
+            database = getWritableDatabase();
 
-            Cursor result = mDatabase.rawQuery(query, null);
+            Cursor result = database.rawQuery(query, null);
 
             result.moveToFirst();
 
@@ -520,15 +520,15 @@ public class Database extends SQLiteOpenHelper {
 
             result.close();
 
-            mDatabase.close();
+            database.close();
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
 
         return nLastID;
     }
 
     public void close() {
-        mDatabase.close();
+        database.close();
     }
 }

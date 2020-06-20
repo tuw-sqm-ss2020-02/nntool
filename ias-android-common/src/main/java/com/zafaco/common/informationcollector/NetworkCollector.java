@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.zafaco.common.listener;
+package com.zafaco.common.informationcollector;
 
 import android.content.Context;
 import android.telephony.CellLocation;
@@ -37,13 +37,13 @@ import java.lang.reflect.Method;
 /**
  * Class ListenerNetwork
  */
-public class ListenerNetwork extends PhoneStateListener {
+public class NetworkCollector extends PhoneStateListener {
     /**************************** Variables ****************************/
 
     private Context ctx;
 
     //Module Objects
-    private Tool mTool;
+    private Tool tool;
     private ModulesInterface interfaceCallback;
     private ServiceState serviceState;
     private TelephonyManager tm;
@@ -58,11 +58,11 @@ public class ListenerNetwork extends PhoneStateListener {
      * @param ctx
      * @param intCall
      */
-    public ListenerNetwork(Context ctx, ModulesInterface intCall) {
+    public NetworkCollector(Context ctx, ModulesInterface intCall) {
         this.ctx = ctx;
         this.interfaceCallback = intCall;
 
-        mTool = new Tool();
+        tool = new Tool();
 
         tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
     }
@@ -191,17 +191,17 @@ public class ListenerNetwork extends PhoneStateListener {
         }
 
         try {
-            jData.put("app_mode", mTool.isWifi(ctx) ? "WIFI" : "WWAN");
-            jData.put("app_access", mTool.getNetType(tm.getNetworkType()));
+            jData.put("app_mode", tool.isWifi(ctx) ? "WIFI" : "WWAN");
+            jData.put("app_access", tool.getNetType(tm.getNetworkType()));
             jData.put("app_access_id", tm.getNetworkType());
 
             //--------------------------------------------------------------------------------------
 
             if (serviceState != null) {
-                jData.put("app_voice", mTool.getVoicetype(serviceState.getState()));
+                jData.put("app_voice", tool.getVoicetype(serviceState.getState()));
                 jData.put("app_voice_id", getVoiceNetworkType(serviceState));
             } else {
-                jData.put("app_voice", mTool.getVoicetype(-1));
+                jData.put("app_voice", tool.getVoicetype(-1));
                 jData.put("app_voice_id", -1);
             }
 
@@ -228,7 +228,7 @@ public class ListenerNetwork extends PhoneStateListener {
             //Callback
             interfaceCallback.receiveData(jData);
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
     }
 
@@ -249,7 +249,7 @@ public class ListenerNetwork extends PhoneStateListener {
 
             return (int) (Integer) mI.invoke(serviceState);
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
 
         return -1;
@@ -270,7 +270,7 @@ public class ListenerNetwork extends PhoneStateListener {
                     //Every 10 Seconds
                     Thread.sleep(10000);
                 } catch (InterruptedException ex) {
-                    mTool.printTrace(ex);
+                    tool.printTrace(ex);
                 }
             }
         }

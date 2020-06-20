@@ -186,7 +186,7 @@ public class ExportProperties {
 
             private String title;
             private String pointer;
-            private Boolean includeInCoarse;
+            private boolean includeInCoarse;
 
             public String getTitle() {
                 return title;
@@ -204,11 +204,11 @@ public class ExportProperties {
                 this.pointer = pointer;
             }
 
-            public Boolean getIncludeInCoarse() {
+            public boolean getIncludeInCoarse() {
                 return includeInCoarse;
             }
 
-            public void setIncludeInCoarse(Boolean includeInCoarse) {
+            public void setIncludeInCoarse(boolean includeInCoarse) {
                 this.includeInCoarse = includeInCoarse;
             }
 

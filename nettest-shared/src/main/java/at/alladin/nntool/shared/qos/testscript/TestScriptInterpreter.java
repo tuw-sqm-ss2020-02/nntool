@@ -22,22 +22,22 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Random;
+import java.util.Iterator;
+import java.util.Arrays;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.script.Bindings;
+import javax.script.SimpleBindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.script.SimpleBindings;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -107,7 +107,7 @@ public final class TestScriptInterpreter {
         if (jsEngine == null) {
             ScriptEngineManager sem = new ScriptEngineManager();
             jsEngine = sem.getEngineByName("JavaScript");
-            System.out.println("JS Engine: " + jsEngine.getClass().getCanonicalName());
+            LOGGER.info("JS Engine: {}", jsEngine.getClass().getCanonicalName());
             Bindings b = jsEngine.createBindings();
             b.put("nn", new SystemApi());
             jsEngine.setBindings(b, ScriptContext.GLOBAL_SCOPE);
@@ -121,7 +121,7 @@ public final class TestScriptInterpreter {
                 String toReplace = "";
 
                 final String controlCommand = mc.group(1);
-                //System.out.println("found control command: " + controlCommand + ", clause: " + mc.group(2));
+                //LOGGER.info("found control command: " + controlCommand + ", clause: " + mc.group(2));
                 if ("IF".equals(controlCommand)) {
                     if (controlIf(mc.group(2), object)) {
                         toReplace = String.valueOf(interpret(mc.group(3), fieldNameToFieldMap, object, true, resultOptions));
@@ -146,9 +146,9 @@ public final class TestScriptInterpreter {
             Matcher m = p.matcher(command);
             while (m.find()) {
                 String replace = m.group(0);
-                //System.out.println("found: " + replace);
+                //LOGGER.info("found: " + replace);
                 String toReplace = String.valueOf(interpret(replace, fieldNameToFieldMap, object, false, resultOptions));
-                //System.out.println("replacing: " + m.group(0) + " -> " + toReplace);
+                //LOGGER.info("replacing: " + m.group(0) + " -> " + toReplace);
                 command = command.replace(m.group(0), toReplace);
             }
 
@@ -255,20 +255,20 @@ public final class TestScriptInterpreter {
             bindings.putAll(object.getResultMap());
             //final Bindings bindings = new SimpleBindings(object.getResultMap());
 
-            //System.out.println(object.getResultMap().toString());
+            //LOGGER.info(object.getResultMap().toString());
             jsEngine.eval("var result=null; " + args[0], bindings);
 
             EvalResult evalResult = null;
             final Object result = bindings.get("result");
 
             if (result != null) {
-                if (jsEngine.getClass().getCanonicalName().equals("jdk.nashorn.api.scripting.NashornScriptEngine")) {
-                    if (result.getClass().getCanonicalName().equals("jdk.nashorn.api.scripting.ScriptObjectMirror")) {
+                if ("jdk.nashorn.api.scripting.NashornScriptEngine".equals(jsEngine.getClass().getCanonicalName())) {
+                    if ("jdk.nashorn.api.scripting.ScriptObjectMirror".equals(result.getClass().getCanonicalName())) {
                         isJsObject = true;
                     }
                 } else {
-                    if (result.getClass().getCanonicalName().equals("sun.org.mozilla.javascript.NativeObject")
-                            || result.getClass().getCanonicalName().equals("sun.org.mozilla.javascript.internal.NativeObject")) {
+                    if ("sun.org.mozilla.javascript.NativeObject".equals(result.getClass().getCanonicalName())
+                            || "sun.org.mozilla.javascript.internal.NativeObject".equals(result.getClass().getCanonicalName())) {
                         isJsObject = true;
                     }
                 }
@@ -277,12 +277,12 @@ public final class TestScriptInterpreter {
             if (isJsObject) {
                 if (!alredayLookedForGetter && jsEngineNativeObjectGetter == null) {
                     alredayLookedForGetter = true;
-                    System.out.println("js getter is null, trying to get methody with reflections...");
+                    LOGGER.info("js getter is null, trying to get methody with reflections...");
                     try {
                         jsEngineNativeObjectGetter = result.getClass().getMethod("get", Object.class);
-                        System.out.println("method found: " + jsEngineNativeObjectGetter.getName());
+                        LOGGER.info("method found: {}", jsEngineNativeObjectGetter.getName());
                     } catch (Exception e) {
-                        System.out.println("method not found: " + e.getMessage());
+                        LOGGER.error("method not found: {}", e.getMessage());
                     }
                 }
 
@@ -290,15 +290,19 @@ public final class TestScriptInterpreter {
                     final String type = (String) jsEngineNativeObjectGetter.invoke(result, "type");
                     final String key = (String) jsEngineNativeObjectGetter.invoke(result, "key");
 
-                    //System.out.println(type + " " + key);
+                    //LOGGER.info(type + " " + key);
 
                     evalResult = new EvalResult(EvalResultType.valueOf(type.toUpperCase(Locale.US)), key);
 
-                    //System.out.println("Result: " + evalResult);
+                    //LOGGER.info("Result: " + evalResult);
                 }
             }
 
-            return evalResult == null ? (result == null ? "" : result) : evalResult;
+            if (evalResult != null) {
+                return evalResult;
+            } else {
+                return result != null ? result : "";
+            }
         } catch (Exception e) {
             throw new ScriptException(e.getMessage() + " " + args[0]);
         }
@@ -375,18 +379,18 @@ public final class TestScriptInterpreter {
                         format.setMaximumFractionDigits(precision);
                         format.setGroupingUsed(groupingUsed);
                         format.setRoundingMode(RoundingMode.HALF_UP);
-                        //System.out.println("Converting number: " + args[0] + "=" + String.valueOf(value));
+                        //LOGGER.info("Converting number: " + args[0] + "=" + String.valueOf(value));
                         BigDecimal number = new BigDecimal(String.valueOf(value));
                         return format.format(number.divide(new BigDecimal(divisor)));
                     } catch (Exception e) {
                         //can not return parsed element
                     }
                 }
-                //System.out.println("PARAM object: " + args[0] + " -> " + value + " of " + object.toString());
+                //LOGGER.info("PARAM object: " + args[0] + " -> " + value + " of " + object.toString());
                 return value;
             }
-        } catch (Throwable t) {
-            throw new ScriptException(ScriptException.ERROR_UNKNOWN + " PARSE: " + t.getMessage());
+        } catch (Exception e) {
+            throw new ScriptException(ScriptException.ERROR_UNKNOWN + " PARSE: " + e.getMessage(), e);
         }
 
         return null;
@@ -399,7 +403,7 @@ public final class TestScriptInterpreter {
             return Boolean.parseBoolean(result.toString());
 
         } catch (javax.script.ScriptException e) {
-            throw new ScriptException(ScriptException.ERROR_UNKNOWN + " IF: " + e.getMessage());
+            throw new ScriptException(ScriptException.ERROR_UNKNOWN + " IF: " + e.getMessage(), e);
         }
     }
 
@@ -409,7 +413,7 @@ public final class TestScriptInterpreter {
         try {
             result = jsEngine.eval(clause, bindings);
         } catch (javax.script.ScriptException e) {
-            throw new ScriptException(ScriptException.ERROR_UNKNOWN + " SWITCH: " + e.getMessage());
+            throw new ScriptException(ScriptException.ERROR_UNKNOWN + " SWITCH: " + e.getMessage(), e);
         }
 
         try {
@@ -424,7 +428,7 @@ public final class TestScriptInterpreter {
                 }
             }
         } catch (javax.script.ScriptException e) {
-            throw new ScriptException(ScriptException.ERROR_UNKNOWN + " CASE: " + e.getMessage());
+            throw new ScriptException(ScriptException.ERROR_UNKNOWN + " CASE: " + e.getMessage(), e);
         }
 
         return "";

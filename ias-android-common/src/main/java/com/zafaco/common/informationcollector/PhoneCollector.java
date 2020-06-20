@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.zafaco.common.listener;
+package com.zafaco.common.informationcollector;
 
 import android.content.Context;
 import android.os.Build;
@@ -33,13 +33,13 @@ import org.json.JSONObject;
 /**
  * Class ListenerPhone
  */
-public class ListenerPhone extends PhoneStateListener {
+public class PhoneCollector extends PhoneStateListener {
     /**************************** Variables ****************************/
 
     private Context ctx;
 
     //Module Objects
-    private Tool mTool;
+    private Tool tool;
     private ModulesInterface interfaceCallback;
     private JSONObject jData;
     private TelephonyManager tm;
@@ -56,11 +56,11 @@ public class ListenerPhone extends PhoneStateListener {
      * @param ctx
      * @param intCall
      */
-    public ListenerPhone(Context ctx, ModulesInterface intCall) {
+    public PhoneCollector(Context ctx, ModulesInterface intCall) {
         this.ctx = ctx;
         this.interfaceCallback = intCall;
 
-        mTool = new Tool();
+        tool = new Tool();
 
         jData = new JSONObject();
 
@@ -78,14 +78,14 @@ public class ListenerPhone extends PhoneStateListener {
         try {
             //----------------------------------------------
 
-            jData.put("app_call_state", mTool.isCalling(ctx) ? "1" : "0");
+            jData.put("app_call_state", tool.isCalling(ctx) ? "1" : "0");
 
             //----------------------------------------------
 
             //Callback
             interfaceCallback.receiveData(jData);
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
     }
 
@@ -127,7 +127,7 @@ public class ListenerPhone extends PhoneStateListener {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (tm.getPhoneCount() == 2) {
-                    mTool.printOutput("DEBUG [getPhoneCount]:" + tm.getPhoneCount());
+                    tool.printOutput("DEBUG [getPhoneCount]:" + tm.getPhoneCount());
                 }
             }
             //----------------------------------------------
@@ -135,7 +135,7 @@ public class ListenerPhone extends PhoneStateListener {
             //Callback
             interfaceCallback.receiveData(jData);
         } catch (Exception ex) {
-            mTool.printTrace(ex);
+            tool.printTrace(ex);
         }
     }
 
@@ -148,7 +148,7 @@ public class ListenerPhone extends PhoneStateListener {
                     //Every 10 Seconds
                     Thread.sleep(10000);
                 } catch (InterruptedException ex) {
-                    mTool.printTrace(ex);
+                    tool.printTrace(ex);
                 }
             }
         }
