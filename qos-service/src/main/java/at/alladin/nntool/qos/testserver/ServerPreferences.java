@@ -133,7 +133,7 @@ public class ServerPreferences {
      * @throws UnknownHostException
      */
     public ServerPreferences(String[] args) throws TestServerException {
-        if (args == null || args.length < 0) {
+        if (args == null) {
             loadFromConfigFile("config.properties");
             setUdpPortSet();
             checkConstraints();

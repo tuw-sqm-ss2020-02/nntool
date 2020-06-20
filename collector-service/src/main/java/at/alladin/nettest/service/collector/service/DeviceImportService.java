@@ -102,6 +102,9 @@ public class DeviceImportService {
 
             LOGGER.debug("Executing device import: {}", settings.getName());
             final Path path = downloadToTempFile(settings.getUrl(), "temp_" + settings.getName());
+            if (path == null) {
+                return;
+            }
 
             final Map<String, Device> newDevices = new HashMap<>();
             final CsvMapper csvMapper = new CsvMapper();

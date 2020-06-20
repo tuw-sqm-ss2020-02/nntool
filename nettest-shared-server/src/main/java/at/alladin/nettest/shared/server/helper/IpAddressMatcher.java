@@ -62,9 +62,11 @@ public final class IpAddressMatcher {
             nMaskBits = -1;
         }
         requiredAddress = parseAddress(ipAddress);
-        Assert.isTrue(requiredAddress.getAddress().length * 8 >= nMaskBits,
-                String.format("IP address %s is too short for bitmask of length %d",
-                        ipAddress, nMaskBits));
+        if (requiredAddress != null) {
+            Assert.isTrue(requiredAddress.getAddress().length * 8 >= nMaskBits,
+                    String.format("IP address %s is too short for bitmask of length %d",
+                            ipAddress, nMaskBits));
+        }
     }
 
     public boolean matches(String address) {

@@ -92,6 +92,8 @@ public class ClientHandler implements Runnable {
      */
     protected String clientProtocolVersion = QoSServiceProtocol.PROTOCOL_VERSION_1;
 
+    protected Random rand = new Random();
+
     /**
      * @param serverSocket
      * @param socket
@@ -194,9 +196,11 @@ public class ClientHandler implements Runnable {
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_NEW_CONNECTION_TIMEOUT)) {
                             requestNewConnectionTimeout(command);
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_PROTOCOL_VERSION)) {
-                            quit = quit;
+                            //quit = quit;
+                            break;
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_PROTOCOL_KEEPALIVE)) {
-                            quit = quit;
+                            //quit = quit;
+                            break;
                         } else {
                             sendCommand(QoSServiceProtocol.RESPONSE_ACCEPT_COMMANDS, command);
                             quit = true;
@@ -274,7 +278,6 @@ public class ClientHandler implements Runnable {
      */
     protected void sendRandomUdpPort(final String command) throws IOException {
         int randomPort = 0;
-        Random rand = new Random();
         if ((TestServer.getInstance().getServerPreferences().getUdpPortMax() > 0) && (TestServer.getInstance().getServerPreferences().getUdpPortMin() <= TestServer.getInstance().getServerPreferences().getUdpPortMax())) {
             randomPort = rand.nextInt(TestServer.getInstance().getServerPreferences().getUdpPortMax() - TestServer.getInstance().getServerPreferences().getUdpPortMin())
                     + TestServer.getInstance().getServerPreferences().getUdpPortMin();
@@ -305,23 +308,13 @@ public class ClientHandler implements Runnable {
 
             @Override
             public void run() {
-                Socket testSocket = null;
-                try {
-                    testSocket = new Socket(socket.getInetAddress(), port);
+                try (Socket testSocket = new Socket(socket.getInetAddress(), port)) {
                     BufferedOutputStream bufOut = new BufferedOutputStream(testSocket.getOutputStream());
                     bufOut.write(getBytesWithNewline("HELLO TO " + port));
                     bufOut.flush();
                     testSocket.close();
                 } catch (Exception e) {
                     TestServerConsole.error(name, e, 2, TestServerServiceEnum.TCP_SERVICE);
-                } finally {
-                    if (testSocket != null && !testSocket.isClosed()) {
-                        try {
-                            testSocket.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
                 }
             }
         };
@@ -438,6 +431,8 @@ public class ClientHandler implements Runnable {
             }
             sendRcvResult(clientData, port, command);
         }
+
+        sock.close();
     }
 
     /**
@@ -492,9 +487,14 @@ public class ClientHandler implements Runnable {
                 dataOut.write(Long.toString(System.currentTimeMillis()).getBytes());
                 */
                 dataOut.write(UdpPayloadUtil.toBytes(udpPayload));
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 sock.close();
+                return clientData;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                sock.close();
+                Thread.currentThread().interrupt();
                 return clientData;
             }
 
