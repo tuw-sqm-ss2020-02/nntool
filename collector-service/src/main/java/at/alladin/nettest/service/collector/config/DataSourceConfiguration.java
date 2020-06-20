@@ -27,6 +27,10 @@ import org.springframework.context.annotation.Import;
 @Configuration
 public class DataSourceConfiguration {
 
+    public DataSourceConfiguration() {
+
+    }
+
     @Configuration
     @ConditionalOnProperty(name = "spring.datasource.url")
     @Import(DataSourceAutoConfiguration.class)

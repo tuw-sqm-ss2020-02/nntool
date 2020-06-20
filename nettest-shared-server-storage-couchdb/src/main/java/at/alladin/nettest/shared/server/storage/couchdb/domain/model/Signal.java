@@ -16,13 +16,13 @@
 
 package at.alladin.nettest.shared.server.storage.couchdb.domain.model;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.time.LocalDateTime;
 
 /**
  * Contains signal information from a point in time.

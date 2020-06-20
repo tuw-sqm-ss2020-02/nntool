@@ -69,10 +69,12 @@ public class MeasurementConfigurationService {
         ret.setEvents(getImmediateEventList());
         ret.setSchedules(getLmapScheduleList(ret.getEvents().get(0).getName(), ret.getTasks()));
 
-        try {
-            LOGGER.debug("{}", objectMapper.writeValueAsString(ret));
-        } catch (JsonProcessingException e) {
-            LOGGER.trace("Couldn't debug print LmapControlDto", e);
+        if (LOGGER.isDebugEnabled()) {
+            try {
+                LOGGER.debug("{}", objectMapper.writeValueAsString(ret));
+            } catch (JsonProcessingException e) {
+                LOGGER.trace("Couldn't debug print LmapControlDto", e);
+            }
         }
 
         if (loadBalancingService != null) {
@@ -194,7 +196,7 @@ public class MeasurementConfigurationService {
         }
 
         final LmapTaskDto ret = storageService.getTaskDto(name, capability, controllerServiceProperties.getSettingsUuid(), useIPv6);
-        final List<String> tagList = new ArrayList<String>();
+        final List<String> tagList = new ArrayList<>();
         //tagList.add(version);
 
         if (ret != null) {

@@ -80,7 +80,7 @@ public class MeasurementInitiationResource {
     })
     @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> requestMeasurement(@ApiParam("Initiation request") @RequestBody LmapControlDto measurementInitiationRequest,
+    public ResponseEntity<LmapControlDto> requestMeasurement(@ApiParam("Initiation request") @RequestBody LmapControlDto measurementInitiationRequest,
                                                 HttpServletRequest request) throws UnknownHostException {
 
         final LmapAgentDto agentDto = measurementInitiationRequest.getAgent();
@@ -99,7 +99,7 @@ public class MeasurementInitiationResource {
 
         final LmapCapabilityDto capabilityDto = measurementInitiationRequest.getCapabilities();
 
-        if (capabilityDto == null || capabilityDto.getTasks() == null || capabilityDto.getTasks().size() == 0) {
+        if (capabilityDto == null || capabilityDto.getTasks() == null || capabilityDto.getTasks().isEmpty()) {
             throw new GeneralBadRequestException("No capabilities provided");
         }
 

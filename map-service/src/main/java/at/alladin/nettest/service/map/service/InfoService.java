@@ -57,9 +57,9 @@ import at.alladin.nntool.shared.map.info.option.TimePeriodOption;
 public class InfoService {
 
     private static final NumberFormat FORMAT = NumberFormat.getNumberInstance();
-    private final static String MOBILE_PROVIDER_SQL = "SELECT p.name as name, p.short_name as short_name FROM providers p WHERE " //(potential TODO:) readd filtering by some providers only? "p.map_filter=true"
+    private static final String MOBILE_PROVIDER_SQL = "SELECT p.name as name, p.short_name as short_name FROM providers p WHERE " //(potential TODO:) readd filtering by some providers only? "p.map_filter=true"
             + " p.mcc_mnc_mappings IS NOT NULL ORDER BY p.short_name";  // allow mobile networks for wifi/browser
-    private final static String GENERAL_PROVIDER_SQL = "SELECT p.name as name," + /*"mcc_mnc," + */ " p.short_name as short_name FROM providers p"
+    private static final String GENERAL_PROVIDER_SQL = "SELECT p.name as name," + /*"mcc_mnc," + */ " p.short_name as short_name FROM providers p"
             //mcc mnc was read from db but never used
             //+ "WHERE p.map_filter=true"
             + " ORDER BY p.short_name";  // allow mobile networks for wifi/browser

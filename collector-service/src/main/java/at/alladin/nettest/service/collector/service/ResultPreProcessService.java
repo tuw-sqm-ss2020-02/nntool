@@ -50,7 +50,7 @@ public class ResultPreProcessService {
                 lmapReportDto.getTimeBasedResult().setNetworkPointsInTime(new ArrayList<>());
             }
             final List<MeasurementResultNetworkPointInTimeDto> networkPointsInTime = lmapReportDto.getTimeBasedResult().getNetworkPointsInTime();
-            if (networkPointsInTime.size() == 0) {
+            if (networkPointsInTime.isEmpty()) {
                 networkPointsInTime.add(new MeasurementResultNetworkPointInTimeDto());
             }
             final String clientPublicIp = getClientIpAddressString(request);
@@ -63,7 +63,7 @@ public class ResultPreProcessService {
     }
 
     private String getClientIpAddressString(final HttpServletRequest request) {
-        for (String field : httpHeaderIPAddressFields) { // TODO: add correct handling (order) of these values
+        for (String field : httpHeaderIPAddressFields) {
             final String ipAddress = request.getHeader(field);
 
             if (StringUtils.hasLength(ipAddress) && !"127.0.0.1".equals(ipAddress) && !ipAddress.contains("%")) {

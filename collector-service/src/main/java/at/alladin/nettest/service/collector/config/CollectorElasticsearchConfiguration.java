@@ -16,8 +16,6 @@
 
 package at.alladin.nettest.service.collector.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -32,8 +30,6 @@ import at.alladin.nettest.shared.server.opendata.config.ElasticsearchConfigurati
 @Configuration
 @ConditionalOnProperty(name = "collector.elasticsearch.host")
 public class CollectorElasticsearchConfiguration extends ElasticsearchConfiguration {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CollectorElasticsearchConfiguration.class);
 
     @Autowired
     private CollectorServiceProperties collectorServiceProperties;

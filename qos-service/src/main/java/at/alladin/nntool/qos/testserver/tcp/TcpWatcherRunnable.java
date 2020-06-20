@@ -69,7 +69,7 @@ public class TcpWatcherRunnable extends IntervalJob<String> {
                     while (iterator.hasNext()) {
                         TcpMultiClientServer tcpServer = iterator.next();
 
-                        if (!TestServer.getInstance().serverPreferences.isIpCheck()) {
+                        if (!TestServer.getInstance().getServerPreferences().isIpCheck()) {
                             //if ip checking is disabled and the ttl has been reached: close tcp socket
                             if (System.currentTimeMillis() >= tcpServer.getTtlTimestamp().get()) {
                                 if (tcpServer.close()) {

@@ -52,7 +52,6 @@ import io.swagger.annotations.ApiParam;
 @RequestMapping("/api/v1/measurement-agents")
 public class MeasurementAgentResource {
 
-    @SuppressWarnings("unused")
     private final Logger logger = LoggerFactory.getLogger(MeasurementAgentResource.class);
 
     @Autowired
@@ -77,7 +76,7 @@ public class MeasurementAgentResource {
     @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ApiResponse<RegistrationResponse>> registerMeasurementAgent(@ApiParam("Registration request") @RequestBody ApiRequest<RegistrationRequest> registrationApiRequest) {
-        logger.debug("Incoming registration request: " + registrationApiRequest.toString());
+        logger.debug("Incoming registration request: {}", registrationApiRequest.toString());
         final RegistrationRequest request = registrationApiRequest.getData();
         if (!request.isTermsAndConditionsAccepted()) {
             throw new MeasurementAgentRegistrationTermsAndConditionsNotAcceptedException();
@@ -98,7 +97,7 @@ public class MeasurementAgentResource {
             logger.trace("Could not get settings", ex);
         }
 
-        logger.debug("returned response: " + registrationResponse.toString());
+        logger.debug("returned response: {}", registrationResponse);
 
         return ResponseHelper.ok(registrationResponse);
     }

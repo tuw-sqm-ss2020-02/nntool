@@ -21,9 +21,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ForkJoinPool;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,11 +86,7 @@ public class MeasurementServerLoadService {
 
         @Override
         public LoadApiResponse call() throws Exception {
-            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
+            HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
 
             final RestTemplate restTemplate = new RestTemplate();
 
@@ -102,9 +96,6 @@ public class MeasurementServerLoadService {
             acceptableMediaTypes.add(new MediaType("text", "javascript"));
             final HttpHeaders headers = new HttpHeaders();
             headers.setAccept(acceptableMediaTypes);
-
-            //final List<Charset> charsets = new ArrayList<>();
-            //headers.setAcceptCharset(charsets);
 
             final LoadApiRequest requestBody = new LoadApiRequest();
             requestBody.setSecret(peer.getLoadApiSecretKey());

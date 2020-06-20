@@ -66,6 +66,8 @@ public class MeasurementSearchExportResource {
             @ApiIgnore @PageableDefault(page = 0, size = 50) @SortDefaults({@SortDefault(sort = "end_time", direction = Sort.Direction.DESC)}) Pageable pageable,
             HttpServletResponse response
     ) {
+        exportService.verifyExportExtension(extension);
+
         exportService.exportMeasurementsBySearchQuery(queryString, pageable, extension, false, response);
     }
 
@@ -82,6 +84,8 @@ public class MeasurementSearchExportResource {
             @ApiIgnore @PageableDefault(page = 0, size = 50) @SortDefaults({@SortDefault(sort = "end_time", direction = Sort.Direction.DESC)}) Pageable pageable,
             HttpServletResponse response
     ) {
+        exportService.verifyExportExtension(extension);
+
         exportService.exportMeasurementsBySearchQuery(queryString, pageable, extension, true, response);
     }
 }

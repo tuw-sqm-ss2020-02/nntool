@@ -72,19 +72,19 @@ public class MapServiceSettings {
     /**
      * @author Specure GmbH
      */
-    public static abstract class MapFilter {
+    public static interface MapFilter {
 
         /**
          * @param input
          * @return
          */
-        public abstract SQLFilter getFilter(String input);
+        public SQLFilter getFilter(String input);
     }
 
     /**
      * @author Specure GmbH
      */
-    public static class StaticMapFilter extends MapFilter {
+    public static class StaticMapFilter implements MapFilter {
 
         /**
          *

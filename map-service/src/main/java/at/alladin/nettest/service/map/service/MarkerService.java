@@ -59,11 +59,14 @@ public class MarkerService {
     /**
      *
      */
-    private final static int MAX_PROVIDER_LENGTH = 22;
+    private static final int MAX_PROVIDER_LENGTH = 22;
     /**
      *
      */
-    private final static int CLICK_RADIUS = 10;
+    private static final int CLICK_RADIUS = 10;
+
+    private static final String CLIENT_UUID_KEY = "client_uuid";
+
     private final Logger logger = LoggerFactory.getLogger(MarkerService.class);
     @Autowired
     private ClassificationService classificationService;
@@ -84,8 +87,8 @@ public class MarkerService {
         try {
 
             String clientUuidString = null;
-            if (request.getOptions() != null && request.getOptions().containsKey("client_uuid")) {
-                clientUuidString = request.getOptions().get("client_uuid");
+            if (request.getOptions() != null && request.getOptions().containsKey(CLIENT_UUID_KEY)) {
+                clientUuidString = request.getOptions().get(CLIENT_UUID_KEY);
             }
 
             boolean useXY = false;
@@ -253,7 +256,7 @@ public class MarkerService {
 
                     }, (ResultSet rs, int rowNum) -> parseResultSet(rs, finalClientUuidString, finalHighlightUuidString, locale));
 
-                    logger.info("Fetching marker info. #Results: " + (resultObjects == null ? 0 : resultObjects.size()));
+                    logger.info("Fetching marker info. #Results: {}", (resultObjects == null ? 0 : resultObjects.size()));
 
                     answer.setMapMarkers(resultObjects);
                 }
@@ -261,7 +264,7 @@ public class MarkerService {
                 logger.error("Expected request is missing.");
             }
         } catch (final JSONException e) {
-            logger.error("Error parsing JSON Data " + e.toString());
+            logger.error("Error parsing JSON Data", e);
         }
 
         return answer;
@@ -284,7 +287,7 @@ public class MarkerService {
             }
         }
 
-        final String dbClientUuidString = rs.getString("client_uuid");
+        final String dbClientUuidString = rs.getString(CLIENT_UUID_KEY);
         //final String measurementUuid = rs.getString("uuid");
         final String measurementUuid = "0" + rs.getString("open_test_uuid");
 
