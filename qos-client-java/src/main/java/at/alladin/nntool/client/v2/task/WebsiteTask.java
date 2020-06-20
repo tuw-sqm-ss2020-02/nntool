@@ -146,7 +146,10 @@ public class WebsiteTask extends AbstractQoSTask {
             System.out.println("Starting WEBSITETASK");
 
             testImpl.run(url, (int) (timeout / 1000000));
-            latch.await(timeout, TimeUnit.NANOSECONDS);
+            boolean noTimeout = latch.await(timeout, TimeUnit.NANOSECONDS);
+            if (!noTimeout) {
+                System.out.println("Timeout during website task");
+            }
 
             System.out.println("Stopping WEBSITETASK");
 

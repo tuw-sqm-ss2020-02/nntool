@@ -228,9 +228,9 @@ public class QoSServerResultCollection implements Serializable {
             for (QoSServerResult res : resultMap.get(key)) {
                 if (detailType.equals(DetailType.FAIL) && res.getFailureCount() > 0) {
                     resultList.add(res);
-                } else {
+                } /* else {
                     resultList.add(res);
-                }
+                }*/
             }
 
             if (resultList.size() > 0) {

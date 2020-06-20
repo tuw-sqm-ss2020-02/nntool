@@ -26,7 +26,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "loadbalancer", ignoreUnknownFields = true)
 public class LoadbalancerServiceProperties {
 
-    private final static long DEFAULT_DELAY = 10000; //10s
+    private static final long DEFAULT_DELAY = 10000; //10s
 
     private boolean enabled;
 

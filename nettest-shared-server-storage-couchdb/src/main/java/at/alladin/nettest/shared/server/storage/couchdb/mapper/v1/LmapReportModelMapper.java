@@ -239,7 +239,7 @@ public interface LmapReportModelMapper {
                 try {
                     res.setType(QoSMeasurementType.valueOf(val.toString().toUpperCase()));
                 } catch (IllegalArgumentException ex) {
-                    ex.printStackTrace();
+                    //ex.printStackTrace();
                 }
             }
             val = map.get(QOS_TEST_UID_KEY);
@@ -247,7 +247,7 @@ public interface LmapReportModelMapper {
                 try {
                     res.setObjectiveId(Long.parseLong(val.toString()));
                 } catch (IllegalArgumentException ex) {
-                    ex.printStackTrace();
+                    //ex.printStackTrace();
                 }
             }
             res.setResults(map);

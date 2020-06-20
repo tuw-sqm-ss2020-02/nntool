@@ -42,7 +42,7 @@ public final class LoggingService {
     /**
      * all available loggers
      */
-    public final static Map<TestServerServiceEnum, Logger> LOGGER_MAP = new HashMap<>();
+    protected final static Map<TestServerServiceEnum, Logger> LOGGER_MAP = new HashMap<>();
 
     /**
      * tells if any logging [syslog, file, console] has been enabled
@@ -57,8 +57,8 @@ public final class LoggingService {
      * @return
      */
     public static boolean isLoggingAvailable(final TestServerImpl testServerImpl) {
-        return (testServerImpl.serverPreferences != null
-                && (testServerImpl.serverPreferences.isConsoleLog() || testServerImpl.serverPreferences.isLoggingEnabled() || testServerImpl.serverPreferences.isSyslogEnabled()));
+        return (testServerImpl.getServerPreferences() != null
+                && (testServerImpl.getServerPreferences().isConsoleLog() || testServerImpl.getServerPreferences().isLoggingEnabled() || testServerImpl.getServerPreferences().isSyslogEnabled()));
     }
 
     /**
@@ -69,11 +69,11 @@ public final class LoggingService {
 
         LogManager.getRootLogger().removeAllAppenders();
 
-        if (testServerImpl.serverPreferences != null
-                && testServerImpl.serverPreferences.isSyslogEnabled()) {
+        if (testServerImpl.getServerPreferences() != null
+                && testServerImpl.getServerPreferences().isSyslogEnabled()) {
             LogManager.getRootLogger().addAppender(new SyslogAppender(
-                    new PatternLayout(testServerImpl.serverPreferences.getSyslogPattern()),
-                    testServerImpl.serverPreferences.getSyslogHost(),
+                    new PatternLayout(testServerImpl.getServerPreferences().getSyslogPattern()),
+                    testServerImpl.getServerPreferences().getSyslogHost(),
                     SyslogAppender.LOG_LOCAL0));
         }
 
@@ -84,13 +84,13 @@ public final class LoggingService {
         LOGGER_MAP.put(TestServerServiceEnum.TEST_SERVER, Logger.getLogger("QOS.SERVER"));
 
         //file logging appender:
-        if (testServerImpl.serverPreferences != null
-                && testServerImpl.serverPreferences.isLoggingEnabled()) {
-            for (final Entry<TestServerServiceEnum, String> e : testServerImpl.serverPreferences.getLogFileMap().entrySet()) {
+        if (testServerImpl.getServerPreferences() != null
+                && testServerImpl.getServerPreferences().isLoggingEnabled()) {
+            for (final Entry<TestServerServiceEnum, String> e : testServerImpl.getServerPreferences().getLogFileMap().entrySet()) {
                 final Logger l = LOGGER_MAP.get(e.getKey());
                 try {
                     l.addAppender(new DailyRollingFileAppender(
-                            new PatternLayout(testServerImpl.serverPreferences.getLoggingPattern()), e.getValue(), "_yyyy-MM-dd-a"));
+                            new PatternLayout(testServerImpl.getServerPreferences().getLoggingPattern()), e.getValue(), "_yyyy-MM-dd-a"));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -98,8 +98,8 @@ public final class LoggingService {
         }
 
         //console appender:
-        if (testServerImpl.serverPreferences != null
-                && testServerImpl.serverPreferences.isConsoleLog()) {
+        if (testServerImpl.getServerPreferences() != null
+                && testServerImpl.getServerPreferences().isConsoleLog()) {
             LogManager.getRootLogger().addAppender(new ConsoleAppender(new PatternLayout("%d{ISO8601} - %m%n")));
         }
     }

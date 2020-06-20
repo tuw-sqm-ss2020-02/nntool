@@ -31,6 +31,7 @@ import java.nio.channels.DatagramChannel;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -93,9 +94,9 @@ public class TestServerImpl {
     /**
      * server socket list (=awaiting client test requests)
      */
-    public volatile List<ServerSocket> serverSocketList = new ArrayList<ServerSocket>();
+    private List<ServerSocket> serverSocketList = Collections.synchronizedList(new ArrayList<ServerSocket>());
     private SSLServerSocketFactory sslServerSocketFactory;
-    public ServerPreferences serverPreferences;
+    private ServerPreferences serverPreferences;
     /**
      * is used for all control connection threads
      */
@@ -122,6 +123,18 @@ public class TestServerImpl {
         System.setOut(console);
     }
 
+    public List<ServerSocket> getServerSocketList() {
+        return serverSocketList;
+    }
+
+    public ServerPreferences getServerPreferences() {
+        return serverPreferences;
+    }
+
+    public void setServerPreferences(ServerPreferences serverPreferences) {
+        this.serverPreferences = serverPreferences;
+    }
+
     /**
      * @param port
      * @param isSsl
@@ -142,6 +155,7 @@ public class TestServerImpl {
             socket.bind(sa);
         } catch (Exception e) {
             TestServerConsole.errorReport("TCP " + port, "TCP Socket on port " + port, e, 0, TestServerServiceEnum.TCP_SERVICE);
+            socket.close();
             throw e;
         }
 
@@ -342,6 +356,7 @@ public class TestServerImpl {
             mainServerPool.awaitTermination(4L, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             //e.printStackTrace();
+            Thread.currentThread().interrupt();
         } finally {
             System.setErr(tempErr);
             System.setOut(tempOut);

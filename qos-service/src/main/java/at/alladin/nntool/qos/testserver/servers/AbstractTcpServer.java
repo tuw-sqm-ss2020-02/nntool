@@ -50,7 +50,7 @@ public abstract class AbstractTcpServer extends AbstractServer<ServerSocket, Tes
         super(ServerSocket.class, TestCandidate.class, addr, port, "TcpServer", TestServerServiceEnum.TCP_SERVICE);
         registerCompetence(new BasicCompetence());
 
-        final ServerPreferences sp = TestServer.getInstance().serverPreferences;
+        final ServerPreferences sp = TestServer.getInstance().getServerPreferences();
         if (sp != null && sp.getTcpCompetenceMap() != null) {
             final TcpCompetence tcpCompetence = sp.getTcpCompetenceMap().get(port);
             if (tcpCompetence != null) {

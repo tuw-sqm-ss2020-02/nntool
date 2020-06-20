@@ -105,7 +105,7 @@ public enum QosMeasurementType {
     /**
      *
      */
-    public static final Map<String, QosMeasurementType> CONSTANTS = new HashMap<>();
+    protected static final Map<String, QosMeasurementType> CONSTANTS = new HashMap<>();
 
     static {
         for (QosMeasurementType c : values()) {

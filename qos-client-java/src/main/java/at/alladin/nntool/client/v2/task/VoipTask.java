@@ -113,6 +113,8 @@ public class VoipTask extends AbstractQoSTask {
     private final long buffer;
     private Integer incomingPort;
 
+    private final Random random = new Random();
+
     /**
      * @param nnTest
      * @param taskDesc
@@ -168,8 +170,7 @@ public class VoipTask extends AbstractQoSTask {
         try {
             onStart(result);
 
-            final Random r = new Random();
-            final int initialSequenceNumber = r.nextInt(10000);
+            final int initialSequenceNumber = random.nextInt(10000);
             final CountDownLatch latch = new CountDownLatch(1);
             final Map<Integer, RtpControlData> rtpControlDataList = new HashMap<Integer, RtpUtil.RtpControlData>();
 
@@ -179,10 +180,8 @@ public class VoipTask extends AbstractQoSTask {
                     if (response != null && response.startsWith("OK")) {
                         final Matcher m = VOIP_OK_PATTERN.matcher(response);
                         if (m.find()) {
-                            DatagramSocket dgsock = null;
-                            try {
+                            try (DatagramSocket dgsock = new DatagramSocket()) {
                                 ssrc.set(Integer.parseInt(m.group(1)));
-                                dgsock = new DatagramSocket();
 
                                 final UdpStreamCallback receiveCallback = new UdpStreamCallback() {
 
@@ -218,16 +217,13 @@ public class VoipTask extends AbstractQoSTask {
                             } catch (InterruptedException e) {
                                 result.getResultMap().put(RESULT_STATUS, "TIMEOUT");
                                 e.printStackTrace();
+                                Thread.currentThread().interrupt();
                             } catch (TimeoutException e) {
                                 result.getResultMap().put(RESULT_STATUS, "TIMEOUT");
                                 e.printStackTrace();
                             } catch (Exception e) {
                                 result.getResultMap().put(RESULT_STATUS, "ERROR");
                                 e.printStackTrace();
-                            } finally {
-                                if (dgsock != null && !dgsock.isClosed()) {
-                                    dgsock.close();
-                                }
                             }
                         }
                     } else {
@@ -256,7 +252,10 @@ public class VoipTask extends AbstractQoSTask {
                     + initialSequenceNumber + " " + payloadType.getValue() + " " + buffer, callback);
 
             //wait for countdownlatch or timeout:
-            latch.await(timeout, TimeUnit.NANOSECONDS);
+            boolean noTimeout = latch.await(timeout, TimeUnit.NANOSECONDS);
+            if (!noTimeout) {
+                System.out.println("Timeout during 'VOIPTEST'");
+            }
 
             // if rtpreceivestream did not finish cancel the task
             // if (!rtpInTimeoutTask.isDone()) {
@@ -294,7 +293,10 @@ public class VoipTask extends AbstractQoSTask {
             //request server results:
             if (ssrc.get() >= 0) {
                 sendCommand("GET VOIPRESULT " + ssrc.get(), incomingResultRequestCallback);
-                resultLatch.await(CONTROL_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS);
+                noTimeout = resultLatch.await(CONTROL_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS);
+                if (!noTimeout) {
+                    System.out.println("Timeout during 'GET VOIPRESULT'");
+                }
             }
 
             final RtpQoSResult rtpResults = rtpControlDataList.size() > 0

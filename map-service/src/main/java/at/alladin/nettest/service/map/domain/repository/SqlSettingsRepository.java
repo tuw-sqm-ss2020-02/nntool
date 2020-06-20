@@ -16,8 +16,6 @@
 
 package at.alladin.nettest.service.map.domain.repository;
 
-import org.springframework.stereotype.Repository;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -26,9 +24,9 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.stereotype.Repository;
 
 import com.google.gson.Gson;
 
@@ -49,19 +47,19 @@ public class SqlSettingsRepository {
      */
     private static final String GET_SETTINGS_SQL = "SELECT json AS json from settings LIMIT 1";
     private final Logger logger = LoggerFactory.getLogger(SqlSettingsRepository.class);
-    /**
-     *
-     */
-    //private final Gson gson = GsonHelper.createDatabaseGsonBuilder().create(); // TODO: create bean and inject
-    private final Gson gson = GsonBasicHelper.getDateTimeGsonBuilder().create();
-    /**
-     *
-     */
 
+    /**
+     *
+     */
+    private final Gson gson = GsonBasicHelper.getDateTimeGsonBuilder().create(); // TODO: create bean and inject
+
+    /**
+     *
+     */
     private final ResultSetExtractor<ServerSettings> settingsExtractor = new ResultSetExtractor<ServerSettings>() {
 
         @Override
-        public ServerSettings extractData(ResultSet rs) throws SQLException, DataAccessException {
+        public ServerSettings extractData(ResultSet rs) throws SQLException {
             if (rs.next()) {
                 return gson.fromJson(rs.getString("json"), ServerSettings.class);
             }
@@ -69,11 +67,13 @@ public class SqlSettingsRepository {
             return null;
         }
     };
+
     /**
      *
      */
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
     /**
      *
      */
@@ -105,8 +105,7 @@ public class SqlSettingsRepository {
             final ServerSettings settings = jdbcTemplate.query(GET_SETTINGS_SQL, settingsExtractor);
             cachedSettings = settings;
         } catch (Exception ex) {
-            ex.printStackTrace();
-            // TODO
+            logger.error("Could not fetch settings", ex);
         }
 
         return cachedSettings;

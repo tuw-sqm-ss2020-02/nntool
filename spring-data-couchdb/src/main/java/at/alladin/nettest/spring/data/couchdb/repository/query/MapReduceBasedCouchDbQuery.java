@@ -320,11 +320,7 @@ public class MapReduceBasedCouchDbQuery extends AbstractCouchDbRepositoryQuery {
                 final String placeholder = p.getName().orElse(p.getPlaceholder());
 
                 if (key.value().equals(placeholder)) {
-                    final Object bindable = accessor.getBindableValue(p.getIndex());
-
-                    if (bindable == null) {
-                        return null;
-                    }
+                    final Object bindable = accessor.getBindableValue(p.getIndex()); // can never be null
 
                     if (bindable instanceof String || bindable instanceof Number || bindable instanceof Boolean) {
                         return bindable;

@@ -102,6 +102,9 @@ public class DeviceImportService {
 
             LOGGER.debug("Executing device import: {}", settings.getName());
             final Path path = downloadToTempFile(settings.getUrl(), "temp_" + settings.getName());
+            if (path == null) {
+                return;
+            }
 
             final Map<String, Device> newDevices = new HashMap<>();
             final CsvMapper csvMapper = new CsvMapper();
@@ -120,10 +123,10 @@ public class DeviceImportService {
                     newDevices.put(device.getCodename(), device);
                 }
             } catch (final Exception e) {
-                e.printStackTrace();
+                LOGGER.error("Device import failed", e);
             }
 
-            List<Device> updatedDevices = new ArrayList<Device>();
+            List<Device> updatedDevices = new ArrayList<>();
             Pageable pageable = PageRequest.of(0, 200);
             boolean isLastPage = false;
 
@@ -150,7 +153,7 @@ public class DeviceImportService {
                     }
                 }
 
-                if (updatedDevices.size() > 0) {
+                if (!updatedDevices.isEmpty()) {
                     deviceRepository.saveAll(updatedDevices);
                     updates += updatedDevices.size();
                     updatedDevices.clear();
@@ -167,22 +170,6 @@ public class DeviceImportService {
 
             LOGGER.debug("Device import finished. New devices: {}, updated: {}, not updated: {}", inserts, updates, notUpdated);
         }
-
-        /*
-        private void bulkDelete() {
-        Pageable pageable = PageRequest.of(0, 200);
-        boolean isLastPage = false;
-        while (!isLastPage) {
-        Page<Device> page = deviceRepository.getAllDevices(pageable);
-        pageable = page.nextPageable();
-        if (page.hasContent()) {
-        for (Device d : page.getContent())
-        deviceRepository.delete(d);
-        }
-        isLastPage = !page.hasNext();
-        }
-        }
-        */
 
         private int bulkUpdate(final List<Device> devices, final int threshold) {
             int i = 0;
@@ -243,7 +230,7 @@ public class DeviceImportService {
 
                 return tmpFilePath;
             } catch (Exception ex) {
-                LOGGER.error("failed to download file from url " + url, ex);
+                LOGGER.error("failed to download file from url {}", url, ex);
                 return null;
             }
         }

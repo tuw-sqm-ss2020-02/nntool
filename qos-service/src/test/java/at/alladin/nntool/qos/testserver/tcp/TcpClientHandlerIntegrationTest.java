@@ -84,7 +84,7 @@ public class TcpClientHandlerIntegrationTest {
 
     @Test
     public void testClientHandlerWithSingleLineRequestMessage() throws Exception {
-        TestServer.getInstance().serverPreferences = new ServerPreferences();
+        TestServer.getInstance().setServerPreferences(new ServerPreferences());
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         SocketCommunicationExpectationsUtil.createExpectationWithOutputStream(socket, os, "MESSAGE\n");
         TcpClientHandler tch = new TcpClientHandler(socket, tcpServer);
@@ -112,7 +112,7 @@ public class TcpClientHandlerIntegrationTest {
 
     @Test
     public void testClientHandlerWithSingleMultiLineRequestMessage() throws Exception {
-        TestServer.getInstance().serverPreferences = new ServerPreferences();
+        TestServer.getInstance().setServerPreferences(new ServerPreferences());
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         SocketCommunicationExpectationsUtil.createExpectationWithOutputStream(socket, os, "MULTILINE\n");
         TcpClientHandler tch = new TcpClientHandler(socket, tcpServer);
@@ -140,7 +140,7 @@ public class TcpClientHandlerIntegrationTest {
 
     @Test
     public void testClientHandlerWithSingleMultiLineRequestMessageAndCustomCompetenceBeingUsed() throws Exception {
-        TestServer.getInstance().serverPreferences = new ServerPreferences();
+        TestServer.getInstance().setServerPreferences(new ServerPreferences());
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         SocketCommunicationExpectationsUtil.createExpectationWithOutputStream(socket, os, "MULTILINE\nMESSAGE\n");
         TcpClientHandler tch = new TcpClientHandler(socket, tcpServer);
@@ -186,7 +186,7 @@ public class TcpClientHandlerIntegrationTest {
 
     @Test
     public void testClientHandlerWithSingleMultiLineRequestMessageAndCustomCompetenceBeingIgnored() throws Exception {
-        TestServer.getInstance().serverPreferences = new ServerPreferences();
+        TestServer.getInstance().setServerPreferences(new ServerPreferences());
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         SocketCommunicationExpectationsUtil.createExpectationWithOutputStream(socket, os, "MULTILINES\nMESSAGE");
         TcpClientHandler tch = new TcpClientHandler(socket, tcpServer);
@@ -234,8 +234,8 @@ public class TcpClientHandlerIntegrationTest {
 
     @Test
     public void testClientHandlerWithIpCheckEnabledAndClientSocketContainingValidSocketAddress() throws Exception {
-        TestServer.getInstance().serverPreferences = new ServerPreferences();
-        TestServer.getInstance().serverPreferences.setIsIpCheck(true);
+        TestServer.getInstance().setServerPreferences(new ServerPreferences());
+        TestServer.getInstance().getServerPreferences().setIsIpCheck(true);
 
         new Expectations() {
             {
@@ -273,8 +273,8 @@ public class TcpClientHandlerIntegrationTest {
 
     @Test
     public void testClientHandlerWithIpCheckEnabledAndClientSocketContainingUnknownSocketAddress() throws Exception {
-        TestServer.getInstance().serverPreferences = new ServerPreferences();
-        TestServer.getInstance().serverPreferences.setIsIpCheck(true);
+        TestServer.getInstance().setServerPreferences(new ServerPreferences());
+        TestServer.getInstance().getServerPreferences().setIsIpCheck(true);
 
         List<String> logList = new ArrayList<>();
 
@@ -303,7 +303,7 @@ public class TcpClientHandlerIntegrationTest {
 
     @Test
     public void testClientHandlerCatchingSocketTimeoutExceptionThenClosingSocket() throws Exception {
-        TestServer.getInstance().serverPreferences = new ServerPreferences();
+        TestServer.getInstance().setServerPreferences(new ServerPreferences());
         SocketCommunicationExpectationsUtil.createExpectationWithThrownException(socket, new SocketTimeoutException(), "PING");
         TcpClientHandler tch = new TcpClientHandler(socket, tcpServer);
         tch.run();
@@ -313,7 +313,7 @@ public class TcpClientHandlerIntegrationTest {
 
     @Test
     public void testClientHandlerCatchingIOExceptionThenClosingSocket() throws Exception {
-        TestServer.getInstance().serverPreferences = new ServerPreferences();
+        TestServer.getInstance().setServerPreferences(new ServerPreferences());
         SocketCommunicationExpectationsUtil.createExpectationWithThrownException(socket, new IOException(), "PING");
         TcpClientHandler tch = new TcpClientHandler(socket, tcpServer);
         tch.run();
@@ -323,7 +323,7 @@ public class TcpClientHandlerIntegrationTest {
 
     @Test
     public void testClientHandlerCatchingMultipleExceptionWhileClosingClientSocket() throws Exception {
-        TestServer.getInstance().serverPreferences = new ServerPreferences();
+        TestServer.getInstance().setServerPreferences(new ServerPreferences());
 
         slm = new SocketWithCountDownLatchMockup(latch) {
 

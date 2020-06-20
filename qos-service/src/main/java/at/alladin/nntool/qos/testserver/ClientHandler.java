@@ -92,6 +92,8 @@ public class ClientHandler implements Runnable {
      */
     protected String clientProtocolVersion = QoSServiceProtocol.PROTOCOL_VERSION_1;
 
+    protected Random rand = new Random();
+
     /**
      * @param serverSocket
      * @param socket
@@ -180,7 +182,7 @@ public class ClientHandler implements Runnable {
                         } else if (command.startsWith(QoSServiceProtocol.CMD_SIP_TEST)) {
                             runSipTest(command, token);
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_UDP_PORT_RANGE)) {
-                            sendCommand(TestServer.getInstance().serverPreferences.getUdpPortMin() + " " + TestServer.getInstance().serverPreferences.getUdpPortMax(), command);
+                            sendCommand(TestServer.getInstance().getServerPreferences().getUdpPortMin() + " " + TestServer.getInstance().getServerPreferences().getUdpPortMax(), command);
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_UDP_PORT)) {
                             sendRandomUdpPort(command);
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_UDP_RESULT_OUT)) {
@@ -194,9 +196,11 @@ public class ClientHandler implements Runnable {
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_NEW_CONNECTION_TIMEOUT)) {
                             requestNewConnectionTimeout(command);
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_PROTOCOL_VERSION)) {
-                            quit = quit;
+                            //quit = quit;
+                            break;
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_PROTOCOL_KEEPALIVE)) {
-                            quit = quit;
+                            //quit = quit;
+                            break;
                         } else {
                             sendCommand(QoSServiceProtocol.RESPONSE_ACCEPT_COMMANDS, command);
                             quit = true;
@@ -248,7 +252,7 @@ public class ClientHandler implements Runnable {
                 String hmac = m.group(3);
 
                 if (CHECK_TOKEN) {
-                    String controlHmac = Helperfunctions.calculateHMAC(TestServer.getInstance().serverPreferences.getSecretKey(), uuid + "_" + timeStamp);
+                    String controlHmac = Helperfunctions.calculateHMAC(TestServer.getInstance().getServerPreferences().getSecretKey(), uuid + "_" + timeStamp);
                     if (controlHmac.equals(hmac) && (timeStamp + QoSServiceProtocol.TOKEN_LEGAL_TIME >= System.currentTimeMillis())) {
                         clientToken = new ClientToken(uuid, timeStamp, hmac);
                         return clientToken;
@@ -274,10 +278,9 @@ public class ClientHandler implements Runnable {
      */
     protected void sendRandomUdpPort(final String command) throws IOException {
         int randomPort = 0;
-        Random rand = new Random();
-        if ((TestServer.getInstance().serverPreferences.getUdpPortMax() > 0) && (TestServer.getInstance().serverPreferences.getUdpPortMin() <= TestServer.getInstance().serverPreferences.getUdpPortMax())) {
-            randomPort = rand.nextInt(TestServer.getInstance().serverPreferences.getUdpPortMax() - TestServer.getInstance().serverPreferences.getUdpPortMin())
-                    + TestServer.getInstance().serverPreferences.getUdpPortMin();
+        if ((TestServer.getInstance().getServerPreferences().getUdpPortMax() > 0) && (TestServer.getInstance().getServerPreferences().getUdpPortMin() <= TestServer.getInstance().getServerPreferences().getUdpPortMax())) {
+            randomPort = rand.nextInt(TestServer.getInstance().getServerPreferences().getUdpPortMax() - TestServer.getInstance().getServerPreferences().getUdpPortMin())
+                    + TestServer.getInstance().getServerPreferences().getUdpPortMin();
 
         }
         TestServerConsole.log("Requested UDP Port. Picked random port number: " + randomPort, 0, TestServerServiceEnum.TEST_SERVER);
@@ -305,23 +308,13 @@ public class ClientHandler implements Runnable {
 
             @Override
             public void run() {
-                Socket testSocket = null;
-                try {
-                    testSocket = new Socket(socket.getInetAddress(), port);
+                try (Socket testSocket = new Socket(socket.getInetAddress(), port)) {
                     BufferedOutputStream bufOut = new BufferedOutputStream(testSocket.getOutputStream());
                     bufOut.write(getBytesWithNewline("HELLO TO " + port));
                     bufOut.flush();
                     testSocket.close();
                 } catch (Exception e) {
                     TestServerConsole.error(name, e, 2, TestServerServiceEnum.TCP_SERVICE);
-                } finally {
-                    if (testSocket != null && !testSocket.isClosed()) {
-                        try {
-                            testSocket.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
                 }
             }
         };
@@ -432,9 +425,14 @@ public class ClientHandler implements Runnable {
 
         final Matcher idMatcher = ID_REGEX_PATTERN.matcher(command);
         if (!idMatcher.find()) {
-            latch.await(timeout, TimeUnit.MILLISECONDS);
+            boolean noTimeout = latch.await(timeout, TimeUnit.MILLISECONDS);
+            if (!noTimeout) {
+                TestServerConsole.log("Timeout during 'runIncomingUdpTest'", 2, TestServerServiceEnum.UDP_SERVICE);
+            }
             sendRcvResult(clientData, port, command);
         }
+
+        sock.close();
     }
 
     /**
@@ -489,9 +487,14 @@ public class ClientHandler implements Runnable {
                 dataOut.write(Long.toString(System.currentTimeMillis()).getBytes());
                 */
                 dataOut.write(UdpPayloadUtil.toBytes(udpPayload));
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 sock.close();
+                return clientData;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                sock.close();
+                Thread.currentThread().interrupt();
                 return clientData;
             }
 
@@ -686,7 +689,10 @@ public class ClientHandler implements Runnable {
 
         final Matcher idMatcher = ID_REGEX_PATTERN.matcher(command);
         if (!idMatcher.find()) {
-            latch.await(timeout, TimeUnit.MILLISECONDS);
+            boolean noTimeout = latch.await(timeout, TimeUnit.MILLISECONDS);
+            if (!noTimeout) {
+                TestServerConsole.log("Timeout during 'runIncomingUdpTest'", 2, TestServerServiceEnum.UDP_SERVICE);
+            }
             sendRcvResult(clientUdpOutDataMap.get(port), port, command);
         }
     }

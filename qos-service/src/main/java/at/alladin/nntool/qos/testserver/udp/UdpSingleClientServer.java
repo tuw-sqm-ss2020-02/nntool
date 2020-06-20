@@ -117,7 +117,7 @@ public class UdpSingleClientServer implements Callable<Integer> {
                     uuid[i - 2] = (char) data[i];
                 }
 
-                if (TestServer.getInstance().serverPreferences.getVerboseLevel() >= 1) {
+                if (TestServer.getInstance().getServerPreferences().getVerboseLevel() >= 1) {
                     TestServerConsole.log("received UDP from: " + dp.getAddress().toString() + ", #" + packetNumber + ", uuid: " + String.valueOf(uuid), 1, TestServerServiceEnum.UDP_SERVICE);
                 }
 

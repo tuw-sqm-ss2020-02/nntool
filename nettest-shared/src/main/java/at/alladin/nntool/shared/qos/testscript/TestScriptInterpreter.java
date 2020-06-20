@@ -51,6 +51,7 @@ import at.alladin.nntool.shared.qos.testscript.TestScriptInterpreter.EvalResult.
 public final class TestScriptInterpreter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestScriptInterpreter.class);
+
     /**
      *
      */
@@ -78,6 +79,8 @@ public final class TestScriptInterpreter {
     private static ScriptEngine jsEngine;
     private static Method jsEngineNativeObjectGetter;
     private static boolean alredayLookedForGetter = false;
+
+    private static final Random RAND = new Random();
 
     private TestScriptInterpreter() {
     }
@@ -130,7 +133,7 @@ public final class TestScriptInterpreter {
                 command = command.replace(mc.group(0), (toReplace != null ? toReplace.trim() : ""));
             }
         } catch (final ScriptException e) {
-            e.printStackTrace();
+            LOGGER.error("Error during interpreting command {}", command, e);
             return null;
         }
 
@@ -187,7 +190,7 @@ public final class TestScriptInterpreter {
                 return command;
             }
         } catch (ScriptException e) {
-            e.printStackTrace();
+            LOGGER.error("Error during interpreting commands", e);
             return null;
         }
     }
@@ -198,7 +201,6 @@ public final class TestScriptInterpreter {
      * @throws ScriptException
      */
     private static int random(String[] args) throws ScriptException {
-        Random rand = new Random();
         if (args.length > 2 || args.length < 1) {
             throw new ScriptException(ScriptException.ERROR_INVALID_ARGUMENT_COUNT + " RANDOM: " + args.length);
         }
@@ -207,12 +209,12 @@ public final class TestScriptInterpreter {
             switch (args.length) {
                 case 1:
                     int val = Integer.valueOf(args[0]) + 1;
-                    return rand.nextInt(val);
+                    return RAND.nextInt(val);
 
                 case 2:
                     int min = Integer.valueOf(args[0]);
                     int max = Integer.valueOf(args[1]) + 1;
-                    return (rand.nextInt(max - min) + min);
+                    return (RAND.nextInt(max - min) + min);
 
                 default:
                     throw new ScriptException(ScriptException.ERROR_BAD_ARGUMENTS + " RANDOM: " + Helperfunctions.join(", ", args));
@@ -302,7 +304,6 @@ public final class TestScriptInterpreter {
                 return result != null ? result : "";
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new ScriptException(e.getMessage() + " " + args[0]);
         }
     }

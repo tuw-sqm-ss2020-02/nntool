@@ -102,41 +102,42 @@ public class UdpMultiClientServer extends AbstractUdpServer<DatagramSocket> impl
 
                 String clientUuid = null;
 
-                if (!RtpVersion.VER2.equals(rtpVersion) && data.length > 1) {
-                    //Non RTP packet:
-                    final int packetNumber = data[1];
+                if (data != null && data.length > 1) {
+                    if (!RtpVersion.VER2.equals(rtpVersion)) {
+                        //Non RTP packet:
+                        final int packetNumber = data[1];
 
-                    Long timeStamp = null;
+                        Long timeStamp = null;
 
-                    try {
-                        char[] uuid = new char[36];
+                        try {
+                            char[] uuid = new char[36];
 
-                        for (int i = 2; i < 38; i++) {
-                            uuid[i - 2] = (char) data[i];
+                            for (int i = 2; i < 38; i++) {
+                                uuid[i - 2] = (char) data[i];
+                            }
+                            clientUuid = String.valueOf(uuid);
+
+                            // timestamp
+                            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(dp.getLength() - 38);
+                            byteBuffer.order(ByteOrder.BIG_ENDIAN);
+
+                            for (int i = 38; i < dp.getLength(); i++) {
+                                byteBuffer.put(data[i]);
+                            }
+
+                            byteBuffer.flip();
+                            timeStamp = byteBuffer.getLong();
+
+                        } catch (Exception e) {
+                            TestServerConsole.error(getName(), e, 1, TestServerServiceEnum.UDP_SERVICE);
                         }
-                        clientUuid = String.valueOf(uuid);
 
-                        // timestamp
-                        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(dp.getLength() - 38);
-                        byteBuffer.order(ByteOrder.BIG_ENDIAN);
-
-                        for (int i = 38; i < dp.getLength(); i++) {
-                            byteBuffer.put(data[i]);
-                        }
-
-                        byteBuffer.flip();
-                        timeStamp = byteBuffer.getLong();
-
-                    } catch (Exception e) {
-                        TestServerConsole.error(getName(), e, 1, TestServerServiceEnum.UDP_SERVICE);
+                        TestServerConsole.log("received UDP from: " + dp.getAddress().toString() + ":" + dp.getPort()
+                                + " (on local port :" + socket.getLocalPort() + ") , #" + packetNumber + " TimeStamp: " + timeStamp + ", containing: " + clientUuid, 1, TestServerServiceEnum.UDP_SERVICE);
+                    } else {
+                        //RtpPacket received:
+                        clientUuid = "VOIP_" + RtpUtil.getSsrc(data);
                     }
-
-                    TestServerConsole.log("received UDP from: " + dp.getAddress().toString() + ":" + dp.getPort()
-                            + " (on local port :" + socket.getLocalPort() + ") , #" + packetNumber + " TimeStamp: " + timeStamp + ", containing: " + clientUuid, 1, TestServerServiceEnum.UDP_SERVICE);
-
-                } else if (data.length > 1) {
-                    //RtpPacket received:
-                    clientUuid = "VOIP_" + RtpUtil.getSsrc(data);
                 }
 
                 if (clientUuid != null) {

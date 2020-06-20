@@ -60,7 +60,7 @@ public class ServiceManager {
                     if (JobState.ERROR.equals(state) && ((IntervalJob<?>) service).restartOnError()) {
                         synchronized (serviceMap) {
                             log("Forcing service restart after error.", 0, service.getService());
-                            final FutureService fs = serviceMap.get(service.getService());
+                            final FutureService fs = serviceMap.get(service.getId());
                             if (fs != null && fs.getService().getIsRunning()) {
                                 log("Service still running. Waiting for termination...", 0, service.getService());
                                 fs.getFuture().cancel(true);
@@ -153,8 +153,11 @@ public class ServiceManager {
             try {
                 service.getService().stop();
                 return service.future.get();
-            } catch (InterruptedException | ExecutionException e) {
+            } catch (ExecutionException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
 
