@@ -58,6 +58,9 @@ public class MeasurementConfigurationService {
     @Autowired
     private LoadBalancingService loadBalancingService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     public LmapControlDto getLmapControlDtoForCapabilities(final LmapCapabilityDto capabilities, boolean useIPv6) {
         final LmapControlDto ret = new LmapControlDto();
 
@@ -68,9 +71,9 @@ public class MeasurementConfigurationService {
 
         if (LOGGER.isDebugEnabled()) {
             try {
-                LOGGER.debug("{}", new ObjectMapper().writeValueAsString(ret));
+                LOGGER.debug("{}", objectMapper.writeValueAsString(ret));
             } catch (JsonProcessingException e) {
-                e.printStackTrace();
+                LOGGER.trace("Couldn't debug print LmapControlDto", e);
             }
         }
 

@@ -295,7 +295,6 @@ public class GroupedMeasurementService {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
                 return null;
             }
         }
@@ -366,7 +365,6 @@ public class GroupedMeasurementService {
                     return format.format(Double.parseDouble(value) / formatEnum.getDivider());
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             // do nothing with it, just return original value
         }
 

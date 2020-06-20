@@ -21,6 +21,9 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.alladin.nntool.shared.qos.annotations.NonComparableField;
 import at.alladin.nntool.shared.qos.testscript.TestScriptInterpreter;
 import at.alladin.nntool.shared.qos.testscript.TestScriptInterpreter.EvalResult;
@@ -30,6 +33,9 @@ import at.alladin.nntool.shared.qos.testscript.TestScriptInterpreter.EvalResult;
  * @author lb
  */
 public final class ResultComparer {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResultComparer.class);
+
     public final static int RESULT_COULD_NOT_COMPARE = -1;
     public final static int RESULT_FAILURE = 0;
     public final static int RESULT_SUCCESS = 1;
@@ -172,7 +178,7 @@ public final class ResultComparer {
             }
 
         } catch (Throwable t) {
-            t.printStackTrace();
+            LOGGER.trace("Exception thrown during compare with operator {}", operator, t);
             return ResultComparer.RESULT_COULD_NOT_COMPARE;
         }
 
@@ -254,8 +260,7 @@ public final class ResultComparer {
                 }
             }
         } catch (Throwable t) {
-            t.printStackTrace();
-            System.out.println("Field: " + f.toString() + ", " + t.getClass().getCanonicalName() + ": " + t.getLocalizedMessage());
+            LOGGER.trace("Field {}, {}: {}", new Object[] {f.toString(), t.getClass().getCanonicalName(), t.getLocalizedMessage()});
             return ResultComparer.RESULT_COULD_NOT_COMPARE;
         }
 

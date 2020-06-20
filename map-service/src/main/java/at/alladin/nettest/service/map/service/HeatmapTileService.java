@@ -273,7 +273,6 @@ public class HeatmapTileService {
                 return null;
             }
         } catch (DataAccessException ex) {
-            ex.printStackTrace();
             throw new IllegalStateException(ex);
         }
 
@@ -354,7 +353,6 @@ public class HeatmapTileService {
         try {
             ImageIO.write(img.getBufferedImage(), "png", baos);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new IllegalStateException(e);
         }
         return baos.toByteArray();

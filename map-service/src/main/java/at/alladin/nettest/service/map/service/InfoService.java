@@ -351,7 +351,7 @@ public class InfoService {
                 prov.setShortname(rs.getString("short_name"));
                 prov.setName(rs.getString("name"));
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                logger.warn("Could not fetch provider", ex);
             }
             return prov;
         }

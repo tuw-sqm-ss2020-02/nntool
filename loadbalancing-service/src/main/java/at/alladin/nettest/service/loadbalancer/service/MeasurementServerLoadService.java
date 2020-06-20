@@ -23,6 +23,8 @@ import java.util.concurrent.ForkJoinPool;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -47,6 +49,8 @@ import at.alladin.nettest.shared.server.service.storage.v1.StorageService;
 @Service
 public class MeasurementServerLoadService {
 
+    private final Logger logger = LoggerFactory.getLogger(MeasurementServerLoadService.class);
+
     @Autowired
     private StorageService storageService;
 
@@ -62,7 +66,6 @@ public class MeasurementServerLoadService {
                     final LoadApiResponse response = runnable.call();
                     deferred.setResult(ResponseHelper.ok(response));
                 } catch (Exception e) {
-                    e.printStackTrace();
                     deferred.setErrorResult(e);
                 }
             });

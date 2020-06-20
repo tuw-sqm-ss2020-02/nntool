@@ -22,12 +22,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.alladin.nettest.shared.qos.UdpPayload;
 
 /**
  *
  */
 public final class UdpPayloadUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UdpPayloadUtil.class);
 
     private UdpPayloadUtil() {
     }
@@ -46,7 +51,7 @@ public final class UdpPayloadUtil {
             udpPayload.setUuid(new String(token));
             udpPayload.setTimestamp(dis.readLong());
         } catch (final IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not parse payload bytes", e);
         }
 
         return udpPayload;
@@ -64,7 +69,7 @@ public final class UdpPayloadUtil {
             return byteOut.toByteArray();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not parse udp payload", e);
         }
 
         return null;

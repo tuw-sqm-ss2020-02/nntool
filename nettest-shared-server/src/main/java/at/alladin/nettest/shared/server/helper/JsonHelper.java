@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -35,6 +38,8 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
  * @author alladin-IT GmbH (bp@alladin.at)
  */
 public interface JsonHelper {
+
+    static final Logger LOGGER = LoggerFactory.getLogger(JsonHelper.class);
 
     /**
      * This method returns a map containing JSON Schema definitions indexed by the class' simple name.
@@ -61,7 +66,7 @@ public interface JsonHelper {
 
                 schemaMap.put(c.getSimpleName(), schema);
             } catch (JsonMappingException e) {
-                e.printStackTrace();
+                LOGGER.error("Could not render JSON schema for class {}", c.getSimpleName(), e);
             }
         });
 

@@ -97,7 +97,7 @@ public class CouchDbStorageConfiguration extends CouchDbConfiguration {
                     try {
                         type = MeasurementTypeDto.valueOf(entry.getKey());
                     } catch (IllegalArgumentException ex) {
-                        ex.printStackTrace();
+                        logger.warn("Ignoring invalid measurement type {}", entry.getKey(), ex);
                         continue;
                     }
                     Class<? extends Settings.SubMeasurementSettings> subMeasurementClass =
@@ -142,7 +142,7 @@ public class CouchDbStorageConfiguration extends CouchDbConfiguration {
                     try {
                         type = MeasurementTypeDto.valueOf(entry.getKey());
                     } catch (IllegalArgumentException ex) {
-                        ex.printStackTrace();
+                        logger.warn("Ignoring invalid measurement type {}", entry.getKey(), ex);
                         continue;
                     }
 

@@ -123,7 +123,7 @@ public class DeviceImportService {
                     newDevices.put(device.getCodename(), device);
                 }
             } catch (final Exception e) {
-                e.printStackTrace();
+                LOGGER.error("Device import failed", e);
             }
 
             List<Device> updatedDevices = new ArrayList<>();

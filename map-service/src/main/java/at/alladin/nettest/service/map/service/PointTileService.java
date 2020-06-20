@@ -344,7 +344,6 @@ public class PointTileService {
             ImageIO.write(img.getBufferedImage(), "png", baos);
             return baos.toByteArray();
         } catch (final Exception e) {
-            e.printStackTrace();
             throw new IllegalStateException(e);
         }
 

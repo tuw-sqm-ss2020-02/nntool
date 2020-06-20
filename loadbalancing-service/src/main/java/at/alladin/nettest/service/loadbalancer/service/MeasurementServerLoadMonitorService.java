@@ -157,7 +157,7 @@ public class MeasurementServerLoadMonitorService {
                     requestHasFailed = false;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Load request failed", e);
             }
 
             if (requestHasFailed) {
