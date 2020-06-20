@@ -119,9 +119,5 @@ public abstract class EventJob<R> extends AbstractJob<R> {
         public String getInfo() {
             return info;
         }
-
-        public void setInfo(String info) {
-            this.info = info;
-        }
     }
 }

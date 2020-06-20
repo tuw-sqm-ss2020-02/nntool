@@ -182,7 +182,7 @@ public class ClientHandler implements Runnable {
                         } else if (command.startsWith(QoSServiceProtocol.CMD_SIP_TEST)) {
                             runSipTest(command, token);
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_UDP_PORT_RANGE)) {
-                            sendCommand(TestServer.getInstance().serverPreferences.getUdpPortMin() + " " + TestServer.getInstance().serverPreferences.getUdpPortMax(), command);
+                            sendCommand(TestServer.getInstance().getServerPreferences().getUdpPortMin() + " " + TestServer.getInstance().getServerPreferences().getUdpPortMax(), command);
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_UDP_PORT)) {
                             sendRandomUdpPort(command);
                         } else if (command.startsWith(QoSServiceProtocol.REQUEST_UDP_RESULT_OUT)) {
@@ -252,7 +252,7 @@ public class ClientHandler implements Runnable {
                 String hmac = m.group(3);
 
                 if (CHECK_TOKEN) {
-                    String controlHmac = Helperfunctions.calculateHMAC(TestServer.getInstance().serverPreferences.getSecretKey(), uuid + "_" + timeStamp);
+                    String controlHmac = Helperfunctions.calculateHMAC(TestServer.getInstance().getServerPreferences().getSecretKey(), uuid + "_" + timeStamp);
                     if (controlHmac.equals(hmac) && (timeStamp + QoSServiceProtocol.TOKEN_LEGAL_TIME >= System.currentTimeMillis())) {
                         clientToken = new ClientToken(uuid, timeStamp, hmac);
                         return clientToken;
@@ -278,9 +278,9 @@ public class ClientHandler implements Runnable {
      */
     protected void sendRandomUdpPort(final String command) throws IOException {
         int randomPort = 0;
-        if ((TestServer.getInstance().serverPreferences.getUdpPortMax() > 0) && (TestServer.getInstance().serverPreferences.getUdpPortMin() <= TestServer.getInstance().serverPreferences.getUdpPortMax())) {
-            randomPort = rand.nextInt(TestServer.getInstance().serverPreferences.getUdpPortMax() - TestServer.getInstance().serverPreferences.getUdpPortMin())
-                    + TestServer.getInstance().serverPreferences.getUdpPortMin();
+        if ((TestServer.getInstance().getServerPreferences().getUdpPortMax() > 0) && (TestServer.getInstance().getServerPreferences().getUdpPortMin() <= TestServer.getInstance().getServerPreferences().getUdpPortMax())) {
+            randomPort = rand.nextInt(TestServer.getInstance().getServerPreferences().getUdpPortMax() - TestServer.getInstance().getServerPreferences().getUdpPortMin())
+                    + TestServer.getInstance().getServerPreferences().getUdpPortMin();
 
         }
         TestServerConsole.log("Requested UDP Port. Picked random port number: " + randomPort, 0, TestServerServiceEnum.TEST_SERVER);
@@ -425,7 +425,10 @@ public class ClientHandler implements Runnable {
 
         final Matcher idMatcher = ID_REGEX_PATTERN.matcher(command);
         if (!idMatcher.find()) {
-            latch.await(timeout, TimeUnit.MILLISECONDS);
+            boolean noTimeout = latch.await(timeout, TimeUnit.MILLISECONDS);
+            if (!noTimeout) {
+                TestServerConsole.log("Timeout during 'runIncomingUdpTest'", 2, TestServerServiceEnum.UDP_SERVICE);
+            }
             sendRcvResult(clientData, port, command);
         }
 
@@ -686,7 +689,10 @@ public class ClientHandler implements Runnable {
 
         final Matcher idMatcher = ID_REGEX_PATTERN.matcher(command);
         if (!idMatcher.find()) {
-            latch.await(timeout, TimeUnit.MILLISECONDS);
+            boolean noTimeout = latch.await(timeout, TimeUnit.MILLISECONDS);
+            if (!noTimeout) {
+                TestServerConsole.log("Timeout during 'runIncomingUdpTest'", 2, TestServerServiceEnum.UDP_SERVICE);
+            }
             sendRcvResult(clientUdpOutDataMap.get(port), port, command);
         }
     }

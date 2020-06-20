@@ -34,7 +34,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
@@ -70,7 +70,7 @@ public class ErrorResource implements ErrorController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "/error")
+    @GetMapping("/error")
     public ResponseEntity<ApiResponse<?>> error(WebRequest webRequest, HttpServletResponse response) {
         final boolean includeStackTrace = env.acceptsProfiles(Profiles.of("dev"));
 

@@ -43,6 +43,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import at.alladin.nettest.service.map.config.MapCacheConfig;
 import at.alladin.nettest.service.map.domain.model.BoundingBox;
@@ -117,14 +118,16 @@ public class PointTileService {
         }
 
         final PointTileParameters params = (PointTileParameters) mapParams;
+        final String mapOption = params.getMapOption();
 
+        if (StringUtils.hasLength(mapOption)) {
+            logger.info("computing points for mapoption: " + mapOption.replaceAll("[\n|\r|\t]", "_"));
+        }
 
-        logger.info("computing points for mapoption: " + params.getMapOption());
-
-        final MapServiceOptions options = mapOptionsService.getMapOptionsForKey(params.getMapOption());
+        final MapServiceOptions options = mapOptionsService.getMapOptionsForKey(mapOption);
 
         if (options == null) {
-            throw new IllegalArgumentException("provided map option not available: " + params.getMapOption());
+            throw new IllegalArgumentException("provided map option not available: " + mapOption);
         }
 
         final List<MapServiceSettings.SQLFilter> sqlFilterList = mapOptionsService.getSqlFilterList(params.getFilterMap(), true, true);

@@ -21,6 +21,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ServerSocket;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -43,7 +44,7 @@ import at.alladin.nntool.qos.testserver.udp.UdpTestCandidate;
 
 public class TestServerConsole extends PrintStream {
 
-    public final static ConcurrentMap<String, ErrorReport> ERROR_REPORT_MAP = new ConcurrentHashMap<String, TestServerConsole.ErrorReport>();
+    protected final static ConcurrentMap<String, ErrorReport> ERROR_REPORT_MAP = new ConcurrentHashMap<String, TestServerConsole.ErrorReport>();
     public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public final static String HINT_SHOW = "SHOW what? Available options: [tcp] [udp] [info]";
     public final static String COMMAND_EXIT_COMMAND_PROMPT = "exit";
@@ -113,9 +114,9 @@ public class TestServerConsole extends PrintStream {
                                                 case SUBCOMMAND_SHOW_INFO:
                                                     printLine();
                                                     printlnCommand("\n" + TestServer.TEST_SERVER_VERSION_NAME);
-                                                    printlnCommand("\nCurrent server settings: " + TestServer.getInstance().serverPreferences.toString());
+                                                    printlnCommand("\nCurrent server settings: " + TestServer.getInstance().getServerPreferences().toString());
                                                     printlnCommand("\nQoSTestServer is listening on the following addresses:");
-                                                    for (ServerSocket ss : TestServer.getInstance().serverSocketList) {
+                                                    for (ServerSocket ss : TestServer.getInstance().getServerSocketList()) {
                                                         printlnCommand("\t- " + ss.toString());
                                                     }
                                                     printLine();
@@ -174,7 +175,7 @@ public class TestServerConsole extends PrintStream {
                                                             }
                                                         }
                                                     } else {
-                                                        printlnCommand("\nActive UDP ports: " + TestServer.getInstance().serverPreferences.getUdpPortSet());
+                                                        printlnCommand("\nActive UDP ports: " + TestServer.getInstance().getServerPreferences().getUdpPortSet());
                                                     }
                                                     break;
                                                 default:
@@ -196,7 +197,7 @@ public class TestServerConsole extends PrintStream {
                                                         verboseLevel = verboseLevel < 0 ? 0 : (verboseLevel > 2 ? 2 : verboseLevel);
 
                                                         printlnCommand("\nSetting verbose level to: " + verboseLevel);
-                                                        TestServer.getInstance().serverPreferences.setVerboseLevel(verboseLevel);
+                                                        TestServer.getInstance().getServerPreferences().setVerboseLevel(verboseLevel);
                                                     } else {
                                                         printlnCommand("\nVerbose level missing!");
                                                     }
@@ -206,7 +207,7 @@ public class TestServerConsole extends PrintStream {
                                                     printCommand("\nSET what? Available options: [verbose].");
                                             }
                                         }
-                                        printlnCommand("\nCurrent server settings: " + TestServer.getInstance().serverPreferences.toString());
+                                        printlnCommand("\nCurrent server settings: " + TestServer.getInstance().getServerPreferences().toString());
                                         break;
 
                                     case COMMAND_SHUTDOWN:
@@ -289,6 +290,10 @@ public class TestServerConsole extends PrintStream {
         LoggingService.info(msg, service);
     }
 
+    public static Collection<ErrorReport> getErrorValues() {
+        return ERROR_REPORT_MAP.values();
+    }
+
     /**
      * @param date
      * @return
@@ -328,7 +333,7 @@ public class TestServerConsole extends PrintStream {
     }
 
     public void start() {
-        if (testServerImpl.serverPreferences.isCommandConsoleEnabled()) {
+        if (testServerImpl.getServerPreferences().isCommandConsoleEnabled()) {
             log("Command Console enabled. Starting KeyListener\n", 1, TestServerServiceEnum.TEST_SERVER);
             keyListener.start();
         } else {

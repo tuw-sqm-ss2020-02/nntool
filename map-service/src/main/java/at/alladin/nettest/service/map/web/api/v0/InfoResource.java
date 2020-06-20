@@ -47,7 +47,7 @@ public class InfoResource {
 
     //TODO: BIG! Restrict CrossOrigin requests if possible
     @CrossOrigin
-    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> obtainMapInfo(@ApiIgnore Locale locale) {
         final MapInfoResponse ret = new MapInfoResponse();
         ret.setMapFilters(infoService.getMapFilter(locale));
